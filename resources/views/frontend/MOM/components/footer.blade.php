@@ -1,0 +1,95 @@
+@php
+// $active_theme object is available containing the theme developer json loaded.
+// This is for the theme developers who want to load further view assets
+
+use App\Http\Controllers\ConstantsController;
+use App\Http\Controllers\CommonController;
+
+@endphp
+<footer class="footer-stick-bottom">
+    <div class="footer-area-wrapper">
+        <div class="footer-area section-space--ptb_60">
+            <div class="container">
+                <div class="row footer-widget-wrapper">
+                    <div class="col-lg col-md col-sm-6 col-6 footer-widget">
+                        <h6 class="footer-widget__title mb-20">{{$menus -> third_footer -> name}}</h6>
+                        <ul class="footer-widget__list">
+                            @foreach($menus -> third_footer -> metas as $meta)
+                            <li><a href="{{ $meta -> meta_url }}" class="hover-style-link">{{ $meta -> meta_title }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="col-lg col-md col-sm-6 col-6 footer-widget">
+                        <h6 class="footer-widget__title mb-20">{{$menus -> first_footer -> name}}</h6>
+                        <ul class="footer-widget__list">
+                            @foreach($menus -> first_footer -> metas as $meta)
+                            <li><a href={{ $meta -> meta_url }} class="hover-style-link">{{ $meta -> meta_title }}</a></li>
+                            @endforeach
+
+                        </ul>
+                    </div>
+                    <div class="col-lg col-md col-sm-6 col-6 footer-widget">
+                        <h6 class="footer-widget__title mb-20">{{$menus -> second_footer -> name}}</h6>
+                        <ul class="footer-widget__list">
+                            @foreach($menus -> second_footer -> metas as $meta)
+                            <li><a href="{{ $meta -> meta_url }}" class="hover-style-link">{{ $meta -> meta_title }}</a></li>
+                            @endforeach
+
+                        </ul>
+                    </div>
+                    <div class="col-lg col-md col-sm-6 col-6 footer-widget">
+                        <h6 class="footer-widget__title mb-20">{{$menus -> fourth_footer -> name}}</h6>
+                        <ul class="footer-widget__list">
+                            @foreach($menus -> fourth_footer -> metas as $meta)
+                            <li><a href="{{ $meta -> meta_url }}" class="hover-style-link">{{ $meta -> meta_title }}</a></li>
+                            @endforeach
+
+                        </ul>
+                    </div>
+                    <!-- <div class="col-lg col-md col-sm-12 footer-widget">
+                        <h6 class="footer-widget__title mb-20">GET INSPIRED</h6>
+                        <div class="footer-bottom-social">
+                            <ul class="list footer-social-networks ">
+                                <li class="item">
+                                    <a href="{{$pages -> all_pages -> sections -> footer_social_media -> insta_url}}" target="_blank" aria-label="Twitter"> <i class="social social_instagram"></i> </a>
+                                </li>
+                                <li class="item">
+                                    <a href="{{$pages -> all_pages -> sections -> footer_social_media -> facebook_url}}" target="_blank" aria-label="Facebook"> <i class="social social_facebook"></i> </a>
+                                </li>
+                                <li class="item">
+                                    <a href="{{$pages -> all_pages -> sections -> footer_social_media -> pinterest_url}}" target="_blank" aria-label="Pintrest"> <i class="social social_pinterest"></i> </a>
+                                </li>
+                                <li class="item">
+                                    <a href="{{$pages -> all_pages -> sections -> footer_social_media -> twitter_url}}" target="_blank" aria-label="Twitter"> <i class="social social_twitter"></i> </a>
+                                </li>
+                                <li class="item">
+                                    <a href="{{$pages -> all_pages -> sections -> footer_social_media -> linkedin_url}}" target="_blank" aria-label="LinkedIn"> <i class="social social_linkedin"></i> </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <p>&nbsp; </p>
+                        <p class="news-tile">Subscribe for alerts, promotions &amp; inspiration</p>
+                        <form action="{{route('form.submission', ['newsletter'])}}" method="POST">
+                            @if (Session::has('message') && isset(Session::get('message')['referrer']) && Session::get('message')['referrer'] == 'newsletter')
+                            <div class="alert alert-{{Session::get('message')['type']}}">
+                                {{Session::get('message')['body']}}
+                            </div>
+                            @endif
+                            @csrf
+                            <div class="footer-widget__newsletter ">
+                                <input type="email" name="email" value="" required placeholder="Email Address">
+                                <button type="submit" class="submit-button">Join</button>
+                            </div>
+                        </form>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="copyright-mian container pb-5 d-none">
+                <div class="copyright text-center">
+                    <span>Copyright &copy; {{date('Y')}}, Momeni.</span>
+                </div>
+            </div>
+    </div>
+</footer>
+@include('frontend.'.$active_theme -> theme_abrv.'.components.mobile-menu')

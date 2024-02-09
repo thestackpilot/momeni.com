@@ -1,0 +1,98 @@
+@php
+// $active_theme object is available containing the theme developer json loaded.
+// This is for the theme developers who want to load further view assets
+
+use App\Http\Controllers\ConstantsController;
+use App\Http\Controllers\CommonController;
+
+@endphp 
+<div class="mobile-menu-overlay" id="mobile-menu-overlay">
+        <div class="mobile-menu-overlay__inner">
+            <div class="mobile-menu-close-box text-right"> <span class="mobile-navigation-close-icon" id="mobile-menu-close-trigger"> <i class="icon-cross2"></i></span> </div>
+            <div class="mobile-menu-overlay__body">
+                <nav class="offcanvas-navigation">
+                    <ul>
+                    <li class="has-children mb-icons ">
+                             <span class="container-checker" id="searchh">
+                             <div class="searchh">
+                                <img src="/MOM/images/search-icon-mom.svg" id="click-search">
+                                <div id="show-on-search" style="display: none;">
+                                <div id="search-custom-overlay"></div>
+                                <div id="custom-cross-btn">X</div>
+                                    <div class="full-screen-serach-box_inner_wrapper d-flex align-items-center">
+                                        <form role="search" method="get" id="searchform" class="search-form" action="https://momeni.botguys.ai/">
+                                            <div class="form-group">
+                                                <input type="text" class="search-input" id="popup-search" value="" name="s" placeholder="Search....." required="">
+                                            </div>
+                                            <button type="submit" id="serach-popup-btn-box" class="search-button submit-btn"><img src="/MOM/images/white-search-icon-mom.svg"></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            </span>
+                            <span class="container-checker" id="cart-parent">
+                                <a href="{{route('frontend.checkout')}}">
+                                    <!-- <i class="headericons icon-cart quickCart-opener position-relative">
+                                        @auth()
+                                        <span class="badge badge-pill badge-primary position-absolute cartCount">{{$cart -> cart_count}}</span>
+                                        @endauth
+                                    </i> -->
+                                    <div class="headericons quickCart-opener position-relative">
+                                        <img src="/MOM/images/cart-icon-mom.svg">
+                                        @auth()
+                                        <span class="badge badge-pill badge-primary position-absolute cartCount">{{$cart -> cart_count}}</span>
+                                        @endauth
+                                    </div>
+                                </a>
+                            </span>
+                            <span class="container-checker" id="profile-parent">
+                                <a href="{{route('dashboard')}}">
+                                    <!-- <i class="headericons icon-user"></i> -->
+                                    <div class="headericons quickProfile-opener">
+                                        <img src="/MOM/images/myaccount-icon-mom.svg">
+                                    </div>
+                                </a>
+                            </span>
+                        </li>
+                        <li class="has-children">
+                            <a class="nav-link" href="#">
+                                {{$pages -> all_pages -> sections -> main_top_menu -> menu_1_caption}}
+                            </a>
+                            <ul class="sub-menu">
+                                <li> <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_url}}">VIEW ALL</a></li>
+                                @if(isset($menus -> rug_header))
+                                @foreach($menus -> rug_header -> metas as $meta)
+                                    <li>
+                                        <a href="{{ $meta -> meta_url }}">{{ $meta -> meta_title }}</a>
+                                    </li>
+                                @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                        <li class="has-children">
+                            <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_2_url}}">
+                                {{$pages -> all_pages -> sections -> main_top_menu -> menu_2_caption}}
+                            </a>
+
+                        </li>
+                        <li class="has-children"> <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_url}}">{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_caption}}</a>
+
+                        </li>
+
+                        <li class="has-children"> <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_url}}">{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_caption}}</a>
+
+                        </li>
+                        <li class="has-children"> <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_5_url}}">{{$pages -> all_pages -> sections -> main_top_menu -> menu_5_caption}}</a>
+
+                        </li>
+                        <li class="has-children">
+                            @if(!Auth::user())
+                            <a class="nav-link" href="{{route('auth.register')}}"> Become a Partner</a>
+                            @endif
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+

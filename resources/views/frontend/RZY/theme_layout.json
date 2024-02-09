@@ -1,0 +1,415 @@
+{
+    "theme_name": "Rizzy Home",
+    "theme_slug": "rzy",
+    "theme_abrv": "RZY",
+    "theme_api_slug": "api-slug-rzy",
+    "theme_api_base_url": "http://66.110.218.96/B2BAPI_UAT/api/Service/",
+    "theme_api_dev_base_url": "http://122.129.80.197/RIZZY.B2BAPI.DEV/api/Service/",
+    "theme_api_key": "64d3b4ae-dba9-47b2-bf88-f72dfbae0e9d",
+    "theme_api_company": "RizzyHome",
+    "theme_api_image_url": "/",
+    "theme_api_thumbnail_url": "/",
+    "general": {
+        "category_based_filters": false,
+        "allow_custom_cost": false,
+        "allow_freight_percentage": false,
+        "allow_sales_rep_details": true,
+        "show_recent_orders": false,
+        "use_company_credit": false,
+        "use_theme_header": false,
+        "payment_method": {
+            "enabled": false,
+            "gateway": "paytrace"
+        },
+        "tabular_orders": false,
+        "advance_filters_for_orders": false,
+        "allow_hang_tags": true,
+        "extended_breadcrumbs": true,
+        "date_format": true,
+        "allow_emails": true
+    },
+    "sidebar": {
+        "dashboard": {
+            "label": "Dashboard",
+            "slug": "dashboard",
+            "permission": ""
+        },
+        "myaccount": {
+            "label": "My Account",
+            "slug": "dashboard.myaccount",
+            "permission": ""
+        },
+        "accountinfo": {
+            "label": "Account Information",
+            "slug": "dashboard.accountinfo",
+            "permission": ""
+        },
+        "document": {
+            "label": "Documents",
+            "slug": "dashboard.document",
+            "permission": ""
+        },
+        "staff": {
+            "label": "Manage Staff",
+            "slug": "dashboard.staff",
+            "permission": "manage-staff"
+        },
+        "creditmemos": {
+            "label": "Credit Memos",
+            "slug": "dashboard.creditmemos",
+            "permission": "manage-financials"
+        },
+        "financialtransactions": {
+            "label": "Financial Transactions",
+            "slug": "dashboard.financialtransactions",
+            "permission": "manage-financials"
+        },
+        "invoice": {
+            "label": "Invoice",
+            "slug": "dashboard.invoice",
+            "permission": "manage-invoices"
+        },
+        "paymentoptions": {
+            "label": "Payment Options (Pending)",
+            "slug": "dashboard.paymentoptions",
+            "permission": "manage-financials"
+        },
+        "normalorder": {
+            "label": "Place Order",
+            "slug": "dashboard.placeorder",
+            "permission": "manage-orders"
+        },
+        "vieworder": {
+            "label": "View Orders",
+            "slug": "dashboard.vieworder",
+            "permission": "manage-orders"
+        },
+        "initreturn": {
+            "label": "Initiate a Return/Claim",
+            "slug": "dashboard.initreturn",
+            "permission": "manage-claims"
+        },
+        "viewreturn": {
+            "label": "View Returns",
+            "slug": "dashboard.viewreturn",
+            "permission": "manage-claims"
+        },
+        "freightestimator": {
+            "label": "Freight Estimator",
+            "slug": "dashboard.freightestimator",
+            "permission": "manage-freights"
+        },
+        "hangtags": {
+            "label": "Hang Tags",
+            "slug": "dashboard.hangtags",
+            "permission": ""
+        }
+    },
+    "pages": {
+        "all_pages": {
+            "title": "All Pages Common",
+            "slug": "all_pages",
+            "sections": {
+                "footer_social_media": {
+                    "slug": "footer_social_media",
+                    "title": "Footer Social media Items",
+                    "metas": {
+                        "insta_url": "text",
+
+                        "facebook_url": "text",
+
+                        "pinterest_url": "text",
+
+                        "twitter_url": "text",
+
+                        "youtube_url": "text",
+
+                        "linkedin_url": "text"
+                    }
+                }
+            }
+        },
+        "home": {
+            "title": "Home",
+            "slug": "home",
+            "sections": {
+                "new_arrival": {
+                    "slug": "new_arrival",
+                    "title": "New Arrival",
+                    "metas": {
+                        "image_1_title": "text",
+                        "image_1_caption": "text",
+                        "image_1_image": "url",
+                        "image_1_url": "url",
+
+                        "image_2_title": "text",
+                        "image_2_caption": "text",
+                        "image_2_image": "url",
+                        "image_2_url": "url",
+
+                        "image_3_title": "text",
+                        "image_3_caption": "text",
+                        "image_3_image": "url",
+                        "image_3_url": "url",
+
+                        "image_4_title": "text",
+                        "image_4_caption": "text",
+                        "image_4_image": "url",
+                        "image_4_url": "url"
+                    }
+                },
+                "new_additions": {
+                    "slug": "new_additions",
+                    "title": "Let's Get Rizzy",
+                    "metas": {
+                        "caption": "text",
+                        "button_title": "text",
+                        "button_url": "url",
+                        "image": "url"
+                    }
+                },
+                "our_products": {
+                    "slug": "our_products",
+                    "title": "Our Products",
+                    "metas": {
+                        "caption": "text",
+                        "prod_1_title": "text",
+                        "prod_1_caption": "text",
+                        "prod_1_image": "url",
+                        "prod_1_url": "url",
+
+                        "prod_2_title": "text",
+                        "prod_2_caption": "text",
+                        "prod_2_image": "url",
+                        "prod_2_url": "url",
+
+                        "prod_3_title": "text",
+                        "prod_3_caption": "text",
+                        "prod_3_image": "url",
+                        "prod_3_url": "url",
+
+                        "prod_4_title": "text",
+                        "prod_4_caption": "text",
+                        "prod_4_image": "url",
+                        "prod_4_url": "url"
+                    }
+                },
+                "learn_more": {
+                    "slug": "learn_more",
+                    "title": "Learn More",
+                    "metas": {
+                        "caption": "text",
+                        "button_text": "text",
+                        "button_url": "url"
+                    }
+                },
+                "about_rizzy": {
+                    "slug": "about_rizzy",
+                    "title": "About Rizzy",
+                    "metas": {
+                        "title_top": "text",
+                        "title_bottom": "text",
+                        "description": "text",
+                        "video": "url"
+                    }
+                },
+                "rizzy_home": {
+                    "slug": "rizzy_home",
+                    "title": "Rizzy Home",
+                    "metas": {
+                        "image_1_title": "text",
+                        "image_1_caption": "text",
+                        "image_1_image": "url",
+                        "image_1_url": "url",
+
+                        "image_2_title": "text",
+                        "image_2_caption": "text",
+                        "image_2_image": "url",
+                        "image_2_url": "url",
+
+                        "image_3_title": "text",
+                        "image_3_caption": "text",
+                        "image_3_image": "url",
+                        "image_3_url": "url",
+
+                        "image_4_title": "text",
+                        "image_4_caption": "text",
+                        "image_4_image": "url",
+                        "image_4_url": "url",
+
+                        "image_5_title": "text",
+                        "image_5_caption": "text",
+                        "image_5_image": "url",
+                        "image_5_url": "url"
+                    }
+                }
+            }
+        },
+        "about_us": {
+            "title": "About Us",
+            "slug": "about_us",
+            "sections": {
+                "about_us_items": {
+                    "slug": "about_us_items",
+                    "title": "About Us Items",
+                    "metas": {
+                        "about_us_description_1": "textarea",
+                        "about_us_image_1": "url",
+                        "about_us_description_2": "textarea",
+                        "about_us_image_2": "url"
+                    }
+                }
+            }
+        },
+        "documents": {
+            "title": "Documents",
+            "slug": "documents",
+            "sections": {
+                "catalog": {
+                    "slug": "catalog",
+                    "title": "Documents",
+                    "metas": {
+                        "document_title_1": "text",
+                        "document_url_1": "url",
+                        "document_title_2": "text",
+                        "document_url_2": "url",
+                        "document_title_3": "text",
+                        "document_url_3": "url",
+                        "document_title_4": "text",
+                        "document_url_4": "url",
+                        "document_title_5": "text",
+                        "document_url_5": "url"
+                    }
+                }
+            }
+        }
+    },
+    "sliders": {
+        "home_slider": {
+            "slug": "home_slider",
+            "title": "Home Slider",
+            "metas": {
+                "caption_1": "text",
+                "caption_2": "text",
+                "image": "url"
+            }
+        }
+    },
+    "showrooms": {
+        "rzy_showrooms": {
+            "slug": "rzy_showrooms",
+            "title": "Rizzy Showrooms",
+            "metas": {
+                "title": "text",
+                "area": "text",
+                "address": "text",
+                "image": "url"
+            }
+        }
+    },
+    "forms": {
+        "contact_us": {
+            "slug": "contact_us",
+            "title": "Contact Us",
+            "metas": {
+                "fullname": "text",
+                "email": "text",
+                "company": "text",
+                "phone": "number",
+                "Inquiry": "para"
+            }
+        },
+        "feedback": {
+            "slug": "feedback",
+            "title": "Feedback",
+            "metas": {
+                "fullname": "text",
+                "email": "text",
+                "company": "text",
+                "phone": "number",
+                "Inquiry": "para"
+            }
+        },
+        "careers": {
+            "slug": "careers",
+            "title": "Careers",
+            "metas": {
+                "fullname": "text",
+                "email": "text",
+                "company": "text",
+                "phone": "number",
+                "Inquiry": "para"
+            }
+        }
+    },
+    "menus": {
+        "mega_header": {
+            "slug": "mega_header",
+            "title": "PRODUCT",
+            "view_all": "1",
+            "view_all_type": "maincollection",
+            "metas": {
+                "key": "text",
+                "title": "text",
+                "url": "url",
+                "image": "image",
+                "parent_key": "text"
+            }
+        },
+        "main_header_left": {
+            "slug": "main_header_left",
+            "title": "Main Top Header (Left)",
+            "metas": {
+                "key": "text",
+                "title": "text",
+                "url": "url",
+                "image": "image",
+                "parent_key": "text"
+            }
+        },
+        "main_header_right": {
+            "slug": "main_header_right",
+            "title": "Main Top Header (Right)",
+            "metas": {
+                "key": "text",
+                "title": "text",
+                "url": "url",
+                "image": "image",
+                "parent_key": "text"
+            }
+        },
+        "first_footer": {
+            "slug": "first_footer",
+            "title": "Products",
+            "metas": {
+                "key": "text",
+                "title": "text",
+                "url": "url",
+                "image": "image",
+                "parent_key": "text"
+            }
+        },
+        "second_footer": {
+            "slug": "second_footer",
+            "title": "Quick Services",
+            "metas": {
+                "key": "text",
+                "title": "text",
+                "url": "url",
+                "image": "image",
+                "parent_key": "text"
+            }
+        },
+        "third_footer": {
+            "slug": "third_footer",
+            "title": "Company Info",
+            "metas": {
+                "key": "text",
+                "title": "text",
+                "url": "url",
+                "image": "image",
+                "parent_key": "text"
+            }
+        }
+    }
+}
