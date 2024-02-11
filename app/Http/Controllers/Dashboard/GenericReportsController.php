@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use Carbon\Carbon;
 use View;
 use App\Models\Cart;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class GenericReportsController extends DashboardController
         if ( $active_customer )
         {
             $company_credit = $this->ApiObj->Get_CompanyCredit( $active_customer );
-            
+
             if ( $company_credit )
             {
                 $company_credit = $company_credit['OutPut'];
@@ -282,7 +283,7 @@ class GenericReportsController extends DashboardController
                 'type'        => 'date',
                 'attribues'   => ' data-required="true" ',
                 'placeholder' => '',
-                'value'       => $request->from_date ? $request->from_date : CommonController::get_date_format( '-1 month' ) 
+                'value'       => $request->from_date ? $request->from_date : CommonController::get_date_format( '-1 month' )
             ],
             [
                 'title'       => 'To Date',
@@ -1091,14 +1092,15 @@ class GenericReportsController extends DashboardController
 
         if ( count( $request->all() ) > 0 )
         {
+            $from_date = $request->has('from_date') ? $request->from_date : Carbon::now()->format('Y-m-d');
+            $to_date = $request->has('to_date') ? $request->to_date : Carbon::now()->format('Y-m-d');
+            $report = $this->ApiObj->Get_SalesReport( $request->sales_rep, $request->customer, $request->report_title, $from_date, $to_date );
 
-            $report = $this->ApiObj->Get_SalesReport( $request->sales_rep, $request->customer, $request->report_title, $request->from_date, $request->to_date );
-            
             if( $report['Success'] )
             {
                 View::share( 'ReportData', $report['ReportData'] );
             }
-            
+
         }
 
         $reports_title  = array();
@@ -1113,7 +1115,11 @@ class GenericReportsController extends DashboardController
                 $reports_title[] =
                     [
                     'value' => $report['KeyID'],
-                    'label' => $report['Description']
+                    'label' => $report['Description'],
+                    'fields' => [
+                        'customer_show' => $report['CustomerField'],
+                        'date_field' => $report['DateField']
+                    ]
                 ];
 
             }
@@ -1124,6 +1130,7 @@ class GenericReportsController extends DashboardController
             [
                 'title'       => 'Report Title',
                 'type'        => 'select',
+                'id'          => 'report_title',
                 'options'     => $reports_title ? $reports_title : '',
                 'placeholder' => '',
                 'value'       => $request->report_title ? $request->report_title : ''
@@ -1131,6 +1138,7 @@ class GenericReportsController extends DashboardController
             [
                 'title'       => 'From Date',
                 'type'        => 'date',
+                'id'          => 'date_field',
                 'attribues'   => ' data-required="true" ',
                 'placeholder' => '',
                 'value'       => $request->from_date ? CommonController::get_date_format( $request->from_date ) : CommonController::get_date_format( '-1 month' )
@@ -1138,6 +1146,7 @@ class GenericReportsController extends DashboardController
             [
                 'title'       => 'To Date',
                 'type'        => 'date',
+                'id'          => 'date_field',
                 'attribues'   => ' data-required="true" ',
                 'placeholder' => '',
                 'value'       => $request->to_date ? CommonController::get_date_format( $request->to_date ) : CommonController::get_date_format( date( 'Y-m-d' ) )
@@ -1145,6 +1154,7 @@ class GenericReportsController extends DashboardController
             [
                 'title'       => 'Customer',
                 'type'        => Auth::user()->is_customer ? 'hidden' : 'select',
+                'id'          => 'customer_show',
                 'options'     => $this->get_customers_dropdown_options(),
                 'placeholder' => '',
                 'value'       => $request->has( 'customer' ) ? $request->customer : ''

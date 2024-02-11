@@ -26,13 +26,17 @@ use App\Http\Controllers\CommonController;
                         @if($filter['type'] == 'hidden')
                            <input name="{{str_replace(' ', '_', strtolower($filter['title']))}}" value="{{$filter['value']}}" class="form-control" {!!isset($filter['attributes']) ? $filter['attributes'] : '' !!} type="{{$filter['type']}}" />
                            @else
-                           <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
+                           <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3 @if(!empty($filter['id'])) {{ $filter['id'] }} @endif">
                               <label for="{{str_replace(' ', '_', strtolower($filter['title']))}}" class="form-label">{{$filter['title']}}</label>
                               @if($filter['type'] == 'select')
                               <select name="{{str_replace(' ', '_', strtolower($filter['title']))}}" class="form-control">
                                  @if($filter['options'])
                                     @foreach($filter['options'] as $option)
-                                    <option {{old(str_replace(' ', '_', strtolower($filter['title']))) && old(str_replace(' ', '_', strtolower($filter['title']))) == $option['value'] ? 'selected' : ($filter['value'] == $option['value'] ? 'selected' : '' ) }} value="{{$option['value']}}">{{$option['label']}}</option>
+                                    <option
+                                        @if(!empty($option['fields']))
+                                            data-show="{{ json_encode($option['fields']) }}"
+                                        @endif
+                                        {{old(str_replace(' ', '_', strtolower($filter['title']))) && old(str_replace(' ', '_', strtolower($filter['title']))) == $option['value'] ? 'selected' : ($filter['value'] == $option['value'] ? 'selected' : '' ) }} value="{{$option['value']}}">{{$option['label']}}</option>
                                     @endforeach
                                  @endif
                               </select>
@@ -48,15 +52,15 @@ use App\Http\Controllers\CommonController;
                               @endif
                            </div>
                            @endif
-                        
+
                         @endforeach
                         <div class="col-md-12 d-flex justify-content-end">
                            <button type="submit" class="btn btn-primary text-uppercase mt-2">Search</button>
                         </div>
-                       
+
                      </form>
                      @endif
-                     
+
                   </div>
                   <div class="table-container">
                     <div id="report_details"></div>
@@ -72,7 +76,7 @@ use App\Http\Controllers\CommonController;
 @parent
 <script type="text/javascript">
    $(document).ready(function() {
-      
+
       if(`{{ isset($ReportData) && $ReportData }}`) {
          // The Base64 string of a simple PDF file
          var b64 = `{{ isset($ReportData) ? $ReportData : '' }}`
@@ -84,6 +88,7 @@ use App\Http\Controllers\CommonController;
          obj.type = 'application/pdf';
          obj.data = 'data:application/pdf;base64,' + b64;
          // document.body.appendChild(obj);
+          console.log(obj)
          $(obj).insertAfter('#report_details');
 
          // Insert a link that allows the user to download the PDF file
@@ -95,7 +100,28 @@ use App\Http\Controllers\CommonController;
          // document.body.appendChild(link);
          $(link).insertAfter('#report_details');
       }
-      
+
+      $('select[name="report_title"]').on('change', function () {
+          checkFilters($(this))
+      })
+
+       function checkFilters(elem) {
+           let show_divs = elem.find(':selected').data('show');
+           $.each(show_divs, function(key, val) {
+               if (val == 1) {
+                   $('.' + key).show()
+                   $('.' + key + ' input').prop('disabled', false)
+                   $('.' + key + ' select').prop('disabled', false)
+               } else {
+                   $('.' + key).hide()
+                   $('.' + key + ' input').prop('disabled', true)
+                   $('.' + key + ' select').prop('disabled', true)
+               }
+           });
+       }
+
+      checkFilters($('select[name="report_title"]'))
+
    });
 </script>
 @endsection
