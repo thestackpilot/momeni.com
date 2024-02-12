@@ -23,7 +23,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
 	}
 }
 }
-@endphp 
+@endphp
 <div class="sidebar">
     <div class="filler-show-btn pull-right">
         <button onclick="setVisibility('sub3', 'inline');" ;="">Filters <span class="icon-funnel"></span></button>
@@ -33,7 +33,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
         <input type="hidden" name="main_collection_id" value="{{$main_collection['MainCollectionID']}}" >
         <input type="hidden" name="return_type_id" value="{{$return_type_id}}" >
         <input type="hidden" name="default_filter_id" value="{{isset($default_filter) && $default_filter ? $default_filter : ConstantsController::NO_FILTER_FLAG}}" >
-        
+
         <div id="selected_filters">
             @if( ($is_discontinued) || (!empty($filters['Filters'])) && ($filters['Selected_Filters_Count'] > 0) )
                 <div class="filter-header d-flex align-items-center">
@@ -57,7 +57,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                         }
                     }
                 @endphp
-            
+
                 @endif
                 <div class="p-4 pt-3 filter-content mb-1">
 		@if(isset($default_filter) && $default_filter && isset(json_decode($default_filter, 1)['Filters']))
@@ -158,7 +158,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
         </div>
         @endif
     </div>
-    
+
 </div>
 @section('styles')
 <style>
@@ -182,22 +182,31 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
     function setVisibility(id, visibility) {
         document.getElementById(id).style.display = visibility;
     }
+    if (!localStorage.getItem('main_url')) {
+        localStorage.setItem('main_url', window.location.href);
+    }
     var filter_type = '';
     var filter_value = '';
     var filter_array = null;
-    function fill_filter_array(type) 
+    var main_url = localStorage.getItem('main_url');
+    var not_redirect = "{{ \Illuminate\Support\Facades\Route::current()->getName() }}"
+    if (not_redirect !== 'frontend.designs') {
+        main_url = window.location.href;
+    }
+
+    function fill_filter_array(type)
     {
         var temp = [];
         var str = '';
         if(type !== 'Sort')
         {
-            $.each($("input[name='" + type + "']:checked"), function() 
+            $.each($("input[name='" + type + "']:checked"), function()
             {
                 temp.push('"' + ($(this).val()).trim() + '"');
             });
             filter_value = '';
         }else{
-            $.each($("select[name='" + type.toLowerCase() + "'] option:selected"), function() 
+            $.each($("select[name='" + type.toLowerCase() + "'] option:selected"), function()
             {
                 temp.push('"' + ($(this).val()).trim() + '"');
                 filter_type = 'Sort';
@@ -209,57 +218,57 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
             });
         }
 
-        if (temp.length != 0) 
+        if (temp.length != 0)
         {
             return '{"FilterID":"' + type + '","Values":[' + temp + ']}';
         }
         return '';
     }
-    
-    function filterManager(discontinued_filter, Filterarr, discontinued) 
+
+    function filterManager(discontinued_filter, Filterarr, discontinued, redirect_back = 0)
     {
 
-        if ($('#pageLoader').length) 
+        if ($('#pageLoader').length)
         {
             $('#pageLoader').removeClass('d-none');
         }
 
-        if (xhr != null) 
+        if (xhr != null)
         {
             xhr.abort();
         }
 
         var FiltersArray = btoa(`{!!ConstantsController::NO_FILTER_FLAG!!}`);
-       
-        if (Filterarr == null) 
+
+        if (Filterarr == null)
         {
             var Filters = [];
             var filter_types = "{{ implode( ',', $filter_arr ) }}".split(','); //['Current In-Line', 'Color', 'Style', 'Material', 'Pattern', 'Weaving', 'Discount', 'Collection', 'Construction'];
             var default_filter_id = $('input[name="default_filter_id"]').val();
-         
-            filter_types.forEach(function(filter) 
+
+            filter_types.forEach(function(filter)
             {
                 var response = fill_filter_array(filter);
-                if (response.length) 
+                if (response.length)
                 {
                     Filters.push(response);
                 }
             });
-          
+
             var sizes = [];
-            $.each($("input[name='Size']:checked"), function() 
+            $.each($("input[name='Size']:checked"), function()
             {
                 var val = $(this).val();
                 sizes.push('"' + val.replace(/"/g, '\\"') + '"');
             });
-            
-            if (sizes.length != 0) 
+
+            if (sizes.length != 0)
             {
                 Filters.push('{"FilterID":"Size","Values":[' + sizes + ']}')
             }
-            
-            
-            if (Filters.length != 0) 
+
+
+            if (Filters.length != 0)
             {
                 Filterarr = [];
                 if ( default_filter_id && default_filter_id != '{!!ConstantsController::NO_FILTER_FLAG!!}' ) {
@@ -285,8 +294,8 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                 else
                     FiltersArray = btoa(default_filter_id);
             }
-        } 
-        else 
+        }
+        else
         {
             FiltersArray = btoa(Filterarr);
         }
@@ -312,7 +321,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                     Values: ['1']
                 });
             }
-            
+
             console.log("in discountinued");
             console.log(jsonData);
         FiltersArray = btoa(JSON.stringify(jsonData));
@@ -321,14 +330,12 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
         console.log(FiltersArray);
         var mainCollectionId = $('input[name="main_collection_id"]').val();
         var return_type = $('input[name="return_type_id"]').val();
-        
+
         var url = window.location.origin + "/designs/" + mainCollectionId + "/" + FiltersArray + "/" + return_type;
         var collection_url = window.location.origin + "/collections/" + mainCollectionId + "/" + return_type + "/" + FiltersArray ;
 
         var designPagePath = window.location.origin + '/designs';
         var currentPagePath = window.location.origin + window.location.pathname;
-             
-        
 
         if( currentPagePath.match(designPagePath) == null )
         {
@@ -351,18 +358,18 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                 '_token': '{{csrf_token()}}',
                             }
                         }).
-                        done(function(response) 
+                        done(function(response)
                         {
                             var base_url = window.location.origin;
                             window.history.pushState('', '', collection_url);
                             var new_html = $($.parseHTML(response));
                             console.log(new_html.find('#selected_filters').html());
-                            
+
                             $('#sub_collections_wrapper').html(new_html.find('#sub_collections_wrapper').html());
                             $('#collection_heading').html(new_html.find('#collection_heading').html());
                             $('#selected_filters').html(new_html.find('#selected_filters').html());
-                            
-                            if ($('#pageLoader').length) 
+
+                            if ($('#pageLoader').length)
                             {
                                 $('#pageLoader').addClass('d-none');
                             }
@@ -376,9 +383,9 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                 window.location.href = url;
                 console.log('else');
             }
-           
+
         }
-        else 
+        else
         {
             xhr = $.ajax(
             {
@@ -388,18 +395,23 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                     '_token': '{{csrf_token()}}',
                 }
             }).
-            done(function(response) 
+            done(function(response)
             {
+                if (redirect_back) {
+                    window.location.href = main_url;
+                    localStorage.removeItem('main_url')
+                    return;
+                }
                 console.log("ajax");
                 var base_url = window.location.origin;
                 window.history.pushState('', '', url);
                 var new_html = $($.parseHTML(response));
-   
+
                 $('#sub_collections_wrapper').html(new_html.find('#sub_collections_wrapper').html());
                 $('#collection_heading').html(new_html.find('#collection_heading').html());
                 $('#selected_filters').html(new_html.find('#selected_filters').html());
-                
-                if ($('#pageLoader').length) 
+
+                if ($('#pageLoader').length)
                 {
                     $('#pageLoader').addClass('d-none');
                 }
@@ -411,7 +423,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
     function applyFilterTrigger()
     {
         $('.remove-filer-cross').off('click');
-        $('.remove-filer-cross').on('click', function() 
+        $('.remove-filer-cross').on('click', function()
         {
             var sel_filter = $(this).find('.remove-filter-value').val().toString().trim().split(':');
             removeFilter(sel_filter[0].trim(), sel_filter[1].trim(), sel_filter[0].trim() == 'Discontinued', sel_filter[1].trim() == 1 ? 0 : 1);
@@ -429,14 +441,14 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
         });
 
         $("#filter-id-" + (filterType.replace(' ', '')).toLowerCase()).find("select[name='" + filterType.toLowerCase() + "'] option").each(function(index, option) {
-            if ($(option).val().trim() == filterValue) 
+            if ($(option).val().trim() == filterValue)
             {
                 $(option).removeAttr("selected");
             }
         });
         // console.log("test");
         // console.log($("#filter-id-" + (filterType.replace(' ', '')).toLowerCase()).find("select[name='" + filterType.toLowerCase() + "'] option:selected").val());
-	if (discontinued) 
+	if (discontinued)
     {
         $('#flexCheckChecked-discontinued').prop('checked', false);
         console.log(dvalue);
@@ -446,9 +458,9 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
     }
 
     var xhr = null;
-    $(document).ready(function() 
+    $(document).ready(function()
     {
-        $(document).off('change', '.sidebar-filters-input').on('change', '.sidebar-filters-input', function() 
+        $(document).off('change', '.sidebar-filters-input').on('change', '.sidebar-filters-input', function()
         {
             filterManager();
         });
@@ -471,7 +483,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
             $('.filter-content .sidebar-filters-input').each(function(){
                 $(this).removeAttr('checked');
             });
-            filterManager(null,null, 0);
+            filterManager(null,null, 0, 1);
         });
 
         $(document)
@@ -480,21 +492,21 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
 
             if ($(this).prop('checked')) {
                 console.log('Checkbox is checked');
-                
+
                 discontinued_filter = '{"FilterID":"Discontinued","Values":["1"]}';
                 filterManager(discontinued_filter, null, 0);
                 // var mainCollectionId = $('input[name="main_collection_id"]').val();
                 // var filter_arr = btoa('{"Filters": [{"FilterID":"Discontinued","Values":["1"]}]}');
-              
+
                 // var return_type = $('input[name="return_type_id"]').val();
-              
+
                 // var url = window.location.origin + "/designs/" + mainCollectionId + "/" + filter_arr + "/" + return_type;
                 // console.log(return_type);
                 // window.location.href = url;
             } else {
-                
+
                 removeFilter('Discontinued', 1,true, 0);
-                
+
             }
         });
     });
