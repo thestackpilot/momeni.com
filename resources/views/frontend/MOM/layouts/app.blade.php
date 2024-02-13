@@ -60,7 +60,7 @@ use App\Http\Controllers\CommonController;
     <script src="https://img1.wsimg.com/tcc/tcc_l.combined.1.0.6.min.js"></script>
 </head>
 <body class="momeni">
-    @include('frontend.'.$active_theme -> theme_abrv.'.components.side-icons')
+{{--    @include('frontend.'.$active_theme -> theme_abrv.'.components.side-icons')--}}
     @yield('content')
     <script>
     // TODO : The page loads with a jerk and white screen shows - Asfand needs to look into this
