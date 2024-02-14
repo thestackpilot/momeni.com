@@ -159,7 +159,7 @@ use App\Http\Controllers\CommonController;
                                                 <label for="without-price" class="form-label ml-2">Hang Tag without price</label>
                                             </div>
                                             <div class="col-md-4 col-sm-12 mb-3 pe-1 pe-lg-3">
-                                                <input type="checkbox" name="include-barcode" id="include-barcode" />
+                                                <input type="checkbox" name="include-barcode" id="include-barcode" checked/>
                                                 <label for="include-barcode" class="form-label ml-2">Include Barcode</label>
                                             </div>
                                             <div class="col-md-4 col-sm-12 mb-3 pe-1 pe-lg-3">

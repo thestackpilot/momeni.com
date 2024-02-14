@@ -24,14 +24,13 @@
     <style type="text/css">
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
         body {
-            font-family: "Montserrat", sans-serif;
+            font-family: "Montserrat";
             font-optical-sizing: auto;
             font-style: normal;
             margin:0%;
             padding: 0%;
         }
         
-
         <!--
         .style2 {
             font-size: 12px;
@@ -114,7 +113,7 @@
 
 </head>
 
-<body marginstyle="width:0" marginheight="0" topmargin="0">
+<body onload="{{isset($print) && $print ? 'PrintDoc()' : ''}}" marginstyle="width:0" marginheight="0" topmargin="0">
     @foreach($products as $k => $product)
     <div style="width:100%;" class="divbg">
         <div style="height:50px;" class="divHeaderFooterbg"></div>
@@ -129,21 +128,21 @@
                           <p style="border:0; background-color: #ffffff; ">
                               <div style="border:0; background-color: #ffffff; ">
                                 <center>
-                                    <font color="#000000" style="font-size:40px; color:rgb(158, 155, 155);" >
+                                    <font color="#000000" style="font-size:40px;color: rgb(158, 155, 155);" >
                                         <span>SIZES AVAILABLE</span>
                                     </font>
 
-                                <div class="" style="margin-top: 70px;">
+                                <div class="" style="margin-top: 40px;">
                                     @if (isset($product['barcodes']))
                                         @foreach($product['barcodes'] as $barcode)
                                         <span style="border:0; background-color: #ffffff; width: 225px; display: inline-block; margin-bottom: 40px;">
-                                            <span class="m-0" style="margin: 0; font-size:22px; font-weight:normal; color: grey;">{{$barcode['label']}}</span>
+                                            <span class="m-0" style="margin: 0; font-size:24px; font-weight:normal; color: grey;">{{$barcode['label']}}</span>
                                             <div style="margin-top: 5px; margin-bottom: 10px;">
                                                 <img src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}" width="170px" height="45px">
                                                 
                                                 {{-- <img src="data:image/png;base64,{!! DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), true) !!}" width="150px" height="60px" alt="Barcode"> --}}
                                             </div>
-                                            <span style="margin-top: 10px;font-size: 10px; font-weight: bold;"> {{ $barcode['code']  }}</span>
+                                            <span style="margin-top: 8px;font-size: 12px; font-weight: bold;"> {{ $barcode['code']  }}</span>
                                         </span>
                                         @endforeach
                                     
@@ -158,41 +157,45 @@
                               </div>
                           </p>
                         </td>
-                        <td style="width:50%; vertical-align: top; padding:0; margin:20%;" class="right-div">
+                        <td style="width:50%; vertical-align: top; padding:0; margin:0;" class="right-div">
+                              <div style="border:0; background-color: #ffffff; ">
+
                                     {{-- logo --}}
+                                        
                                     <div class="mb-5 pb-3" style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
-                                        <img src = "{{ $product['logo'] }}" width="175" onerror="this.onerror=null; this.src='{{url('/').$error_image}}'" style="text-align: right;" />
+                                        <img src = "{{ $product['logo'] }}" width="150" onerror="this.onerror=null; this.src='{{url('/').$error_image}}'" style="text-align: center;" />
                                         @if(isset($header))
                                             <div>
-                                                <font face="arial" style="color: gray;font-style: italic;font-size: 30px;">
+                                                <font face="arial" style="color: gray;font-style: italic;font-size: 20px;">
                                                     {{$header}}
                                                 </font>
                                             </div>
                                         @endif
                                     </div>         
+                                    
                                     {{-- titles and details --}}
-    
-                                    <div style="font-size: 28px; color: grey; text-align: center; margin-bottom: 10px;">
-                                        <p style="margin-bottom: 40px; overflow-wrap: break-word;"><b>{{$product['category']}}</b></p>
-                                        <p style="margin-bottom: 10px; overflow-wrap: break-word;">{{$product['title']}}</p>
-                                    </div>
-
+            
+                                    <div>
+                                        {{-- title --}}
+                                        <div style="font-size:24px;color: grey; text-align: center; margin-bottom: 30px;">
+                                            <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
+                                            <p class="mb-0">{{$product['title']}}</p>
+                                        </div>
                                         <table style="width:100%" border="0" cellspacing="0" cellpadding="0" style="padding-top: 0px;">
                                             <tbody>
                                                 {{-- line between --}}
                                                 <tr>
-                                                    <td><hr class="col-2 m-auto p-3 mt-4" style="width:16.66%; margin-top:60px; margin-bottom:30px; auto; padding:1rem; opacity: 1;"></td>
+                                                    <td><hr class="col-2 m-auto p-3 mt-4" style="width:16.66%; margin:0 auto; padding:1rem; opacity: 1;"></td>
                                                 </tr>
             
                                                 {{-- details --}}
-            
                                                 <tr>
                                                     <td>
                                                         @foreach($product['attributes'] as $attribute)
-                                                            <div class="style2 text-center" style="text-align: center;margin-top: 30px;">
-                                                                <div style="font-size:26px; color: grey;margin-bottom: 60px;">
-                                                                    <span style="color:rgb(104, 102, 102)">{{$attribute['label']}}:</span>
-                                                                    <span class="mb-0" style="overflow-wrap: break-word;">{{$attribute['value']}} </span>
+                                                            <div class="style2 text-center" style="text-align: center;margin-top: 10px;">
+                                                                <div style="font-size:24px;margin-bottom: 20px;">
+                                                                    <span style="color:rgb( 132, 135, 135)" >{{$attribute['label']}}:</span>&nbsp;
+                                                                    <span class="mb-0" style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span>
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -200,6 +203,9 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                    </div>
+                               
+                              </div>
                         </td>
                       </tr>
                 </tbody>

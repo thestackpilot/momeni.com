@@ -40,8 +40,12 @@ class HangtagsController extends DashboardController
                         'title'        => $items_data['HangTagsDetail'][0]['Design'],
                         'attributes'   => [
                             [
-                                'label' => 'Fibers',
+                                'label' => 'Material',
                                 'value' => $items_data['HangTagsDetail'][0]['Fibers']
+                            ],
+                            [
+                                'label' => 'Construction',
+                                'value' => $items_data['HangTagsDetail'][0]['Construction']
                             ],
                             [
                                 'label' => 'Country',
@@ -51,6 +55,7 @@ class HangtagsController extends DashboardController
                         'construction' => $items_data['HangTagsDetail'][0]['Construction'],
                         'collection'   => $items_data['HangTagsDetail'][0]['Collection'],
                         'image'        => CommonController::getApiFullImage( $item['ImageName'] )
+                       
                     ];
 
                     foreach ( $items_data['HangTagsDetail'] as $i => $data )
@@ -123,21 +128,21 @@ class HangtagsController extends DashboardController
         {
             $page_data['logo'] = asset( $this->basicSettings->logo_dark );
         }
-
+        
         switch ( $validated_data['submit'] )
         {
             case 'print':
                 $page_data['print'] = true;
 
-                return view( 'dashboard.hangtags-pdf', $page_data );
+                return view( 'dashboard.hangtags-print', $page_data );
                 break;
             case 'download':
 
                 $html = view( 'dashboard.hangtags-pdf', $page_data )->render();
-                $pdf  = PDF::loadHTML( $html )->setPaper( [0, 0, 750, 970], 'portrait' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
+                $pdf  = PDF::loadHTML( $html )->setPaper( [0, 0, 580, 790 ], 'landscape' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
                 // $pdf = PDF::loadView( 'dashboard.hangtags-pdf', $page_data )->setPaper( [0, 0, 720, 970], 'portrait' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
 
-                return $pdf->download( 'hangtags.pdf' );
+                return $pdf->stream( 'hangtags.pdf' );
                 break;
             default:
                 return redirect()->route( 'dashboard.hangtags' )->with( 'message', ['type' => 'danger', 'body' => 'Invalid request.'] );
