@@ -1,2 +1,6 @@
 storage/*
+vendor/*
+composer.lock
+01012024_momeni.sql
+.env
 *.log
