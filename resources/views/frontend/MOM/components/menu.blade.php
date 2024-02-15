@@ -7,7 +7,7 @@ use App\Http\Controllers\CommonController;
 
 @endphp
 
-<div class="col-lg-8 col-md-5 header-menu text-left">
+<div class="col-lg-12 col-md-5 header-menu text-left">
     <ul class="menu">
         <li class="parant">
             @if(isset($menus -> rug_header))
@@ -71,9 +71,16 @@ use App\Http\Controllers\CommonController;
             </span>
         </li>
         <li class="parant">
+            <form action="" method="POST">
+                <div class="border-bottom-black" id="search_text_container">
+                    <input type="text" name="searchText" id="" class="border-0 main-item search-field search-input" placeholder="Search Here"/>
+                </div>
+            </form> {{-- you dont need form for search, handled using jquery --}}
+        </li>
+        <li class="parant">
             <span>
-                <a href="javascript:void(0)" class="main-item searchh">
-                    <img src="/MOM/images/search-icon-mom.svg" id="click-search">
+                <a href="javascript:void(0)" class="search-button submit-btn search_text_button search-icon" id="serach-popup-btn-box">
+                    <img src="/MOM/images/search-icon-mom.svg" id="serach-popup-btn-box">
                 </a>
             </span>
         </li>
