@@ -10,7 +10,7 @@ use App\Http\Controllers\CommonController;
     @if(isset($sliders -> main_slider)) 
         @foreach($sliders -> main_slider -> metas as $slide)
         @if($slide -> is_active)
-            <div class="slider-item home-row hp-video" style="background-image:url({{asset($slide -> image)}});">
+            <div class="slider-item home-row hp-video" style="background-image:url('/MOM/images/landing-img/furniture/1.png');">
                 <div class="overlay"></div>
                 <div class="container">
                     <div class="row no-gutters slider-text js-fullheight hpmt-video-text-content justify-content-center">
