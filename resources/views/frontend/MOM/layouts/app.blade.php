@@ -129,6 +129,16 @@ use App\Http\Controllers\CommonController;
             }
         });
 
+        var isLoggedIn = {!! Auth::user() ? 'true' : 'false' !!};
+    // Show the appropriate li based on user login status
+        if (isLoggedIn) {
+            $("#loginLi").hide();
+            $("#profileLi").show();
+        } else {
+            $("#loginLi").show();
+            $("#profileLi").hide();
+        }
+
         $('.carousel').carousel(
         {
             interval: false,
@@ -179,7 +189,9 @@ use App\Http\Controllers\CommonController;
         });
         //search full screen
         $("#click-search").click(function(){
-            $("#show-on-search").show();
+            $("#search_field").show();
+            $("#search_text_container").addClass('border-bottom-thick');
+            $("#click-search").addClass('search_text_button');
         });
         $("#custom-cross-btn").click(function(){
             $("#show-on-search").hide();

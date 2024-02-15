@@ -53,18 +53,18 @@ use App\Http\Controllers\CommonController;
             <span> <a href="{{route('auth.register')}}" class="main-item"> Become a Partner</a></span>
             @endif
         </li>
-        <li class="parant">
+        <li class="parant" id="loginLi">
             @if(!Auth::user())
                 <span> <a href="{{route('auth.login')}}" class="main-item"> Login</a></span>
-            @else
-                <span> <a href="javascript:void(0)" class="main-item quickProfile-opener"> <img src="/MOM/images/myaccount-icon-mom.svg"></a></span>
+            {{-- @else
+                <span> <a href="javascript:void(0)" class="main-item quickProfile-opener"> <img src="/MOM/images/myaccount-icon-mom.svg"></a></span> --}}
             @endif
         </li>
         <li class="parant">
-            <div class="border-bottom-thick" id="search_text_container">
-                <input type="text" name="searchText" id="" class="border-0 main-item search-field search-input" placeholder="Search Here"/>
+            <div class="" id="search_text_container">
+                <input type="text" name="searchText" id="search_field" style="display: none;" class="border-0 main-item search-field search-input" placeholder="Search Here"/>
                 <span>
-                    <a href="javascript:void(0)" class="search-button exclude-link submit-btn search_text_button search-icon" id="serach-popup-btn-box">
+                    <a href="javascript:void(0)" class="search-button exclude-link submit-btn search-icon" id="click-search">
                         <img src="/MOM/images/search-icon-mom.svg" id="serach-popup-btn-box">
                     </a>
                 </span>
@@ -79,6 +79,13 @@ use App\Http\Controllers\CommonController;
                     <img src="/MOM/images/cart-icon-mom.svg">
                 </a>
             </span>
+        </li>
+        <li class="parant" style="display: none;" id="profileLi">
+            @if(!Auth::user())
+                <span> <a href="{{route('auth.login')}}" class="main-item"> Login</a></span>
+            @else
+                <span> <a href="javascript:void(0)" class="main-item quickProfile-opener"> <img src="/MOM/images/myaccount-icon-mom.svg"></a></span>
+            @endif
         </li>
     </ul>
 </div>
