@@ -19,18 +19,23 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- <link href="https://fonts.cdnfonts.com/css/times-new-roman" rel="stylesheet"> -->
-                
-    
+
+
     <style type="text/css">
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
+        @font-face {
+            font-family: "Montserrat", sans-serif;
+            font-style: normal;
+            font-weight: normal;
+            src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
+        }
         body {
             font-family: "Montserrat", sans-serif;
             font-optical-sizing: auto;
             font-style: normal;
-            margin:0%;
-            padding: 0%;
+            margin:0;
+            padding: 0;
         }
-        
+
 
         <!--
         .style2 {
@@ -140,13 +145,13 @@
                                             <span class="m-0" style="margin: 0; font-size:22px; font-weight:normal; color: grey;">{{$barcode['label']}}</span>
                                             <div style="margin-top: 5px; margin-bottom: 10px;">
                                                 <img src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}" width="170px" height="45px">
-                                                
+
                                                 {{-- <img src="data:image/png;base64,{!! DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), true) !!}" width="150px" height="60px" alt="Barcode"> --}}
                                             </div>
                                             <span style="margin-top: 10px;font-size: 10px; font-weight: bold;"> {{ $barcode['code']  }}</span>
                                         </span>
                                         @endforeach
-                                    
+
                                     @else
                                         @foreach($product['sizes'] as $size)
                                             <span style="width: 150px; display: inline-block; margin-bottom: 30px;">{{$size['label']}}</span>
@@ -169,9 +174,9 @@
                                                 </font>
                                             </div>
                                         @endif
-                                    </div>         
+                                    </div>
                                     {{-- titles and details --}}
-    
+
                                     <div style="font-size: 28px; color: grey; text-align: center; margin-bottom: 10px;">
                                         <p style="margin-bottom: 40px; overflow-wrap: break-word;"><b>{{$product['category']}}</b></p>
                                         <p style="margin-bottom: 10px; overflow-wrap: break-word;">{{$product['title']}}</p>
@@ -183,9 +188,9 @@
                                                 <tr>
                                                     <td><hr class="col-2 m-auto p-3 mt-4" style="width:16.66%; margin-top:60px; margin-bottom:30px; auto; padding:1rem; opacity: 1;"></td>
                                                 </tr>
-            
+
                                                 {{-- details --}}
-            
+
                                                 <tr>
                                                     <td>
                                                         @foreach($product['attributes'] as $attribute)
@@ -391,7 +396,7 @@
                     {{$footer}}
                 </center>
             </div>
-            
+
         </center>
     </div>
     {{-- @if(isset($product['barcodes']) || $k < (count($products) - 1))
