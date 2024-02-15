@@ -7,7 +7,7 @@ use App\Http\Controllers\CommonController;
 
 @endphp
 
-<div class="col-lg-12 col-md-5 header-menu text-left">
+<div class="col-lg-12 col-md-5 header-menu text-left mb-3">
     <ul class="menu">
         <li class="parant">
             @if(isset($menus -> rug_header))
@@ -61,26 +61,22 @@ use App\Http\Controllers\CommonController;
             @endif
         </li>
         <li class="parant">
+            <div class="border-bottom-thick" id="search_text_container">
+                <input type="text" name="searchText" id="" class="border-0 main-item search-field search-input" placeholder="Search Here"/>
+                <span>
+                    <a href="javascript:void(0)" class="search-button exclude-link submit-btn search_text_button search-icon" id="serach-popup-btn-box">
+                        <img src="/MOM/images/search-icon-mom.svg" id="serach-popup-btn-box">
+                    </a>
+                </span>
+            </div>
+        </li>
+        <li class="parant">
             <span>
                 <a href="javascript:void(0)" class="main-item quickCart-opener position-relative">
                     @auth()
                         <span class="badge badge-pill badge-primary position-absolute cartCount" style="top: auto">{{$cart -> cart_count}}</span>
                     @endauth
                     <img src="/MOM/images/cart-icon-mom.svg">
-                </a>
-            </span>
-        </li>
-        <li class="parant">
-            <form action="" method="POST">
-                <div class="border-bottom-black" id="search_text_container">
-                    <input type="text" name="searchText" id="" class="border-0 main-item search-field search-input" placeholder="Search Here"/>
-                </div>
-            </form> {{-- you dont need form for search, handled using jquery --}}
-        </li>
-        <li class="parant">
-            <span>
-                <a href="javascript:void(0)" class="search-button submit-btn search_text_button search-icon" id="serach-popup-btn-box">
-                    <img src="/MOM/images/search-icon-mom.svg" id="serach-popup-btn-box">
                 </a>
             </span>
         </li>
