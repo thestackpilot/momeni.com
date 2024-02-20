@@ -11,6 +11,29 @@
         curl_close($ch);
         return $data;
     }
+
+    function splitString($string, $chunkSize) {
+    $chunks = [];
+    $words = explode(" ", $string);
+    $currentChunk = '';
+    
+    foreach ($words as $word) {
+        if (strlen($currentChunk) + strlen($word) <= $chunkSize) {
+            $currentChunk .= $word . " ";
+        } else {
+            $chunks[] = trim($currentChunk);
+            $currentChunk = $word . " ";
+        }
+    }
+
+    // Add the remaining part
+    if (!empty($currentChunk)) {
+        $chunks[] = trim($currentChunk);
+    }
+    // die(print_r($chunks));
+    return $chunks;
+}
+
 @endphp
 <html>
 
@@ -23,13 +46,18 @@
 
     <style type="text/css">
         @font-face {
-            font-family: "Montserrat", sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
+            font-family: "montserrat", sans-serif;
+            /* font-style: normal;
+            font-weight: normal; */
+            /* src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap'); */
+            src: url("https://use.typekit.net/lba7uat.css");
+        }
+        @page {
+            size: 30cm 20cm;
+            margin: 0;
         }
         body {
-            font-family: "Montserrat", sans-serif;
+            font-family: "montserrat", sans-serif;
             font-optical-sizing: auto;
             font-style: normal;
             margin:0;
@@ -141,8 +169,17 @@
                                 <div class="" style="margin-top: 70px;">
                                     @if (isset($product['barcodes']))
                                         @foreach($product['barcodes'] as $barcode)
-                                        <span style="border:0; background-color: #ffffff; width: 225px; display: inline-block; margin-bottom: 40px;">
-                                            <span class="m-0" style="margin: 0; font-size:22px; font-weight:normal; color: grey;">{{$barcode['label']}}</span>
+                                        <span style="border:0; background-color: #ffffff; width: 280px; display: inline-block; margin-bottom: 40px;line-space:1.2; position: relative;">
+                                            @php
+                                                $maxLength = 23;
+                                                $chunks = splitString($barcode['label'], $maxLength);
+                                            @endphp
+                                            @foreach($chunks as $key => $value)
+                                            {{-- <p> {{ $key }}</p> --}}
+                                            <div>   
+                                                <p style="font-size:24px; font-weight:normal; color: grey;overflow-wrap: break-word; ">{{$value}}</p><br>
+                                             </div>
+                                            @endforeach
                                             <div style="margin-top: 5px; margin-bottom: 10px;">
                                                 <img src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}" width="170px" height="45px">
 

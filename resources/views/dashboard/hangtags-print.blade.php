@@ -24,7 +24,8 @@
     <style type="text/css">
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
         body {
-            font-family: "Montserrat";
+            font-family: "montserrat", sans-serif;
+            /* font-family: "Montserrat", ; */
             font-optical-sizing: auto;
             font-style: normal;
             margin:0%;
@@ -124,11 +125,11 @@
             <table width="100%" style="width: 100%; height:100%;">
                 <tbody>
                     <tr>
-                        <td style="width:50%; vertical-align: top; padding:0; margin:0;" class="left-div">
+                        <td style="width:45%; vertical-align: top; padding:0; margin:0;" class="left-div">
                           <p style="border:0; background-color: #ffffff; ">
                               <div style="border:0; background-color: #ffffff; ">
                                 <center>
-                                    <font color="#000000" style="font-size:40px;color: rgb(158, 155, 155);" >
+                                    <font color="#000000" style="font-size:40px;color: rgb(95, 93, 93);" >
                                         <span>SIZES AVAILABLE</span>
                                     </font>
 
@@ -137,12 +138,12 @@
                                         @foreach($product['barcodes'] as $barcode)
                                         <span style="border:0; background-color: #ffffff; width: 225px; display: inline-block; margin-bottom: 40px;">
                                             <span class="m-0" style="margin: 0; font-size:24px; font-weight:normal; color: grey;">{{$barcode['label']}}</span>
-                                            <div style="margin-top: 5px; margin-bottom: 10px;">
+                                            <div style="margin-top: 5px;">
                                                 <img src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}" width="170px" height="45px">
                                                 
                                                 {{-- <img src="data:image/png;base64,{!! DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), true) !!}" width="150px" height="60px" alt="Barcode"> --}}
                                             </div>
-                                            <span style="margin-top: 8px;font-size: 12px; font-weight: bold;"> {{ $barcode['code']  }}</span>
+                                            <span style="margin-top: 4px;font-size: 12px; font-weight: bold;"> {{ $barcode['code']  }}</span>
                                         </span>
                                         @endforeach
                                     
@@ -157,7 +158,7 @@
                               </div>
                           </p>
                         </td>
-                        <td style="width:50%; vertical-align: top; padding:0; margin:0;" class="right-div">
+                        <td style="width:65%; vertical-align: top; padding:0; margin:0;" class="right-div">
                               <div style="border:0; background-color: #ffffff; ">
 
                                     {{-- logo --}}
@@ -177,7 +178,7 @@
             
                                     <div>
                                         {{-- title --}}
-                                        <div style="font-size:24px;color: grey; text-align: center; margin-bottom: 30px;">
+                                        <div style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
                                             <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
                                             <p class="mb-0">{{$product['title']}}</p>
                                         </div>
@@ -193,8 +194,8 @@
                                                     <td>
                                                         @foreach($product['attributes'] as $attribute)
                                                             <div class="style2 text-center" style="text-align: center;margin-top: 10px;">
-                                                                <div style="font-size:24px;margin-bottom: 20px;">
-                                                                    <span style="color:rgb( 132, 135, 135)" >{{$attribute['label']}}:</span>&nbsp;
+                                                                <div style="font-size:26px;margin-bottom: 20px;">
+                                                                    <span style="color:rgb(136, 139, 139)" >{{$attribute['label']}}:</span>&nbsp;
                                                                     <span class="mb-0" style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span>
                                                                 </div>
                                                             </div>
