@@ -53,12 +53,10 @@ use App\Http\Controllers\CommonController;
             <span> <a href="{{route('auth.register')}}" class="main-item"> Become a Partner</a></span>
             @endif
         </li>
-        <li class="parant" id="loginLi">
-            @if(!Auth::user())
+        <li class="parant" id="loginLi" style="display: {{ !Auth::user() ? 'inline-block' : 'none' }}">
                 <span> <a href="{{route('auth.login')}}" class="main-item"> Login</a></span>
             {{-- @else
                 <span> <a href="javascript:void(0)" class="main-item quickProfile-opener"> <img src="/MOM/images/myaccount-icon-mom.svg"></a></span> --}}
-            @endif
         </li>
         <li class="parant">
             <div class="" id="search_text_container">
@@ -80,12 +78,8 @@ use App\Http\Controllers\CommonController;
                 </a>
             </span>
         </li>
-        <li class="parant" style="display: none;" id="profileLi">
-            @if(!Auth::user())
-                <span> <a href="{{route('auth.login')}}" class="main-item"> Login</a></span>
-            @else
-                <span> <a href="javascript:void(0)" class="main-item quickProfile-opener"> <img src="/MOM/images/myaccount-icon-mom.svg"></a></span>
-            @endif
+        <li class="parant" style="display: {{ !Auth::user() ? 'inline-block' : 'none' }}" id="profileLi">
+            <span> <a href="javascript:void(0)" class="main-item quickProfile-opener"> <img src="/MOM/images/myaccount-icon-mom.svg"></a></span>
         </li>
     </ul>
 </div>
