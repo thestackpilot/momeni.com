@@ -5,7 +5,7 @@
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
 
-                        
+
 @endphp
 
 @extends('frontend.'.$active_theme -> theme_abrv.'.layouts.app')
@@ -31,27 +31,27 @@ use App\Http\Controllers\CommonController;
                             <div class="col-md-3 d-flex flex-column sidebar-main">
                                 @include('frontend.'.$active_theme -> theme_abrv.'.components.filters')
                             </div>
-                           
-                            <div class="col-md-9 col-sm-12 col-12 d-flex flex-row justify-content-left three-col product-listing d-flex flex-wrap my-5"  id="sub_collections_wrapper">
+
+                            <div class="col-md-9 h-100 col-sm-12 col-12 d-flex flex-row justify-content-left three-col product-listing d-flex flex-wrap my-5"  id="sub_collections_wrapper">
                                 <div class="cu-top-filters col-12 d-flex justify-content-between align-items-center">
                                     <div>
                                         <ul>
                                         @if($main_collection['MainCollectionID'] == 'Rugs')
-                                        <li> 
-                                                <input class="form-check-input" 
-                                                type="checkbox" 
-                                                name="discontinued" 
+                                        <li>
+                                                <input class="form-check-input"
+                                                type="checkbox"
+                                                name="discontinued"
                                                 id="flexCheckChecked-discontinued" >
-                                                
+
                                             <label class="form-check-label" for="flexCheckChecked-discontinued"> Show Discontinued {{ $main_collection['Description'] }}</label>
                                            </li>
                                         @endif
 
                                         </ul>
-                                        
+
                                     </div>
                                     <div class="d-flex align-items-center justify-content-start">
-                                   
+
                                         @if(($filters['Filters_Count']) > 0)
                                             @foreach($filters['Filters'] as $filter)
                                             @if(strtolower($filter['FilterID']) == 'sort')
@@ -63,7 +63,7 @@ use App\Http\Controllers\CommonController;
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            
+
                                             @endif
                                             @endforeach
                                         @endif
@@ -132,7 +132,7 @@ use App\Http\Controllers\CommonController;
     <script type="text/javascript">
         $(document).ready(function(){
             $('.carousel').carousel({interval: false,});
-            $("[id^=carousel-selector-]").hover(function() 
+            $("[id^=carousel-selector-]").hover(function()
             {
                 /*
                 var id_selector = $(this).attr("id");
@@ -207,7 +207,7 @@ use App\Http\Controllers\CommonController;
             display: block !important;
             border: 0px solid black;
         }
-    
+
         .owl-next {
             width: 15px;
             height: 100px;
@@ -217,14 +217,14 @@ use App\Http\Controllers\CommonController;
             display: block !important;
             border: 0px solid black;
         }
-    
+
         .owl-nav button {
             background: #fff !important;
             height: 25px;
             width: 25px;
             border-radius: 50% !important;
         }
-    
+
         /* .owl-nav button span {
             font-size: 33px;
             position: relative;
@@ -242,7 +242,7 @@ use App\Http\Controllers\CommonController;
             float: none;
             width: 100%;
         }
-    
+
         .owl-theme .owl-nav [class*=owl-]:hover {
             color: #000 !important;
         }

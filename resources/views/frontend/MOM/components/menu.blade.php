@@ -7,7 +7,7 @@ use App\Http\Controllers\CommonController;
 
 @endphp
 
-<div class="col-lg-10 col-md-5 header-menu text-left mb-3">
+<div class="col-lg-10 col-md-5 header-menu text-left">
     <ul class="menu">
         <li class="parant">
             @if(isset($menus -> rug_header))
