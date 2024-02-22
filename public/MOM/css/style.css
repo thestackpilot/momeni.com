@@ -626,7 +626,7 @@ input[type="radio"] {
     right: 0;
 }
 /*===================================
- - Breadvrumb
+ - Breadvrumb  
 =================================*/
 .breadcrumb-area {
     border-bottom-width: 0px;
@@ -714,7 +714,7 @@ only screen and (min-width: 992px) and (max-width: 1199px) {
     color: #660000;
 }
 /*=============================================
-   - Scroll top
+   - Scroll top         
 =============================================*/
 
 .scroll-top {
@@ -1541,7 +1541,7 @@ only screen and (min-width: 992px) and (max-width: 1199px) {
     clear: both;
     padding-top: 20px;
 }
-body.momeni main.main-content ,
+body.momeni main.main-content , 
 body.momeni .site-wrapper-reveal {
     overflow: auto;
     padding-bottom: 390px;
@@ -2817,7 +2817,7 @@ only screen and (min-width: 768px) and (max-width: 991px) {
 .product-cats label input:checked+span {
     color: #999;
 }
-/*==============================
+/*============================== 
     - Navigation Menu Css
 ===============================*/
 
@@ -3143,7 +3143,7 @@ only screen and (min-width: 768px) and (max-width: 991px) {
 .megamenu--mega>li>ul>li.active>a {
     color: #660000;
 }
-/*================================
+/*================================ 
     - Mobile Menu Overlay Css
 ==================================*/
 
@@ -7206,7 +7206,7 @@ only screen and (max-width: 767px) {
     font-weight: 500;
 }
 /*================================================
-=                 17. Product Css             =
+=                 17. Product Css             =       
 ==================================================*/
 
 .single-product-item {
@@ -7438,7 +7438,7 @@ only screen and (max-width: 767px) {
     }
 } */
 /*================================================
-=       18. Product Tab list Css             =
+=       18. Product Tab list Css             =       
 ==================================================*/
 
 .product-tab-menu li {
@@ -7487,7 +7487,7 @@ only screen and (max-width: 767px) {
 }
 
 /*================================================
-=     19. Single Product details Css             =
+=     19. Single Product details Css             =       
 ==================================================*/
 
 .product-modal-box .modal-dialog {
@@ -9120,7 +9120,7 @@ only screen and (max-width: 767px) {
 
 .home-row h2.title,
 .home-row h3.title {
-    font-family: 'LuloCleanOne';
+    font-family: 'LuloCleanOne';    
     text-transform: uppercase;
     margin: 0 0 30px;
     text-align: center;
@@ -9324,16 +9324,6 @@ only screen and (max-width: 767px) {
     display: block;
     padding: 19px 0px;
     font-size: 16px;
-}
-
-.menu .parant a.exclude-link {
-    font-size: 16px;
-    display: inline-block;
-    padding: 0px;
-}
-
-.search-field::placeholder {
-    color: #b6b6b6; /* Adjust the color as needed */
 }
 
 .menu .parant .drop-down-item {
@@ -10237,7 +10227,7 @@ input.invalid {
     line-height: 0;
 }
 /*
-====================================================
+==================================================== 
 START OF NEW ADDITION OF CSS AFI 66
 ====================================================
  */
@@ -10553,7 +10543,7 @@ h5.card-title {
     box-shadow: -20px 0px 20px rgb(0 0 0 / 5%);
     -webkit-box-shadow: -20px 0px 20px rgb(0 0 0 / 5%);
     height: 100vh;
-    max-width: 420px;
+    min-width: 420px;
     transition: all 0.3s linear;
     -webkit-transition: all 0.3s linear;
 }
@@ -10684,7 +10674,7 @@ span.container-checker {
     font-family: 'LuloCleanOne';
     letter-spacing: -5px;
 }
-/*
+/* 
 .cartoverlay{
     position:fixed;
     top:0;
@@ -10698,9 +10688,9 @@ span.container-checker {
     z-index:1000;
 } */
 /*
-====================================================
+==================================================== 
 END OF NEW ADDITION OF CSS AFI 66
-====================================================
+==================================================== 
  */
 
 @media(max-width:767px) {
@@ -11284,7 +11274,7 @@ mark {
     line-height: 20px;
     letter-spacing: 1px;
     margin: 0 auto;
-    margin-left: 5px;
+    margin-left: 5px; 
     margin-right: 5px;
     margin-bottom: 10px;
     text-align: center;
@@ -11618,7 +11608,7 @@ mark {
 .alternate-check {
     justify-content: center;
     margin-top: 20px;
-    color: #000000;
+    color: #000000; 
 }
 
 .alternate-check p>a {
@@ -12094,7 +12084,7 @@ input[type="checkbox"].save-update-card {
     text-align: center;
 } */
 .filter-content-selected{
-    margin: auto;
+    margin: auto; 
     width: 100%;
 }
 /* home page mobile and teblet version */
@@ -12130,7 +12120,7 @@ input[type="checkbox"].save-update-card {
         margin: 0;
         padding: 0;
         letter-spacing: 1px;
-        margin: 0 10px 0 -15px;
+        margin: 0 10px 0 -15px;   
     }
     .cust-order-details .for-mobile-only .product-description p,
     .cust-order-details .for-mobile-only h6 {
@@ -12150,7 +12140,7 @@ input[type="checkbox"].save-update-card {
         align-items: center;
         padding: 10px 0;
     }
-    .cust-order-details .for-mobile-only .product-description,
+    .cust-order-details .for-mobile-only .product-description, 
     .cust-order-details .for-mobile-only .order-qty {
         padding: 10px 0;
     }
@@ -12222,7 +12212,7 @@ input[type="checkbox"].save-update-card {
     }
     .product-slider-active .slick-arrow.arrow-next{
         right: 0;
-    }
+    }   
     .product-details-content .mbl-qty-main-box {
         flex-direction: column;
         align-items: flex-start;
@@ -12470,7 +12460,7 @@ section.featuted-product .featured-product-contect {
     z-index: 1;
 } */
 /*.catalog {
-     background-image: url(../images/catlog.jpg) !important;
+     background-image: url(../images/catlog.jpg) !important; 
     position: relative;
     display: block;
     background-repeat: no-repeat;
