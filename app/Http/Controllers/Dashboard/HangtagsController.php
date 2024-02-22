@@ -100,8 +100,8 @@ class HangtagsController extends DashboardController
                         }
                         $products[$k]['logo'] = $this->get_design_logo( $data['Designer']);
                     }
-                    $barcodes = array_chunk($products[$k]['barcodes'], 5);
-                    $sizes = array_chunk($products[$k]['sizes'], 5);
+                    $barcodes = array_chunk($products[$k]['barcodes'], 10);
+                    $sizes = array_chunk($products[$k]['sizes'], 10);
                     $products[$k]['barcodes'] = $barcodes;
                     $products[$k]['sizes'] = $sizes;
                 }
