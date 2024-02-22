@@ -70,6 +70,20 @@
             display: inline-block;
         }
 
+        .barcode p {
+            font-size: 24px;
+            margin: 0;
+            line-height: 25px;
+            color: grey;
+        }
+
+        p.barcode-label {
+            margin-top: 0px;
+            font-size: 12px;
+            color: #000;
+            font-weight: 700;
+        }
+        
         .right-wrapper {
             width: 50%;
             text-align: center;
