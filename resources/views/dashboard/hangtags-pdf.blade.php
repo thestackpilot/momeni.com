@@ -110,7 +110,7 @@
 
         .hr {
             width: 100%;
-            margin: 3rem 0;
+            margin: 1rem 0;
             position: relative;
             text-align: center;
         }
