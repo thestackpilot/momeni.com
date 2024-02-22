@@ -1117,7 +1117,7 @@ class GenericReportsController extends DashboardController
                     'fields' => [
                         'customer_show' => $report['CustomerField'],
                         'date_field' => $report['DateField'],
-                        'item_id' => $report['ItemIDField'],
+                        'item_id_show' => $report['ItemIDField'],
                         'quality_show' => $report['QualityField']
                     ]
                 ];
