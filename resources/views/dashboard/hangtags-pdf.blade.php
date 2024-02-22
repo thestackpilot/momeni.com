@@ -23,15 +23,23 @@
 
 
     <style type="text/css">
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
-
+        @font-face {
+            font-family: "montserrat", sans-serif;
+            /* font-style: normal;
+            font-weight: normal; */
+            /* src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap'); */
+            src: url("https://use.typekit.net/lba7uat.css");
+        }
+        @page {
+            size: 30cm 20cm;
+            margin: 0;
+        }
         body {
             font-family: "montserrat", sans-serif;
-            /* font-family: "Montserrat", ; */
             font-optical-sizing: auto;
             font-style: normal;
-            margin: 0%;
-            padding: 0%;
+            margin:0;
+            padding: 0;
         }
 
         .style2 {
