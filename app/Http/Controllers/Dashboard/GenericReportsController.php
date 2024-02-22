@@ -1094,7 +1094,7 @@ class GenericReportsController extends DashboardController
         {
             $from_date = $request->has('from_date') ? $request->from_date : Carbon::now()->format('Y-m-d');
             $to_date = $request->has('to_date') ? $request->to_date : Carbon::now()->format('Y-m-d');
-            $report = $this->ApiObj->Get_SalesReport( $request->sales_rep, $request->customer, $request->report_title, $from_date, $to_date );
+            $report = $this->ApiObj->Get_SalesReport( $request->sales_rep, $request->customer, $request->report_title, $from_date, $to_date, $request->quality, $request->item_id );
 
             if( $report['Success'] )
             {
@@ -1108,17 +1108,17 @@ class GenericReportsController extends DashboardController
 
         if ( $reports['Success'] )
         {
-
             foreach ( $reports['ReportList'] as $report )
             {
-
                 $reports_title[] =
                     [
                     'value' => $report['KeyID'],
                     'label' => $report['Description'],
                     'fields' => [
                         'customer_show' => $report['CustomerField'],
-                        'date_field' => $report['DateField']
+                        'date_field' => $report['DateField'],
+                        'item_id_show' => $report['ItemIDField'],
+                        'quality_show' => $report['QualityField']
                     ]
                 ];
 
@@ -1158,6 +1158,22 @@ class GenericReportsController extends DashboardController
                 'options'     => $this->get_customers_dropdown_options(),
                 'placeholder' => '',
                 'value'       => $request->has( 'customer' ) ? $request->customer : ''
+            ],
+            [
+                'title'       => 'Item Id',
+                'type'        => 'text',
+                'id'          => 'item_id_show',
+                'attribues'   => '',
+                'placeholder' => 'Enter Item ID',
+                'value'       => $request->has( 'item_id' ) ? $request->item_id : ''
+            ],
+            [
+                'title'       => 'Quality',
+                'type'        => 'text',
+                'id'          => 'quality_show',
+                'attribues'   => '',
+                'placeholder' => 'Enter Quality',
+                'value'       => $request->has( 'quality' ) ? $request->quality : ''
             ],
         ];
         View::share( 'filters', $filters );

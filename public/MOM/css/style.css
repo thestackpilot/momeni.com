@@ -9326,16 +9326,6 @@ only screen and (max-width: 767px) {
     font-size: 16px;
 }
 
-.menu .parant a.exclude-link {
-    font-size: 16px;
-    display: inline-block;
-    padding: 0px;
-}
-
-.search-field::placeholder {
-    color: #b6b6b6; /* Adjust the color as needed */
-}
-
 .menu .parant .drop-down-item {
     position: absolute;
     width: auto;

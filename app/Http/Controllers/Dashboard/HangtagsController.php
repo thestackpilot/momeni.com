@@ -40,17 +40,22 @@ class HangtagsController extends DashboardController
                         'title'        => $items_data['HangTagsDetail'][0]['Design'],
                         'attributes'   => [
                             [
-                                'label' => 'Fibers',
-                                'value' => $items_data['HangTagsDetail'][0]['Fibers']
+                                'label' => 'Material',
+                                'value' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Fibers']))
+                            ],
+                            [
+                                'label' => 'Construction',
+                                'value' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Construction']))
                             ],
                             [
                                 'label' => 'Country',
-                                'value' => $items_data['HangTagsDetail'][0]['Country']
+                                'value' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Country']))
                             ]
                         ],
-                        'construction' => $items_data['HangTagsDetail'][0]['Construction'],
-                        'collection'   => $items_data['HangTagsDetail'][0]['Collection'],
+                        'construction' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Construction'])),
+                        'collection'   => ucwords(strtolower($items_data['HangTagsDetail'][0]['Collection'])),
                         'image'        => CommonController::getApiFullImage( $item['ImageName'] )
+                       
                     ];
 
                     foreach ( $items_data['HangTagsDetail'] as $i => $data )
@@ -123,18 +128,18 @@ class HangtagsController extends DashboardController
         {
             $page_data['logo'] = asset( $this->basicSettings->logo_dark );
         }
-
+        
         switch ( $validated_data['submit'] )
         {
             case 'print':
                 $page_data['print'] = true;
 
-                return view( 'dashboard.hangtags-pdf', $page_data );
+                return view( 'dashboard.hangtags-print', $page_data );
                 break;
             case 'download':
 
                 $html = view( 'dashboard.hangtags-pdf', $page_data )->render();
-                $pdf  = PDF::loadHTML( $html )->setPaper( [0, 0, 750, 970], 'portrait' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
+                $pdf  = PDF::loadHTML( $html )->setPaper( [0, 0, 580, 870 ], 'landscape' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
                 // $pdf = PDF::loadView( 'dashboard.hangtags-pdf', $page_data )->setPaper( [0, 0, 720, 970], 'portrait' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
 
                 return $pdf->download( 'hangtags.pdf' );

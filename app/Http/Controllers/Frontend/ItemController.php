@@ -265,6 +265,7 @@ class ItemController extends FrontendController
         {
             $related_designs  = [];
             $main_collections = [];
+            $main_collection  = ( new MainCollectionController() )->get_main_collection( $id );
         }
         else
         {
