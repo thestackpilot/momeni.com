@@ -191,9 +191,7 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <div class="hr">
-                                                <div></div>
-                                            </div>
+                                            <hr style="width: 16.66%">
                                         </td>
                                     </tr>
                                     <tr>
