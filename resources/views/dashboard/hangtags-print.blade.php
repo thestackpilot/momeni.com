@@ -66,13 +66,13 @@
 
         .barcode {
             width: 200px;
-            /* float: left; */
+            margin: 0 10px;
             display: inline-block;
         }
 
         .barcode p {
             font-size: 24px;
-            margin: 0;
+            margin: 4px 0 0;
             line-height: 25px;
             color: grey;
         }
@@ -83,10 +83,11 @@
             color: #000;
             font-weight: 700;
         }
-        
+
         .right-wrapper {
             width: 50%;
             text-align: center;
+            padding: 5rem 0 0;
         }
     </style>
 
@@ -119,7 +120,7 @@
                     <div class="barcodes">
                         @foreach($barcodes as $k => $barcode)
                             <div class="barcode">
-                            <p>{{$barcode['label']}}</p>
+                            <p>{{ strlen($barcode['label']) > 16 ? substr($barcode['label'], 0, 15) . '..' : $barcode['label'] }}</p>
                             <div style="margin-top: 5px;">
                                 <img
                                     src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
