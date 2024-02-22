@@ -55,7 +55,7 @@ class HangtagsController extends DashboardController
                         'construction' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Construction'])),
                         'collection'   => ucwords(strtolower($items_data['HangTagsDetail'][0]['Collection'])),
                         'image'        => CommonController::getApiFullImage( $item['ImageName'] )
-                       
+
                     ];
 
                     foreach ( $items_data['HangTagsDetail'] as $i => $data )
@@ -100,7 +100,10 @@ class HangtagsController extends DashboardController
                         }
                         $products[$k]['logo'] = $this->get_design_logo( $data['Designer']);
                     }
-
+                    $barcodes = array_chunk($products[$k]['barcodes'], 5);
+                    $sizes = array_chunk($products[$k]['sizes'], 5);
+                    $products[$k]['barcodes'] = $barcodes;
+                    $products[$k]['sizes'] = $sizes;
                 }
 
             }
@@ -128,7 +131,7 @@ class HangtagsController extends DashboardController
         {
             $page_data['logo'] = asset( $this->basicSettings->logo_dark );
         }
-        
+
         switch ( $validated_data['submit'] )
         {
             case 'print':
@@ -325,11 +328,11 @@ class HangtagsController extends DashboardController
             case 'NOVO01':
                 $logo = 'https://media.momeni.com/Full_Img/Novogratz_logo.png';
                 break;
-            
+
             case 'PURE01':
                 $logo = 'https://media.momeni.com/Full_Img/PureSalt_logo.png';
                 break;
-            
+
             default:
                 $logo = 'https://media.momeni.com/Full_Img/Momeni_logo.png';
                 break;
