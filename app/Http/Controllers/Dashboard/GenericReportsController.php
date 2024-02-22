@@ -1092,7 +1092,6 @@ class GenericReportsController extends DashboardController
 
         if ( count( $request->all() ) > 0 )
         {
-            dd($request->all());
             $from_date = $request->has('from_date') ? $request->from_date : Carbon::now()->format('Y-m-d');
             $to_date = $request->has('to_date') ? $request->to_date : Carbon::now()->format('Y-m-d');
             $report = $this->ApiObj->Get_SalesReport( $request->sales_rep, $request->customer, $request->report_title, $from_date, $to_date, $request->quality, $request->item_id );
