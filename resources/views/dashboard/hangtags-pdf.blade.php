@@ -181,14 +181,14 @@
                                 <div
                                     style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
                                     <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
-                                    <p style="margin: 0">{{$product['title']}}</p>
+                                    <p style="margin-bottom: 0; margin-top: 10px;">{{$product['title']}}</p>
                                 </div>
                                 <table style="width:100%" border="0" cellspacing="0" cellpadding="0"
                                        style="padding-top: 0px;">
                                     <tbody>
                                     <tr>
                                         <td style="width: 100%; text-align: center">
-                                            <hr style="width: 16.66%; display: inline-block">
+                                            <hr style="width: 16.66%; display: inline-block; margin-bottom: 20px;">
                                         </td>
                                     </tr>
                                     <tr>
