@@ -24,18 +24,23 @@
 
     <style type="text/css">
         @font-face {
-            font-family: "Montserrat", sans-serif;
-            font-style: normal;
-            font-weight: normal;
-            src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
+            font-family: "montserrat", sans-serif;
+            /* font-style: normal;
+            font-weight: normal; */
+            /* src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap'); */
+            src: url("https://use.typekit.net/lba7uat.css");
         }
 
         body {
-            font-family: "Montserrat", sans-serif;
+            font-family: "montserrat", sans-serif;
             font-optical-sizing: auto;
             font-style: normal;
             margin: 0;
             padding: 0;
+        }
+
+        .style2 {
+            font-size: 12px;
         }
 
         .hangtags-wrapper {
@@ -48,13 +53,10 @@
             display: inline;
             text-align: center;
             padding: 5rem 0;
-            height: 100% !important;
+            height: 100%;
         }
 
         .left-wrapper h3 {
-            font-family: "Montserrat", sans-serif;
-            font-optical-sizing: auto;
-            font-style: normal;
             font-size: 32px;
             margin: 0;
             text-transform: uppercase;
@@ -92,7 +94,7 @@
             display: inline;
             text-align: center;
             padding: 5rem 0 0;
-            height: 100% !important;
+            height: 100%;
         }
 
         .hangtags-wrapper table {
@@ -164,7 +166,7 @@
                                    @endif
                                    <tr>
                                        <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
-                                           <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p><br>
+                                           <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
                                        </td>
                                    </tr>
                                    <tr>
@@ -175,7 +177,6 @@
                                    <tr>
                                        <td style="width: 100%; text-align: center">
                                            <hr style="width: 16.66%; display: inline-block; margin-bottom: 20px;">
-                                           <br>
                                        </td>
                                    </tr>
                                    <tr>
@@ -187,7 +188,7 @@
                                                         <span
                                                             style="color:rgb(136, 139, 139)">{{$attribute['label']}}:</span>&nbsp;
                                                        <span class="mb-0"
-                                                             style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span><br>
+                                                             style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span>
                                                    </div>
                                                </div>
                                            @endforeach
