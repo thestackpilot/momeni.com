@@ -131,7 +131,7 @@
                     <tr>
                         <td>
                             <div class="left-wrapper">
-                                <h3>Sizes Available</h3>
+                                <h3 style=" font-family: 'montserrat', sans-serif; ">Sizes Available</h3>
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
