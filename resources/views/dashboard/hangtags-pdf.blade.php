@@ -53,19 +53,17 @@
             display: inline;
             text-align: center;
             padding: 5rem 0;
-            height: 100%;
+            line-height: 30px;
         }
 
         .left-wrapper h3 {
-            font-family: "montserrat", sans-serif;
-            font-size: 28px;
+            font-size: 32px;
             margin: 0;
-            text-transform: uppercase;
             color: rgb(95, 93, 93);
         }
 
         .barcodes {
-            margin-top: 40px;
+            margin-top: 70px;
             width: 100%;
             display: inline-block;
             text-align: center;
