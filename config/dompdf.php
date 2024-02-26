@@ -44,7 +44,7 @@ return array(
          */
         'fonts' => [
             'Montserrat' => [
-                'normal' => public_path('/fonts/static/Montserrat.ttf')
+                'normal' => public_path('/fonts/static/Montserrat-Regular.ttf')
             ],
             // Add more fonts as needed
         ],

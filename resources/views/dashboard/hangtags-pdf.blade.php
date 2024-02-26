@@ -25,7 +25,7 @@
     <style type="text/css">
         @font-face {
             font-family: "Montserrat";
-            src: url({{ asset('fonts/static/Montserrat.ttf') }}) format('truetype');
+            src: url({{ asset('fonts/static/Montserrat-Regular.ttf') }}) format('truetype');
             /*    !* font-style: normal;*/
         /*    font-weight: normal; *!*/
         /*    !*src: url("/public/fonts/static/Montserrat.ttf");*!*/
