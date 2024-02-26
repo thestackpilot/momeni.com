@@ -56,10 +56,12 @@
             line-height: 30px;
         }
 
-        .left-wrapper h3 {
+        .left-wrapper .h3 {
             font-size: 32px;
             margin: 0;
             color: rgb(95, 93, 93);
+            text-transform: capitalize;
+            font-family: "montserrat", sans-serif !important;
         }
 
         .barcodes {
@@ -117,7 +119,7 @@
                     <tr>
                         <td>
                             <div class="left-wrapper">
-                                <h3>Sizes Available</h3>
+                                <p class="h3">Sizes Available</p>
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
