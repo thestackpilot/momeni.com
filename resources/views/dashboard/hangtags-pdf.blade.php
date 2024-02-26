@@ -24,23 +24,10 @@
 
     <style type="text/css">
         @font-face {
-            font-family: "montserrat", sans-serif;
-            /* font-style: normal;
-            font-weight: normal; */
-            /* src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap'); */
-            src: url("https://use.typekit.net/lba7uat.css");
-        }
-
-        body {
-            font-family: "montserrat", sans-serif;
-            font-optical-sizing: auto;
+            font-family: "Montserrat", sans-serif;
             font-style: normal;
-            margin: 0;
-            padding: 0;
-        }
-
-        .style2 {
-            font-size: 12px;
+            font-weight: normal;
+            src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
         }
 
         .hangtags-wrapper {
