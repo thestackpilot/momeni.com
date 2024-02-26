@@ -119,23 +119,6 @@
         }
     </style>
 
-    <script>
-        function PrintDoc() {
-            window.print();
-            var tblHeight = $('#tblSize').height();
-
-            if (parseInt(tblHeight) >= 500 || parseInt(tblHeight) == 700) {
-                $('#imgID').removeClass('imgHeight');
-                $('#imgID').addClass('imgHeightNew1');
-            }
-
-            if (tblHeight >= 700 || tblHeight == 1000) {
-                $('#imgID').removeClass('imgHeight');
-                $('#imgID').addClass('imgHeightNew2');
-            }
-        }
-    </script>
-
 </head>
 
 <body onload="{{isset($print) && $print ? 'PrintDoc()' : ''}}" marginstyle="width:0" marginheight="0" topmargin="0">
@@ -165,24 +148,31 @@
                         </td>
                         <td>
                             <div class="right-wrapper">
-                                <div class="mb-5 pb-3"
-                                     style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
-                                    <img src="{{ $product['logo'] }}" width="150"
-                                         onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
-                                         style="text-align: center;"/>
+                                <table>
+                                    <tr>
+                                        <td style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
+                                            <img src="{{ $product['logo'] }}" width="150"
+                                                   onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
+                                                   style="text-align: center;"/>`
+                                        </td>
+                                    </tr>
                                     @if(isset($header))
-                                        <div>
-                                            <font face="arial" style="color: gray;font-style: italic;font-size: 20px;">
-                                                {{$header}}
-                                            </font>
-                                        </div>
+                                        <tr>
+                                            <td>
+                                                <h3 style="color: gray;font-style: italic;font-size: 20px;">{{$header}}</h3>
+                                            </td>
+                                        </tr>
                                     @endif
-                                </div>
-                                <div
-                                    style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
-                                    <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
-                                    <p style="margin-bottom: 0; margin-top: 10px;">{{$product['title']}}</p>
-                                </div>
+                                    <tr>
+                                        <td>
+                                            <div style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
+                                                <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
+                                                <p style="margin-bottom: 0; margin-top: 10px;">{{$product['title']}}</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
                                 <table style="width:100%" border="0" cellspacing="0" cellpadding="0"
                                        style="padding-top: 0px;">
                                     <tbody>
