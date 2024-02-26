@@ -54,7 +54,6 @@
             display: inline;
             text-align: center;
             padding: 5rem 0;
-            line-height: 30px;
         }
 
         .barcodes {
@@ -117,13 +116,13 @@
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
-                                            <p>{{ strlen($barcode['label']) > 16 ? substr($barcode['label'], 0, 15) . '..' : $barcode['label'] }}</p>
-                                            <div style="margin-top: 5px;">
+                                            <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 15) . '..' : $barcode['label'] }}</p>
+                                            <div style="margin-top: 3px;">
                                                 <img
                                                     src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
                                                     width="170px" height="45px">
                                             </div>
-                                            <p class="barcode-label"> {{ $barcode['code']  }}</p>
+                                            <p style="margin-top: -4px; font-size: 12px; color: #000; font-weight: 700; margin-bottom: 3px;"> {{ $barcode['code']  }}</p>
                                         </div>
                                     @endforeach
                                 </div>
@@ -167,7 +166,7 @@
                                            @foreach($product['attributes'] as $attribute)
                                                <div class="style2 text-center"
                                                     style="text-align: center;margin-top: 10px;">
-                                                   <div style="font-size:26px;margin-bottom: 20px;">
+                                                   <div style="font-size:26px;margin-bottom: 20px; line-height: 15px !important;">
                                                         <span
                                                             style=" color: rgb(98, 99, 99)">{{$attribute['label']}}:</span>&nbsp;
                                                        <span class="mb-0"
