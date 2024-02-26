@@ -57,6 +57,7 @@
         }
 
         .left-wrapper h3 {
+            font-family: "montserrat", sans-serif;
             font-size: 32px;
             margin: 0;
             text-transform: uppercase;
