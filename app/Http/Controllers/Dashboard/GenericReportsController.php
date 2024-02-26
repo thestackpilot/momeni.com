@@ -778,7 +778,7 @@ class GenericReportsController extends DashboardController
                 $page_size = 25;
             }
 
-            $view_orders = $this->ApiObj->View_Order( $request->customer, $request->external_number, $request->from_date, $request->to_date, $request->sales_rep, $page, $page_size );
+            $view_orders = $this->ApiObj->View_Order( $request->customer, $request->external_number, $request->from_date, $request->to_date, $request->sales_rep, $page, $page_size, $request->customer_po, $request->order_number );
             $table       = array( 'thead' => [
                 'order_no'     => 'Order Number',
                 'customer_id'  => 'Customer ID',
@@ -918,7 +918,21 @@ class GenericReportsController extends DashboardController
                 'type'        => 'hidden',
                 'placeholder' => '',
                 'value'       => $request->external_number
-            ]
+            ],
+            [
+                'title'       => 'Customer PO',
+                'type'        => 'text',
+                'attribues'   => ' data-required="false" ',
+                'placeholder' => '',
+                'value'       => $request->customer_po ? $request->customer_po : ''
+            ],
+            [
+                'title'       => 'Order Number',
+                'type'        => 'text',
+                'attribues'   => ' data-required="false" ',
+                'placeholder' => '',
+                'value'       => $request->order_number ? $request->order_number : ''
+            ],
         ];
 
         View::share( 'filters', $filters );

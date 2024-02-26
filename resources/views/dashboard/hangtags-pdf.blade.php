@@ -31,11 +31,6 @@
             src: url("https://use.typekit.net/lba7uat.css");
         }
 
-        @page {
-            size: 30cm 20cm;
-            margin: 0;
-        }
-
         body {
             font-family: "montserrat", sans-serif;
             font-optical-sizing: auto;

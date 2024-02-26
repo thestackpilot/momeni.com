@@ -572,9 +572,9 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Update_ShippingFreightRate', 'Update Shipping Freight Rate', $post_array, ['Success', 'Message', 'CustomerAddress'] );
     }
 
-    public function View_Order( $CustomerID = '', $ExternalID = '', $DateFrom = '', $DateTo = '', $SalesRep = '', $PageIndex = 1, $PageSize = 25 )
+    public function View_Order( $CustomerID = '', $ExternalID = '', $DateFrom = '', $DateTo = '', $SalesRep = '', $PageIndex = 1, $PageSize = 25, $po_number = '', $order_number = '' )
     {
-        $post_array = array( 'CustomerID' => $CustomerID, 'ExternalID' => $ExternalID, 'DateFrom' => $DateFrom, 'DateTo' => $DateTo, 'SalesRep' => $SalesRep, 'PageIndex' => $PageIndex, 'PageSize' => $PageSize );
+        $post_array = array( 'CustomerID' => $CustomerID, 'ExternalID' => $ExternalID, 'DateFrom' => $DateFrom, 'DateTo' => $DateTo, 'SalesRep' => $SalesRep, 'CustomerPO' => $po_number, 'SalesOrderNo' => $order_number, 'PageIndex' => $PageIndex, 'PageSize' => $PageSize );
 
         return $this->Post_API_Signature( 'Get_Orders', 'Ge Order', $post_array, ['Orders', 'TotalRows'] );
     }
