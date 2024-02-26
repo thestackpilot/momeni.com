@@ -52,6 +52,9 @@
         }
 
         .left-wrapper h3 {
+            font-family: "Montserrat", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
             font-size: 32px;
             margin: 0;
             text-transform: uppercase;
@@ -144,7 +147,7 @@
                         <td>
                             <div class="right-wrapper">
                                 <table style="width: 100%">
-                                   <tbody style="line-height: 35px;">
+                                   <tbody style="line-height: 30px;">
                                    <tr>
                                        <td style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
                                            <img src="{{ $product['logo'] }}" width="150"
