@@ -166,7 +166,7 @@
                                    @endif
                                    <tr>
                                        <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
-                                           <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
+                                           <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p><br>
                                        </td>
                                    </tr>
                                    <tr>
@@ -177,6 +177,7 @@
                                    <tr>
                                        <td style="width: 100%; text-align: center">
                                            <hr style="width: 16.66%; display: inline-block; margin-bottom: 20px;">
+                                           <br>
                                        </td>
                                    </tr>
                                    <tr>
@@ -188,7 +189,7 @@
                                                         <span
                                                             style="color:rgb(136, 139, 139)">{{$attribute['label']}}:</span>&nbsp;
                                                        <span class="mb-0"
-                                                             style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span>
+                                                             style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span><br>
                                                    </div>
                                                </div>
                                            @endforeach
