@@ -53,6 +53,7 @@
             display: inline;
             text-align: center;
             padding: 5rem 0;
+            height: 100%;
         }
 
         .left-wrapper h3 {
@@ -93,6 +94,7 @@
             display: inline;
             text-align: center;
             padding: 5rem 0 0;
+            height: 100%;
         }
 
         .hangtags-wrapper table {
