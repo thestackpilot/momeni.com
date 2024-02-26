@@ -116,7 +116,7 @@
                     <tr>
                         <td>
                             <div class="left-wrapper">
-                                <p style="font-size: 32px;margin: 0;color: rgb(95, 93, 93);text-transform: capitalize;">Sizes Available</p>
+                                <p style="font-size: 32px;margin: 0;color: rgb(95, 93, 93);">SIZES AVAILABLE</p>
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
