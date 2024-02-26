@@ -57,10 +57,7 @@
         }
 
         .h3 {
-            font-size: 32px;
-            margin: 0;
-            color: rgb(95, 93, 93);
-            text-transform: capitalize;
+
             font-family: "montserrat", sans-serif !important;
         }
 
@@ -119,7 +116,7 @@
                     <tr>
                         <td>
                             <div class="left-wrapper">
-                                <p class="h3">Sizes Available</p>
+                                <p style="font-size: 32px;margin: 0;color: rgb(95, 93, 93);text-transform: capitalize;">Sizes Available</p>
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
