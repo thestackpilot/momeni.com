@@ -24,17 +24,18 @@
 
     <style type="text/css">
         @font-face {
-            font-family: "montserrat", sans-serif;
+            font-family: "Montserrat", sans-serif;
             /* font-style: normal;
             font-weight: normal; */
-            /* src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap'); */
-            src: url("https://use.typekit.net/lba7uat.css");
+             src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
+            /*src: url("https://use.typekit.net/lba7uat.css");*/
         }
 
         body {
-            font-family: "montserrat", sans-serif;
+            font-family: "Montserrat", sans-serif;
             font-optical-sizing: auto;
             font-style: normal;
+            font-weight: lighter;
             margin: 0;
             padding: 0;
         }
@@ -54,11 +55,6 @@
             text-align: center;
             padding: 5rem 0;
             line-height: 30px;
-        }
-
-        .h3 {
-
-            font-family: "montserrat", sans-serif !important;
         }
 
         .barcodes {
@@ -82,10 +78,11 @@
         }
 
         p.barcode-label {
-            margin-top: 0px;
+            margin-top: -4px;
             font-size: 12px;
             color: #000;
             font-weight: 700;
+            margin-bottom: 3px;
         }
 
         .right-wrapper {
@@ -116,7 +113,7 @@
                     <tr>
                         <td>
                             <div class="left-wrapper">
-                                <p style="font-size: 32px;margin: 0;color: rgb(95, 93, 93);">SIZES AVAILABLE</p>
+                                <p style="font-size: 36px;margin: 0;color: grey;">SIZES AVAILABLE</p>
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
@@ -172,9 +169,9 @@
                                                     style="text-align: center;margin-top: 10px;">
                                                    <div style="font-size:26px;margin-bottom: 20px;">
                                                         <span
-                                                            style="color:rgb(136, 139, 139)">{{$attribute['label']}}:</span>&nbsp;
+                                                            style=" color: rgb(98, 99, 99)">{{$attribute['label']}}:</span>&nbsp;
                                                        <span class="mb-0"
-                                                             style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span>
+                                                             style="color:rgb(136, 139, 139);">{{$attribute['value']}} </span>
                                                    </div>
                                                </div>
                                            @endforeach
