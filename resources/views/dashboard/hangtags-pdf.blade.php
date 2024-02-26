@@ -58,7 +58,7 @@
 
         .left-wrapper h3 {
             font-family: "montserrat", sans-serif;
-            font-size: 32px;
+            font-size: 28px;
             margin: 0;
             text-transform: uppercase;
             color: rgb(95, 93, 93);
@@ -106,18 +106,6 @@
             width: 50%;
         }
 
-        .hr {
-            width: 100%;
-            margin: 1rem 0;
-            position: relative;
-            text-align: center;
-        }
-
-        .hr div {
-            border-bottom: 2px solid grey;
-            width: 16.66%;
-            display: inline-block;
-        }
     </style>
 
 </head>
@@ -131,7 +119,7 @@
                     <tr>
                         <td>
                             <div class="left-wrapper">
-                                <h3 style=" font-family: 'montserrat', sans-serif; ">Sizes Available</h3>
+                                <h3>Sizes Available</h3>
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
