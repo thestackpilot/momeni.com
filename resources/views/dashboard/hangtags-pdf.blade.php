@@ -179,7 +179,7 @@
                                     @endif
                                 </div>
                                 <div
-                                    style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
+                                    style="font-size:27px;color: rgb(80, 78, 78); text-align: center;">
                                     <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
                                     <p class="mb-0">{{$product['title']}}</p>
                                 </div>
