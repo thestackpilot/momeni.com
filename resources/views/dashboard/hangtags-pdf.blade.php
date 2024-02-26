@@ -56,7 +56,7 @@
             line-height: 30px;
         }
 
-        .left-wrapper .h3 {
+        .h3 {
             font-size: 32px;
             margin: 0;
             color: rgb(95, 93, 93);
