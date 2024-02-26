@@ -24,18 +24,17 @@
 
     <style type="text/css">
         @font-face {
-            font-family: "Montserrat", sans-serif;
-            /* font-style: normal;
-            font-weight: normal; */
-             src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
-            /*src: url("https://use.typekit.net/lba7uat.css");*/
+            font-family: "Montserrat";
+            src: url({{ asset('fonts/static/Montserrat.ttf') }}) format('truetype');
+            /*    !* font-style: normal;*/
+        /*    font-weight: normal; *!*/
+        /*    !*src: url("/public/fonts/static/Montserrat.ttf");*!*/
+        /*    !*src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');*!*/
+        /*    !*src: url("https://use.typekit.net/lba7uat.css");*!*/
         }
 
         body {
             font-family: "Montserrat", sans-serif;
-            font-optical-sizing: auto;
-            font-style: normal;
-            font-weight: lighter;
             margin: 0;
             padding: 0;
         }
