@@ -149,51 +149,52 @@
                         <td>
                             <div class="right-wrapper">
                                 <table style="width: 100%">
-                                    <tbody>
-                                    <tr>
-                                        <td style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
-                                            <img src="{{ $product['logo'] }}" width="150"
-                                                 onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
-                                                 style="text-align: center;"/>`
-                                        </td>
-                                    </tr>
-                                    @if(isset($header))
-                                        <tr>
-                                            <td>
-                                                <h3 style="color: gray;font-style: italic;font-size: 20px;">{{$header}}</h3>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                    <tr>
-                                        <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
-                                            <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px; margin-top: 20px">
-                                            <p style="margin-bottom: 0;">{{$product['title']}}</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 100%; text-align: center">
-                                            <hr style="width: 16.66%; display: inline-block; margin: 20px 0;">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @foreach($product['attributes'] as $attribute)
-                                                <div class="style2 text-center"
-                                                     style="text-align: center;margin-top: 20px;">
-                                                    <div style="font-size:26px;margin-bottom: 20px;">
-                                                        <p style="color:rgb(136, 139, 139)">{{$attribute['label']}}:
-                                                            <span style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </td>
-                                    </tr>
-                                    </tbody>
+                                   <tbody>
+                                   <tr>
+                                       <td style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
+                                           <img src="{{ $product['logo'] }}" width="150"
+                                                onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
+                                                style="text-align: center;"/>`
+                                       </td>
+                                   </tr>
+                                   @if(isset($header))
+                                       <tr>
+                                           <td>
+                                               <h3 style="color: gray;font-style: italic;font-size: 20px;">{{$header}}</h3>
+                                           </td>
+                                       </tr>
+                                   @endif
+                                   <tr>
+                                       <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
+                                           <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
+                                       </td>
+                                   </tr>
+                                   <tr>
+                                       <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
+                                           <p style="margin-bottom: 20px; margin-top: 10px;">{{$product['title']}}</p>
+                                       </td>
+                                   </tr>
+                                   <tr>
+                                       <td style="width: 100%; text-align: center">
+                                           <hr style="width: 16.66%; display: inline-block; margin-bottom: 20px;">
+                                       </td>
+                                   </tr>
+                                   <tr>
+                                       <td>
+                                           @foreach($product['attributes'] as $attribute)
+                                               <div class="style2 text-center"
+                                                    style="text-align: center;margin-top: 10px;">
+                                                   <div style="font-size:26px;margin-bottom: 20px;">
+                                                        <span
+                                                            style="color:rgb(136, 139, 139)">{{$attribute['label']}}:</span>&nbsp;
+                                                       <span class="mb-0"
+                                                             style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span>
+                                                   </div>
+                                               </div>
+                                           @endforeach
+                                       </td>
+                                   </tr>
+                                   </tbody>
                                 </table>
                             </div>
                         </td>
