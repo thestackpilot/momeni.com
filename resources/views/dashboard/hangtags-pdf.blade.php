@@ -48,7 +48,7 @@
             display: inline;
             text-align: center;
             padding: 5rem 0;
-            height: 100%;
+            height: 100% !important;
         }
 
         .left-wrapper h3 {
@@ -89,7 +89,7 @@
             display: inline;
             text-align: center;
             padding: 5rem 0 0;
-            height: 100%;
+            height: 100% !important;
         }
 
         .hangtags-wrapper table {
@@ -144,7 +144,7 @@
                         <td>
                             <div class="right-wrapper">
                                 <table style="width: 100%">
-                                   <tbody>
+                                   <tbody style="line-height: 35px;">
                                    <tr>
                                        <td style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
                                            <img src="{{ $product['logo'] }}" width="150"
