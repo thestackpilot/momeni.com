@@ -156,8 +156,10 @@
                                        </td>
                                    </tr>
                                    <tr>
-                                       <td style="width: 100%; text-align: center">
-                                           <hr style="width: 16.66%; display: inline-block; margin-bottom: 20px;">
+                                       <td style="text-align: center">
+                                           <a href="{{url('/search') . '/' . base64_encode($product['title'])}}">
+                                               <img src="https://api.qrserver.com/v1/create-qr-code/?data={{url('/search') . '/' . base64_encode($product['title'])}}" onerror="this.onerror=null; this.src='{{url('/').$error_image}}'" id="imgID" align="middle" border="0" class="imgHeight" height="80px"; width="80px" alt="QR Code">
+                                           </a>
                                        </td>
                                    </tr>
                                    <tr>

@@ -151,9 +151,10 @@
                     <table style="width:100%" border="0" cellspacing="0" cellpadding="0" style="padding-top: 0px;">
                         <tbody>
                         <tr>
-                            <td>
-                                <hr class="col-2 m-auto p-3 mt-4"
-                                    style="width:16.66%; margin:0 auto; padding:1rem; opacity: 1;">
+                            <td style="text-align: center">
+                                <a href="{{url('/search') . '/' . base64_encode($product['title'])}}">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?data={{url('/search') . '/' . base64_encode($product['title'])}}" onerror="this.onerror=null; this.src='{{url('/').$error_image}}'" id="imgID" align="middle" border="0" class="imgHeight" height="80px"; width="80px" alt="QR Code">
+                                </a>
                             </td>
                         </tr>
                         <tr>
