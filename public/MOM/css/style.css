@@ -9326,6 +9326,12 @@ only screen and (max-width: 767px) {
     font-size: 16px;
 }
 
+.menu .parant a.exclude-link {
+    display: table-row-group !important;
+    padding: 19px 0px;
+    font-size: 16px;
+}
+
 .menu .parant .drop-down-item {
     position: absolute;
     width: auto;

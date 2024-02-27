@@ -142,7 +142,7 @@ use App\Http\Controllers\CommonController;
                             <div class="rugs-home-slider ">
                                 <div class="single-rugs-item ">
                                     <div class="rugs-images img-fluid">
-                                        <a href="{{asset($slide -> link)}}" class="rugs-thumbnail"> <img src="{{asset($slide -> image)}}" class="img-fluid" alt=""></a>
+                                        <a href="{{asset($slide -> link)}}" class="rugs-thumbnail"> <img src="/MOM/images/landing-img/rug/3.png" class="img-fluid" alt=""></a>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@ use App\Http\Controllers\CommonController;
                             <div class="col-lg-12">
                                 <div class="single-product-item text-center">
                                     <div class="products-images">
-                                        <a href="{{$pages -> home -> sections -> key_categories -> image_2_url}}" class="product-thumbnail img-fluid" style="background-image: url('{{$pages -> home -> sections -> key_categories -> image_2_image}}');">
+                                        <a href="{{$pages -> home -> sections -> key_categories -> image_2_url}}" class="product-thumbnail img-fluid" style="background-image: url('/public/MOM/images/featured-product/df-2.png');">
                                             <!-- <img src="{{$pages -> home -> sections -> key_categories -> image_2_image}}" class="img-fluid" alt="{{$pages -> home -> sections -> key_categories -> image_2_title}}">  -->
                                         </a>
                                     </div>

@@ -13,10 +13,10 @@ use App\Http\Controllers\CommonController;
                 <!-- <div class="col-lg-2 col-md-2 col-sm-12 d-none d-md-block">-->
                 <div class="col-lg-2 col-md-2 col-sm-2 d-md-block">
                     <div class="logo text-md-left">
-                        <a href="/"><img src="{{asset($basicSettings -> logo_dark)}}" width="60" alt=""></a>
+                        <a href="/"><img src="/MOM/images/momeni-logoo.png" width="60" alt=""></a>
                     </div>
                 </div>
-                @include('frontend.'.$active_theme -> theme_abrv.'.components.menu')
+                    @include('frontend.'.$active_theme -> theme_abrv.'.components.menu')
                 <div class="mobile-menu">
                     <a href="#" class="mobile-navigation-icon" id="mobile-menu-trigger"> <i class="icon-menu"></i> </a>
                 </div>
