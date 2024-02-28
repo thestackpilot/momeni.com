@@ -237,10 +237,23 @@ class ItemController extends FrontendController
 
         if ( $request->has( 'item_id' ) && $request->has( 'customer_id' ) )
         {
-            $return = [
-                'success' => 1,
-                'data'    => $this->update_ats_prices( $this->ApiObj->Get_ATS( $request->item_id, $request->customer_id )['ATSInfo'], $request->item_id, $request->customer_id )
-            ];
+            // print_r($request->SUK);
+            // die(var_dump( $request->SUK !== null));
+            if($request->SUK !== null)
+            {
+                // $request->item_id = $request->SUK;
+                $return = [
+                    'success' => 1,
+                    'data'    => $this->update_ats_prices( $this->ApiObj->Get_ATS( $request->SUK, $request->customer_id )['ATSInfo'], $request->item_id, $request->customer_id )
+                ];
+            }
+            else{
+                $return = [
+                    'success' => 1,
+                    'data'    => $this->update_ats_prices( $this->ApiObj->Get_ATS( $request->item_id, $request->customer_id )['ATSInfo'], $request->item_id, $request->customer_id )
+                ];
+            }
+
         }
 
         return response()->json( $return );
@@ -294,7 +307,8 @@ class ItemController extends FrontendController
             'collection_id'    => $id,
             'related_designs'  => $related_designs,
             'color'            => $color_id,
-	    'is_oak'	       => strtolower( $id ) === 'oak'
+            'is_oak'	       => strtolower( $id ) === 'oak',
+            'SUK'              => strtolower( $id ) === 'oak' ? $design_id : null
         ] );
 
     }
@@ -322,9 +336,9 @@ class ItemController extends FrontendController
         $data['ATSQtyOrig'] = $data['ATSQty'];
         $data['ATSQty']     = $data['ATSQty'] - ( new Cart() )->get_item_quantity( $item_id );
         $data['ETADate']    = CommonController::get_date_format( $data['ETADate'] );
-
         // $data['ItemExistInCart']    =  ( new Cart() )->get_item_quantity( $item_id ) ? true : false;
         $cart_item               = ( new Cart() )->get_item( $item_id );
+   
         $data['ItemExistInCart'] = $cart_item ? ( $cart_item->customer_id == $customer_id ? 1 : -1 ) : 0;
 
         return $data;

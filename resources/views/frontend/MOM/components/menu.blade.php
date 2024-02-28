@@ -69,7 +69,8 @@ use App\Http\Controllers\CommonController;
             </div>
         </li>
         <li class="parant">
-            <span>
+            <span id="cart-parent">
+                
                 <a href="javascript:void(0)" class="main-item quickCart-opener position-relative">
                     @auth()
                         <span class="badge badge-pill badge-primary position-absolute cartCount" style="top: auto">{{$cart -> cart_count}}</span>
@@ -146,7 +147,7 @@ use App\Http\Controllers\CommonController;
     </div>
 @endauth
 @if(isset($cart -> items) && count((array)$cart -> items))
-    <div class="quickCart position-fixed d-none">
+    <div class="quickCart position-fixed d-none" id="quickCart">
         <div class="col-sm-12 m-md-2 checkout-balance col-12 position-absolute">
             <i class="close-icon icon-cross position-absolute quickcart-closer"> </i>
             <div class="checkout_items_wrap mt-4">

@@ -135,7 +135,7 @@ use App\Http\Controllers\CommonController;
                                     <span class="base_price muted" id="base_price">0</span>
                                     <span class="postfix muted" style="text-transform: initial;margin-left: 5px;font-size: 16px;margin-top: 5px;">wholesale</span>
                                 </div>
-                                <div class="d-flex align-items-center mb-20 d-none">
+                                <div class="d-flex align-items-center mb-20">
                                     <span class="form-label font-crimson bg-secondary" id="qty_msg">Loading...</span>
                                 </div>
 
@@ -353,12 +353,12 @@ use App\Http\Controllers\CommonController;
                 },
                 success: function(response) {
                     var new_html = $($.parseHTML(response));
-                     console.log('Length: ', new_html.find('#item_json').length);
-                        console.log('Value: ', new_html.find('#item_json').val());
+         
                     $('#item_json').html(new_html.find('#item_json').html());
 
                     item_object = JSON.parse($('#item_json').html());
-                    console.log(item_object);
+                   
+                    console.log($('#cart-parent').html());
                     $('#cart-parent').html(new_html.find('#cart-parent').html());
                     $('#profile-parent').html(new_html.find('#profile-parent').html());
 
@@ -619,13 +619,15 @@ use App\Http\Controllers\CommonController;
             hide_components(['#qty-main', '#cart_main', '#add_to_cart']);
             return true;
         }
+        var SUK = '{{ $SUK }}';
+        console.log('suk11: ',SUK);
         item_object.Items.forEach(function(item, index) {
             if ((item.ItemID == ItemID)) {
                 $('#item_customer input[name=customer]').prop('disabled', false);
                 if (item.UserCustomerInfo.IsSaleRep == 1) {
                     getCustomers(item);
                     var customer_id = item.UserCustomerInfo.CustomerSet ? item.UserCustomerInfo.CustomerSet : '';
-                  
+                    console.log('customer_id1: ', customer_id);
                     // $('#item_customer input[name=customer]').prop('disabled', 'disabled');
                     $('#qty-main, .base_price').addClass('muted');
                     $('#qty_msg').css('opacity', '0.4');
@@ -634,6 +636,7 @@ use App\Http\Controllers\CommonController;
                     $.post('{{route("frontend.item.ats")}}', {
                         _token: '{{csrf_token()}}',
                         item_id: item.ItemID,
+                        SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                         customer_id: customer_id
                     }, function(response) {
                         startBuying(item.ItemID, customer_id, response.data);
@@ -650,6 +653,7 @@ use App\Http\Controllers\CommonController;
                     $.post('{{route("frontend.item.ats")}}', {
                         _token: '{{csrf_token()}}',
                         item_id: item.ItemID,
+                        SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                         customer_id: typeof item.UserCustomerInfo.Customers[0].CustomerID !== "undefined" ? item.UserCustomerInfo.Customers[0].CustomerID : ''
                     }, function(response) {
                         startBuying(item.ItemID, item.UserCustomerInfo.Customers[0].CustomerID, response.data);
@@ -744,6 +748,9 @@ use App\Http\Controllers\CommonController;
         var split_arr = item_customer_id.split(' :: ');
         var item_id = split_arr[0].trim();
         var customer_id = split_arr[1].trim();
+        var SUK = '{{ $SUK }}';
+        console.log('suk: ',SUK);
+        console.log('customer_id2: ',customer_id);
         item_object.Items.forEach(function(item, index) {
             if ((item.ItemID == item_id)) {
                 item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
@@ -754,6 +761,7 @@ use App\Http\Controllers\CommonController;
                         $.post('{{route("frontend.item.ats")}}', {
                             _token: '{{csrf_token()}}',
                             item_id: item_id,
+                            SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                             customer_id: customer_id
                         }, function(response) {
                             startBuying(item_id, customer_id, response.data);
@@ -801,6 +809,7 @@ use App\Http\Controllers\CommonController;
         if('{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id)}}' ) {
             hide_components(['#qty_msg', '.postfix', '#item_variant_parent', '#item_color_parent', '#item_size_parent', '#qty-main', '#cart_main h3']);
             $('#item_qty').val(1);
+            console.log('exists:',ATSInfo.ItemExistInCart);
             if(ATSInfo.ItemExistInCart) {
                 $("#qty_msg").text(ATSInfo.ItemExistInCart == 1 ? 'Item is already in your Cart.' : 'Item not available.');
                 $("#qty_msg").addClass('bg-warning');
@@ -859,6 +868,7 @@ use App\Http\Controllers\CommonController;
                     if (response.success) {
                         console.log("new ",$('#item_json').length);
                         if ($('#item_json').length) {
+                            console.log("if");
                             refreshItemJson(function() {
                                 toastr.success(response.message, {
                                     hideDuration: 10000,
@@ -868,6 +878,7 @@ use App\Http\Controllers\CommonController;
                                 // $('.quickCart-opener').trigger('click');
                             });
                         } else {
+                            console.log("else");
                             refreshUser('quick-cart', function() {
                                 refreshUser('profile', function() {
                                     $("#quick_cart").removeClass('d-none');
