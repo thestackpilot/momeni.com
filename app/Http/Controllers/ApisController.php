@@ -441,7 +441,7 @@ class ApisController extends RootController
                 $p_array = ["Input" => $post_array];
                 //
 		prr("TOKEN: " . print_r([$this->accessTokenArray, $p_array], 1));
-                $response = Http::timeout( 90 )->withHeaders( $this->accessTokenArray )->$request_type( $this->active_theme->theme_api_base_url.$api_slug, $p_array );
+                $response = Http::timeout( 300 )->withHeaders( $this->accessTokenArray )->$request_type( $this->active_theme->theme_api_base_url.$api_slug, $p_array );
 
                 $ret = null;
 
