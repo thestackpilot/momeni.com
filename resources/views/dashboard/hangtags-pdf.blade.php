@@ -56,7 +56,7 @@
         }
 
         .barcodes {
-            margin-top: 20px;
+            margin-top: 40px;
             width: 100%;
             display: inline-block;
             text-align: center;
