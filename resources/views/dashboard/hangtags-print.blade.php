@@ -47,7 +47,7 @@
         .left-wrapper {
             width: 50%;
             text-align: center;
-            padding: 5rem 0;
+            /*padding: 5rem 0;*/
         }
 
         .left-wrapper h3 {
@@ -58,7 +58,7 @@
         }
 
         .barcodes {
-            margin-top: 40px;
+            margin-top: 20px;
             width: 100%;
             display: inline-block;
             text-align: center;
