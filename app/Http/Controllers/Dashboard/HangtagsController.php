@@ -103,8 +103,8 @@ class HangtagsController extends DashboardController
                             }
                             $products[$k]['logo'] = $this->get_design_logo( $data['Designer']);
                         }
-                        $barcodes = array_chunk($products[$k]['barcodes'], 8);
-                        $sizes = array_chunk($products[$k]['sizes'], 8);
+                        $barcodes = array_chunk($products[$k]['barcodes'], 10);
+                        $sizes = array_chunk($products[$k]['sizes'], 10);
                         $products[$k]['barcodes'] = $barcodes;
                         $products[$k]['sizes'] = $sizes;
                     }
@@ -145,6 +145,7 @@ class HangtagsController extends DashboardController
                 case 'download':
 //                return view( 'dashboard.hangtags-pdf', $page_data );
                     $html = view( 'dashboard.hangtags-pdf', $page_data )->render();
+//                    die($html);
                     $pdf  = PDF::loadHTML( $html )->setPaper( [0, 0, 580, 870 ], 'landscape' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
                     // $pdf = PDF::loadView( 'dashboard.hangtags-pdf', $page_data )->setPaper( [0, 0, 720, 970], 'portrait' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
 

@@ -52,11 +52,11 @@
         .left-wrapper {
             display: inline;
             text-align: center;
-            padding: 5rem 0;
+            /*padding: 5rem 0;*/
         }
 
         .barcodes {
-            margin-top: 70px;
+            margin-top: 20px;
             width: 100%;
             display: inline-block;
             text-align: center;
