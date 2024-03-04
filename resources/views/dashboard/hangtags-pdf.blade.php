@@ -47,13 +47,6 @@
             width: 100%;
             display: flex;
             flex-direction: row;
-            position: relative;
-        }
-
-        .hangtags-wrapper > p {
-            position: absolute;
-            top: 0px;
-            left: 150px;
         }
 
         .left-wrapper {
@@ -64,13 +57,13 @@
 
         .barcodes {
             margin-top: 40px;
-            width: 600px;
+            width: 100%;
             display: inline-block;
             text-align: center;
         }
 
         .barcode {
-            width: 250px;
+            width: 200px;
             margin: 0 10px;
             display: inline-block;
         }
@@ -114,15 +107,15 @@
     @if(isset($product['barcodes']))
         @foreach($product['barcodes'] as $j => $barcodes)
             <div class="hangtags-wrapper">
-                <p style="font-size: 36px;margin: 0;color: grey;">SIZES AVAILABLE</p>
                 <table>
                     <tr>
                         <td>
                             <div class="left-wrapper">
+                                <p style="font-size: 36px;margin: 0;color: grey;">SIZES AVAILABLE</p>
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
-                                            <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 19) . '..' : $barcode['label'] }}</p>
+                                            <p>{{ strlen($barcode['label']) > 16 ? substr($barcode['label'], 0, 15) . '..' : $barcode['label'] }}</p>
                                             <div style="margin-top: 3px;">
                                                 <img
                                                     src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
