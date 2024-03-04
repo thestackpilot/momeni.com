@@ -52,7 +52,7 @@
 
         .hangtags-wrapper > p {
             position: absolute;
-            top: 25px;
+            top: 0px;
             left: 150px;
         }
 
