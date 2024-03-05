@@ -145,8 +145,7 @@ class HangtagsController extends DashboardController
                 case 'download':
 //                return view( 'dashboard.hangtags-pdf', $page_data );
                     $html = view( 'dashboard.hangtags-pdf', $page_data )->render();
-//                    die($html);
-                    $pdf  = PDF::loadHTML( $html )->setPaper( [0, 0, 580, 870 ], 'landscape' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
+                    $pdf  = PDF::loadHTML( $html )->setPaper('A4', 'landscape' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
                     // $pdf = PDF::loadView( 'dashboard.hangtags-pdf', $page_data )->setPaper( [0, 0, 720, 970], 'portrait' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
 
                     return $pdf->download( 'hangtags.pdf' );
