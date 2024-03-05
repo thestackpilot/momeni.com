@@ -54,6 +54,7 @@
             /*display: inline;*/
             text-align: center;
             /*padding: 5rem 0;*/
+            margin-top: 4rem;
         }
 
         .barcodes {
@@ -109,7 +110,7 @@
             text-align: center;
             right: 0;
             left: 0;
-        } 
+        }
 
     </style>
 
