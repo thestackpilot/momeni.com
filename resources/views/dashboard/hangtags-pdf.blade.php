@@ -106,7 +106,7 @@
 
         p.sizes {
             position: absolute;
-            top: 0;
+            top: 5px;
             text-align: center;
             right: 0;
             left: 0;
