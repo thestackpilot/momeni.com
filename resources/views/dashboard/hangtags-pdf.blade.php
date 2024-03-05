@@ -47,16 +47,16 @@
             width: 100%;
             display: flex;
             flex-direction: row;
+            padding-top: 2rem;
         }
 
         .left-wrapper {
-            display: inline;
+            /*display: inline;*/
             text-align: center;
             /*padding: 5rem 0;*/
         }
 
         .barcodes {
-            margin-top: 40px;
             width: 100%;
             display: inline-block;
             text-align: center;
@@ -98,6 +98,19 @@
             width: 50%;
         }
 
+        td.left-td {
+            position: relative;
+            /* text-align: center; */
+        }
+
+        p.sizes {
+            position: absolute;
+            top: 0;
+            text-align: center;
+            right: 0;
+            left: 0;
+        } 
+
     </style>
 
 </head>
@@ -109,9 +122,9 @@
             <div class="hangtags-wrapper">
                 <table>
                     <tr>
-                        <td>
+                        <td class="left-td">
+                            <p class="sizes" style="font-size: 36px;margin: 0;color: grey;">SIZES AVAILABLE</p>
                             <div class="left-wrapper">
-                                <p style="font-size: 36px;margin: 0;color: grey;">SIZES AVAILABLE</p>
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
