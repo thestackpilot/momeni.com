@@ -64,7 +64,7 @@
         }
 
         .barcode {
-            width: 250px;
+            width: 225px;
             margin: 0 10px;
             display: inline-block;
         }
@@ -172,12 +172,8 @@
                                     @endif
                                     <tr>
                                         <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
-                                            <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
-                                            <p style="margin-bottom: 20px; margin-top: 10px;">{{$product['title']}}</p>
+                                            <p style="margin-bottom: 0px;"><b>{{$product['category']}}</b></p>
+                                            <p style="margin-bottom: 20px; font-size:27px;color: rgb(80, 78, 78);;">{{$product['title']}}</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -186,8 +182,8 @@
                                                 <img
                                                     src="https://api.qrserver.com/v1/create-qr-code/?data={{url('/search') . '/' . base64_encode($product['title'])}}"
                                                     onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
-                                                    id="imgID" align="middle" border="0" class="imgHeight" height="60px"
-                                                    ; width="60px" alt="QR Code">
+                                                    id="imgID" align="middle" border="0" class="imgHeight" height="100px"
+                                                    width="100px" alt="QR Code">
                                             </a>
                                         </td>
                                     </tr>
