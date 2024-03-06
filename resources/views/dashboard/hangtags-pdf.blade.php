@@ -96,24 +96,24 @@
         }
 
         .hangtags-wrapper table td {
-            width: 50%;
+            /*width: 50%;*/
         }
 
         td.left-td {
             position: relative;
-            /*width: 60%;*/
+            width: 60%;
             /* text-align: center; */
         }
 
         td.right-td {
             position: relative;
-            /*width: 40%;*/
+            width: 40%;
             /* text-align: center; */
         }
 
         p.sizes {
             position: absolute;
-            top: 5px;
+            top: 20px;
             text-align: center;
             right: 0;
             left: 0;
@@ -131,7 +131,7 @@
                 <table>
                     <tr>
                         <td class="left-td">
-                            <p class="sizes" style="font-weight: 600; font-size: 24px; margin: 0; color: grey">SIZES AVAILABLE</p>
+                            <p class="sizes" style="font-size: 24px; margin: 0; color: grey">SIZES AVAILABLE</p>
                             <div class="left-wrapper">
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
