@@ -65,7 +65,7 @@
 
         .barcode {
             width: 225px;
-            margin: 0 10px;
+            margin: 0 5px;
             display: inline-block;
         }
 
@@ -96,18 +96,16 @@
         }
 
         .hangtags-wrapper table td {
-            /*width: 50%;*/
+            width: 50%;
         }
 
         td.left-td {
             position: relative;
-            width: 60%;
             /* text-align: center; */
         }
 
         td.right-td {
             position: relative;
-            width: 40%;
             /* text-align: center; */
         }
 
