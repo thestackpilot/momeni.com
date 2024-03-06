@@ -96,18 +96,18 @@
         }
 
         .hangtags-wrapper table td {
-            /*width: 50%;*/
+            width: 50%;
         }
 
         td.left-td {
             position: relative;
-            width: 60%;
+            /*width: 60%;*/
             /* text-align: center; */
         }
 
         td.right-td {
             position: relative;
-            width: 40%;
+            /*width: 40%;*/
             /* text-align: center; */
         }
 
