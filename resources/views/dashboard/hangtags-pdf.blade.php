@@ -61,7 +61,7 @@
             width: 100%;
             display: inline-block;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .barcode {
