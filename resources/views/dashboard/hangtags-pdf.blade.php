@@ -64,13 +64,13 @@
         }
 
         .barcode {
-            width: 200px;
+            width: 250px;
             margin: 0 10px;
             display: inline-block;
         }
 
         .barcode p {
-            font-size: 21px;
+            font-size: 24px;
             margin: 4px 0 0;
             line-height: 25px;
             color: grey;
