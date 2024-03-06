@@ -117,8 +117,8 @@
             text-align: center;
             right: 0;
             left: 0;
-            font-weight: 600;
-            font-size: 36px;
+            /*font-weight: 600;*/
+            /*font-size: 36px;*/
             margin: 0;
             color: grey;
         }
@@ -135,7 +135,7 @@
                 <table>
                     <tr>
                         <td class="left-td">
-                            <p class="sizes">SIZES AVAILABLE</p>
+                            <p class="sizes" style="font-weight: 600; font-size: 24px">SIZES AVAILABLE</p>
                             <div class="left-wrapper">
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
