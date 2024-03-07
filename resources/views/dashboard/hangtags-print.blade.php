@@ -47,7 +47,7 @@
             width: 100%;
             display: flex;
             flex-direction: row;
-            padding-top: 1rem;
+            padding-top: 2.5rem;
         }
 
         .left-wrapper {
