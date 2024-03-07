@@ -23,15 +23,20 @@
 
 
     <style type="text/css">
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');
+        @font-face {
+            font-family: "Montserrat";
+            src: url({{ asset('fonts/static/Montserrat-Regular.ttf') }}) format('truetype');
+            /*    !* font-style: normal;*/
+            /*    font-weight: normal; *!*/
+            /*    !*src: url("/public/fonts/static/Montserrat.ttf");*!*/
+            /*    !*src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');*!*/
+            /*    !*src: url("https://use.typekit.net/lba7uat.css");*!*/
+        }
 
         body {
-            font-family: "montserrat", sans-serif;
-            /* font-family: "Montserrat", ; */
-            font-optical-sizing: auto;
-            font-style: normal;
-            margin: 0%;
-            padding: 0%;
+            font-family: "Montserrat", sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         .style2 {
@@ -42,31 +47,26 @@
             width: 100%;
             display: flex;
             flex-direction: row;
+            padding-top: 1rem;
         }
 
         .left-wrapper {
-            width: 50%;
+            /*display: inline;*/
             text-align: center;
             /*padding: 5rem 0;*/
-        }
-
-        .left-wrapper h3 {
-            font-size: 32px;
-            margin: 0;
-            text-transform: uppercase;
-            color: rgb(95, 93, 93);
+            /*margin-top: -2rem;*/
         }
 
         .barcodes {
-            margin-top: 20px;
             width: 100%;
             display: inline-block;
             text-align: center;
+            margin-top: 20px;
         }
 
         .barcode {
-            width: 200px;
-            margin: 0 10px;
+            width: 230px;
+            margin: 0 5px;
             display: inline-block;
         }
 
@@ -78,17 +78,50 @@
         }
 
         p.barcode-label {
-            margin-top: 0px;
+            margin-top: -4px;
             font-size: 12px;
             color: #000;
             font-weight: 700;
+            margin-bottom: 3px;
         }
 
         .right-wrapper {
-            width: 50%;
+            display: inline;
             text-align: center;
             padding: 5rem 0 0;
+            height: 100%;
         }
+
+        .hangtags-wrapper table {
+            width: 100%;
+        }
+
+        .hangtags-wrapper table td {
+            width: 50%;
+        }
+
+        td.left-td {
+            position: relative;
+            /* text-align: center; */
+        }
+
+        td.right-td {
+            position: relative;
+            /* text-align: center; */
+        }
+
+        p.sizes {
+            /*position: absolute;*/
+            /*top: 25px;*/
+            /*text-align: center;*/
+            /*right: 0;*/
+            /*left: 0;*/
+            /*font-weight: 600;*/
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: grey;
+        }
+
     </style>
 
     <script>
@@ -110,69 +143,105 @@
 
 </head>
 
-<body onload="{{isset($print) && $print ? 'PrintDoc()' : ''}}" marginstyle="width:0" marginheight="0" topmargin="0">
+<body onload="{{isset($print) && $print ? 'PrintDoc()' : ''}}">
 @foreach($products as $i => $product)
     @if(isset($product['barcodes']))
         @foreach($product['barcodes'] as $j => $barcodes)
             <div class="hangtags-wrapper">
-                <div class="left-wrapper">
-                    <h3>Sizes Available</h3>
-                    <div class="barcodes">
-                        @foreach($barcodes as $k => $barcode)
-                            <div class="barcode">
-                                <p>{{ strlen($barcode['label']) > 16 ? substr($barcode['label'], 0, 15) . '..' : $barcode['label'] }}</p>
-                                <div style="margin-top: 5px;">
-                                    <img
-                                        src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
-                                        width="170px" height="45px">
-                                </div>
-                                <p class="barcode-label"> {{ $barcode['code']  }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="right-wrapper">
-                    <div class="mb-5 pb-3" style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
-                        <img src="{{ $product['logo'] }}" width="150"
-                             onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
-                             style="text-align: center;"/>
-                        @if(isset($header))
-                            <div>
-                                <font face="arial" style="color: gray;font-style: italic;font-size: 20px;">
-                                    {{$header}}
-                                </font>
-                            </div>
-                        @endif
-                    </div>
-                    <div style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
-                        <p style="margin-bottom: 10px;"><b>{{$product['category']}}</b></p>
-                        <p class="mb-0">{{$product['title']}}</p>
-                    </div>
-                    <table style="width:100%" border="0" cellspacing="0" cellpadding="0" style="padding-top: 0px;">
-                        <tbody>
-                        <tr>
-                            <td style="text-align: center">
-                                <a href="{{url('/search') . '/' . base64_encode($product['title'])}}">
-                                    <img src="https://api.qrserver.com/v1/create-qr-code/?data={{url('/search') . '/' . base64_encode($product['title'])}}" onerror="this.onerror=null; this.src='{{url('/').$error_image}}'" id="imgID" align="middle" border="0" class="imgHeight" height="80px"; width="80px" alt="QR Code">
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                @foreach($product['attributes'] as $attribute)
-                                    <div class="style2 text-center" style="text-align: center;margin-top: 10px;">
-                                        <div style="font-size:26px;margin-bottom: 20px;">
-                                            <span style="color:rgb(136, 139, 139)">{{$attribute['label']}}:</span>&nbsp;
-                                            <span class="mb-0"
-                                                  style=" color: rgb(98, 99, 99);">{{$attribute['value']}} </span>
+                <table>
+                    <tr>
+                        <td class="left-td">
+                            @php
+                                $margin = -17;
+                                $total_barcodes = count($barcodes);
+
+                                if ($total_barcodes <= 6 && $total_barcodes > 2) {
+                                    $margin = -11;
+                                }
+
+                                if ($total_barcodes <= 8 && $total_barcodes > 6) {
+                                    $margin = -4;
+                                }
+
+                                if ($total_barcodes <= 10 && $total_barcodes > 8) {
+                                    $margin = 2;
+                                }
+                            @endphp
+                            <div class="left-wrapper" style="margin-top: {{ $margin }}rem">
+                                <p class="sizes">SIZES AVAILABLE</p>
+                                <div class="barcodes">
+                                    @foreach($barcodes as $k => $barcode)
+                                        <div class="barcode">
+                                            <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 19) . '..' : $barcode['label'] }}</p>
+                                            <div style="margin-top: 3px;">
+                                                <img
+                                                    src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
+                                                    width="170px" height="45px">
+                                            </div>
+                                            <p style="margin-top: -4px; font-size: 12px; color: #000; font-weight: 700; margin-bottom: 3px;"> {{ $barcode['code']  }}</p>
                                         </div>
-                                    </div>
-                                @endforeach
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </td>
+                        <td class="right-td">
+                            <div class="right-wrapper">
+                                <table style="width: 100%">
+                                    <tbody style="line-height: 30px;">
+                                    <tr>
+                                        <td style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
+                                            <img src="{{ $product['logo'] }}" width="150"
+                                                 onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
+                                                 style="text-align: center;"/>`
+                                        </td>
+                                    </tr>
+                                    @if(isset($header))
+                                        <tr>
+                                            <td>
+                                                <h3 style="color: gray;font-style: italic;font-size: 20px;">{{$header}}</h3>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                    <tr>
+                                        <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
+                                            <p style="margin-bottom: 0px;"><b>{{$product['category']}}</b></p>
+                                            <p style="margin-bottom: 20px; font-size:27px;color: rgb(80, 78, 78);;">{{$product['title']}}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center">
+                                            <a href="{{url('/search') . '/' . base64_encode($product['title'])}}">
+                                                <img
+                                                    src="https://api.qrserver.com/v1/create-qr-code/?data={{url('/search') . '/' . base64_encode($product['title'])}}"
+                                                    onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
+                                                    id="imgID" align="middle" border="0" class="imgHeight" height="100px"
+                                                    width="100px" alt="QR Code">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @foreach($product['attributes'] as $attribute)
+                                                <div class="style2 text-center"
+                                                     style="text-align: center;margin-top: 10px;">
+                                                    <div
+                                                        style="font-size:26px;margin-bottom: 15px; line-height: 30px !important;">
+                                                        <span
+                                                            style=" color: rgb(98, 99, 99)">{{$attribute['label']}}:</span>&nbsp;
+                                                        <span class="mb-0"
+                                                              style="color:rgb(136, 139, 139);">{{$attribute['value']}} </span>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
             </div>
         @endforeach
 
