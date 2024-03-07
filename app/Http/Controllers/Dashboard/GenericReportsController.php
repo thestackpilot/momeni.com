@@ -1094,7 +1094,7 @@ class GenericReportsController extends DashboardController
         {
             $from_date = $request->has('from_date') ? $request->from_date : Carbon::now()->format('Y-m-d');
             $to_date = $request->has('to_date') ? $request->to_date : Carbon::now()->format('Y-m-d');
-            $report = $this->ApiObj->Get_SalesReport( $request->sales_rep, $request->customer, $request->report_title, $from_date, $to_date, $request->quality, $request->item_id );
+            $report = $this->ApiObj->Get_SalesReport( $request->sales_rep, $request->customer, $request->report_title, $from_date, $to_date, $request->quality, $request->item_id, $request->collection, $request->design);
 
             if( $report['Success'] )
             {
@@ -1118,7 +1118,9 @@ class GenericReportsController extends DashboardController
                         'customer_show' => $report['CustomerField'],
                         'date_field' => $report['DateField'],
                         'item_id_show' => $report['ItemIDField'],
-                        'quality_show' => $report['QualityField']
+                        'quality_show' => $report['QualityField'],
+                        'collection_show' => $report['CollectionField'],
+                        'design_show' => $report['DesignField']
                     ]
                 ];
 
@@ -1174,6 +1176,22 @@ class GenericReportsController extends DashboardController
                 'attribues'   => '',
                 'placeholder' => 'Enter Quality',
                 'value'       => $request->has( 'quality' ) ? $request->quality : ''
+            ],
+            [
+                'title'       => 'Collection',
+                'type'        => 'text',
+                'id'          => 'collection_show',
+                'attribues'   => '',
+                'placeholder' => 'Enter Collection ',
+                'value'       => $request->has( 'collection' ) ? $request->collection : ''
+            ],
+            [
+                'title'       => 'Design',
+                'type'        => 'text',
+                'id'          => 'design_show',
+                'attribues'   => '',
+                'placeholder' => 'Enter Design',
+                'value'       => $request->has( 'design' ) ? $request->design : ''
             ],
         ];
         View::share( 'filters', $filters );
