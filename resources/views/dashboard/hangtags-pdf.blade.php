@@ -47,14 +47,14 @@
             width: 100%;
             display: flex;
             flex-direction: row;
-            padding-top: 2rem;
+            padding-top: 1rem;
         }
 
         .left-wrapper {
             /*display: inline;*/
             text-align: center;
             /*padding: 5rem 0;*/
-            margin-top: 4rem;
+            margin-top: 2rem;
         }
 
         .barcodes {
