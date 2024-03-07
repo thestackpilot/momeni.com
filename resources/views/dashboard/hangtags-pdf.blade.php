@@ -54,7 +54,7 @@
             /*display: inline;*/
             text-align: center;
             /*padding: 5rem 0;*/
-            margin-top: -2rem;
+            /*margin-top: -2rem;*/
         }
 
         .barcodes {
@@ -134,7 +134,23 @@
                 <table>
                     <tr>
                         <td class="left-td">
-                            <div class="left-wrapper">
+                            @php
+                                $margin = -17;
+                                $total_barcodes = count($barcodes);
+
+                                if ($total_barcodes <= 6 && $total_barcodes > 2) {
+                                    $margin = -11;
+                                }
+
+                                if ($total_barcodes <= 8 && $total_barcodes > 6) {
+                                    $margin = -4;
+                                }
+
+                                if ($total_barcodes <= 10 && $total_barcodes > 8) {
+                                    $margin = 2;
+                                }
+                            @endphp
+                            <div class="left-wrapper" style="margin-top: {{ $margin }}rem">
                                 <p class="sizes">SIZES AVAILABLE</p>
                                 <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
