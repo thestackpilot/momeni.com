@@ -210,9 +210,9 @@ class ApisController extends RootController
         return $this->Post_API_Signature('DownloadExcelReports', 'Download Excel Reports', $post_array, ['Success', 'Message', 'ReportData'], 1, 1, 0);
     }
 
-    public function Get_SalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '')
+    public function Get_SalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '', $Collection = '', $Design = '')
     {
-        $post_array = array('SalesRepID' => $SalesRep, 'CustomerID' => $CustomerID, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID);
+        $post_array = array('SalesRepID' => $SalesRep, 'CustomerID' => $CustomerID, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
 
         return $this->Post_API_Signature('Get_SalesReport', 'Get Sales Report', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
     }
