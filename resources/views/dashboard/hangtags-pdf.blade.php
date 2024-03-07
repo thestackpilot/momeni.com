@@ -54,7 +54,7 @@
             /*display: inline;*/
             text-align: center;
             /*padding: 5rem 0;*/
-            margin-top: 2rem;
+            margin-top: -2rem;
         }
 
         .barcodes {
