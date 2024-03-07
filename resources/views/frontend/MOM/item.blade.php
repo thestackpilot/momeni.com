@@ -1,9 +1,44 @@
 @php
-// $active_theme object is available containing the theme developer json loaded.
-// This is for the theme developers who want to load further view assets
+    // $active_theme object is available containing the theme developer json loaded.
+    // This is for the theme developers who want to load further view assets
 
-use App\Http\Controllers\ConstantsController;
-use App\Http\Controllers\CommonController;
+    use App\Http\Controllers\ConstantsController;
+    use App\Http\Controllers\CommonController;
+
+    $dont_show = [];
+    if (Auth::check() && strcmp(ConstantsController::USER_ROLES['staff'], Auth::user()->role) === 0) {
+        if (!in_array('show-price', $permission)) {
+            $dont_show[] = '.base_price';
+            $dont_show[] = '.PAChart-Price';
+        }
+        if (!in_array('allow-checkout', $permission)) {
+            $dont_show[] = '#qty-main';
+            $dont_show[] = '.PAChart-Quantity';
+            $dont_show[] = '#add_to_cart';
+        }
+    }
+    $items_images = [];
+    foreach ($items['Items'] as $item) {
+        if (isset($item['ImageNameArray']) && $item['ImageNameArray']) {
+            foreach ($item['ImageNameArray'] as $image) {
+                if (!in_array($image, $items_images)) {
+                    $items_images[] = $image;
+                }
+            }
+        }
+    }
+
+    $size_heading = isset($main_collection['Description']) && strtolower($main_collection['Description']) == 'rugs' ? 'Approximate Size' : 'Size';
+
+    // backorder and qty when stock will be availe to separate the data from array of date and qty
+    // by asad
+    function formatETA($eta)
+    {
+        preg_match('/(\d{2}-\d{2}-\d{4})\((\d+)\)/', $eta, $matches);
+        return ['date' => $matches[1], 'quantity' => $matches[2]];
+    }
+        // print_r("<pre>");
+        // print_r($items['ItemsETA']);
 
 @endphp
 
@@ -192,13 +227,14 @@ use App\Http\Controllers\CommonController;
                     </div>
 
 <!-- product size Chart -->
+                
                     @if (isset($items['ItemsETA']) && $items['ItemsETA'])
                             <div class="m-auto mt-5 p-0 text-center product_chart">
-                                <div id="prodAvlChart" class="prodAvlChart" style="display: block;">
+                                <div id="prodAvlChart" class="prodAvlChart" style="display: block; width:100%; align:center; margin-top:30px;display: block;">
                                     <div class="mb-4">
                                         <p class="heading-PAChart">Product Availability Chart</p>
                                     </div>
-                                    <div style="overflow-x:auto;">
+                                    <div style="overflow-x:auto; overflow-x:auto; height:375px;">
                                         <table id="tblProductSizes" class="table" border="0" cellpadding="3"
                                             cellspacing="2" width="100%">
                                             <tbody>
