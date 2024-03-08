@@ -12989,6 +12989,7 @@ h3.selected-fltr {
     border-radius: 50%;
     border: 2px solid #fff;
     color: #fff;
+    font-size: 10px;
 }
 
 .cut-pieces-wrapper {
@@ -13019,10 +13020,11 @@ h3.selected-fltr {
 
 .picese-wrapper {
     width: 95%;
-    border-top: 3rem solid #cfcfcf;
-    border-left: 3rem solid #cfcfcf;
+    border-top: 3rem solid #f3f3f3;
+    border-left: 3rem solid #f3f3f3;
     display: flex;
     margin-top: -3rem;
+
 }
 
 .width p {

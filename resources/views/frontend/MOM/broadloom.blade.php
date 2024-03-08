@@ -39,10 +39,12 @@
                                                                 <label for="">Roll ID / Cut Piece ID</label>
                                                             </div>
                                                             <div class="col-6 text-right">
-                                                                <label for="">Length: <span class="text-danger">0' - 0' / 0' - 0'</span></label>
+                                                                <label for="">Length: <span style="color: #660000">0' - 0' / 0' - 0'</span></label>
                                                             </div>
                                                         </div>
-                                                        <input type="text" class="form-control">
+                                                        <select name="" id="" class="form-control">
+                                                            <option value="">Select Option</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-sm-12">
@@ -140,26 +142,26 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
-                                                    <div class="badge badge-success broadloom-badge">
+                                                    <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
                                                     </div>
-                                                    <div class="badge badge-success broadloom-badge">
+                                                    <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
-                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                    </div> <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
-                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                    </div> <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
-                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                    </div> <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
-                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                    </div> <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
-                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                    </div> <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
                                                     </div>
