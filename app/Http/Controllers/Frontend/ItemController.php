@@ -284,9 +284,13 @@ class ItemController extends FrontendController
 
         }
 
+        $page = '.item';
+        if (strtolower($id) === 'broadloom' && ($design_id && $color_id)) {
+            $page = '.broadloom';
+        }
         // die("<pre>".print_r( $main_collection['Description'], 1)."</pre>");
 
-        return view( 'frontend.'.$this->active_theme->theme_abrv.'.item', [
+        return view( 'frontend.'.$this->active_theme->theme_abrv.$page, [
             'items'            => $items,
             'items_json'       => json_encode( $items ),
             'main_collections' => $main_collections,
@@ -294,7 +298,7 @@ class ItemController extends FrontendController
             'collection_id'    => $id,
             'related_designs'  => $related_designs,
             'color'            => $color_id,
-	    'is_oak'	       => strtolower( $id ) === 'oak'
+	        'is_oak'	       => strtolower( $id ) === 'oak'
         ] );
 
     }

@@ -12956,3 +12956,21 @@ h3.selected-fltr {
         width: 320px;
     }
 }
+
+.broadloom-wrapper {
+    text-align: center;
+    padding: 2.5rem 0;
+}
+
+.broadloom-hearder {
+    width: 100%;
+    height: 350px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.broadloom-form {
+    text-align: left !important;
+    margin-top: 4rem;
+}
