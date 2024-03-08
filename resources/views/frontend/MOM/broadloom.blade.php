@@ -28,94 +28,164 @@
                                              style="background-image: url('{{ asset("/MOM/images/landing-img/rug/3.png") }}')"></div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-sm-12">
-                                    <div class="broadloom-form">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <label for="">Roll ID / Cut Piece ID</label>
-                                                        </div>
-                                                        <div class="col-6 text-right">
-                                                            <label for="">Length: <span class="text-danger">0' - 0' / 0' - 0'</span></label>
-                                                        </div>
-                                                    </div>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <div class="form-group">
-                                                    <label for="">Cut Length</label>
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
-                                                                <div class="input-group-prepend">
-                                                                    <div class="input-group-text">Ft</div>
-                                                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="broadloom-form">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <label for="">Roll ID / Cut Piece ID</label>
+                                                            </div>
+                                                            <div class="col-6 text-right">
+                                                                <label for="">Length: <span class="text-danger">0' - 0' / 0' - 0'</span></label>
                                                             </div>
                                                         </div>
-                                                        <div class="col-6">
-                                                            <div class="input-group">
-                                                                <select name="" id=""
-                                                                        class="form-control">
-                                                                    <option value="">1</option>
-                                                                    <option value="">2</option>
-                                                                    <option value="">3</option>
-                                                                </select>
-                                                                <div class="input-group-prepend">
-                                                                    <div class="input-group-text">In</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        <input type="text" class="form-control">
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <div class="form-group">
-                                                    <label for="">Cut Width</label>
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
-                                                                <div class="input-group-prepend">
-                                                                    <div class="input-group-text">Ft</div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for="">Cut Length</label>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text">Ft</div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="input-group">
-                                                                <select name="" id=""
-                                                                        class="form-control">
-                                                                    <option value="">1</option>
-                                                                    <option value="">2</option>
-                                                                    <option value="">3</option>
-                                                                </select>
-                                                                <div class="input-group-prepend">
-                                                                    <div class="input-group-text">In</div>
+                                                            <div class="col-6">
+                                                                <div class="input-group">
+                                                                    <select name="" id=""
+                                                                            class="form-control">
+                                                                        <option value="">1</option>
+                                                                        <option value="">2</option>
+                                                                        <option value="">3</option>
+                                                                    </select>
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text">In</div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-12">
-                                                <div class="form-group">
-                                                    <label for="">SQ-FT Price ($)</label>
-                                                    <input type="text" class="form-control" disabled>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for="">Cut Width</label>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text">Ft</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="input-group">
+                                                                    <select name="" id=""
+                                                                            class="form-control">
+                                                                        <option value="">1</option>
+                                                                        <option value="">2</option>
+                                                                        <option value="">3</option>
+                                                                    </select>
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text">In</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for="">SQ-FT Price ($)</label>
+                                                        <input type="text" class="form-control" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for="">SQ-YRD Price ($)</label>
+                                                        <input type="text" class="form-control" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for="">EXT Price ($)</label>
+                                                        <input type="text" class="form-control" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for=""><input type="checkbox" name="" id=""> With Serging</label>
+                                                        <select name="" id="" class="form-control">
+                                                            <option value="">Select Option</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for="">Serging Charges ($)</label>
+                                                        <input class="form-control" type="text" name="" id="" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="">Customer Instructions</label>
+                                                        <textarea name="" id="" class="form-control" rows="5"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="badge badge-success broadloom-badge">
+                                                        10' - 0" x 10' - 0"
+                                                        <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
+                                                    </div>
+                                                    <div class="badge badge-success broadloom-badge">
+                                                        10' - 0" x 10' - 0"
+                                                        <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
+                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                        10' - 0" x 10' - 0"
+                                                        <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
+                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                        10' - 0" x 10' - 0"
+                                                        <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
+                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                        10' - 0" x 10' - 0"
+                                                        <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
+                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                        10' - 0" x 10' - 0"
+                                                        <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
+                                                    </div> <div class="badge badge-success broadloom-badge">
+                                                        10' - 0" x 10' - 0"
+                                                        <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-sm-12">
-                                                <div class="form-group">
-                                                    <label for="">SQ-YRD Price ($)</label>
-                                                    <input type="text" class="form-control" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="cut-pieces-wrapper">
+                                            <h4>Show Cut</h4>
+                                            <div class="cut-pieces">
+                                                <div class="length">
+                                                    13' -0 (Length)
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-12">
-                                                <div class="form-group">
-                                                    <label for="">EXT Price ($)</label>
-                                                    <input type="text" class="form-control" disabled>
+                                                <div class="pieces" style="height: 10cm">
+                                                    <div class="width">
+                                                        10' -0 (Width)
+                                                    </div>
+                                                    <div class="picese-wrapper">
+                                                        <div class="piece" style="height: 10cm; width: 8cm;">
+                                                            8' -0' X 10' -0'
+                                                        </div>
+                                                        <div class="piece" style="height: 10cm; width: 5cm;">
+                                                            5' -0' X 10' -0'
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
