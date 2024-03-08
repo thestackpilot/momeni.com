@@ -12974,3 +12974,65 @@ h3.selected-fltr {
     text-align: left !important;
     margin-top: 4rem;
 }
+
+.broadloom-badge {
+    padding: 10px 19px;
+    position: relative;
+    margin: 5px;
+}
+
+.broadloom-badge a {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    padding: 5px 6px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+.cut-pieces-wrapper {
+    text-align: center;
+    width: 100%;
+    margin-top: 4rem;
+}
+
+.cut-pieces {
+    margin-top: 2rem;
+}
+
+.pieces {
+    width: 100%;
+    display: flex;
+    margin-top: 3rem;
+}
+
+.width {
+    width: 5%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.picese-wrapper {
+    width: 95%;
+    border-top: 3rem solid #cfcfcf;
+    border-left: 3rem solid #cfcfcf;
+    display: flex;
+    margin-top: -3rem;
+}
+
+.width p {
+    writing-mode: vertical-rl;
+    text-align: center;
+}
+
+.piece {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #c3c3c3;
+}
