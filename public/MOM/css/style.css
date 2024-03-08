@@ -13036,3 +13036,19 @@ h3.selected-fltr {
     align-items: center;
     border: 1px solid #c3c3c3;
 }
+
+.broadloom-btns {
+    border: 0;
+    padding: 10px 20px 7px;
+    width: 200px;
+    margin: 0 15px;
+    color: #fff;
+}
+
+.show-piece-btn {
+    background: #282828;
+}
+
+.add-to-cart-broadloom-btn {
+    background: #660000;
+}

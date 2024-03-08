@@ -191,6 +191,12 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-12 mt-5 text-center">
+                                        <button class="show-piece-btn broadloom-btns">Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="add-to-cart-broadloom-btn broadloom-btns">Add to Cart <i class="fa fa-long-arrow-right"></i></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
