@@ -2355,10 +2355,13 @@ only screen and (max-width: 767px) {
 }
 .PAChart-text-Heading {
     font-weight: bold;
-    font-size: 16px !important;
+    font-size: 14px !important;
 }
 .PAChart-Size {
-    background-color: #959899 !important
+    background-color: #afb1b1 !important
+}
+.PAChart-Dimensions-Weight{
+    background-color: #bbbdbd !important
 }
 .PAChart-InStock {
     background-color: #CECFD0 !important;
@@ -2374,7 +2377,8 @@ only screen and (max-width: 767px) {
     border-right: 1px solid #aca9a9;;
 }
 #tblProductSizes td {
-    border: 0.5px solid #858080;
+    font-size: 14px;
+    border: 0.5px solid #9b9797;
 }
 .header-cart {
     position: relative;
