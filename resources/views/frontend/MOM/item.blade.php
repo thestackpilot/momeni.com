@@ -228,7 +228,8 @@
 
 <!-- product size Chart -->
                 
-                    @if (isset($items['ItemsETA']) && $items['ItemsETA'])
+                    @if (isset($items['ItemsETA']) && $items['ItemsETA'] && !$is_oak)
+                    @auth()
                             <div class="m-auto mt-5 p-0 text-center product_chart">
                                 <div id="prodAvlChart" class="prodAvlChart" style="display: block; width:100%; align:center; margin-top:30px;display: block;">
                                     <div class="mb-4">
@@ -267,6 +268,39 @@
                                     </div>
                                 </div>
                             </div>
+                        @endauth
+                        @guest
+                        <div class="m-auto p-0 text-center product_chart_main">
+                            <div id="" class="prodAvlChart">
+                                <div class="mb-4 mt-4">
+                                    <p class="heading-PAChart">Product Chart</p>
+                                </div>
+                                <div style="overflow-x:auto;">
+                                    <table id="tblProductSizes" class="table" border="0" cellpadding="3"
+                                        cellspacing="2" width="100%">
+                                        <tbody>
+                                            <tr style="vertical-align: middle;border-top: 1px solid #a5a9aa;">
+                                                <td width="15%" align="center"
+                                                    class="PAChart-Size PAChart-text-Heading">{{ $size_heading }}</td>
+                                                <td width="15%" align="center"
+                                                    class="PAChart-Dimensions-Weight PAChart-text-Heading">Shipping
+                                                    Dimensions / Weight</td>
+                                            </tr>
+                                            @foreach ($items['ItemsETA'] as $itemETA)
+                                                <tr class="">
+                                                    <td width="15%" align="center" class="PAChart-Size">
+                                                        {{ $itemETA['Size'] }}</td>
+                                                    <td width="15%" align="center" class="PAChart-Dimensions-Weight">
+                                                        {{ $itemETA['ShippingDimension'] }}<br />{{ $itemETA['DimentionalWeight'] }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        @endguest
                         @endif
                 </div>
             </div>
@@ -393,15 +427,15 @@
                     $('#item_json').html(new_html.find('#item_json').html());
 
                     item_object = JSON.parse($('#item_json').html());
-                   
-                    console.log($('#cart-parent').html());
+
                     $('#cart-parent').html(new_html.find('#cart-parent').html());
                     $('#profile-parent').html(new_html.find('#profile-parent').html());
+                    $('.product_chart_main').html(new_html.find('.product_chart').html());
 
                     $('#cart_main').html(new_html.find('#cart_main').html());
                     $('#cart_main').find('#add_to_cart').removeClass('d-none');
                     $('#cart_main').find('#login_by_popup').remove();
-
+                    
                     $('#add_to_cart').off('click');
                     $('#add_to_cart').on('click', function(e) {
                         if (
