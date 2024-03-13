@@ -235,7 +235,7 @@
                                     <div class="mb-4">
                                         <p class="heading-PAChart">Product Availability Chart</p>
                                     </div>
-                                    <div style="overflow-x:auto; overflow-x:auto; height:375px;">
+                                    <div style="overflow-x:auto; overflow-x:auto; height:100%;">
                                         <table id="tblProductSizes" class="table" border="0" cellpadding="3"
                                             cellspacing="2" width="100%">
                                             <tbody>
