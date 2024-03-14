@@ -285,6 +285,10 @@ class ItemController extends FrontendController
         }
 
         $page = '.item';
+        if (strtolower($id) === 'broadloom') {
+            $page = '.broadloom-item';
+        }
+
         if (strtolower($id) === 'broadloom' && ($design_id && $color_id)) {
             $page = '.broadloom';
         }
