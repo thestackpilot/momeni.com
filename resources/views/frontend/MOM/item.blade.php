@@ -464,7 +464,7 @@
                     $('#cart_main').html(new_html.find('#cart_main').html());
                     $('#cart_main').find('#add_to_cart').removeClass('d-none');
                     $('#cart_main').find('#login_by_popup').remove();
-                    $('.product_chart').html(new_html.find('.product_chart').html());
+                    $('.product_chart_main').html(new_html.find('.product_chart').html());
                     $('#add_to_cart').off('click');
                     $('#add_to_cart').on('click', function(e) {
                         if (
