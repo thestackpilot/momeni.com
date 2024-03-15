@@ -254,6 +254,29 @@
                                                 </tr>
                                                 @foreach ($items['ItemsETA'] as $itemETA)
                                                     <tr class="">
+                                                        <input type="hidden" class="cart_item_id"
+                                                            name="product_cart_item_id[]"
+                                                            value="{{ $itemETA['ItemID'] }}">
+                                                        <input type="hidden" class="cart_design_id"
+                                                            name="cart_design_id[]" value="{{ $itemETA['DesignID'] }}">
+                                                        <input type="hidden" class="cart_customer_id"
+                                                            name="cart_customer_id" value="">
+                                                        <input type="hidden" class="cart_item_name"
+                                                            name="cart_item_name[]" value="{{ $itemETA['ItemName'] }}">
+                                                        <input type="hidden" class="cart_item_quantity"
+                                                            name="cart_item_quantity" value="">
+                                                        <input type="hidden" class="cart_item_price"
+                                                            name="cart_item_price[]" value="{{ $itemETA['BasePrice'] }}">
+                                                        <input type="hidden" class="cart_item_color"
+                                                            name="cart_item_color[]" value="{{ $itemETA['ItemColor'] }}">
+                                                        <input type="hidden" class="cart_item_size"
+                                                            name="cart_item_size[]" value="{{ $itemETA['Size'] }}">
+                                                        <input type="hidden" class="cart_item_currency"
+                                                            name="cart_item_currency[]" value="">
+                                                        <input type="hidden" class="cart_item_image"
+                                                            name="cart_item_image[]" value="{{ $itemETA['ImageName'] }}">
+                                                        <input type="hidden" class="cart_item_eta"
+                                                            name="cart_item_eta[]" value="">
                                                         <td width="15%" align="center" class="PAChart-Size"> {{ $itemETA['Size'] }}</td>
                                                         <td width="15%" align="center" class="PAChart-Dimensions-Weight">
                                                             {{ $itemETA['ShippingDimension'] }}<br />{{ $itemETA['DimentionalWeight'] }}
@@ -434,17 +457,14 @@
                     $('#item_json').html(new_html.find('#item_json').html());
 
                     item_object = JSON.parse($('#item_json').html());
-                    console.log(new_html.find('.product_chart').html());
+                    console.log(item_object);
                     $('#cart-parent').html(new_html.find('#cart-parent').html());
                     $('#profile-parent').html(new_html.find('#profile-parent').html());
-                    $('#quick-profile').html(new_html.find('#quick-profile').html());
-                    $('.product_chart_main').html(new_html.find('.product_chart').html());
 
                     $('#cart_main').html(new_html.find('#cart_main').html());
                     $('#cart_main').find('#add_to_cart').removeClass('d-none');
                     $('#cart_main').find('#login_by_popup').remove();
-                   
-
+                    $('.product_chart').html(new_html.find('.product_chart').html());
                     $('#add_to_cart').off('click');
                     $('#add_to_cart').on('click', function(e) {
                         if (
@@ -462,6 +482,36 @@
                         callback();
                     }
                     getQuantity($("#item_size input:radio[name=size]:checked").val().trim());
+
+                            // $('#grid_item_customer').prop('disabled', false);
+                            if (item_object.Items[0].UserCustomerInfo.IsSaleRep == 1) {
+                                getCustomers(item_object.Items[0]);
+                                if (item_object.Items[0].UserCustomerInfo.CustomerSet) {
+                                    // $('#grid_item_customer').prop('disabled', 'disabled');
+                                    // var split_arr = $('#grid_item_customer').val().split(' :: ');
+                                    var customer_id = item_object.Items[0].UserCustomerInfo.CustomerSet;
+
+                                    $.post('{{ route('frontend.item.design_ats') }}', {
+                                        _token: '{{ csrf_token() }}',
+                                        design_id: item_object.Items[0]['DesignID'],
+                                        customer_id: customer_id
+                                    }, function(response) {
+                                        startBuyingBulk(item_object.Items[0].ItemID, customer_id,
+                                            response.data);
+                                    });
+                                }
+                            } else {
+                                $.post('{{ route('frontend.item.design_ats') }}', {
+                                    _token: '{{ csrf_token() }}',
+                                    design_id: item_object.Items[0]['DesignID'],
+                                    customer_id: item_object.Items[0].UserCustomerInfo.Customers[0]
+                                        .CustomerID
+                                }, function(response) {
+                                    startBuyingBulk(item_object.Items[0].ItemID, item_object.Items[0]
+                                        .UserCustomerInfo.Customers[0].CustomerID, response.data);
+                                });
+                            }
+                        
                 }
             });
         }
@@ -546,6 +596,32 @@
 
     function init() {
         item_object = JSON.parse($('#item_json').html());
+        if (item_object.Items[0].UserCustomerInfo.IsSaleRep == 1) {
+            getCustomers(item_object.Items[0]);
+            if (item_object.Items[0].UserCustomerInfo.CustomerSet) {
+                // $('#grid_item_customer').prop('disabled', 'disabled');
+                // var split_arr = $('#grid_item_customer').val().split(' :: ');
+                var customer_id = item_object.Items[0].UserCustomerInfo.CustomerSet;
+                // console.log("customerrr");
+                // console.log($('#cart_customer_id').val());
+                $.post('{{ route('frontend.item.design_ats') }}', {
+                    _token: '{{ csrf_token() }}',
+                    design_id: item_object.Items[0]['DesignID'],
+                    customer_id: customer_id
+                }, function(response) {
+                    startBuyingBulk(item_object.Items[0].ItemID, customer_id, response.data);
+                });
+            }
+        } else {
+            $.post('{{ route('frontend.item.design_ats') }}', {
+                _token: '{{ csrf_token() }}',
+                design_id: item_object.Items[0]['DesignID'],
+                customer_id: item_object.Items[0].UserCustomerInfo.Customers[0].CustomerID
+            }, function(response) {
+                startBuyingBulk(item_object.Items[0].ItemID, item_object.Items[0].UserCustomerInfo
+                    .Customers[0].CustomerID, response.data);
+            });
+        }
         var counter = 0;
         console.log("item_object: ", item_object);
         $('#item_variant').html('');
@@ -825,22 +901,33 @@
         var customer_id = split_arr[1].trim();
         item_object.Items.forEach(function(item, index) {
             if ((item.ItemID == item_id)) {
-                item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
-                    if (Customer.CustomerID == customer_id) {
-                        $('#qty_msg').css('opacity', '0.4');
-                        if (!$('#qty-main').is(':visible'))
-                            show_components(['.qty-loader']);
-                        $.post('{{route("frontend.item.ats")}}', {
-                            _token: '{{csrf_token()}}',
-                            item_id: item_id,
-                            customer_id: customer_id
-                        }, function(response) {
-                            startBuying(item_id, customer_id, response.data);
-                        });
-                        // startBuying(item_id, customer_id , Customer.ATSInfo);
-                    }
-                });
-            }
+                    item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
+                        if (Customer.CustomerID == customer_id) {
+                                $.post('{{ route('frontend.item.design_ats') }}', {
+                                    _token: '{{ csrf_token() }}',
+                                    design_id: item.DesignID,
+                                    customer_id: customer_id
+                                }, function(response) {
+                                    startBuyingBulk(item_id, customer_id, response.data);
+                                    console.log("bulk");
+                                });
+                            
+                            // else {
+                            if (!$('#qty-main').is(':visible'))
+                                show_components(['.qty-loader']);
+                            $.post('{{ route('frontend.item.ats') }}', {
+                                _token: '{{ csrf_token() }}',
+                                item_id: item_id,
+                                customer_id: customer_id
+                            }, function(response) {
+                                startBuying(item_id, customer_id, response.data);
+                                console.log("buy");
+                            });
+                            // }
+
+                        }
+                    });
+                }
         });
     }
 
@@ -876,6 +963,34 @@
             }
         });
 
+
+        // $.post('{{ route('frontend.item.design_ats') }}', {
+        //     _token: '{{ csrf_token() }}',
+        //     design_id: item_object.Items[0].DesignID,
+        //     customer_id: CustomerID
+        // }, function(response) {
+        //     console.log(response.data);
+        //     response.data.forEach(function(item, index) {
+        //     console.log("item.ATSQty: ", item.Price);
+        //     // console.log($(this).val());
+        //     // console.log($(this).val());
+        //     $('.cart_item_id').each(function() {
+        //         if ($(this).val() == item.ItemID) {
+        //             console.log("truee");
+        //             $(this).siblings('.PAChart-Price').text(item.Price.toLocaleString('en-US', {
+        //                 style: 'currency',
+        //                 currency: 'USD',
+        //             }));
+        //             $(this).siblings('.cart_item_price').val(item.Price);
+        //             $(this).siblings('.PAChart-InStock').text(item.ATSQty < 0 ? 0 : item.ATSQty);
+        //             $(this).siblings('.PAChart-Quantity').children('.item_qty').attr('max', item
+        //                 .OnlyMaxQuantity ? item.ATSQty : 9999);
+        //         }
+        //     });
+        //     });
+        //     // startBuyingBulk(ItemID, CustomerID, response.data);
+        // });
+
         //handling OAK items here
         if('{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id)}}' ) {
             hide_components(['#qty_msg', '.postfix', '#item_variant_parent', '#item_color_parent', '#item_size_parent', '#qty-main', '#cart_main h3']);
@@ -909,6 +1024,45 @@
             else
                 return `15+ Available`;
         }
+    }
+
+    function startBuyingBulk(ItemID, CustomerID, ATSInfo) {
+        console.log("In startBuyingBulk");
+        // console.log("ATSInfo: ", ATSInfo);
+        // if ($('#login_by_popup').length) {
+        //     show_components(['#login_by_popup', '#cart_main', '#grid_cart_main', '.product_chart_main']);
+        //     hide_components([]);
+        // } else {
+        //     hide_components([]);
+        //     show_components(['#cart_main', '#grid_add_to_cart', '#grid_cart_main']);
+        // }
+
+        ATSInfo.forEach(function(item, index) {
+            console.log("item.price: ", item.Price);
+            console.log("item.ATSQty: ", item.ATSQty);
+            $('.cart_item_id').each(function() {
+                if ($(this).val() == item.ItemID) {
+                    console.log("bulk truee");
+                    $(this).siblings('.PAChart-Price').text('$'+item.Price.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                    }));
+                    $(this).siblings('.cart_item_price').val(item.Price);
+                    $(this).siblings('.PAChart-InStock').text(item.ATSQty < 0 ? 0 : item.ATSQty);
+                    $(this).siblings('.PAChart-Quantity').children('.item_qty').attr('max', item
+                        .OnlyMaxQuantity ? item.ATSQty : 9999);
+                }
+            });
+        });
+
+        // item_object.ItemsETA.forEach(function(item, index) {
+        //     if ((item['ItemID'] == ItemID)) {
+        //         // $('.cart_customer_id').val(CustomerID);
+        //         $('.cart_customer_id').each(function() {
+        //             $(this).val(CustomerID);
+        //         });
+        //     }
+        // });
     }
 
     function pushToCart() {
@@ -1031,6 +1185,7 @@
                 var item_id = split_arr[0].trim();
                 refresh_product(item_id);
                 customerID = $(this).val();
+                console.log($(this).val());
                 getCartReady($(this).val());
             });
 

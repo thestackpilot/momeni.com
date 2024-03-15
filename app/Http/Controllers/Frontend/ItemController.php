@@ -246,6 +246,27 @@ class ItemController extends FrontendController
         return response()->json( $return );
     }
 
+    public function get_design_ats( Request $request )
+    {
+        $return = ['success' => 0, 'data' => json_encode( ['ATSQty' => 0, 'Price' => 0, 'ETADate' => null, 'ETAQty' => 0, 'Message' => 'Not Available'] )];
+
+        if ( $request->has( 'design_id' ) && $request->has( 'customer_id' ) )
+        {
+            $design_ats = $this->ApiObj->Get_DesignATS( $request->design_id, $request->customer_id )['ATSInfo']['Items'];
+            $temp_data = array();
+            foreach( $design_ats as $data )
+            {
+                $temp_data[] = $this->update_ats_prices( $data, $data['ItemID'] );
+            }
+            $return = [
+                'success' => 1,
+                'data'    => $temp_data
+            ];
+        }
+
+        return response()->json( $return );
+    }
+    
     // Testing ideal link RZY = http://vcs.local.com/item/3/BQ4189
     // Testing ideal link LR = http://vcs.local.com/item/Rugs%20&%20Carpets/81451
     public function index( $id, $design_id, $color_id = 0 )

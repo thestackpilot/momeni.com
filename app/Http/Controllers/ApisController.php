@@ -49,6 +49,14 @@ class ApisController extends RootController
 
         return array( "ATSInfo" => $responseArray['OutPut'] );
     }
+    
+    public function Get_DesignATS($designId, $customerId = '')
+    {
+        $post_array    = array('DesignID' => $designId, 'CustomerID' => $customerId);
+        $responseArray = $this->Post_API_Signature('Get_DesignATS', 'Get ATS', $post_array);
+
+        return array("ATSInfo" => $responseArray['OutPut']);
+    }
 
     public function Get_B2BOrderInquiryData( $FilterType, $Category = '', $SubCategory = '', $Collection = '', $Design = '', $Color = '', $Size = '' )
     {
@@ -137,9 +145,9 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Get_CustomerDetail', 'Get Customer Details', $post_array, ['Success', 'Message', 'CustomerDetail'] );
     }
 
-    public function Get_DebitMemos( $customerId, $FromDate = '', $ToDate = '', $PayableInvoiceNo = '', $VendorID = '' )
+    public function Get_DebitMemos( $customerId, $FromDate = '', $ToDate = '', $PayableInvoiceNo = '', $VendorID = '', $PageIndex = 1, $PageSize = 25 )
     {
-        $post_array = array( 'CustomerID' => $customerId, 'FromDate' => $FromDate, 'ToDate' => $ToDate, 'PayableInvoiceNo' => $PayableInvoiceNo, 'VendorID' => $VendorID );
+        $post_array = array( 'CustomerID' => $customerId, 'FromDate' => $FromDate, 'ToDate' => $ToDate, 'PayableInvoiceNo' => $PayableInvoiceNo, 'VendorID' => $VendorID, 'PageIndex' => $PageIndex, 'PageSize' => $PageSize );
 
         return $this->Post_API_Signature( 'Get_DebitMemos', 'Get Debit Memos', $post_array, ['DebitMemos'] );
     }
