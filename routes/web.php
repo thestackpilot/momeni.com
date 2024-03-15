@@ -64,6 +64,8 @@ Route::post( '/designs/{id}/{filter}/{type}/{with_title}/{page}', [DesignControl
 //Item Routes
 Route::get( '/item/{id}/{designId}/{colorId?}', [ItemController::class, 'index'] )->name( 'frontend.item' );
 Route::post( '/item/ats', [ItemController::class, 'get_item_ats'] )->name( 'frontend.item.ats' );
+Route::post( '/item/design_ats', [ItemController::class, 'get_design_ats'] )->name( 'frontend.item.design_ats' );
+
 //Search Routes
 Route::get( '/search/{string}/{type?}', [SearchController::class, 'index'] )->name( 'frontend.search' );
 
