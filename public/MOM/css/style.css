@@ -2363,8 +2363,11 @@ only screen and (max-width: 767px) {
 .PAChart-Dimensions-Weight{
     background-color: #bbbdbd !important
 }
-.PAChart-InStock {
+.PAChart-Color {
     background-color: #CECFD0 !important;
+}
+.PAChart-InStock {
+    background-color: #dddedf !important;
 }
 .PAChart-Within30Days {
     background-color: #F7F7F6  !important;

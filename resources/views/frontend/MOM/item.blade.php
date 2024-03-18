@@ -244,12 +244,13 @@
                                                     <td width="15%" align="center"
                                                     class="PAChart-Dimensions-Weight PAChart-text-Heading">Shipping
                                                     Dimensions / Weight</td>
+                                                    <td width="10%" align="center" class="PAChart-Color PAChart-text-Heading">Color</td>
                                                     <td width="10%" align="center" class="PAChart-InStock PAChart-text-Heading">In-Stock</td>
-                                                    <td width="15%" align="center" class="PAChart-Within30Days PAChart-text-Heading">Within30 Days</td>
-                                                    <td width="15%" align="center" class="PAChart-Within2Months PAChart-text-Heading">Within 2 Months</td>
-                                                    <td width="15%" align="center" class="PAChart-Over2Months PAChart-text-Heading">Over 2 Months</td>
+                                                    <td width="13%" align="center" class="PAChart-Within30Days PAChart-text-Heading">Within30 Days</td>
+                                                    <td width="13%" align="center" class="PAChart-Within2Months PAChart-text-Heading">Within 2 Months</td>
+                                                    <td width="13%" align="center" class="PAChart-Over2Months PAChart-text-Heading">Over 2 Months</td>
                                                     @if (!in_array('.PAChart-Price', $dont_show))
-                                                        <td width="15%" align="center" class="PAChart-Price PAChart-text-Heading">Price</td>
+                                                        <td width="13%" align="center" class="PAChart-Price PAChart-text-Heading">Price</td>
                                                     @endif
                                                 </tr>
                                                 @foreach ($items['ItemsETA'] as $itemETA)
@@ -281,12 +282,13 @@
                                                         <td width="15%" align="center" class="PAChart-Dimensions-Weight">
                                                             {{ $itemETA['ShippingDimension'] }}<br />{{ $itemETA['DimentionalWeight'] }}
                                                         </td>
+                                                        <td width="10%" align="center" class="PAChart-Color"> {{ $itemETA['ItemColor'] }}</td>
                                                         <td width="10%" align="center" class="PAChart-InStock"> {{ $itemETA['QtyInStock'] }}</td>
-                                                        <td width="15%" align="center" class="PAChart-Within30Days PAChart-text-Within30Days"> {{ $itemETA['QtyThirtyDay'] }}</td>
-                                                        <td width="15%" align="center" class="PAChart-Within2Months"> {{ $itemETA['QtyTwoMonth'] }}</td>
-                                                        <td width="15%" align="center" class="PAChart-Over2Months"> {{ $itemETA['QtyOverTwoMonth'] }}</td>
+                                                        <td width="13%" align="center" class="PAChart-Within30Days PAChart-text-Within30Days"> {{ $itemETA['QtyThirtyDay'] }}</td>
+                                                        <td width="13%" align="center" class="PAChart-Within2Months"> {{ $itemETA['QtyTwoMonth'] }}</td>
+                                                        <td width="13%" align="center" class="PAChart-Over2Months"> {{ $itemETA['QtyOverTwoMonth'] }}</td>
                                                         @if (!in_array('.PAChart-Price', $dont_show))
-                                                            <td width="15%" align="center" class="PAChart-Price">
+                                                            <td width="13%" align="center" class="PAChart-Price">
                                                                 {{ ConstantsController::CURRENCY . number_format($itemETA['BasePrice'], ConstantsController::ALLOWED_DECIMALS, '.', '') }}
                                                             </td>
                                                         @endif

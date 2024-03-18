@@ -318,7 +318,27 @@ class ItemController extends FrontendController
 
         }
 
-        // die("<pre>".print_r( $main_collection['Description'], 1)."</pre>");
+        foreach ( $items['ItemsETA'] as &$itemETA ) 
+        {  
+            foreach ( $items['Items'] as $item ) 
+            {
+                if ( $item['ItemID'] === $itemETA['ItemID'] ) 
+                {
+                    foreach ($items['Colors'] as $color) 
+                    {
+                        if ( $color['ColorID'] === $item['ColorID'] ) 
+                        {
+                            $itemETA['ItemColor'] = $color['Description'];
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+
+        // die("<pre>".print_r($items, 1)."</pre>");
 
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.item', [
             'items'            => $items,
