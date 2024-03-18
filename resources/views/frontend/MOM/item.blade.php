@@ -316,6 +316,8 @@
                                                 <td width="15%" align="center"
                                                     class="PAChart-Dimensions-Weight PAChart-text-Heading">Shipping
                                                     Dimensions / Weight</td>
+                                                <td width="15%" align="center"
+                                                    class="PAChart-Color PAChart-text-Heading">Color</td> 
                                             </tr>
                                             @foreach ($items['ItemsETA'] as $itemETA)
                                                 <tr class="">
@@ -324,6 +326,8 @@
                                                     <td width="15%" align="center" class="PAChart-Dimensions-Weight">
                                                         {{ $itemETA['ShippingDimension'] }}<br />{{ $itemETA['DimentionalWeight'] }}
                                                     </td>
+                                                    <td width="15%" align="center" class="PAChart-Color">
+                                                        {{ $itemETA['ItemColor'] }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
