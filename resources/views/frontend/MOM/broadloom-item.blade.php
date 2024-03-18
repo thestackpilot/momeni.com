@@ -15,27 +15,33 @@ use App\Http\Controllers\CommonController;
     @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
     <main class="main-content">
         {{-- @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs') --}}
-        <div class="breadcrumb-area bg-gray">
+        <div class="breadcrumb-area bg-gray container">
             <div class="container">
                 <h2 class="breadcrumb-title text-center">{{$items['Items'][0]['ItemName']}}<b>{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h2>
             </div>
         </div>
-        
+        {{-- @dd($items); --}}
         <div class="d-none" id="item_json">{{$items_json}}</div>
         <div class="site-wrapper-reveal">
-            <div class="single-product-wrap section-space--pt_40">
-                <div class="container">
+            <div class="single-product-wrap">
+                <div class="container" style="background-color: whitesmoke;">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 my-5">
                             <div class="product-details-left">
                                 <div class="product-details-images-2 slider-lg-image-2">
-                                    <div class="easyzoom-style">
+                                    <div class="easyzoom-style mb-3">
                                         <div class="easyzoom easyzoom--overlay">
                                             <a href="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" class="poppu-img" id="product-main-image">
-                                                <img id="image_0" class="img-fluid" src="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" alt="{{$items['Items'][0]['ItemName']}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
+                                                <img id="image_0" class="img-fluid img-broadloom" src="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" alt="{{$items['Items'][0]['ItemName']}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
                                             </a>
                                         </div>
                                     </div>
+                                    <div class="section over-hide z-bigger d-none" id="item_color_parent">
+                                        <div id="item_color" class="d-flex flex-wrap justify-flex justify-content-start flex-row variant-details">
+                                            <input class="checkbox-tools" value="" type="radio" name="color" id="" checked="checked">
+                                            <label class="for-checkbox-tools" for=""> </label>
+                                        </div>
+                                    </div> 
                                 </div>
                                 <div class="product-details-thumbs-2 slider-thumbs-2 pt-3" id="product_thumbnails">
                                     @php $i = 0 @endphp
@@ -45,7 +51,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 my-5">
                             <div class="product-details-content ">
                                 <input type="hidden" id="cart_item_id" name="cart_item_id" value="">
                                 <input type="hidden" id="cart_customer_id" name="cart_customer_id" value="">
@@ -67,6 +73,14 @@ use App\Http\Controllers\CommonController;
                                         <p class="col-6 ms-1 p-0">100% Wool</p>
                                     </div>
                                     <div class="col-6 d-flex align-items-baseline">
+                                        <p class="col-6 me-1 p-0"><b>Width:</b></p>
+                                        <p class="col-6 ms-1 p-0">13'2"</p>
+                                    </div>
+                                    <div class="col-6 d-flex align-items-baseline">
+                                        <p class="col-6 me-1 p-0"><b>Made In:</b></p>
+                                        <p class="col-6 ms-1 p-0">India</p>
+                                    </div>
+                                    <div class="col-6 d-flex align-items-baseline">
                                         <p class="col-6 me-1 p-0"><b>Full Roll Length:</b></p>
                                         <p class="col-6 ms-1 p-0">100'</p>
                                     </div>
@@ -75,11 +89,42 @@ use App\Http\Controllers\CommonController;
                                         <p class="col-6 ms-1 p-0">3 1/2" W x 3 1/2" L Drop Match</p>
                                     </div>
                                     <div class="col-6 d-flex align-items-baseline">
+                                        <p class="col-6 me-1 p-0"><b>Construction:</b></p>
+                                        <p class="col-6 ms-1 p-0">Hand Loomed Flatweave, Multi-Level Loop Pile</p>
+                                    </div>
+                                    <div class="col-6 d-flex align-items-baseline">
+                                        <p class="col-6 me-1 p-0"><b>Secondary backing:</b></p>
+                                        <p class="col-6 ms-1 p-0">Action Black</p>
+                                    </div>
+                                    <div class="col-6 d-flex align-items-baseline">
                                         <p class="col-6 me-1 p-0"><b>Recommended Usage:</b></p>
                                         <p class="col-6 ms-1 p-0">Perfect for any residential and medium commercial space</p>
                                     </div>
                                 </div>
-                                <div class="quickview-peragraph">
+                                <div class="d-flex flex-column justify-content-end d-none cart_main_custom" id="cart_main">
+                                    <h3 class="detiel-heading d-flex">&nbsp;</h3> 
+                                    @auth() 
+                                    <a href="{{route('broadloom.cart')}}" class="btn btn-dark add-to-cart d-none mb-2" id="add_to_cart">
+                                        <span class="label-text">Place Order</span>
+                                        <i class="icon-arrow-right arrow-place-order"></i>
+                                        <div class="spinner-border" role="status" style="margin: 0 auto;">
+                                            <span class="sr-only" style="opacity:0;">Loading...</span>
+                                        </div>
+                                    </a>
+                                    @endauth
+                                    @guest()
+                                    <button type="button" class="log-in-popup-button btn btn-dark d-none" id="login_by_popupp">
+                                        Log In
+                                    </button>
+                                    @endguest
+                                    <span class="form-label font-crimson">&nbsp;</span>
+                                </div>
+                                <div class="mt-4 d-flex justify-content-end mx-5">
+                                    <a href="{{route('broadloom.cart',['id' => 1])}}" class="log-in-popup-button btn btn-dark" id="login_by_popupp">
+                                        Place Order <i class="fa fa-long-arrow-right"></i>
+                                    </a>
+                                </div>
+                                {{-- <div class="quickview-peragraph">
                                     <h3 class="detiel-heading"> Description</h3>
                                     <p id="product-description">{!! trim($items['Items'][0]['ProductDescription']) == '' || strtolower(trim($items['Items'][0]['ProductDescription'])) == 'not available' ? '' : $items['Items'][0]['ProductDescription'] !!}</p>
 
@@ -100,31 +145,24 @@ use App\Http\Controllers\CommonController;
                                         </tr>
                                         @endforeach
                                     </table>
-                                </div>
+                                </div> --}}
                                 
                                 <div class="section over-hide z-bigger" id="item_variant_parent">
-                                    <h3 class="detiel-heading">Collection</h3>
                                     <div id="item_variant" class="d-flex flex-wrap justify-flex justify-content-start flex-row variant-details">
                                         <input class="checkbox-tools" value="" type="radio" name="variant" id="" checked="checked">
                                         <label class="for-checkbox-tools" for=""> </label>
                                     </div>
                                 </div>
 
-                                <div class="section over-hide z-bigger d-none" id="item_color_parent">
-                                    <h3 class="detiel-heading">Color <span id="color_name"></span></h3>
-                                    <div id="item_color" class="d-flex flex-wrap justify-flex justify-content-start flex-row variant-details">
-                                        <input class="checkbox-tools" value="" type="radio" name="color" id="" checked="checked">
-                                        <label class="for-checkbox-tools" for=""> </label>
-                                    </div>
-                                </div>
+                                
 
-                                <div class="section over-hide z-bigger d-none" id="item_size_parent">
+                                {{-- <div class="section over-hide z-bigger d-none" id="item_size_parent">
                                     <h3 class="detiel-heading">Size <span id="size_name"></span></h3>
                                     <div id="item_size" class="d-flex flex-wrap justify-flex justify-content-start flex-row variant-details">
                                         <input class="checkbox-tools" value="" type="radio" name="size" id="" checked="checked">
                                         <label class="for-checkbox-tools" for=""> </label>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 @if(isset($items['PillowCovers']) && $items['PillowCovers'])
                                 <div class="section over-hide z-bigger d-none" id="item_cover_parent">
@@ -154,14 +192,14 @@ use App\Http\Controllers\CommonController;
                                     </div>
                                 </div>
 
-                                <div class="price d-flex align-items-center">
+                                {{-- <div class="price d-flex align-items-center">
                                     <span class="base_price muted prefix"> $ </span>
                                     <span class="base_price muted" id="base_price">0</span>
                                     <span class="postfix muted" style="text-transform: initial;margin-left: 5px;font-size: 16px;margin-top: 5px;">wholesale</span>
                                 </div>
                                 <div class="d-flex align-items-center mb-20">
                                     <span class="form-label font-crimson bg-secondary" id="qty_msg">Loading...</span>
-                                </div>
+                                </div> --}}
 
                                 <div class="d-flex justify-content-between mt-2 over-hide section z-bigger mbl-qty-main-box">
                                     <div class="d-flex flex-column flex-wrap" id="qty-main">
@@ -173,32 +211,15 @@ use App\Http\Controllers\CommonController;
                                         </div>
                                         <span class="form-label font-crimson">&nbsp;</span>
                                     </div>
-                                    <div class="d-flex flex-column justify-content-end d-none cart_main_custom" id="cart_main">
-                                        <h3 class="detiel-heading d-flex">&nbsp;</h3>
-                                        @auth()
-                                        <button type="button" class="btn btn-dark add-to-cart d-none mb-2" id="add_to_cart">
-                                            <span class="label-text">Place Order</span>
-                                            <i class="icon-arrow-right arrow-place-order"></i>
-                                            <div class="spinner-border" role="status" style="margin: 0 auto;">
-                                                <span class="sr-only" style="opacity:0;">Loading...</span>
-                                            </div>
-                                        </button>
-                                        @endauth
-                                        @guest()
-                                        <button type="button" class="log-in-popup-button btn btn-dark d-none" id="login_by_popup">
-                                            Log In
-                                        </button>
-                                        @endguest
-                                        <span class="form-label font-crimson">&nbsp;</span>
-                                    </div>
-                                </div>
+                                    
+                                </div> 
 
                                 <div class="section over-hide z-bigger d-none">
                                     <h3 class="detiel-heading item-size-dimension d-none">Shipping Dimensions & Weight</h3>
                                     <table class="table my-table item-size-dimension d-none" id="item-size-dimension">
 
                                     </table>
-                                </div>
+                                </div> 
                                 <!-- <div class="section over-hide z-bigger d-flex flex-row align-items-center justify-content-between mt-2" id="qty-main">
                                     <div class="d-flex align-items-center detiel-heading">
                                         <label class="base_price me-2 mb-0 mr-2"><b>Price: </b></label>
@@ -220,8 +241,8 @@ use App\Http\Controllers\CommonController;
         @if(isset($related_designs) && isset($related_designs['Designs']) && count($related_designs['Designs']))
         <div class="container mt-5">
             <div class="col-lg-12">
-                <div class="section-title text-center mb-30">
-                    <h4> YOU MAY ALSO LIKE</h4>
+                <div class="text-center mb-30">
+                    <h4> Related Products</h4>
                 </div>
             </div>
             @if(!empty($related_designs))

@@ -32,6 +32,7 @@ use App\Http\Controllers\Dashboard\GenericReportsController;
 use App\Http\Controllers\Admin\DealerRegistrationsController;
 use App\Http\Controllers\Admin\ApiContentManagementController;
 use App\Http\Controllers\Admin\FormController as AdminFormController;
+use App\Http\Controllers\Frontend\BroadloomController;
 
 //Auth Routes
 Auth::routes();
@@ -63,6 +64,7 @@ Route::post( '/designs/{id}/{filter}/{type}/{page}', [DesignController::class, '
 Route::post( '/designs/{id}/{filter}/{type}/{with_title}/{page}', [DesignController::class, 'get_paginated_designs'] )->name( 'frontend.designs_page' );
 //Item Routes
 Route::get( '/item/{id}/{designId}/{colorId?}', [ItemController::class, 'index'] )->name( 'frontend.item' );
+Route::get('/broad-loom/{id}', [BroadloomController::class, 'index'])->name('broadloom.cart');
 Route::post( '/item/ats', [ItemController::class, 'get_item_ats'] )->name( 'frontend.item.ats' );
 //Search Routes
 Route::get( '/search/{string}/{type?}', [SearchController::class, 'index'] )->name( 'frontend.search' );

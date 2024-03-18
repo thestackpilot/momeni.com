@@ -5085,11 +5085,13 @@ only screen and (min-width: 768px) and (max-width: 991px) {
         padding-left: 0px;
     }
 }
-
+.breadcrumb-title{
+    font-size: 30px;
+}
 .product-details-content .price {
     color: #444242;
     font-weight: 400;
-    font-size: 24px;
+    font-size: 20px;
     text-transform: uppercase;
     margin-bottom: 20px;
     width: auto;
@@ -7555,7 +7557,7 @@ only screen and (max-width: 767px) {
 }
 
 .product-details-content p {
-    font-size: 15.5px;
+    font-size: 12.5px;
     color: #636363;
 }
 
@@ -11110,7 +11112,7 @@ END OF NEW ADDITION OF CSS AFI 66
 
 .easyzoom img {
     width: 1200px;
-    height: auto;
+    height: 350px;
 }
 
 .my-table {
