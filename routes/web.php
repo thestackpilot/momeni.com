@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Frontend\BroadloomController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\MenuController;
@@ -32,7 +33,6 @@ use App\Http\Controllers\Dashboard\GenericReportsController;
 use App\Http\Controllers\Admin\DealerRegistrationsController;
 use App\Http\Controllers\Admin\ApiContentManagementController;
 use App\Http\Controllers\Admin\FormController as AdminFormController;
-use App\Http\Controllers\Frontend\BroadloomController;
 
 //Auth Routes
 Auth::routes();
