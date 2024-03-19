@@ -492,11 +492,13 @@
                             // $('#grid_item_customer').prop('disabled', false);
                             if (item_object.Items[0].UserCustomerInfo.IsSaleRep == 1) {
                                 getCustomers(item_object.Items[0]);
-                                if (item_object.Items[0].UserCustomerInfo.CustomerSet) {
+                                console.log(item_object.Items[0].UserCustomerInfo.CustomerSet);
+                                // if (item_object.Items[0].UserCustomerInfo.CustomerSet) {
                                     // $('#grid_item_customer').prop('disabled', 'disabled');
                                     // var split_arr = $('#grid_item_customer').val().split(' :: ');
                                     var customer_id = item_object.Items[0].UserCustomerInfo.CustomerSet;
-
+                                    console.log("sales rep");
+                                    console.log(customer_id);
                                     $.post('{{ route('frontend.item.design_ats') }}', {
                                         _token: '{{ csrf_token() }}',
                                         design_id: item_object.Items[0]['DesignID'],
@@ -505,8 +507,9 @@
                                         startBuyingBulk(item_object.Items[0].ItemID, customer_id,
                                             response.data);
                                     });
-                                }
+                                // }
                             } else {
+                                console.log("not in sales rep");
                                 $.post('{{ route('frontend.item.design_ats') }}', {
                                     _token: '{{ csrf_token() }}',
                                     design_id: item_object.Items[0]['DesignID'],
@@ -780,6 +783,8 @@
             hide_components(['#qty-main', '#cart_main', '#add_to_cart']);
             return true;
         }
+        var SUK = '{{ $SUK }}';
+
         item_object.Items.forEach(function(item, index) {
             if ((item.ItemID == ItemID)) {
                 $('#item_customer input[name=customer]').prop('disabled', false);
@@ -795,6 +800,7 @@
                     $.post('{{route("frontend.item.ats")}}', {
                         _token: '{{csrf_token()}}',
                         item_id: item.ItemID,
+                        SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                         customer_id: customer_id
                     }, function(response) {
                         startBuying(item.ItemID, customer_id, response.data);
@@ -811,6 +817,7 @@
                     $.post('{{route("frontend.item.ats")}}', {
                         _token: '{{csrf_token()}}',
                         item_id: item.ItemID,
+                        SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                         customer_id: typeof item.UserCustomerInfo.Customers[0].CustomerID !== "undefined" ? item.UserCustomerInfo.Customers[0].CustomerID : ''
                     }, function(response) {
                         startBuying(item.ItemID, item.UserCustomerInfo.Customers[0].CustomerID, response.data);
@@ -905,6 +912,8 @@
         var split_arr = item_customer_id.split(' :: ');
         var item_id = split_arr[0].trim();
         var customer_id = split_arr[1].trim();
+        var SUK = '{{ $SUK }}';
+
         item_object.Items.forEach(function(item, index) {
             if ((item.ItemID == item_id)) {
                     item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
@@ -924,6 +933,7 @@
                             $.post('{{ route('frontend.item.ats') }}', {
                                 _token: '{{ csrf_token() }}',
                                 item_id: item_id,
+                                SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                                 customer_id: customer_id
                             }, function(response) {
                                 startBuying(item_id, customer_id, response.data);
@@ -1049,10 +1059,15 @@
             $('.cart_item_id').each(function() {
                 if ($(this).val() == item.ItemID) {
                     console.log("bulk truee");
-                    $(this).siblings('.PAChart-Price').text('$'+item.Price.toLocaleString('en-US', {
+                    price = item.Price.toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD',
-                    }));
+                    });
+                    
+                    if (!price.includes('$'))
+                        price = '$' + price;
+
+                    $(this).siblings('.PAChart-Price').text(price);
                     $(this).siblings('.cart_item_price').val(item.Price);
                     $(this).siblings('.PAChart-InStock').text(item.ATSQty < 0 ? 0 : item.ATSQty);
                     $(this).siblings('.PAChart-Quantity').children('.item_qty').attr('max', item
