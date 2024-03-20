@@ -95,6 +95,17 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Get_CustomerCredit', 'Get Customer Credit', $post_array );
     }
 
+    public function Get_ItemsRollAndCutPieceList( $itemId){
+
+        $post_array = array( 'ItemID' => $itemId );
+
+        return $this->Post_API_Signature( 'Get_ItemsRollAndCutPieceList', 'Get Items Roll And Cut Piece List', $post_array );
+    }
+
+    public function Get_SurgingTypes(){
+        return $this->Post_API_Signature( 'Get_SurgingTypes', 'Get Surging Types', false );
+    }
+
     public function Get_CountriesList()
     {
         return $this->Post_API_Signature( 'Get_CountriesList', 'Get Countries List', [], ['Countries', 'Success', 'Message'], 0, 1, 1 );

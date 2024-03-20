@@ -15,7 +15,8 @@
         @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
         <main class="main-content">
             @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs')
-            <div class="d-none" id="item_json">{{$items_json}}</div>
+            {{-- <div class="d-none" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}"></div> --}}
+            <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}">
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
                     <h3>DIA-B Black</h3>
@@ -42,8 +43,11 @@
                                                                 <label for="">Length: <span style="color: #660000">0' - 0' / 0' - 0'</span></label>
                                                             </div>
                                                         </div>
-                                                        <select name="" id="" class="form-control">
-                                                            <option value="">Select Option</option>
+                                                        <select name="" id="roll_pieces" class="form-control">
+                                                            <option value="" width="" length="">Select Option</option>
+                                                            @foreach ($roll_pieces['OutPut']['RollsAndCutPieces'] as $row)
+                                                            <option value="{{$row['RollID']}}]" width="{{$row['TotalWidth']}}" length="{{$row['ATSLength']}}">{{$row['RollID']}}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
@@ -53,7 +57,7 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
+                                                                    <input type="text" class="form-control Twidth" id="inlineFormInputGroup" placeholder="">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">Ft</div>
                                                                     </div>
@@ -66,6 +70,15 @@
                                                                         <option value="">1</option>
                                                                         <option value="">2</option>
                                                                         <option value="">3</option>
+                                                                        <option value="">4</option>
+                                                                        <option value="">5</option>
+                                                                        <option value="">6</option>
+                                                                        <option value="">7</option>
+                                                                        <option value="">8</option>
+                                                                        <option value="">9</option>
+                                                                        <option value="">10</option>
+                                                                        <option value="">11</option>
+                                                                        <option value="">12</option>
                                                                     </select>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">In</div>
@@ -81,7 +94,7 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="">
+                                                                    <input type="text" class="form-control Tlength" id="inlineFormInputGroup" placeholder="">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">Ft</div>
                                                                     </div>
@@ -94,6 +107,15 @@
                                                                         <option value="">1</option>
                                                                         <option value="">2</option>
                                                                         <option value="">3</option>
+                                                                        <option value="">4</option>
+                                                                        <option value="">5</option>
+                                                                        <option value="">6</option>
+                                                                        <option value="">7</option>
+                                                                        <option value="">8</option>
+                                                                        <option value="">9</option>
+                                                                        <option value="">10</option>
+                                                                        <option value="">11</option>
+                                                                        <option value="">12</option>
                                                                     </select>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">In</div>
@@ -123,16 +145,19 @@
                                                 </div>
                                                 <div class="col-md-6 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for=""><input type="checkbox" name="" id=""> With Serging</label>
-                                                        <select name="" id="" class="form-control">
-                                                            <option value="">Select Option</option>
+                                                        <label for=""><input type="checkbox" name="" id="surging_check"> With Serging</label>
+                                                        <select name="" id="surging_options" class="form-control" disabled="disabled">
+                                                            <option value="0" charges="" >Select Option</option>
+                                                            @foreach ($surging_types['OutPut']['SurgingTypesList'] as $row)
+                                                            <option value="{{$row["SergingTypeNo"]}}" charges="{{$row["Charges"]}}" >{{$row['Description']}}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-sm-12">
                                                     <div class="form-group">
                                                         <label for="">Serging Charges ($)</label>
-                                                        <input class="form-control" type="text" name="" id="" disabled>
+                                                        <input class="form-control" type="text" name="" id="surging_charges" value="" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -736,18 +761,6 @@
                     $('#cart_item_eta').val(ATSInfo.ETADate);
                 }
             });
-
-            //handling OAK items here
-            if ('{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id)}}') {
-                hide_components(['#qty_msg', '.postfix', '#item_variant_parent', '#item_color_parent', '#item_size_parent', '#qty-main', '#cart_main h3']);
-                $('#item_qty').val(1);
-                if (ATSInfo.ItemExistInCart) {
-                    $("#qty_msg").text(ATSInfo.ItemExistInCart == 1 ? 'Item is already in your Cart.' : 'Item not available.');
-                    $("#qty_msg").addClass('bg-warning');
-                    show_components(['#qty_msg']);
-                    hide_components(['#add_to_cart']);
-                }
-            }
         }
 
         function getQuantityMessage(ATSInfo) {
@@ -924,6 +937,50 @@
             $('.qty-minus').on('click', function () {
                 var value = $('input[type="number"]', $(this).parent()).val();
                 $('input[type="number"]', $(this).parent()).val((parseInt(value) - 1) > 0 ? parseInt(value) - 1 : 0).change();
+            });
+
+            $('#surging_options').change(function() {
+                var selectedOption = $(this).find('option:selected');
+                var charges = selectedOption.attr('charges');
+                console.log('Charges:', charges);
+                // console.log('itemid:', $('#item_id').val());
+                $('#surging_charges').val(charges);
+            });
+
+            var defaultOption1 = $('#roll_pieces').val();
+            $('#roll_pieces').change(function() {
+                $.ajax({
+                    method: 'POST',
+                    url: '{{route("frontend.item.ats")}}',
+                    data: {
+                        '_token': '{{csrf_token()}}',
+                        'item_id': $("#item_id").val(),
+                        'customer_id': ''
+                    },
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+                var selectedOption = $(this).find('option:selected');
+                var width = selectedOption.attr('width');
+                var length = selectedOption.attr('length');
+                $('.Twidth').val(width);
+                $('.Tlength').val(length);
+
+            });
+
+            var defaultOption2 = $('#surging_options').val();
+            $('#surging_check').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#surging_options').prop('disabled', false);
+                } else {
+                    $('#surging_options').prop('disabled', true);
+                    $('#surging_options').val(defaultOption);
+                    $('#surging_charges').val("");
+                }
             });
 
             $('.product-slider-active').slick({

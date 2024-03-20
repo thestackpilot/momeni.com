@@ -41,7 +41,7 @@ use App\Http\Controllers\CommonController;
                                             <input class="checkbox-tools" value="" type="radio" name="color" id="" checked="checked">
                                             <label class="for-checkbox-tools" for=""> </label>
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
                                 <div class="product-details-thumbs-2 slider-thumbs-2 pt-3" id="product_thumbnails">
                                     @php $i = 0 @endphp
@@ -66,7 +66,7 @@ use App\Http\Controllers\CommonController;
                                 <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}">
 
                                 <h3 class="price" id="product-heading"><b>{{$items['Items'][0]['ItemName']}}{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
-                                
+
                                 <div class="col-12 row">
                                     <div class="col-6 d-flex align-items-baseline">
                                         <p class="col-6 me-1 p-0"><b>Material:</b></p>
@@ -102,8 +102,8 @@ use App\Http\Controllers\CommonController;
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column justify-content-end d-none cart_main_custom" id="cart_main">
-                                    <h3 class="detiel-heading d-flex">&nbsp;</h3> 
-                                    @auth() 
+                                    <h3 class="detiel-heading d-flex">&nbsp;</h3>
+                                    @auth()
                                     <a href="{{route('broadloom.cart')}}" class="btn btn-dark add-to-cart d-none mb-2" id="add_to_cart">
                                         <span class="label-text">Place Order</span>
                                         <i class="icon-arrow-right arrow-place-order"></i>
@@ -120,7 +120,7 @@ use App\Http\Controllers\CommonController;
                                     <span class="form-label font-crimson">&nbsp;</span>
                                 </div>
                                 <div class="mt-4 d-flex justify-content-end mx-5">
-                                    <a href="{{route('broadloom.cart',['id' => 1])}}" class="log-in-popup-button btn btn-dark" id="login_by_popupp">
+                                    <a href="{{route('broadloom.cart',['id' => $items['Items'][0]['ItemID']])}}" class="log-in-popup-button btn btn-dark" id="login_by_popupp">
                                         Place Order <i class="fa fa-long-arrow-right"></i>
                                     </a>
                                 </div>
@@ -131,8 +131,8 @@ use App\Http\Controllers\CommonController;
                                     <table class="table my-table" id="item-udf-fields">
                                         @foreach($items['Items'][0]['UDFFields'] as $field)
                                         @if (
-                                            $field['FieldName'] == 'Color' || 
-                                            $field['FieldName'] == 'Size' || 
+                                            $field['FieldName'] == 'Color' ||
+                                            $field['FieldName'] == 'Size' ||
                                             $field['Value'] == '-' ||
                                             $field['Value'] == 'N/A' ||
                                             !strlen($field['Value'])
@@ -146,7 +146,7 @@ use App\Http\Controllers\CommonController;
                                         @endforeach
                                     </table>
                                 </div> --}}
-                                
+
                                 <div class="section over-hide z-bigger" id="item_variant_parent">
                                     <div id="item_variant" class="d-flex flex-wrap justify-flex justify-content-start flex-row variant-details">
                                         <input class="checkbox-tools" value="" type="radio" name="variant" id="" checked="checked">
@@ -154,7 +154,7 @@ use App\Http\Controllers\CommonController;
                                     </div>
                                 </div>
 
-                                
+
 
                                 {{-- <div class="section over-hide z-bigger d-none" id="item_size_parent">
                                     <h3 class="detiel-heading">Size <span id="size_name"></span></h3>
@@ -211,15 +211,15 @@ use App\Http\Controllers\CommonController;
                                         </div>
                                         <span class="form-label font-crimson">&nbsp;</span>
                                     </div>
-                                    
-                                </div> 
+
+                                </div>
 
                                 <div class="section over-hide z-bigger d-none">
                                     <h3 class="detiel-heading item-size-dimension d-none">Shipping Dimensions & Weight</h3>
                                     <table class="table my-table item-size-dimension d-none" id="item-size-dimension">
 
                                     </table>
-                                </div> 
+                                </div>
                                 <!-- <div class="section over-hide z-bigger d-flex flex-row align-items-center justify-content-between mt-2" id="qty-main">
                                     <div class="d-flex align-items-center detiel-heading">
                                         <label class="base_price me-2 mb-0 mr-2"><b>Price: </b></label>
@@ -230,7 +230,7 @@ use App\Http\Controllers\CommonController;
                                 <div class="m-5 spinner-border qty-loader d-none" role="status">
                                     <span class="sr-only" style="opacity:0;">Loading...</span>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -1041,7 +1041,7 @@ use App\Http\Controllers\CommonController;
         //         }
         //     }
         // });
-        
+
     });
 </script>
 @endsection
