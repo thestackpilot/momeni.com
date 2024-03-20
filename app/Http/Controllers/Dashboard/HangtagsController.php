@@ -8,6 +8,7 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Frontend\MainCollectionController;
+use Illuminate\Support\Facades\Log;
 
 class HangtagsController extends DashboardController
 {
@@ -157,6 +158,7 @@ class HangtagsController extends DashboardController
         }
         catch (\Exception $e) {
             // Handle any exceptions here
+            Log::error($e);
             return response()->json(['error' => 'An error occurred'], 500);
         }
     }
