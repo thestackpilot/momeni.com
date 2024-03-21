@@ -193,9 +193,9 @@
                                     </tr>
                                     <tr>
                                         <td style="text-align: center">
-                                            <a href="https://www.momeni.com/search?q={{ $product['title'].' '.  $product['color']}}">
+                                            <a href="https://www.momeni.com/search?q={{ $product['title']}}">
                                                 <img
-                                                    src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.momeni.com/search?q={{ $product['title'].' '.  $product['color']}} "
+                                                    src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.momeni.com/search?q={{ $product['title']}} "
                                                     onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
                                                     id="imgID" align="middle" border="0" class="imgHeight" height="100px"
                                                     width="100px" alt="QR Code">
