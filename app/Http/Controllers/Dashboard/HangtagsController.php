@@ -42,6 +42,7 @@ class HangtagsController extends DashboardController
                         $products[$k] = [
                             'category'     => $items_data['HangTagsDetail'][0]['Category'],
                             'title'        => $items_data['HangTagsDetail'][0]['Design'],
+                            'color'        => $items_data['HangTagsDetail'][0]['Color'],
                             'attributes'   => [
                                 [
                                     'label' => 'Material',

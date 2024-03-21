@@ -188,14 +188,14 @@
                                     <tr>
                                         <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
                                             <p style="margin-bottom: 0px;"><b>{{$product['category']}}</b></p>
-                                            <p style="margin-bottom: 20px; font-size:27px;color: rgb(80, 78, 78);;">{{$product['title']}}</p>
+                                            <p style="margin-bottom: 20px; font-size:27px;color: rgb(80, 78, 78);;">{{$product['title']. ' '. $product['color']}} </p>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: center">
-                                            <a href="{{url('/search') . '/' . base64_encode($product['title'])}}">
+                                            <a href="https://www.momeni.com/search?q={{ $product['title'].' '.  $product['color']}}">
                                                 <img
-                                                    src="https://api.qrserver.com/v1/create-qr-code/?data={{url('/search') . '/' . base64_encode($product['title'])}}"
+                                                    src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.momeni.com/search?q={{ $product['title'].' '.  $product['color']}} "
                                                     onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
                                                     id="imgID" align="middle" border="0" class="imgHeight" height="100px"
                                                     width="100px" alt="QR Code">
