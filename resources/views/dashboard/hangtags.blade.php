@@ -335,7 +335,7 @@ use App\Http\Controllers\CommonController;
         });
 
         $('#csv-designs-text').on('keyup', function() {
-            let pattern1 = /^[0-9|A-Z|a-z, ]*$/g;
+            let pattern1 = /^[0-9|A-Z|a-z, , -]*$/g;
             if (pattern1.test($(this).val())) {
                 $(this).removeClass('is-invalid');
             } else {
@@ -376,7 +376,7 @@ use App\Http\Controllers\CommonController;
             });
 
             if (!$('#csv-designs-text').is(':disabled')) {
-                let pattern1 = /^[0-9|A-Z|a-z, ]*$/g;
+                let pattern1 = /^[0-9|A-Z|a-z, , -]*$/g;
                 if (pattern1.test($('#csv-designs-text').val())) {
                     $(this).removeClass('is-invalid');
                 } else {
