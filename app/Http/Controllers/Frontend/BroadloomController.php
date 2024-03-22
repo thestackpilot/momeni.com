@@ -24,6 +24,16 @@ class BroadloomController extends FrontendController
         ]);
     }
 
+    public function order_complete(){
+        return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-order-complete', [
+        ]);
+    }
+
+    public function checkout(){
+        return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-checkout', [
+        ]);
+    }
+
     public function AddCutPiece(Request $request){
         $rollId = $request->input('roll_id');
         $itemId = $request->input('item_id');
