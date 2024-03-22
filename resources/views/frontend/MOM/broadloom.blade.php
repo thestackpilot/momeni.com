@@ -17,6 +17,17 @@
             @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs')
             {{-- <div class="d-none" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}"></div> --}}
             <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}">
+            <input type="hidden" name="" id="roll_id" value="">
+            <input type="hidden" name="" id="cutpiece_id" value="">
+            <input type="hidden" name="" id="atslength" value="">
+            <input type="hidden" name="" id="totalwidth" value="">
+            <input type="hidden" name="" id="totalsqft" value="">
+            <input type="hidden" name="" id="cuttype" value="">
+            <input type="hidden" name="" id="locationid" value="">
+            <input type="hidden" name="" id="sergingtypeno" value="">
+            <input type="hidden" name="" id="charges" value="">
+            <input type="hidden" name="" id="desc" value="">
+            <input type="hidden" name="" id="TempSalesOrderNo" value="">
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
                     <h3>DIA-B Black</h3>
@@ -26,7 +37,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="broadloom-hearder"
-                                             style="background-image: url('{{ asset("/MOM/images/landing-img/rug/3.png") }}')"></div>
+                                            style="background-image: url('{{ asset("/MOM/images/landing-img/rug/3.png") }}')"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -46,7 +57,7 @@
                                                         <select name="" id="roll_pieces" class="form-control">
                                                             <option value="" width="" length="">Select Option</option>
                                                             @foreach ($roll_pieces['OutPut']['RollsAndCutPieces'] as $row)
-                                                            <option value="{{$row['RollID']}}]" width="{{$row['TotalWidth']}}" length="{{$row['ATSLength']}}">{{$row['RollID']}}</option>
+                                                            <option value="{{$row['RollID']}}" width="{{$row['TotalWidth']}}" length="{{$row['ATSLength']}}" SQFT="{{$row['TotalSQFT']}}" cutpieceID="{{$row['CutPieceID']}}" cutType="{{$row['CutType']}}" location="{{$row['LocationID']}}" >{{$row['RollID']}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -128,19 +139,19 @@
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label for="">SQ-FT Price ($)</label>
-                                                        <input type="text" class="form-control" disabled>
+                                                        <input type="text" class="form-control" id="sq-ft" value="" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label for="">SQ-YRD Price ($)</label>
-                                                        <input type="text" class="form-control" disabled>
+                                                        <input type="text" class="form-control" id="sq-yrd" value="" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label for="">EXT Price ($)</label>
-                                                        <input type="text" class="form-control" disabled>
+                                                        <input type="text" class="form-control" id="sq-ext" value="" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-sm-12">
@@ -149,7 +160,7 @@
                                                         <select name="" id="surging_options" class="form-control" disabled="disabled">
                                                             <option value="0" charges="" >Select Option</option>
                                                             @foreach ($surging_types['OutPut']['SurgingTypesList'] as $row)
-                                                            <option value="{{$row["SergingTypeNo"]}}" charges="{{$row["Charges"]}}" >{{$row['Description']}}</option>
+                                                            <option value="{{$row["SergingTypeNo"]}}" charges="{{$row["Charges"]}}" desc="{{$row['Description']}}" >{{$row['Description']}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -167,11 +178,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
-                                                    <div class="badge badge-primary broadloom-badge">
+                                                    <div class="badge badge-primary broadloom-badge" id="cut_pieces" >
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
                                                     </div>
-                                                    <div class="badge badge-primary broadloom-badge">
+                                                    {{-- <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
                                                     </div> <div class="badge badge-primary broadloom-badge">
@@ -189,7 +200,7 @@
                                                     </div> <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -220,7 +231,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 mt-5 text-center">
-                                        <button class="show-piece-btn broadloom-btns">Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="show-piece-btn broadloom-btns" >Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="show-piece-btn broadloom-btns" id="cut_piece_btn" >Add Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="add-to-cart-broadloom-btn broadloom-btns">Add to Cart <i class="fa fa-long-arrow-right"></i></button>
                                     </div>
                                 </div>
@@ -945,6 +957,9 @@
                 console.log('Charges:', charges);
                 // console.log('itemid:', $('#item_id').val());
                 $('#surging_charges').val(charges);
+                $('#charges').val(charges);
+                $('#sergingtypeno').val(selectedOption.attr('value'));
+                $('#desc').val(selectedOption.attr('desc'));
             });
 
             var defaultOption1 = $('#roll_pieces').val();
@@ -955,10 +970,13 @@
                     data: {
                         '_token': '{{csrf_token()}}',
                         'item_id': $("#item_id").val(),
-                        'customer_id': ''
+                        'customer_id': {{$cust_id}}
                     },
                     success: function (response) {
-                        console.log(response);
+                        console.log(response.data['Price']);
+                        $("#sq-ft").val(response.data['Price']);
+                        $("#sq-yrd").val(response.data['Price']);
+                        $("#sq-ext").val(response.data['Price']);
                     },
                     error: function (response) {
                         console.log(response);
@@ -969,6 +987,13 @@
                 var length = selectedOption.attr('length');
                 $('.Twidth').val(width);
                 $('.Tlength').val(length);
+                $('#roll_id').val(selectedOption.attr('value'));
+                $('#cutpiece_id').val(selectedOption.attr('cutpieceID'));
+                $('#atslength').val(selectedOption.attr('length'));
+                $('#totalwidth').val(selectedOption.attr('width'));
+                $('#totalsqft').val(selectedOption.attr('SQFT'));
+                $('#cuttype').val(selectedOption.attr('cutType'));
+                $('#locationid').val(selectedOption.attr('location'));
 
             });
 
@@ -981,6 +1006,49 @@
                     $('#surging_options').val(defaultOption);
                     $('#surging_charges').val("");
                 }
+            });
+
+            $('#cut_piece_btn').click(function(){
+                var itemId= $("#item_id").val();
+                $.ajax({
+                    url: "{{route('broadloom.cutPiece')}}",
+                    method: 'GET',
+                    data: { '_token': '{{csrf_token()}}',
+                        'roll_id': $("#roll_id").val(),
+                        'tempsalesorderno': $("#TempSalesOrderNo").val(),
+                        'item_id': $("#item_id").val(),
+                        'cutpiece_id': $("#cutpiece_id").val(),
+                        'atslength': $("#atslength").val(),
+                        'totalwidth': $("#totalwidth").val(),
+                        'totalsqft': $("#totalsqft").val(),
+                        'cuttype': $("#cuttype").val(),
+                        'locationid': $("#locationid").val(),
+                        'charges': $("#charges").val(),
+                        'desc': "",
+                        'waste': "N",
+                        'Remnant': "N",
+                        'AvailableForSale': "",
+                        'IsremnantShipable': "",
+                        'serging': "Y",
+                        'LineNo': "1",
+                        'UserRemarks': "Setting Data",
+                        'sergingtypeno': $("#sergingtypeno").val(),
+
+                    },
+                    success: function(data){
+                        console.log("helloo");
+                        console.log(data);
+                        // $.each(data, function(index, item) {
+                        //     var divContent = '<div class="badge badge-primary broadloom-badge" id="cut_pieces">';
+                        //     divContent += item.dimensions + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
+                        //     divContent += '</div>';
+                        //     $('#cut_piece_parent').append(divContent);
+                        // });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error occurred:", status, error);
+                    }
+                });
             });
 
             $('.product-slider-active').slick({

@@ -106,6 +106,34 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Get_SurgingTypes', 'Get Surging Types', false );
     }
 
+    public function Get_AddCutPiece($TempSalesOrderNo, $CutPieceID, $RollID, $ItemID, $ActualLength, $ActualWidth, $ActualSQFT, $CutType,  $Description, $SergingCharges, $SergingType, $LocationID, $waste, $remnant, $available, $isremship, $serging, $lineno, $userremarks){
+        $post_array = array( 'Input' => array(
+            'TempSalesOrderNo' => $TempSalesOrderNo,
+            'CutPieceID' => $CutPieceID,
+            'RollID' => $RollID,
+            'ItemID' => $ItemID,
+            'ActualLength' => $ActualLength,
+            'ActualWidth' => $ActualWidth,
+            'ActualSQFT' => $ActualSQFT,
+            'CutType' => $CutType,
+            'Description' => $Description,
+            'LocationID' => $LocationID,
+            'Serging' => $serging,
+            'SergingType' => $SergingType,
+            'SergingCharges' => $SergingCharges,
+            'Waste' => $waste,
+            'Remnant' => $remnant,
+            'AvailableForSale' => $available,
+            'IsRemnantShipable' => $isremship,
+            'LineNo' => $lineno,
+            'UserRemarks' => $userremarks,),
+    );
+        // dd($post_array);
+        return $this->Post_API_Signature( 'Get_AddCutPiece', 'Get Add Cut Piece', $post_array );
+    }
+
+
+
     public function Get_CountriesList()
     {
         return $this->Post_API_Signature( 'Get_CountriesList', 'Get Countries List', [], ['Countries', 'Success', 'Message'], 0, 1, 1 );

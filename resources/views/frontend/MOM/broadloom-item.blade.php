@@ -101,10 +101,10 @@ use App\Http\Controllers\CommonController;
                                         <p class="col-6 ms-1 p-0">Perfect for any residential and medium commercial space</p>
                                     </div>
                                 </div>
-                                <div class="d-flex flex-column justify-content-end d-none cart_main_custom" id="cart_main">
+                                {{-- <div class="d-flex flex-column justify-content-end d-none cart_main_custom" id="cart_main">
                                     <h3 class="detiel-heading d-flex">&nbsp;</h3>
                                     @auth()
-                                    <a href="{{route('broadloom.cart')}}" class="btn btn-dark add-to-cart d-none mb-2" id="add_to_cart">
+                                    <a href="{{route('broadloom.cart',['id' => $items['Items'][0]['ItemID']])}}" class="btn btn-dark add-to-cart d-none mb-2" id="add_to_cart">
                                         <span class="label-text">Place Order</span>
                                         <i class="icon-arrow-right arrow-place-order"></i>
                                         <div class="spinner-border" role="status" style="margin: 0 auto;">
@@ -118,12 +118,7 @@ use App\Http\Controllers\CommonController;
                                     </button>
                                     @endguest
                                     <span class="form-label font-crimson">&nbsp;</span>
-                                </div>
-                                <div class="mt-4 d-flex justify-content-end mx-5">
-                                    <a href="{{route('broadloom.cart',['id' => $items['Items'][0]['ItemID']])}}" class="log-in-popup-button btn btn-dark" id="login_by_popupp">
-                                        Place Order <i class="fa fa-long-arrow-right"></i>
-                                    </a>
-                                </div>
+                                </div> --}}
                                 {{-- <div class="quickview-peragraph">
                                     <h3 class="detiel-heading"> Description</h3>
                                     <p id="product-description">{!! trim($items['Items'][0]['ProductDescription']) == '' || strtolower(trim($items['Items'][0]['ProductDescription'])) == 'not available' ? '' : $items['Items'][0]['ProductDescription'] !!}</p>
@@ -156,13 +151,13 @@ use App\Http\Controllers\CommonController;
 
 
 
-                                {{-- <div class="section over-hide z-bigger d-none" id="item_size_parent">
+                                <div class="section over-hide z-bigger d-none" id="item_size_parent">
                                     <h3 class="detiel-heading">Size <span id="size_name"></span></h3>
                                     <div id="item_size" class="d-flex flex-wrap justify-flex justify-content-start flex-row variant-details">
                                         <input class="checkbox-tools" value="" type="radio" name="size" id="" checked="checked">
                                         <label class="for-checkbox-tools" for=""> </label>
                                     </div>
-                                </div> --}}
+                                </div>
 
                                 @if(isset($items['PillowCovers']) && $items['PillowCovers'])
                                 <div class="section over-hide z-bigger d-none" id="item_cover_parent">
@@ -175,6 +170,8 @@ use App\Http\Controllers\CommonController;
                                 @endif
 
                                 <input type="hidden" value="{{$items['Items'][0]['UserCustomerInfo']['IsSaleRep']}}" name="sale_rep">
+                                <input type="hidden" id="customer-id" value="" name="customer-id">
+                                {{-- @dd($items) --}}
 
                                 <div class="section over-hide z-bigger d-none" id="item_customer_parent">
                                     <h3 class="detiel-heading d-flex">
@@ -190,6 +187,18 @@ use App\Http\Controllers\CommonController;
                                         <input class="checkbox-tools" value="" type="radio" name="customer" id="" checked="checked">
                                         <label class="for-checkbox-tools" for=""> </label>
                                     </div>
+                                </div>
+                                <div class="mt-4 d-flex justify-content-end mx-5">
+                                    @auth
+                                    <a href="" class="add-to-cart-button btn btn-dark" id="add_cart">
+                                        Place Order <i class="fa fa-long-arrow-right"></i>
+                                    </a>
+                                    @endauth
+                                    @guest()
+                                    <button type="button" class="btn btn-dark" id="login_by_popupp">
+                                        Log In
+                                    </button>
+                                    @endguest
                                 </div>
 
                                 {{-- <div class="price d-flex align-items-center">
@@ -541,7 +550,7 @@ use App\Http\Controllers\CommonController;
     }
 
     function getSizes(ItemName, ItemColor, ItemValue) {
-        show_components(['#item_size_parent']);
+        // show_components(['#item_size_parent']);
         hide_components(['#item_cover_parent', '#item_customer_parent', '#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
         $('#item_size').html('');
         item_object.Items.forEach(function(item, index) {
@@ -613,12 +622,14 @@ use App\Http\Controllers\CommonController;
     function getQuantity(ItemID) {
         // TODO : The radio button is working but not getting highlighted - Adil needs to fix this
         if (ItemID == '0') {
+            console.log('helooooo');
             hide_components(['#item_customer_parent']);
             hide_components(['#qty-main', '#cart_main', '#add_to_cart']);
             return true;
         }
         item_object.Items.forEach(function(item, index) {
             if ((item.ItemID == ItemID)) {
+                console.log('sup');
                 $('#item_customer input[name=customer]').prop('disabled', false);
                 if (item.UserCustomerInfo.IsSaleRep == 1) {
                     getCustomers(item);
@@ -627,7 +638,7 @@ use App\Http\Controllers\CommonController;
                     $('#qty-main, .base_price').addClass('muted');
                     $('#qty_msg').css('opacity', '0.4');
                     if (!$('#qty-main').is(':visible'))
-                        show_components(['.qty-loader']);
+                        // show_components(['.qty-loader']);
                     $.post('{{route("frontend.item.ats")}}', {
                         _token: '{{csrf_token()}}',
                         item_id: item.ItemID,
@@ -677,7 +688,7 @@ use App\Http\Controllers\CommonController;
                         class: 'checkbox-tools',
                         type: 'radio',
                         name: 'customer',
-                        id: 'customer_' + item.ItemID + '_' + Customer.CustomerID,
+                        id: Customer.CustomerID,
                         checked: 'checked'
                     }));
 
@@ -696,13 +707,13 @@ use App\Http\Controllers\CommonController;
                     class: 'checkbox-tools',
                     type: 'radio',
                     name: 'customer',
-                    id: item.ItemID + ' :: ' + Customer.CustomerID
+                    id: Customer.CustomerID
                 }));
 
                 $('#item_customer').append($('<label>', {
                     text: Customer.CompanyName,
                     class: 'for-checkbox-tools',
-                    for: item.ItemID + ' :: ' + Customer.CustomerID
+                    for: Customer.CustomerID
                 }));
                 customerID = '';
             }
@@ -768,7 +779,7 @@ use App\Http\Controllers\CommonController;
             hide_components(['#qty-main', '.qty-loader']);
         } else {
             hide_components(['.qty-loader', '#login_by_popup']);
-            show_components(['#qty-main', '#cart_main', '#add_to_cart']);
+            // show_components(['#qty-main', '#cart_main', '#add_to_cart']);
             if (customerID.length != 0) show_components(['.base_price']);
         }
         $('#qty-main, .base_price').removeClass('muted');
@@ -975,6 +986,17 @@ use App\Http\Controllers\CommonController;
             var value = $('input[type="number"]', $(this).parent()).val();
             $('input[type="number"]', $(this).parent()).val((parseInt(value) + 1) < 1001 ? parseInt(value) + 1 : 1000).change();
         });
+
+        $(document).on('change', 'input[type="radio"][name="customer"]', function() {
+        if ($(this).is(':checked')) {
+            var selectedId = $(this).closest('input').attr('id');
+            console.log("Selected ID:", selectedId);
+            $('#customer-id').val(selectedId);
+            var href = "{{ route('broadloom.cart', ['id' => $items['Items'][0]['ItemID'], 'cust_id']) }}";
+            href = href.replace('cust_id', selectedId);
+            $('#add_cart').attr('href', href);
+        }
+    });
 
         $('.qty-minus').on('click', function() {
             var value = $('input[type="number"]', $(this).parent()).val();

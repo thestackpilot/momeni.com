@@ -85,6 +85,9 @@ function LoginUser()
 
                             $('#loginLi').hide();
                             $('#profileLi').show();
+
+                            $('#login_by_popupp').remove(); // Remove the login button
+                    $('.mt-4').append('<a href="" class="add-to-cart-button btn btn-dark" id="add_cart">Place Order <i class="fa fa-long-arrow-right"></i></a>');
                         });
                     }
                     else
@@ -162,6 +165,14 @@ $(document).ready(function()
     });
 
     $('#login_by_popup').on('click', function (e)
+    {
+        $("#checkOut_popup").show();
+        $("#checkOut_popup").addClass("show");
+        $(".backdrop").show();
+        $(".backdrop").addClass("zindex-4");
+    });
+
+    $('#login_by_popupp').on('click', function (e)
     {
         $("#checkOut_popup").show();
         $("#checkOut_popup").addClass("show");
