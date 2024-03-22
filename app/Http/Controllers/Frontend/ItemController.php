@@ -293,7 +293,7 @@ class ItemController extends FrontendController
             $page = '.broadloom';
         }
         // die("<pre>".print_r( $main_collection['Description'], 1)."</pre>");
-        // dd($items);
+//         dd($items);
         return view( 'frontend.'.$this->active_theme->theme_abrv.$page, [
             'items'            => $items,
             'items_json'       => json_encode( $items ),
@@ -302,7 +302,8 @@ class ItemController extends FrontendController
             'collection_id'    => $id,
             'related_designs'  => $related_designs,
             'color'            => $color_id,
-	        'is_oak'	       => strtolower( $id ) === 'oak'
+	        'is_oak'	       => strtolower( $id ) === 'oak',
+	        'design_id'	       => $design_id
         ] );
 
     }

@@ -992,8 +992,8 @@ use App\Http\Controllers\CommonController;
             var selectedId = $(this).closest('input').attr('id');
             console.log("Selected ID:", selectedId);
             $('#customer-id').val(selectedId);
-            var href = "{{ route('broadloom.cart', ['id' => $items['Items'][0]['ItemID'], 'cust_id']) }}";
-            href = href.replace('cust_id', selectedId);
+            var href = "{{ route('broadloom.cart', ['id' => $items['Items'][0]['ItemID'], 'cust_id' => 'customerID', 'design_id' => $design_id]) }}";
+            href = href.replace('customerID', selectedId);
             $('#add_cart').attr('href', href);
         }
     });

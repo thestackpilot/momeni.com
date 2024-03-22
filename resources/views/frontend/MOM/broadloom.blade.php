@@ -68,7 +68,7 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control Twidth" id="inlineFormInputGroup" placeholder="">
+                                                                    <input type="text" class="form-control Tlength" id="Tlength" placeholder="">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">Ft</div>
                                                                     </div>
@@ -76,7 +76,7 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <select name="" id=""
+                                                                    <select name="" id="TlengthInch"
                                                                             class="form-control">
                                                                         <option value="">1</option>
                                                                         <option value="">2</option>
@@ -105,7 +105,7 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control Tlength" id="inlineFormInputGroup" placeholder="">
+                                                                    <input type="text" class="form-control Twidth" id="Twidth" placeholder="">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">Ft</div>
                                                                     </div>
@@ -113,7 +113,7 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <select name="" id=""
+                                                                    <select name="" id="TwidthInch"
                                                                             class="form-control">
                                                                         <option value="">1</option>
                                                                         <option value="">2</option>
@@ -177,11 +177,7 @@
                                                         <textarea name="" id="" class="form-control" rows="5"></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="col-12">
-                                                    <div class="badge badge-primary broadloom-badge" id="cut_pieces" >
-                                                        10' - 0" x 10' - 0"
-                                                        <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
-                                                    </div>
+                                                <div class="col-12" id="cut_piece_parent">
                                                     {{-- <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
@@ -985,6 +981,8 @@
                 var selectedOption = $(this).find('option:selected');
                 var width = selectedOption.attr('width');
                 var length = selectedOption.attr('length');
+                console.log(width)
+                console.log(length)
                 $('.Twidth').val(width);
                 $('.Tlength').val(length);
                 $('#roll_id').val(selectedOption.attr('value'));
@@ -1010,17 +1008,22 @@
 
             $('#cut_piece_btn').click(function(){
                 var itemId= $("#item_id").val();
+                let length = $("#Tlength").val() + "." + $("#TlengthInch").val();
+                length = parseFloat(length);
+                let width = $("#Twidth").val() + "." + $("#TwidthInch").val();
+                width = parseFloat(width);
+                let sqtft = length * width;
                 $.ajax({
                     url: "{{route('broadloom.cutPiece')}}",
-                    method: 'GET',
+                    method: 'POST',
                     data: { '_token': '{{csrf_token()}}',
                         'roll_id': $("#roll_id").val(),
                         'tempsalesorderno': $("#TempSalesOrderNo").val(),
                         'item_id': $("#item_id").val(),
                         'cutpiece_id': $("#cutpiece_id").val(),
-                        'atslength': $("#atslength").val(),
-                        'totalwidth': $("#totalwidth").val(),
-                        'totalsqft': $("#totalsqft").val(),
+                        'atslength': length,
+                        'totalwidth': width,
+                        'totalsqft': sqtft,
                         'cuttype': $("#cuttype").val(),
                         'locationid': $("#locationid").val(),
                         'charges': $("#charges").val(),
@@ -1036,14 +1039,26 @@
 
                     },
                     success: function(data){
-                        console.log("helloo");
-                        console.log(data);
-                        // $.each(data, function(index, item) {
-                        //     var divContent = '<div class="badge badge-primary broadloom-badge" id="cut_pieces">';
-                        //     divContent += item.dimensions + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
-                        //     divContent += '</div>';
-                        //     $('#cut_piece_parent').append(divContent);
-                        // });
+                        if (data.cut_piece.OutPut.Success) {
+                            $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
+                            $.each(data['cut_piece']['OutPut']['AddCutPieces'], function(index, item) {
+                                var divContent = '<div class="badge badge-default broadloom-badge">';
+                                // divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"` + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
+                                divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"`;
+                                divContent += '</div>';
+                                $('#cut_piece_parent').append(divContent);
+                            });
+
+                            toastr.success(data.cut_piece.OutPut.Message, {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                        } else {
+                            toastr.error(data.cut_piece.OutPut.Message, {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.error("Error occurred:", status, error);
