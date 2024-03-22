@@ -46,6 +46,7 @@ class BroadloomController extends FrontendController
         $userremarks = $request->input('UserRemarks');
 
         $res = $this->ApiObj->Get_AddCutPiece($tempsalesorderno, $cutpieceId, $rollId, $itemId, $atslength, $totalWidth, $totalSqft, $cutType, $description, $charges, $sergingTypeNo, $locationId, $waste, $remnant, $available, $isremship, $serging, $line, $userremarks );
+        // dd($res);
         return [
             'cut_piece'     => $res,
         ];

@@ -107,7 +107,7 @@ class ApisController extends RootController
     }
 
     public function Get_AddCutPiece($TempSalesOrderNo, $CutPieceID, $RollID, $ItemID, $ActualLength, $ActualWidth, $ActualSQFT, $CutType,  $Description, $SergingCharges, $SergingType, $LocationID, $waste, $remnant, $available, $isremship, $serging, $lineno, $userremarks){
-        $post_array = array( 'Input' => array(
+        $post_array = array(
             'TempSalesOrderNo' => $TempSalesOrderNo,
             'CutPieceID' => $CutPieceID,
             'RollID' => $RollID,
@@ -126,8 +126,8 @@ class ApisController extends RootController
             'AvailableForSale' => $available,
             'IsRemnantShipable' => $isremship,
             'LineNo' => $lineno,
-            'UserRemarks' => $userremarks,),
-    );
+            'UserRemarks' => $userremarks,
+        );
         // dd($post_array);
         return $this->Post_API_Signature( 'Get_AddCutPiece', 'Get Add Cut Piece', $post_array );
     }
