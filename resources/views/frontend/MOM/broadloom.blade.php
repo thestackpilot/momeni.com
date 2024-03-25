@@ -4,7 +4,8 @@
 
     use App\Http\Controllers\ConstantsController;
     use App\Http\Controllers\CommonController;
-
+    // echo $cust_id;
+    //     die();
 @endphp
 
 @section('title', 'Item Detail Page' )
@@ -15,7 +16,7 @@
         @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
         <main class="main-content">
             @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs')
-            {{-- <div class="d-none" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}"></div> --}}
+            <input type="hidden" id="customer_id" value="{{$cust_id}}"></input>
             <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}">
             <input type="hidden" name="" id="roll_id" value="">
             <input type="hidden" name="" id="cutpiece_id" value="">
@@ -68,7 +69,7 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control Tlength" id="Tlength" placeholder="">
+                                                                    <input type="number" class="form-control Tlength" id="Tlength" placeholder="">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">Ft</div>
                                                                     </div>
@@ -78,18 +79,18 @@
                                                                 <div class="input-group">
                                                                     <select name="" id="TlengthInch"
                                                                             class="form-control">
-                                                                        <option value="">1</option>
-                                                                        <option value="">2</option>
-                                                                        <option value="">3</option>
-                                                                        <option value="">4</option>
-                                                                        <option value="">5</option>
-                                                                        <option value="">6</option>
-                                                                        <option value="">7</option>
-                                                                        <option value="">8</option>
-                                                                        <option value="">9</option>
-                                                                        <option value="">10</option>
-                                                                        <option value="">11</option>
-                                                                        <option value="">12</option>
+                                                                        <option value="1">1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                        <option value="6">6</option>
+                                                                        <option value="7">7</option>
+                                                                        <option value="8">8</option>
+                                                                        <option value="9">9</option>
+                                                                        <option value="10">10</option>
+                                                                        <option value="11">11</option>
+                                                                        <option value="12">12</option>
                                                                     </select>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">In</div>
@@ -105,7 +106,7 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control Twidth" id="Twidth" placeholder="">
+                                                                    <input type="number" class="form-control Twidth" id="Twidth" placeholder="">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">Ft</div>
                                                                     </div>
@@ -115,18 +116,18 @@
                                                                 <div class="input-group">
                                                                     <select name="" id="TwidthInch"
                                                                             class="form-control">
-                                                                        <option value="">1</option>
-                                                                        <option value="">2</option>
-                                                                        <option value="">3</option>
-                                                                        <option value="">4</option>
-                                                                        <option value="">5</option>
-                                                                        <option value="">6</option>
-                                                                        <option value="">7</option>
-                                                                        <option value="">8</option>
-                                                                        <option value="">9</option>
-                                                                        <option value="">10</option>
-                                                                        <option value="">11</option>
-                                                                        <option value="">12</option>
+                                                                            <option value="1">1</option>
+                                                                            <option value="2">2</option>
+                                                                            <option value="3">3</option>
+                                                                            <option value="4">4</option>
+                                                                            <option value="5">5</option>
+                                                                            <option value="6">6</option>
+                                                                            <option value="7">7</option>
+                                                                            <option value="8">8</option>
+                                                                            <option value="9">9</option>
+                                                                            <option value="10">10</option>
+                                                                            <option value="11">11</option>
+                                                                            <option value="12">12</option>
                                                                     </select>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">In</div>
@@ -935,6 +936,8 @@
         }
 
         $(document).ready(function () {
+            // console.log({{ $cust_id }});
+
             hide_components(['#qty_msg', '.postfix', '#item_variant_parent', '#item_color_parent', '#item_size_parent', '#qty-main', '#cart_main h3']);
 
             $('.qty-add').on('click', function () {
@@ -960,13 +963,14 @@
 
             var defaultOption1 = $('#roll_pieces').val();
             $('#roll_pieces').change(function() {
+                // console.log($('#customer_id').val());
                 $.ajax({
                     method: 'POST',
                     url: '{{route("frontend.item.ats")}}',
                     data: {
                         '_token': '{{csrf_token()}}',
                         'item_id': $("#item_id").val(),
-                        'customer_id': {{$cust_id}}
+                        'customer_id': $('#customer_id').val()
                     },
                     success: function (response) {
                         console.log(response.data['Price']);
@@ -985,6 +989,8 @@
                 console.log(length)
                 $('.Twidth').val(width);
                 $('.Tlength').val(length);
+                $('.Twidth').attr('max', width);
+                $('.Tlength').attr('max', length);
                 $('#roll_id').val(selectedOption.attr('value'));
                 $('#cutpiece_id').val(selectedOption.attr('cutpieceID'));
                 $('#atslength').val(selectedOption.attr('length'));
@@ -1008,10 +1014,13 @@
 
             $('#cut_piece_btn').click(function(){
                 var itemId= $("#item_id").val();
-                let length = $("#Tlength").val() + "." + $("#TlengthInch").val();
-                length = parseFloat(length);
-                let width = $("#Twidth").val() + "." + $("#TwidthInch").val();
-                width = parseFloat(width);
+                let length = parseInt($("#Tlength").val())*12 +  parseInt($("#TlengthInch").val());
+                // let lengthInches =;
+                // totalLength = length + lengthInches;
+                console.log(length);
+                let width = parseInt($("#Twidth").val())*12 + parseInt($("#TwidthInch").val());
+                console.log(width);
+
                 let sqtft = length * width;
                 $.ajax({
                     url: "{{route('broadloom.cutPiece')}}",
@@ -1042,10 +1051,24 @@
                         if (data.cut_piece.OutPut.Success) {
                             $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
                             $.each(data['cut_piece']['OutPut']['AddCutPieces'], function(index, item) {
+                                
+                                let lengthfeet = Math.floor(item.ATSLength / 12);
+
+                                let lengthinches = lengthfeet % 12;
+
+                                let widthfeet = Math.floor(item.ATSWidth / 12);
+
+                                let widthinches = widthfeet % 12;
+
+                                console.log(lengthfeet + " ft " + lengthinches + " inches");
+                                console.log(widthfeet + " ft " + widthinches + " inches");
+
                                 var divContent = '<div class="badge badge-default broadloom-badge">';
                                 // divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"` + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
-                                divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"`;
+                                divContent += lengthfeet + `'`+ lengthinches +`" x ` + widthfeet + `'`+ widthinches + `"`;
                                 divContent += '</div>';
+
+                                console.log(divContent);
                                 $('#cut_piece_parent').append(divContent);
                             });
 
@@ -1091,7 +1114,6 @@
                     }
                 }]
             });
-
             init();
             bindClicks();
             init_sliders();
