@@ -79,6 +79,7 @@
                                                                 <div class="input-group">
                                                                     <select name="" id="TlengthInch"
                                                                             class="form-control">
+                                                                        <option value="0">0</option>
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
                                                                         <option value="3">3</option>
@@ -116,6 +117,7 @@
                                                                 <div class="input-group">
                                                                     <select name="" id="TwidthInch"
                                                                             class="form-control">
+                                                                            <option value="0">0</option>
                                                                             <option value="1">1</option>
                                                                             <option value="2">2</option>
                                                                             <option value="3">3</option>
@@ -228,9 +230,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 mt-5 text-center">
-                                        <button class="show-piece-btn broadloom-btns" >Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="show-piece-btn broadloom-btns" id="cut_piece_btn" >Add Cut Piece <i class="fa fa-long-arrow-right"></i></button>
-                                        <button class="add-to-cart-broadloom-btn broadloom-btns">Add to Cart <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="show-piece-btn broadloom-btns" >Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">Add to Cart <i class="fa fa-long-arrow-right"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -868,60 +870,11 @@
         }
 
         function bindClicks() {
-
-            $("#item_variant input[name='variant']")
-                .off('click')
-                .on('click', function () {
-                    refresh_product($(this).val());
-                    getColors($("#item_variant input[name='variant']:checked").text().trim());
-                });
-
-            $("#item_color input[name='color']")
-                .off('click')
-                .on('click', function () {
-                    refresh_product($(this).val());
-                    $('#color_name').html(`: ${$("#item_color input[name='color']:checked").text().trim()}`);
-                    getSizes($("#item_variant input:radio[name='variant']:checked").text().trim(), $("#item_color input[name='color']:checked").text().trim(), $(this).val());
-                });
-
-            $("#item_size input[name='size']")
-                .off('click')
-                .on('click', function () {
-                    refresh_product($(this).val());
-                    $(this).attr('checked', true);
-                    $('#size_name').html(`: ${$("#item_size input[name='size']:checked").text().trim()}`);
-                    if (typeof $('#item_cover_parent').length !== "undefined" && $('#item_cover_parent').length) {
-                        refresh_product($(this).val());
-                        getCovers($(this));
-                    } else {
-                        pupolateDimensions($(this).parent('#item_size_parent'), $(this).val());
-                        getQuantity($(this).val());
-                    }
-                });
-
-            $("#item_cover input[name='cover']")
-                .off('click')
-                .on('click', function () {
-                    $(this).attr('checked', true);
-                    $('#cover_name').html(`: ${$("#item_cover input[name='cover']:checked").text().trim()}`);
-                    getQuantity($(this).val());
-                });
-
-            $("#item_customer input[name='customer']")
-                .off('click')
-                .on('click', function () {
-                    var split_arr = $(this).val().split(' :: ');
-                    var item_id = split_arr[0].trim();
-                    refresh_product(item_id);
-                    customerID = $(this).val();
-                    getCartReady($(this).val());
-                });
-
-            if (customerID.length == 0) $('#add_to_cart').attr('disabled', true);
-
+            console.log("test");
             $('#add_to_cart')
                 .off('click')
                 .on('click', function (e) {
+                    console.log("in cart");
                     if (
                         $('input[name="sale_rep"]').val() == 1 &&
                         customerID.length == 0
@@ -931,24 +884,56 @@
                             closeButton: true,
                         });
                     else
+                    console.log("push");
                         pushToCart();
                 });
+
+                $(".Tlength,  .Twidth").on("input", function() {
+                console.log("in condition");
+                updatePrices();
+            });
+            
+            $("#TlengthInch, #TwidthInch").on("change", function() {
+                console.log("in condition");
+                updatePrices();
+            });
+
         }
+
+        function updatePrices() {
+        // Assuming perSquareFeetPrice is the price per square foot
+        let perSquareFeetPrice =  $("#sq-ft").val();; // Example value
+
+        // Retrieve length and width in feet and inches
+        let lengthFeet = parseInt($("#Tlength").val());
+        let lengthInches = parseInt($("#TlengthInch").val());
+        let widthFeet = parseInt($("#Twidth").val());
+        let widthInches = parseInt($("#TwidthInch").val());
+
+        // Convert length and width to total inches
+        let totalLengthInInches = lengthFeet * 12 + lengthInches;
+        let totalWidthInInches = widthFeet * 12 + widthInches;
+
+        // Calculate total area in square inches
+        let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
+
+        // Convert square inches to square feet
+        let totalAreaInSquareFeet = totalAreaInSquareInches / 144; // 1 square foot = 144 square inches
+
+        // Convert square feet to square yards
+        let totalAreaInSquareYards = totalAreaInSquareFeet / 9; // 1 square yard = 9 square feet
+
+        // Calculate the SQ-YRD Price ($) and EXT Price ($)
+        let sqYrdPrice = perSquareFeetPrice / 9; // Price per square yard
+        let extPrice = totalAreaInSquareYards * sqYrdPrice;
+
+        // Update the SQ-YRD Price ($) and EXT Price ($) fields
+        $("#sq-yrd").val(sqYrdPrice.toFixed(2)); // Set SQ-YRD Price with two decimal places
+        $("#sq-ext").val(extPrice.toFixed(2)); // Set EXT Price with two decimal places
+    }
 
         $(document).ready(function () {
             // console.log({{ $cust_id }});
-
-            hide_components(['#qty_msg', '.postfix', '#item_variant_parent', '#item_color_parent', '#item_size_parent', '#qty-main', '#cart_main h3']);
-
-            $('.qty-add').on('click', function () {
-                var value = $('input[type="number"]', $(this).parent()).val();
-                $('input[type="number"]', $(this).parent()).val((parseInt(value) + 1) < 1001 ? parseInt(value) + 1 : 1000).change();
-            });
-
-            $('.qty-minus').on('click', function () {
-                var value = $('input[type="number"]', $(this).parent()).val();
-                $('input[type="number"]', $(this).parent()).val((parseInt(value) - 1) > 0 ? parseInt(value) - 1 : 0).change();
-            });
 
             $('#surging_options').change(function() {
                 var selectedOption = $(this).find('option:selected');
@@ -975,8 +960,7 @@
                     success: function (response) {
                         console.log(response.data['Price']);
                         $("#sq-ft").val(response.data['Price']);
-                        $("#sq-yrd").val(response.data['Price']);
-                        $("#sq-ext").val(response.data['Price']);
+                        updatePrices();
                     },
                     error: function (response) {
                         console.log(response);
@@ -987,10 +971,22 @@
                 var length = selectedOption.attr('length');
                 console.log(width)
                 console.log(length)
-                $('.Twidth').val(width);
-                $('.Tlength').val(length);
-                $('.Twidth').attr('max', width);
-                $('.Tlength').attr('max', length);
+                let lengthfeet = Math.floor(length / 12);
+
+                let lengthinches = length % 12;
+
+                let widthfeet = Math.floor(width / 12);
+
+                let widthinches = width % 12;
+
+
+                $('.Twidth').val(widthfeet);
+                $('.Tlength').val(lengthfeet);
+                $('#TlengthInch').val(lengthinches);
+                $('#TwidthInch').val(widthinches);
+                $('.Tlength').val(lengthfeet);
+                $('.Twidth').attr('max', widthfeet);
+                $('.Tlength').attr('max', lengthfeet);
                 $('#roll_id').val(selectedOption.attr('value'));
                 $('#cutpiece_id').val(selectedOption.attr('cutpieceID'));
                 $('#atslength').val(selectedOption.attr('length'));
@@ -1012,6 +1008,7 @@
                 }
             });
 
+       
             $('#cut_piece_btn').click(function(){
                 var itemId= $("#item_id").val();
                 let length = parseInt($("#Tlength").val())*12 +  parseInt($("#TlengthInch").val());
@@ -1050,27 +1047,30 @@
                     success: function(data){
                         if (data.cut_piece.OutPut.Success) {
                             $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
+                            var divContent = '<div>';
                             $.each(data['cut_piece']['OutPut']['AddCutPieces'], function(index, item) {
                                 
                                 let lengthfeet = Math.floor(item.ATSLength / 12);
 
-                                let lengthinches = lengthfeet % 12;
+                                let lengthinches = item.ATSLength % 12;
 
                                 let widthfeet = Math.floor(item.ATSWidth / 12);
 
-                                let widthinches = widthfeet % 12;
+                                let widthinches = item.ATSWidth % 12;
 
                                 console.log(lengthfeet + " ft " + lengthinches + " inches");
                                 console.log(widthfeet + " ft " + widthinches + " inches");
 
-                                var divContent = '<div class="badge badge-default broadloom-badge">';
+                                var color = item.LengthStatus == 'F' ? 'Blue' : 'red';
+                                divContent += '<div class="badge badge-default broadloom-badge" style="background-color:'+ color+ '">';
                                 // divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"` + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
                                 divContent += lengthfeet + `'`+ lengthinches +`" x ` + widthfeet + `'`+ widthinches + `"`;
                                 divContent += '</div>';
 
                                 console.log(divContent);
-                                $('#cut_piece_parent').append(divContent);
                             });
+                            divContent += '</div>';
+                            $('#cut_piece_parent').html(divContent);
 
                             toastr.success(data.cut_piece.OutPut.Message, {
                                 hideDuration: 10000,
@@ -1089,34 +1089,10 @@
                 });
             });
 
-            $('.product-slider-active').slick({
-                dots: false,
-                infinite: true,
-                slidesToShow: 5,
-                slidesToScroll: 1,
-                autoplay: false,
-                prevArrow: '<i class="icon-arrow-left arrow-prv"></i>',
-                nextArrow: '<i class="icon-arrow-right arrow-next"></i>',
-                responsive: [{
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 3,
-                    }
-                }, {
-                    breakpoint: 762,
-                    settings: {
-                        slidesToShow: 2,
-                    }
-                }, {
-                    breakpoint: 576,
-                    settings: {
-                        slidesToShow: 1,
-                    }
-                }]
-            });
-            init();
+            
+            // init();
             bindClicks();
-            init_sliders();
+            // init_sliders();
 
             // $('.owl-carousel').owlCarousel(
             // {
