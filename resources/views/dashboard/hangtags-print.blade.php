@@ -45,6 +45,7 @@
 
         .hangtags-wrapper {
             width: 100%;
+            height: 80%;
             display: flex;
             flex-direction: row;
             padding-top: 2.5rem;
@@ -214,8 +215,8 @@
                                                 <img
                                                     src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.momeni.com/search?q={{ $product['title']}} "
                                                     onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
-                                                    id="imgID" align="middle" border="0" class="imgHeight" height="100px"
-                                                    width="100px" alt="QR Code">
+                                                    id="imgID" align="middle" border="0" class="imgHeight" height="60px"
+                                                    width="60px" alt="QR Code">
                                             </a>
                                         </td>
                                     </tr>

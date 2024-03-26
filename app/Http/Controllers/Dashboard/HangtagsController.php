@@ -36,8 +36,9 @@ class HangtagsController extends DashboardController
                 $items_data = $this->ApiObj->Get_GetHangTagsDetailData( $item['ItemID'], $validated_data['customer'], $request->has( 'with-map' ) ? true : '' );
 
                 try {
-
                     if ( $items_data && $items_data['Success'] && $items_data['HangTagsDetail'] )
+
+                    foreach ( $items_data['HangTagsDetail'] as $i => $data )
                     {
                         $products[$k] = [
                             'category'     => $items_data['HangTagsDetail'][0]['Category'],
@@ -156,6 +157,7 @@ class HangtagsController extends DashboardController
                     return redirect()->route( 'dashboard.hangtags' )->with( 'message', ['type' => 'danger', 'body' => 'Invalid request.'] );
                     break;
             }
+
         }
         catch (\Exception $e) {
             // Handle any exceptions here
