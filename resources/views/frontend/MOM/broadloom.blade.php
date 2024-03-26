@@ -79,7 +79,6 @@
                                                                 <div class="input-group">
                                                                     <select name="" id="TlengthInch"
                                                                             class="form-control">
-                                                                        <option value="0">0</option>
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
                                                                         <option value="3">3</option>
@@ -117,7 +116,6 @@
                                                                 <div class="input-group">
                                                                     <select name="" id="TwidthInch"
                                                                             class="form-control">
-                                                                            <option value="0">0</option>
                                                                             <option value="1">1</option>
                                                                             <option value="2">2</option>
                                                                             <option value="3">3</option>
@@ -937,38 +935,6 @@
                 });
         }
 
-        function updatePrices() {
-            // Assuming perSquareFeetPrice is the price per square foot
-            let perSquareFeetPrice = parseInt($("#sq-ft").val()); // Example value
-
-            // Retrieve length and width in feet and inches
-            let lengthFeet = parseInt($("#Tlength").val());
-            let lengthInches = parseInt($("#TlengthInch").val());
-            let widthFeet = parseInt($("#Twidth").val());
-            let widthInches = parseInt($("#TwidthInch").val());
-            let totalLengthInInches = lengthFeet * 12 + lengthInches;
-            let totalWidthInInches = widthFeet * 12 + widthInches;
-
-            // Calculate total area in square inches
-            let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
-
-            // Convert square inches to square feet
-            let totalAreaInSquareFeet = totalAreaInSquareInches / 144; // 1 square foot = 144 square inches
-
-            // Convert square feet to square yards
-            let totalAreaInSquareYards = totalAreaInSquareFeet / 9; // 1 square yard = 9 square feet
-
-            // Calculate the SQ-YRD Price ($) and EXT Price ($)
-            let sqYrdPrice = perSquareFeetPrice / 9; // Price per square yard
-            let extPrice = totalAreaInSquareYards * sqYrdPrice;
-
-        // Update the SQ-YRD Price ($) and EXT Price ($) fields
-        // $("#SQ-YRD-Price").val(sqYrdPrice.toFixed(2)); // Set SQ-YRD Price with two decimal places
-        // $("#EXT-Price").val(extPrice.toFixed(2));
-            $("#sq-yrd").val((sqYrdPrice ).toFixed(2)); // Divide per square foot price by 9 to get price per square yard
-            $("#sq-ext").val(extPrice.toFixed(2));
-        }
-
         $(document).ready(function () {
             // console.log({{ $cust_id }});
 
@@ -1009,10 +975,8 @@
                     success: function (response) {
                         console.log(response.data['Price']);
                         $("#sq-ft").val(response.data['Price']);
-                        updatePrices();
-
-                        // $("#sq-yrd").val(response.data['Price']);
-                        // $("#sq-ext").val(response.data['Price']);
+                        $("#sq-yrd").val(response.data['Price']);
+                        $("#sq-ext").val(response.data['Price']);
                     },
                     error: function (response) {
                         console.log(response);
@@ -1021,20 +985,12 @@
                 var selectedOption = $(this).find('option:selected');
                 var width = selectedOption.attr('width');
                 var length = selectedOption.attr('length');
-                var lengthfeet = Math.floor(length / 12);
-
-                var lengthinches = length % 12;
-
-                var widthfeet = Math.floor(width / 12);
-
-                var widthinches = width % 12;
-               
-                $('.Twidth').val(widthfeet);
-                $('#TwidthInch').val(widthinches);
-                $('.Tlength').val(lengthfeet);
-                $('#TlengthInch').val(lengthinches);
-                $('.Twidth').attr('max', widthfeet);
-                $('.Tlength').attr('max', lengthfeet);
+                console.log(width)
+                console.log(length)
+                $('.Twidth').val(width);
+                $('.Tlength').val(length);
+                $('.Twidth').attr('max', width);
+                $('.Tlength').attr('max', length);
                 $('#roll_id').val(selectedOption.attr('value'));
                 $('#cutpiece_id').val(selectedOption.attr('cutpieceID'));
                 $('#atslength').val(selectedOption.attr('length'));
@@ -1042,11 +998,7 @@
                 $('#totalsqft').val(selectedOption.attr('SQFT'));
                 $('#cuttype').val(selectedOption.attr('cutType'));
                 $('#locationid').val(selectedOption.attr('location'));
-            });
 
-            $(".Tlength, .TlengthInch, .Twidth, .TwidthInch").on("input", function() {
-                // Call the updatePrices function whenever the input fields change
-                updatePrices();
             });
 
             var defaultOption2 = $('#surging_options').val();
@@ -1098,30 +1050,27 @@
                     success: function(data){
                         if (data.cut_piece.OutPut.Success) {
                             $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
-                            var divContent = '<div>';
                             $.each(data['cut_piece']['OutPut']['AddCutPieces'], function(index, item) {
                                 
                                 let lengthfeet = Math.floor(item.ATSLength / 12);
 
-                                let lengthinches = item.ATSLength % 12;
+                                let lengthinches = lengthfeet % 12;
 
                                 let widthfeet = Math.floor(item.ATSWidth / 12);
 
-                                let widthinches = item.ATSWidth % 12;
+                                let widthinches = widthfeet % 12;
 
                                 console.log(lengthfeet + " ft " + lengthinches + " inches");
                                 console.log(widthfeet + " ft " + widthinches + " inches");
-                                let color = item.LengthStatus == 'F' ? 'blue' : 'red';
-                                divContent += `<div class="badge badge-default broadloom-badge" style= "background-color: ${color}">`;
+
+                                var divContent = '<div class="badge badge-default broadloom-badge">';
                                 // divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"` + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
                                 divContent += lengthfeet + `'`+ lengthinches +`" x ` + widthfeet + `'`+ widthinches + `"`;
                                 divContent += '</div>';
 
                                 console.log(divContent);
+                                $('#cut_piece_parent').append(divContent);
                             });
-                            divContent += '</div>';
-                            console.log(divContent)
-                            $('#cut_piece_parent').html(divContent);
 
                             toastr.success(data.cut_piece.OutPut.Message, {
                                 hideDuration: 10000,
