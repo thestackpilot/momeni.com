@@ -89,8 +89,8 @@ use App\Http\Controllers\CommonController;
                // console.log("response: ", response);
                if (response && response.success) {
                    var link = document.createElement('a');
-                   link.innerHTML = 'Download XLS';
-                   link.className = 'btn btn-primary my-3 py-3';
+                   link.innerHTML = 'Download EXCEL';
+                   link.className = 'btn btn-primary my-3 py-3 mr-1';
                    link.download = 'Report.xls';
                    link.href = 'data:application/octet-stream;base64,' + response.data.ReportData;
                    // document.body.appendChild(link);
