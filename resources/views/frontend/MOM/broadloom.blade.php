@@ -18,6 +18,7 @@
             @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs')
             <input type="hidden" id="customer_id" value="{{$cust_id}}"></input>
             <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}">
+            {{-- <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemName']}}"> --}}
             <input type="hidden" name="" id="roll_id" value="">
             <input type="hidden" name="" id="cutpiece_id" value="">
             <input type="hidden" name="" id="atslength" value="">
@@ -29,6 +30,16 @@
             <input type="hidden" name="" id="charges" value="">
             <input type="hidden" name="" id="desc" value="">
             <input type="hidden" name="" id="TempSalesOrderNo" value="">
+            <input type="hidden" id="cart_item_id" name="cart_item_id" value="">
+            <input type="hidden" id="cart_item_name" name="cart_item_name" value="">
+            <input type="hidden" id="cart_item_quantity" name="cart_item_quantity" value="">
+            <input type="hidden" id="cart_item_price" name="cart_item_price" value="">
+            <input type="hidden" id="cart_item_color" name="cart_item_color" value="">
+            <input type="hidden" id="cart_item_size" name="cart_item_size" value="">
+            <input type="hidden" id="cart_item_currency" name="cart_item_currency" value="">
+            <input type="hidden" id="cart_item_image" name="cart_item_image" value="">
+            <input type="hidden" id="cart_item_eta" name="cart_item_eta" value="">
+            {{-- <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}"> --}}
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
                     <h3>DIA-B Black</h3>
@@ -806,10 +817,10 @@
                     url: '{{route("frontend.cart.add")}}',
                     data: {
                         '_token': '{{csrf_token()}}',
-                        'cart_item_id': $('#cart_item_id').val(),
-                        'cart_customer_id': $('#cart_customer_id').val(),
-                        'cart_item_name': $('#cart_item_name').val(),
-                        'cart_item_quantity': $('#cart_item_quantity').val(),
+                        'cart_item_id': $('#item_id').val(),
+                        'cart_customer_id': $('#customer_id').val(),
+                        'cart_item_name': $('#item_name').val(),
+                        'cart_item_quantity': 1,
                         'cart_item_price': $('#cart_item_price').val(),
                         'cart_item_color': $('#cart_item_color').val(),
                         'cart_item_size': $('#cart_item_size').val(),
