@@ -38,7 +38,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="broadloom-hearder"
-                                            style="background-image: url('{{ asset("/MOM/images/landing-img/rug/3.png") }}')"></div>
+                                            style="background-image: url('{{ $image }}')"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -1049,7 +1049,7 @@
                             $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
                             var divContent = '<div>';
                             $.each(data['cut_piece']['OutPut']['AddCutPieces'], function(index, item) {
-                                
+
                                 let lengthfeet = Math.floor(item.ATSLength / 12);
 
                                 let lengthinches = item.ATSLength % 12;
