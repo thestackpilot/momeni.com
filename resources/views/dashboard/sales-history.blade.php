@@ -77,6 +77,38 @@ use App\Http\Controllers\CommonController;
 <script type="text/javascript">
    $(document).ready(function() {
 
+       if(`{{ isset($ReportTitle) && $ReportTitle && isset($PreviewID) && $PreviewID }}`) {
+           var report_title = `{{ isset($ReportTitle) ? $ReportTitle : '' }}`;
+           var preview_id = `{{ isset($PreviewID) ? $PreviewID : '' }}`;
+
+           $.post('{{ route("dashboard.downloadexcel") }}', {
+               _token: '{{ csrf_token() }}',
+               report_title: report_title,
+               preview_id: preview_id,
+           }).done(function(response) {
+               // console.log("response: ", response);
+               if (response && response.success) {
+                   var link = document.createElement('a');
+                   link.innerHTML = 'Download XLS';
+                   link.className = 'btn btn-primary my-3 py-3';
+                   link.download = 'Report.xls';
+                   link.href = 'data:application/octet-stream;base64,' + response.data.ReportData;
+                   // document.body.appendChild(link);
+                   $(link).insertAfter('#report_details');
+                   // var link = addDownloadButton('xls', response.data.ReportData);
+                   // if ($(window).width() <= 1080) {
+                   //     link.appendTo($('#detail-btn'));
+                   // }else{
+                   //     link.appendTo($('#desktop-detail-btn'));
+                   // }
+
+               }
+           }).fail(function() {
+               console.log('Error: Failed to get the excel data.');
+           });
+
+       }
+
       if(`{{ isset($ReportData) && $ReportData }}`) {
          // The Base64 string of a simple PDF file
          var b64 = `{{ isset($ReportData) ? $ReportData : '' }}`
