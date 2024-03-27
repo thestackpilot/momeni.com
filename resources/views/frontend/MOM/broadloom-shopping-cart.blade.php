@@ -52,14 +52,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach($cart_details['items'] as $row)
                                         <tr>
                                             <th class="" scope="row"><div class="row">
-                                                <div class="col-1 justify-content-center align-content-center" style="color: red;">x</div>
-                                                <div class="col-3"><img src="/MOM/images/product/1.jpg" alt="" height="100px"></div>
+                                                <div class="col-1 justify-content-center align-content-center delete-row" style="color: red;cursor: pointer;">x</div>
+                                                <div class="col-3"><img src={{$row['item_image']}} alt="{{$row['item_id']}}" height="100px"></div>
                                                 <div class="col-8" style="font-size: 12px">
-                                                    <div class="mx-3 mt-2 font-weight--bold row">Design: <p class="font-weight--normal mx-2">Sim-I Ivory</p></div>
-                                                    <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">Sim-I Ivory</p></div>
-                                                    <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">3x5 Rugs</p></div>
+                                                    <div class="mx-3 mt-2 font-weight--bold row">Design: <p class="font-weight--normal mx-2">{{$row['item_name']}}</p></div>
+                                                    <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p></div>
+                                                    <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">{{$row['item_size']}}</p></div>
                                                 </div>
                                             </div>
                                         </th>
@@ -69,38 +70,14 @@
                                                     <input type="number" id="item_qty" name="quantity" autocomplete="off"
                                                         onkeydown="if(this.key==='.'){this.preventDefault();}"
                                                         class="form-control" min="1" max="9999" maxlength="4"
-                                                        step="1" required value="" />
+                                                        step="1" required value="{{$row['item_quantity']}}" />
                                                     <a href="javascript:void(0);" class="qty-add qty-action"> + </a>
                                                 </div>
                                             </td>
-                                            <td class="">$87.6</td>
-                                            <td class="">$87.6</td>
+                                            <td class="">{{$cart_details['cart_currency']}}{{$row['item_price']}}</td>
+                                            <td class="">{{$cart_details['cart_currency']}}{{$row['item_total']}}</td>
                                         </tr>
-                                        <tr>
-                                            <th class="" scope="row">
-                                                <div class="row">
-                                                    <div class="col-1 justify-content-center align-content-center" style="color: red;">x</div>
-                                                    <div class="col-3"><img src="/MOM/images/product/1.jpg" alt="" height="100px"></div>
-                                                    <div class="col-8" style="font-size: 12px">
-                                                        <div class="mx-3 mt-2 font-weight--bold row">Design: <p class="font-weight--normal mx-2">Sim-I Ivory</p></div>
-                                                        <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">Sim-I Ivory</p></div>
-                                                        <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">3x5 Rugs</p></div>
-                                                    </div>
-                                                </div>
-                                                </th>
-                                            <td class="">
-                                                <div class="d-flex flex-row qty-styles mb-2">
-                                                    <a href="javascript:void(0);" class="qty-minus qty-action"> - </a>
-                                                    <input type="number" id="item_qty" name="quantity" autocomplete="off"
-                                                        onkeydown="if(this.key==='.'){this.preventDefault();}"
-                                                        class="form-control" min="1" max="9999" maxlength="4"
-                                                        step="1" required value="" />
-                                                    <a href="javascript:void(0);" class="qty-add qty-action"> + </a>
-                                                </div>
-                                            </td>
-                                            <td class="">$87.6</td>
-                                            <td class="">$87.6</td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                                 <div class="mt-4 d-flex justify-content-end mx-5">
@@ -116,17 +93,17 @@
                                     <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
                                     <div class="row mt-3">
                                         <div class="col-md-6">SubTotal:</div>
-                                        <div class="col-md-6 text-right">$45</div>
+                                        <div class="col-md-6 text-right">{{$cart_details['cart_currency']}}{{$cart_details['cart_total']}}</div>
                                     </div>
                                     <hr style="border-top-color: whitesmoke;">
                                     <div class="row">
                                         <div class="col-md-9">Shipping Charges:</div>
-                                        <div class="col-md-3 text-right">$45</div>
+                                        <div class="col-md-3 text-right">N/A</div>
                                     </div>
                                     <hr style="border-top-color: whitesmoke;">
                                     <div class="row mt-3">
                                         <div class="col-md-6 font-weight-bold">Total:</div>
-                                        <div class="col-md-6 font-weight-bold text-right">$55</div>
+                                        <div class="col-md-6 font-weight-bold text-right">N/A</div>
                                     </div>
                                     <a href="" class="add-to-cart-button text-left btn btn-dark col-md-12 mt-3 mb-3" id="add_cart">
                                         Proceed to Checkout <i class="px-4 fa fa-long-arrow-right"></i>
@@ -143,6 +120,26 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+            $('.delete-row').click(function() {
+            $(this).closest('tr').remove();
+        });
+
+        $('.qty-minus').click(function(e) {
+            e.preventDefault();
+            var input = $(this).closest('.qty-styles').find('input[name="quantity"]');
+            var currentValue = parseInt(input.val());
+            if (currentValue > 1) {
+                input.val(currentValue - 1);
+            }
+        });
+
+        // Event listener for clicking on the plus button
+        $('.qty-add').click(function(e) {
+            e.preventDefault();
+            var input = $(this).closest('.qty-styles').find('input[name="quantity"]');
+            var currentValue = parseInt(input.val());
+            input.val(currentValue + 1);
+        });
 
         });
     </script>
