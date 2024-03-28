@@ -52,15 +52,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($cart_details['items'] as $row)
+                                    @if(count((array)$cart->items))
+                                        @foreach($cart->items as $item)
+                                            @php
+                                                if(isset($item -> item_data) && $item -> item_data) {
+                                                   //$item_data = json_decode(unserialize($item -> item_data));
+                                                   $item_data = json_decode($item->item_data, true);
+                                                   //dd($item_data, $cart);
+                                                }
+                                            @endphp
                                         <tr>
                                             <th class="" scope="row"><div class="row">
                                                 <div class="col-1 justify-content-center align-content-center delete-row" style="color: red;cursor: pointer;">x</div>
-                                                <div class="col-3"><img src={{$row['item_image']}} alt="{{$row['item_id']}}" height="100px"></div>
+                                                <div class="col-3"><img src={{$item_data['ImageName']}} alt="{{$item_data['ItemID']}}" height="100px"></div>
                                                 <div class="col-8" style="font-size: 12px">
-                                                    <div class="mx-3 mt-2 font-weight--bold row">Design: <p class="font-weight--normal mx-2">{{$row['item_name']}}</p></div>
+                                                    <div class="mx-3 mt-2 font-weight--bold row">Design: <p class="font-weight--normal mx-2">{{$item_data['ItemName']}}</p></div>
                                                     <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p></div>
-                                                    <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">{{$row['item_size']}}</p></div>
+                                                    <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">{{$item->item_size}}</p></div>
                                                 </div>
                                             </div>
                                         </th>
@@ -70,14 +78,19 @@
                                                     <input type="number" id="item_qty" name="quantity" autocomplete="off"
                                                         onkeydown="if(this.key==='.'){this.preventDefault();}"
                                                         class="form-control" min="1" max="9999" maxlength="4"
-                                                        step="1" required value="{{$row['item_quantity']}}" />
+                                                        step="1" required value="{{$item->item_quantity}}" />
                                                     <a href="javascript:void(0);" class="qty-add qty-action"> + </a>
                                                 </div>
                                             </td>
-                                            <td class="">{{$cart_details['cart_currency']}}{{$row['item_price']}}</td>
-                                            <td class="">{{$cart_details['cart_currency']}}{{$row['item_total']}}</td>
+                                            <td class="">{{$item->item_currency}}{{$item->item_price}}</td>
+                                            <td class="">{{$item->item_currency}}{{$item->item_total}}</td>
                                         </tr>
                                         @endforeach
+                                    @else
+                                        <tr>
+                                            No Item in Cart
+                                        </tr>
+                                    @endif
                                     </tbody>
                                 </table>
                                 <div class="mt-4 d-flex justify-content-end mx-5">
