@@ -9,24 +9,30 @@ use Illuminate\Http\Request;
 class BroadloomController extends FrontendController
 {
     public function index($id, $cust_id, $color_id){
-        $item = $this->ApiObj->Get_Items("",$id,"","","","", $color_id);
-        // dd($item);
-        $item_id = 0;
-        $obj = new ItemController();
-        $images = $obj->generate_image_urls($item);
-        foreach($images['Items'] as $row){
+        $itemController = new ItemController();
+
+        $items = $itemController->generate_color_name($itemController->generate_image_urls( $this->ApiObj->Get_Items("",$id,"","","","", $color_id) ));
+        $item = [];
+        // dd($items);
+
+        // $images = $obj->generate_image_urls($items);
+        // dd($images);
+
+        foreach($items['Items'] as $row){
             if($row['ProductType'] == 'Broadloom'){
-                $item_id = $row['ItemID'];
-                $image_name = $row['ImageNameArray'][0];
+                $item = $row;
             }
         }
-        $roll_pieces = $this->ApiObj->Get_ItemsRollAndCutPieceList($item_id);
+        // dd($item);
+        $roll_pieces = $this->ApiObj->Get_ItemsRollAndCutPieceList($item['ItemID']);
         $surging_types = $this->ApiObj->Get_SurgingTypes();
+
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom', [
-            'surging_types'     => $surging_types,
-            'roll_pieces'       => $roll_pieces,
-            'cust_id'           => $cust_id,
-            'image'        => $image_name
+            'surging_types'         => $surging_types,
+            'roll_pieces'           => $roll_pieces,
+            'customer_id'           => $cust_id,
+            'item'                  => $item,
+            'item_json'             => json_encode($item)
         ]);
     }
 

@@ -4,8 +4,7 @@
 
     use App\Http\Controllers\ConstantsController;
     use App\Http\Controllers\CommonController;
-    // echo $cust_id;
-    //     die();
+   
 @endphp
 
 @section('title', 'Item Detail Page' )
@@ -16,8 +15,10 @@
         @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
         <main class="main-content">
             @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs')
-            <input type="hidden" id="customer_id" value="{{$cust_id}}"></input>
-            <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}">
+            <input type="hidden" id="customer_id" value="{{$customer_id}}"></input>
+            <input type="hidden" id="item_json" value="{{$item_json}}"></input>
+            <input type="hidden" name="" id="item_id" value="{{$item['ItemID']}}">
+            <input type="hidden" name="" id="cut_pieces_json" value="">
             {{-- <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemName']}}"> --}}
             <input type="hidden" name="" id="roll_id" value="">
             <input type="hidden" name="" id="cutpiece_id" value="">
@@ -49,7 +50,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="broadloom-hearder"
-                                            style="background-image: url('{{ $image }}')"></div>
+                                            style="background-image: url('{{ $item['ImageNameArray'][0] }}')"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -453,7 +454,6 @@
         }
 
         function init() {
-            item_object = JSON.parse($('#item_json').html());
             var counter = 0;
             console.log("item_object: ", item_object);
             $('#item_variant').html('');
@@ -810,23 +810,23 @@
         function pushToCart() {
             $('#add_to_cart').addClass('btn-muted');
             $('#cart_item_quantity').val($('#item_qty').val());
-            console.log("cart_customer_id: ", $('#cart_customer_id').val());
-            if ((/^\+?[1-9]\d*/).test(parseInt($('#item_qty').val()))) {
+            item = JSON.parse($('#item_json').val());
+            console.log("item_json: ",$('input[name=size_price]').html() );
+            
                 $.ajax({
                     method: 'POST',
                     url: '{{route("frontend.cart.add")}}',
                     data: {
                         '_token': '{{csrf_token()}}',
-                        'cart_item_id': $('#item_id').val(),
+                        'cart_item_id': item.ItemID,
                         'cart_customer_id': $('#customer_id').val(),
-                        'cart_item_name': $('#item_name').val(),
+                        'cart_item_name': item.ItemName,
                         'cart_item_quantity': 1,
-                        'cart_item_price': $('#cart_item_price').val(),
-                        'cart_item_color': $('#cart_item_color').val(),
-                        'cart_item_size': $('#cart_item_size').val(),
-                        'cart_item_currency': $('#cart_item_currency').val(),
-                        'cart_item_image': $('#cart_item_image').val(),
-                        'cart_item_data': $('#item_json').html(),
+                        'cart_item_color': item.ItemColor,
+                        'cart_item_size': $('#size_price').val(),
+                        'cart_item_currency': '$',
+                        'cart_item_image': item.ImageNameArray[0],
+                        'cart_item_data': $('#item_json').val(),
                         // 'cart_item_data': $('#cart_item_oak').val(),
                         'cart_item_eta': $('#cart_item_eta').val()
                     },
@@ -871,15 +871,162 @@
                         $('#add_to_cart').removeClass('btn-muted');
                     }
                 });
-            } else {
-                toastr.warning("Please enter a valid value", {
-                    hideDuration: 10000,
-                    closeButton: true,
-                });
-                $('#add_to_cart').removeClass('btn-muted');
-            }
+            // } else {
+            //     toastr.warning("Please enter a valid value", {
+            //         hideDuration: 10000,
+            //         closeButton: true,
+            //     });
+            //     $('#add_to_cart').removeClass('btn-muted');
+            // }
         }
 
+        //updated
+        function add_cut_pieces()
+        {
+            var itemId= $("#item_id").val();
+                let length = parseInt($("#Tlength").val())*12 +  parseInt($("#TlengthInch").val());
+                // let lengthInches =;
+                // totalLength = length + lengthInches;
+                console.log(length);
+                let width = parseInt($("#Twidth").val())*12 + parseInt($("#TwidthInch").val());
+                console.log(width);
+
+                let sqtft = length * width;
+                $.ajax({
+                    url: "{{route('broadloom.cutPiece')}}",
+                    method: 'POST',
+                    data: { '_token': '{{csrf_token()}}',
+                        'roll_id': $("#roll_id").val(),
+                        'tempsalesorderno': $("#TempSalesOrderNo").val(),
+                        'item_id': $("#item_id").val(),
+                        'cutpiece_id': $("#cutpiece_id").val(),
+                        'atslength': length,
+                        'totalwidth': width,
+                        'totalsqft': sqtft,
+                        'cuttype': $("#cuttype").val(),
+                        'locationid': $("#locationid").val(),
+                        'charges': $("#charges").val(),
+                        'desc': "",
+                        'waste': "N",
+                        'Remnant': "N",
+                        'AvailableForSale': "",
+                        'IsremnantShipable': "",
+                        'serging': "Y",
+                        'LineNo': "1",
+                        'UserRemarks': "Setting Data",
+                        'sergingtypeno': $("#sergingtypeno").val(),
+
+                    },
+                    success: function(data){
+                        if (data.cut_piece.OutPut.Success) {
+                            $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
+                            var divContent = '<input type="hidden" id="size_price" name="size_price" value=""></input<div>';
+                                var sizes = [];
+                            $.each(data['cut_piece']['OutPut']['AddCutPieces'], function(index, item) {
+
+                                let lengthFeet = Math.floor(item.ATSLength / 12);
+
+                                let lengthInches = item.ATSLength % 12;
+
+                                let widthFeet = Math.floor(item.ATSWidth / 12);
+
+                                let widthInches = item.ATSWidth % 12;
+
+                                console.log(lengthFeet + " ft " + lengthInches + " inches");
+                                console.log(widthFeet + " ft " + widthInches + " inches");
+
+                                var color = item.LengthStatus == 'F' ? 'Blue' : 'red';
+                                divContent += '<div class="badge badge-default broadloom-badge" style="background-color:'+ color+ '">';
+                                // divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"` + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
+                                var size = [];
+                                size['size'] = lengthFeet + `'`+ lengthInches +`" x ` + widthFeet + `'`+ widthInches + `"`;
+                                divContent += size['size'];
+                                divContent += '</div>';
+                               
+                                let totalLengthInInches = lengthFeet * 12 + lengthInches;
+                                let totalWidthInInches = widthFeet * 12 + widthInches;
+
+                                // Calculate total area in square inches
+                                let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
+
+                                // Convert square inches to square feet
+                                let totalAreaInSquareFeet = totalAreaInSquareInches / 144; // 1 square foot = 144 square inches
+
+                                // Convert square feet to square yards
+                                let totalAreaInSquareYards = totalAreaInSquareFeet / 9; // 1 square yard = 9 square feet
+
+                                // Calculate the SQ-YRD Price ($) and EXT Price ($)
+                                let sqYrdPrice =  $("#sq-ft").val() / 9; // Price per square yard
+                                let extPrice = totalAreaInSquareYards * sqYrdPrice;
+                                size['price'] = extPrice.toFixed(2);
+                               
+                                if ( item.LengthStatus == 'F' )
+                                {
+                                    console.log('in size');
+                                    sizes.push(size); 
+                                }
+                                
+                            });
+                            divContent += `</div>`;
+                            console.log(sizes);   
+
+                            $('#cut_piece_parent').html(divContent);
+                            $('#size_price').data('myArray', sizes);
+                            
+                            item_object.CutPieces = data['cut_piece']['OutPut']['AddCutPieces'];
+                            $('#cut_pieces_json').val(JSON.stringify(data['cut_piece']['OutPut']['AddCutPieces']));
+                            $('#item_json').val(JSON.stringify(item_object));
+                            toastr.success(data.cut_piece.OutPut.Message, {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                        } else {
+                            toastr.error(data.cut_piece.OutPut.Message, {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error occurred:", status, error);
+                    }
+                });
+        }
+        
+        //updated
+        function updatePrices() {
+            // Assuming perSquareFeetPrice is the price per square foot
+            let perSquareFeetPrice =  $("#sq-ft").val(); // Example value
+
+            // Retrieve length and width in feet and inches
+            let lengthFeet = parseInt($("#Tlength").val());
+            let lengthInches = parseInt($("#TlengthInch").val());
+            let widthFeet = parseInt($("#Twidth").val());
+            let widthInches = parseInt($("#TwidthInch").val());
+
+            // Convert length and width to total inches
+            let totalLengthInInches = lengthFeet * 12 + lengthInches;
+            let totalWidthInInches = widthFeet * 12 + widthInches;
+
+            // Calculate total area in square inches
+            let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
+
+            // Convert square inches to square feet
+            let totalAreaInSquareFeet = totalAreaInSquareInches / 144; // 1 square foot = 144 square inches
+
+            // Convert square feet to square yards
+            let totalAreaInSquareYards = totalAreaInSquareFeet / 9; // 1 square yard = 9 square feet
+
+            // Calculate the SQ-YRD Price ($) and EXT Price ($)
+            let sqYrdPrice = perSquareFeetPrice / 9; // Price per square yard
+            let extPrice = totalAreaInSquareYards * sqYrdPrice;
+
+            // Update the SQ-YRD Price ($) and EXT Price ($) fields
+            $("#sq-yrd").val(sqYrdPrice.toFixed(2)); // Set SQ-YRD Price with two decimal places
+            $("#sq-ext").val(extPrice.toFixed(2)); // Set EXT Price with two decimal places
+        }
+
+        //updated
         function bindClicks() {
             console.log("test");
             $('#add_to_cart')
@@ -909,42 +1056,23 @@
                 updatePrices();
             });
 
+            $('#surging_check').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#surging_options').prop('disabled', false);
+                } else {
+                    $('#surging_options').prop('disabled', true);
+                    $('#surging_options').val($('#surging_options').val());
+                    $('#surging_charges').val("");
+                }
+            });
+
+            $('#cut_piece_btn').click(function(){
+               add_cut_pieces();
+            });
         }
 
-        function updatePrices() {
-        // Assuming perSquareFeetPrice is the price per square foot
-        let perSquareFeetPrice =  $("#sq-ft").val();; // Example value
-
-        // Retrieve length and width in feet and inches
-        let lengthFeet = parseInt($("#Tlength").val());
-        let lengthInches = parseInt($("#TlengthInch").val());
-        let widthFeet = parseInt($("#Twidth").val());
-        let widthInches = parseInt($("#TwidthInch").val());
-
-        // Convert length and width to total inches
-        let totalLengthInInches = lengthFeet * 12 + lengthInches;
-        let totalWidthInInches = widthFeet * 12 + widthInches;
-
-        // Calculate total area in square inches
-        let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
-
-        // Convert square inches to square feet
-        let totalAreaInSquareFeet = totalAreaInSquareInches / 144; // 1 square foot = 144 square inches
-
-        // Convert square feet to square yards
-        let totalAreaInSquareYards = totalAreaInSquareFeet / 9; // 1 square yard = 9 square feet
-
-        // Calculate the SQ-YRD Price ($) and EXT Price ($)
-        let sqYrdPrice = perSquareFeetPrice / 9; // Price per square yard
-        let extPrice = totalAreaInSquareYards * sqYrdPrice;
-
-        // Update the SQ-YRD Price ($) and EXT Price ($) fields
-        $("#sq-yrd").val(sqYrdPrice.toFixed(2)); // Set SQ-YRD Price with two decimal places
-        $("#sq-ext").val(extPrice.toFixed(2)); // Set EXT Price with two decimal places
-    }
-
         $(document).ready(function () {
-            // console.log({{ $cust_id }});
+            item_object = JSON.parse($('#item_json').val());
 
             $('#surging_options').change(function() {
                 var selectedOption = $(this).find('option:selected');
@@ -1006,98 +1134,6 @@
                 $('#cuttype').val(selectedOption.attr('cutType'));
                 $('#locationid').val(selectedOption.attr('location'));
 
-            });
-
-            var defaultOption2 = $('#surging_options').val();
-            $('#surging_check').change(function() {
-                if ($(this).is(':checked')) {
-                    $('#surging_options').prop('disabled', false);
-                } else {
-                    $('#surging_options').prop('disabled', true);
-                    $('#surging_options').val(defaultOption);
-                    $('#surging_charges').val("");
-                }
-            });
-
-       
-            $('#cut_piece_btn').click(function(){
-                var itemId= $("#item_id").val();
-                let length = parseInt($("#Tlength").val())*12 +  parseInt($("#TlengthInch").val());
-                // let lengthInches =;
-                // totalLength = length + lengthInches;
-                console.log(length);
-                let width = parseInt($("#Twidth").val())*12 + parseInt($("#TwidthInch").val());
-                console.log(width);
-
-                let sqtft = length * width;
-                $.ajax({
-                    url: "{{route('broadloom.cutPiece')}}",
-                    method: 'POST',
-                    data: { '_token': '{{csrf_token()}}',
-                        'roll_id': $("#roll_id").val(),
-                        'tempsalesorderno': $("#TempSalesOrderNo").val(),
-                        'item_id': $("#item_id").val(),
-                        'cutpiece_id': $("#cutpiece_id").val(),
-                        'atslength': length,
-                        'totalwidth': width,
-                        'totalsqft': sqtft,
-                        'cuttype': $("#cuttype").val(),
-                        'locationid': $("#locationid").val(),
-                        'charges': $("#charges").val(),
-                        'desc': "",
-                        'waste': "N",
-                        'Remnant': "N",
-                        'AvailableForSale': "",
-                        'IsremnantShipable': "",
-                        'serging': "Y",
-                        'LineNo': "1",
-                        'UserRemarks': "Setting Data",
-                        'sergingtypeno': $("#sergingtypeno").val(),
-
-                    },
-                    success: function(data){
-                        if (data.cut_piece.OutPut.Success) {
-                            $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
-                            var divContent = '<div>';
-                            $.each(data['cut_piece']['OutPut']['AddCutPieces'], function(index, item) {
-
-                                let lengthfeet = Math.floor(item.ATSLength / 12);
-
-                                let lengthinches = item.ATSLength % 12;
-
-                                let widthfeet = Math.floor(item.ATSWidth / 12);
-
-                                let widthinches = item.ATSWidth % 12;
-
-                                console.log(lengthfeet + " ft " + lengthinches + " inches");
-                                console.log(widthfeet + " ft " + widthinches + " inches");
-
-                                var color = item.LengthStatus == 'F' ? 'Blue' : 'red';
-                                divContent += '<div class="badge badge-default broadloom-badge" style="background-color:'+ color+ '">';
-                                // divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"` + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
-                                divContent += lengthfeet + `'`+ lengthinches +`" x ` + widthfeet + `'`+ widthinches + `"`;
-                                divContent += '</div>';
-
-                                console.log(divContent);
-                            });
-                            divContent += '</div>';
-                            $('#cut_piece_parent').html(divContent);
-
-                            toastr.success(data.cut_piece.OutPut.Message, {
-                                hideDuration: 10000,
-                                closeButton: true,
-                            });
-                        } else {
-                            toastr.error(data.cut_piece.OutPut.Message, {
-                                hideDuration: 10000,
-                                closeButton: true,
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error occurred:", status, error);
-                    }
-                });
             });
 
             
