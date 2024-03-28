@@ -54,6 +54,7 @@ use App\Http\Controllers\CommonController;
                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 my-5">
                             <div class="product-details-content ">
                                 <input type="hidden" id="cart_item_id" name="cart_item_id" value="">
+                                <input type="hidden" id="color_id" name="color-id" value="">
                                 <input type="hidden" id="cart_customer_id" name="cart_customer_id" value="">
                                 <input type="hidden" id="cart_item_name" name="cart_item_name" value="">
                                 <input type="hidden" id="cart_item_quantity" name="cart_item_quantity" value="">
@@ -923,6 +924,10 @@ use App\Http\Controllers\CommonController;
         $("#item_color input[name='color']")
             .off('click')
             .on('click', function() {
+                var colorValue = $(this).val();
+                var labelColor = $(this).closest('div').find('label[for="' + $(this).attr('id') + '"]').data('color');
+                // console.log("Label data-color attribute: " + labelColor);
+                $("#color_id").val(labelColor);
                 refresh_product($(this).val());
                 $('#color_name').html(`: ${$("#item_color input[name='color']:checked").text().trim()}`);
                 getSizes($("#item_variant input:radio[name='variant']:checked").text().trim(), $("#item_color input[name='color']:checked").text().trim(), $(this).val());
@@ -992,8 +997,9 @@ use App\Http\Controllers\CommonController;
             var selectedId = $(this).closest('input').attr('id');
             console.log("Selected ID:", selectedId);
             $('#customer-id').val(selectedId);
-            var href = "{{ route('broadloom.cart', ['id' => $items['Items'][0]['ItemID'], 'cust_id']) }}";
+            var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id','color_id']) }}";
             href = href.replace('cust_id', selectedId);
+            href = href.replace('color_id', $('#color_id').val());
             $('#add_cart').attr('href', href);
         }
     });

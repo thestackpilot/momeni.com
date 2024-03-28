@@ -4,7 +4,7 @@
 
     use App\Http\Controllers\ConstantsController;
     use App\Http\Controllers\CommonController;
-
+   
 @endphp
 
 @section('title', 'Item Detail Page' )
@@ -15,8 +15,11 @@
         @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
         <main class="main-content">
             @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs')
-            {{-- <div class="d-none" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}"></div> --}}
-            <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}">
+            <input type="hidden" id="customer_id" value="{{$customer_id}}"></input>
+            <input type="hidden" id="item_json" value="{{$item_json}}"></input>
+            <input type="hidden" name="" id="item_id" value="{{$item['ItemID']}}">
+            <input type="hidden" name="" id="cut_pieces_json" value="">
+            {{-- <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemName']}}"> --}}
             <input type="hidden" name="" id="roll_id" value="">
             <input type="hidden" name="" id="cutpiece_id" value="">
             <input type="hidden" name="" id="atslength" value="">
@@ -28,6 +31,16 @@
             <input type="hidden" name="" id="charges" value="">
             <input type="hidden" name="" id="desc" value="">
             <input type="hidden" name="" id="TempSalesOrderNo" value="">
+            <input type="hidden" id="cart_item_id" name="cart_item_id" value="">
+            <input type="hidden" id="cart_item_name" name="cart_item_name" value="">
+            <input type="hidden" id="cart_item_quantity" name="cart_item_quantity" value="">
+            <input type="hidden" id="cart_item_price" name="cart_item_price" value="">
+            <input type="hidden" id="cart_item_color" name="cart_item_color" value="">
+            <input type="hidden" id="cart_item_size" name="cart_item_size" value="">
+            <input type="hidden" id="cart_item_currency" name="cart_item_currency" value="">
+            <input type="hidden" id="cart_item_image" name="cart_item_image" value="">
+            <input type="hidden" id="cart_item_eta" name="cart_item_eta" value="">
+            {{-- <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}"> --}}
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
                     <h3>DIA-B Black</h3>
@@ -37,7 +50,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="broadloom-hearder"
-                                            style="background-image: url('{{ asset("/MOM/images/landing-img/rug/3.png") }}')"></div>
+                                            style="background-image: url('{{ $item['ImageNameArray'][0] }}')"></div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -68,7 +81,7 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control Twidth" id="inlineFormInputGroup" placeholder="">
+                                                                    <input type="number" class="form-control Tlength" id="Tlength" placeholder="">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">Ft</div>
                                                                     </div>
@@ -76,20 +89,21 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <select name="" id=""
+                                                                    <select name="" id="TlengthInch"
                                                                             class="form-control">
-                                                                        <option value="">1</option>
-                                                                        <option value="">2</option>
-                                                                        <option value="">3</option>
-                                                                        <option value="">4</option>
-                                                                        <option value="">5</option>
-                                                                        <option value="">6</option>
-                                                                        <option value="">7</option>
-                                                                        <option value="">8</option>
-                                                                        <option value="">9</option>
-                                                                        <option value="">10</option>
-                                                                        <option value="">11</option>
-                                                                        <option value="">12</option>
+                                                                        <option value="0">0</option>
+                                                                        <option value="1">1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                        <option value="6">6</option>
+                                                                        <option value="7">7</option>
+                                                                        <option value="8">8</option>
+                                                                        <option value="9">9</option>
+                                                                        <option value="10">10</option>
+                                                                        <option value="11">11</option>
+                                                                        <option value="12">12</option>
                                                                     </select>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">In</div>
@@ -105,7 +119,7 @@
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <input type="text" class="form-control Tlength" id="inlineFormInputGroup" placeholder="">
+                                                                    <input type="number" class="form-control Twidth" id="Twidth" placeholder="">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">Ft</div>
                                                                     </div>
@@ -113,20 +127,21 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="input-group">
-                                                                    <select name="" id=""
+                                                                    <select name="" id="TwidthInch"
                                                                             class="form-control">
-                                                                        <option value="">1</option>
-                                                                        <option value="">2</option>
-                                                                        <option value="">3</option>
-                                                                        <option value="">4</option>
-                                                                        <option value="">5</option>
-                                                                        <option value="">6</option>
-                                                                        <option value="">7</option>
-                                                                        <option value="">8</option>
-                                                                        <option value="">9</option>
-                                                                        <option value="">10</option>
-                                                                        <option value="">11</option>
-                                                                        <option value="">12</option>
+                                                                            <option value="0">0</option>
+                                                                            <option value="1">1</option>
+                                                                            <option value="2">2</option>
+                                                                            <option value="3">3</option>
+                                                                            <option value="4">4</option>
+                                                                            <option value="5">5</option>
+                                                                            <option value="6">6</option>
+                                                                            <option value="7">7</option>
+                                                                            <option value="8">8</option>
+                                                                            <option value="9">9</option>
+                                                                            <option value="10">10</option>
+                                                                            <option value="11">11</option>
+                                                                            <option value="12">12</option>
                                                                     </select>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">In</div>
@@ -177,11 +192,7 @@
                                                         <textarea name="" id="" class="form-control" rows="5"></textarea>
                                                     </div>
                                                 </div>
-                                                <div class="col-12">
-                                                    <div class="badge badge-primary broadloom-badge" id="cut_pieces" >
-                                                        10' - 0" x 10' - 0"
-                                                        <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
-                                                    </div>
+                                                <div class="col-12" id="cut_piece_parent">
                                                     {{-- <div class="badge badge-primary broadloom-badge">
                                                         10' - 0" x 10' - 0"
                                                         <a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>
@@ -231,9 +242,9 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 mt-5 text-center">
-                                        <button class="show-piece-btn broadloom-btns" >Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="show-piece-btn broadloom-btns" id="cut_piece_btn" >Add Cut Piece <i class="fa fa-long-arrow-right"></i></button>
-                                        <button class="add-to-cart-broadloom-btn broadloom-btns">Add to Cart <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="show-piece-btn broadloom-btns" >Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">Add to Cart <i class="fa fa-long-arrow-right"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -443,7 +454,6 @@
         }
 
         function init() {
-            item_object = JSON.parse($('#item_json').html());
             var counter = 0;
             console.log("item_object: ", item_object);
             $('#item_variant').html('');
@@ -800,23 +810,23 @@
         function pushToCart() {
             $('#add_to_cart').addClass('btn-muted');
             $('#cart_item_quantity').val($('#item_qty').val());
-            console.log("cart_customer_id: ", $('#cart_customer_id').val());
-            if ((/^\+?[1-9]\d*/).test(parseInt($('#item_qty').val()))) {
+            item = JSON.parse($('#item_json').val());
+            console.log("item_json: ",$('input[name=size_price]').html() );
+            
                 $.ajax({
                     method: 'POST',
                     url: '{{route("frontend.cart.add")}}',
                     data: {
                         '_token': '{{csrf_token()}}',
-                        'cart_item_id': $('#cart_item_id').val(),
-                        'cart_customer_id': $('#cart_customer_id').val(),
-                        'cart_item_name': $('#cart_item_name').val(),
-                        'cart_item_quantity': $('#cart_item_quantity').val(),
-                        'cart_item_price': $('#cart_item_price').val(),
-                        'cart_item_color': $('#cart_item_color').val(),
-                        'cart_item_size': $('#cart_item_size').val(),
-                        'cart_item_currency': $('#cart_item_currency').val(),
-                        'cart_item_image': $('#cart_item_image').val(),
-                        'cart_item_data': $('#item_json').html(),
+                        'cart_item_id': item.ItemID,
+                        'cart_customer_id': $('#customer_id').val(),
+                        'cart_item_name': item.ItemName,
+                        'cart_item_quantity': 1,
+                        'cart_item_color': item.ItemColor,
+                        'cart_item_size': $('#size_price').val(),
+                        'cart_item_currency': '$',
+                        'cart_item_image': item.ImageNameArray[0],
+                        'cart_item_data': $('#item_json').val(),
                         // 'cart_item_data': $('#cart_item_oak').val(),
                         'cart_item_eta': $('#cart_item_eta').val()
                     },
@@ -861,166 +871,38 @@
                         $('#add_to_cart').removeClass('btn-muted');
                     }
                 });
-            } else {
-                toastr.warning("Please enter a valid value", {
-                    hideDuration: 10000,
-                    closeButton: true,
-                });
-                $('#add_to_cart').removeClass('btn-muted');
-            }
+            // } else {
+            //     toastr.warning("Please enter a valid value", {
+            //         hideDuration: 10000,
+            //         closeButton: true,
+            //     });
+            //     $('#add_to_cart').removeClass('btn-muted');
+            // }
         }
 
-        function bindClicks() {
+        //updated
+        function add_cut_pieces()
+        {
+            var itemId= $("#item_id").val();
+                let length = parseInt($("#Tlength").val())*12 +  parseInt($("#TlengthInch").val());
+                // let lengthInches =;
+                // totalLength = length + lengthInches;
+                console.log(length);
+                let width = parseInt($("#Twidth").val())*12 + parseInt($("#TwidthInch").val());
+                console.log(width);
 
-            $("#item_variant input[name='variant']")
-                .off('click')
-                .on('click', function () {
-                    refresh_product($(this).val());
-                    getColors($("#item_variant input[name='variant']:checked").text().trim());
-                });
-
-            $("#item_color input[name='color']")
-                .off('click')
-                .on('click', function () {
-                    refresh_product($(this).val());
-                    $('#color_name').html(`: ${$("#item_color input[name='color']:checked").text().trim()}`);
-                    getSizes($("#item_variant input:radio[name='variant']:checked").text().trim(), $("#item_color input[name='color']:checked").text().trim(), $(this).val());
-                });
-
-            $("#item_size input[name='size']")
-                .off('click')
-                .on('click', function () {
-                    refresh_product($(this).val());
-                    $(this).attr('checked', true);
-                    $('#size_name').html(`: ${$("#item_size input[name='size']:checked").text().trim()}`);
-                    if (typeof $('#item_cover_parent').length !== "undefined" && $('#item_cover_parent').length) {
-                        refresh_product($(this).val());
-                        getCovers($(this));
-                    } else {
-                        pupolateDimensions($(this).parent('#item_size_parent'), $(this).val());
-                        getQuantity($(this).val());
-                    }
-                });
-
-            $("#item_cover input[name='cover']")
-                .off('click')
-                .on('click', function () {
-                    $(this).attr('checked', true);
-                    $('#cover_name').html(`: ${$("#item_cover input[name='cover']:checked").text().trim()}`);
-                    getQuantity($(this).val());
-                });
-
-            $("#item_customer input[name='customer']")
-                .off('click')
-                .on('click', function () {
-                    var split_arr = $(this).val().split(' :: ');
-                    var item_id = split_arr[0].trim();
-                    refresh_product(item_id);
-                    customerID = $(this).val();
-                    getCartReady($(this).val());
-                });
-
-            if (customerID.length == 0) $('#add_to_cart').attr('disabled', true);
-
-            $('#add_to_cart')
-                .off('click')
-                .on('click', function (e) {
-                    if (
-                        $('input[name="sale_rep"]').val() == 1 &&
-                        customerID.length == 0
-                    )
-                        toastr.warning('Please select a customer...', {
-                            hideDuration: 10000,
-                            closeButton: true,
-                        });
-                    else
-                        pushToCart();
-                });
-        }
-
-        $(document).ready(function () {
-            hide_components(['#qty_msg', '.postfix', '#item_variant_parent', '#item_color_parent', '#item_size_parent', '#qty-main', '#cart_main h3']);
-
-            $('.qty-add').on('click', function () {
-                var value = $('input[type="number"]', $(this).parent()).val();
-                $('input[type="number"]', $(this).parent()).val((parseInt(value) + 1) < 1001 ? parseInt(value) + 1 : 1000).change();
-            });
-
-            $('.qty-minus').on('click', function () {
-                var value = $('input[type="number"]', $(this).parent()).val();
-                $('input[type="number"]', $(this).parent()).val((parseInt(value) - 1) > 0 ? parseInt(value) - 1 : 0).change();
-            });
-
-            $('#surging_options').change(function() {
-                var selectedOption = $(this).find('option:selected');
-                var charges = selectedOption.attr('charges');
-                console.log('Charges:', charges);
-                // console.log('itemid:', $('#item_id').val());
-                $('#surging_charges').val(charges);
-                $('#charges').val(charges);
-                $('#sergingtypeno').val(selectedOption.attr('value'));
-                $('#desc').val(selectedOption.attr('desc'));
-            });
-
-            var defaultOption1 = $('#roll_pieces').val();
-            $('#roll_pieces').change(function() {
-                $.ajax({
-                    method: 'POST',
-                    url: '{{route("frontend.item.ats")}}',
-                    data: {
-                        '_token': '{{csrf_token()}}',
-                        'item_id': $("#item_id").val(),
-                        'customer_id': {{$cust_id}}
-                    },
-                    success: function (response) {
-                        console.log(response.data['Price']);
-                        $("#sq-ft").val(response.data['Price']);
-                        $("#sq-yrd").val(response.data['Price']);
-                        $("#sq-ext").val(response.data['Price']);
-                    },
-                    error: function (response) {
-                        console.log(response);
-                    }
-                });
-                var selectedOption = $(this).find('option:selected');
-                var width = selectedOption.attr('width');
-                var length = selectedOption.attr('length');
-                $('.Twidth').val(width);
-                $('.Tlength').val(length);
-                $('#roll_id').val(selectedOption.attr('value'));
-                $('#cutpiece_id').val(selectedOption.attr('cutpieceID'));
-                $('#atslength').val(selectedOption.attr('length'));
-                $('#totalwidth').val(selectedOption.attr('width'));
-                $('#totalsqft').val(selectedOption.attr('SQFT'));
-                $('#cuttype').val(selectedOption.attr('cutType'));
-                $('#locationid').val(selectedOption.attr('location'));
-
-            });
-
-            var defaultOption2 = $('#surging_options').val();
-            $('#surging_check').change(function() {
-                if ($(this).is(':checked')) {
-                    $('#surging_options').prop('disabled', false);
-                } else {
-                    $('#surging_options').prop('disabled', true);
-                    $('#surging_options').val(defaultOption);
-                    $('#surging_charges').val("");
-                }
-            });
-
-            $('#cut_piece_btn').click(function(){
-                var itemId= $("#item_id").val();
+                let sqtft = length * width;
                 $.ajax({
                     url: "{{route('broadloom.cutPiece')}}",
-                    method: 'GET',
+                    method: 'POST',
                     data: { '_token': '{{csrf_token()}}',
                         'roll_id': $("#roll_id").val(),
                         'tempsalesorderno': $("#TempSalesOrderNo").val(),
                         'item_id': $("#item_id").val(),
                         'cutpiece_id': $("#cutpiece_id").val(),
-                        'atslength': $("#atslength").val(),
-                        'totalwidth': $("#totalwidth").val(),
-                        'totalsqft': $("#totalsqft").val(),
+                        'atslength': length,
+                        'totalwidth': width,
+                        'totalsqft': sqtft,
                         'cuttype': $("#cuttype").val(),
                         'locationid': $("#locationid").val(),
                         'charges': $("#charges").val(),
@@ -1036,50 +918,228 @@
 
                     },
                     success: function(data){
-                        console.log("helloo");
-                        console.log(data);
-                        // $.each(data, function(index, item) {
-                        //     var divContent = '<div class="badge badge-primary broadloom-badge" id="cut_pieces">';
-                        //     divContent += item.dimensions + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
-                        //     divContent += '</div>';
-                        //     $('#cut_piece_parent').append(divContent);
-                        // });
+                        if (data.cut_piece.OutPut.Success) {
+                            $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
+                            var divContent = '<input type="hidden" id="size_price" name="size_price" value=""></input<div>';
+                                var sizes = [];
+                            $.each(data['cut_piece']['OutPut']['AddCutPieces'], function(index, item) {
+
+                                let lengthFeet = Math.floor(item.ATSLength / 12);
+
+                                let lengthInches = item.ATSLength % 12;
+
+                                let widthFeet = Math.floor(item.ATSWidth / 12);
+
+                                let widthInches = item.ATSWidth % 12;
+
+                                console.log(lengthFeet + " ft " + lengthInches + " inches");
+                                console.log(widthFeet + " ft " + widthInches + " inches");
+
+                                var color = item.LengthStatus == 'F' ? 'Blue' : 'red';
+                                divContent += '<div class="badge badge-default broadloom-badge" style="background-color:'+ color+ '">';
+                                // divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"` + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
+                                var size = [];
+                                size['size'] = lengthFeet + `'`+ lengthInches +`" x ` + widthFeet + `'`+ widthInches + `"`;
+                                divContent += size['size'];
+                                divContent += '</div>';
+                               
+                                let totalLengthInInches = lengthFeet * 12 + lengthInches;
+                                let totalWidthInInches = widthFeet * 12 + widthInches;
+
+                                // Calculate total area in square inches
+                                let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
+
+                                // Convert square inches to square feet
+                                let totalAreaInSquareFeet = totalAreaInSquareInches / 144; // 1 square foot = 144 square inches
+
+                                // Convert square feet to square yards
+                                let totalAreaInSquareYards = totalAreaInSquareFeet / 9; // 1 square yard = 9 square feet
+
+                                // Calculate the SQ-YRD Price ($) and EXT Price ($)
+                                let sqYrdPrice =  $("#sq-ft").val() / 9; // Price per square yard
+                                let extPrice = totalAreaInSquareYards * sqYrdPrice;
+                                size['price'] = extPrice.toFixed(2);
+                               
+                                if ( item.LengthStatus == 'F' )
+                                {
+                                    console.log('in size');
+                                    sizes.push(size); 
+                                }
+                                
+                            });
+                            divContent += `</div>`;
+                            console.log(sizes);   
+
+                            $('#cut_piece_parent').html(divContent);
+                            $('#size_price').data('myArray', sizes);
+                            
+                            item_object.CutPieces = data['cut_piece']['OutPut']['AddCutPieces'];
+                            $('#cut_pieces_json').val(JSON.stringify(data['cut_piece']['OutPut']['AddCutPieces']));
+                            $('#item_json').val(JSON.stringify(item_object));
+                            toastr.success(data.cut_piece.OutPut.Message, {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                        } else {
+                            toastr.error(data.cut_piece.OutPut.Message, {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.error("Error occurred:", status, error);
                     }
                 });
+        }
+        
+        //updated
+        function updatePrices() {
+            // Assuming perSquareFeetPrice is the price per square foot
+            let perSquareFeetPrice =  $("#sq-ft").val(); // Example value
+
+            // Retrieve length and width in feet and inches
+            let lengthFeet = parseInt($("#Tlength").val());
+            let lengthInches = parseInt($("#TlengthInch").val());
+            let widthFeet = parseInt($("#Twidth").val());
+            let widthInches = parseInt($("#TwidthInch").val());
+
+            // Convert length and width to total inches
+            let totalLengthInInches = lengthFeet * 12 + lengthInches;
+            let totalWidthInInches = widthFeet * 12 + widthInches;
+
+            // Calculate total area in square inches
+            let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
+
+            // Convert square inches to square feet
+            let totalAreaInSquareFeet = totalAreaInSquareInches / 144; // 1 square foot = 144 square inches
+
+            // Convert square feet to square yards
+            let totalAreaInSquareYards = totalAreaInSquareFeet / 9; // 1 square yard = 9 square feet
+
+            // Calculate the SQ-YRD Price ($) and EXT Price ($)
+            let sqYrdPrice = perSquareFeetPrice / 9; // Price per square yard
+            let extPrice = totalAreaInSquareYards * sqYrdPrice;
+
+            // Update the SQ-YRD Price ($) and EXT Price ($) fields
+            $("#sq-yrd").val(sqYrdPrice.toFixed(2)); // Set SQ-YRD Price with two decimal places
+            $("#sq-ext").val(extPrice.toFixed(2)); // Set EXT Price with two decimal places
+        }
+
+        //updated
+        function bindClicks() {
+            console.log("test");
+            $('#add_to_cart')
+                .off('click')
+                .on('click', function (e) {
+                    console.log("in cart");
+                    if (
+                        $('input[name="sale_rep"]').val() == 1 &&
+                        customerID.length == 0
+                    )
+                        toastr.warning('Please select a customer...', {
+                            hideDuration: 10000,
+                            closeButton: true,
+                        });
+                    else
+                    console.log("push");
+                        pushToCart();
+                });
+
+                $(".Tlength,  .Twidth").on("input", function() {
+                console.log("in condition");
+                updatePrices();
+            });
+            
+            $("#TlengthInch, #TwidthInch").on("change", function() {
+                console.log("in condition");
+                updatePrices();
             });
 
-            $('.product-slider-active').slick({
-                dots: false,
-                infinite: true,
-                slidesToShow: 5,
-                slidesToScroll: 1,
-                autoplay: false,
-                prevArrow: '<i class="icon-arrow-left arrow-prv"></i>',
-                nextArrow: '<i class="icon-arrow-right arrow-next"></i>',
-                responsive: [{
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 3,
-                    }
-                }, {
-                    breakpoint: 762,
-                    settings: {
-                        slidesToShow: 2,
-                    }
-                }, {
-                    breakpoint: 576,
-                    settings: {
-                        slidesToShow: 1,
-                    }
-                }]
+            $('#surging_check').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#surging_options').prop('disabled', false);
+                } else {
+                    $('#surging_options').prop('disabled', true);
+                    $('#surging_options').val($('#surging_options').val());
+                    $('#surging_charges').val("");
+                }
             });
 
-            init();
+            $('#cut_piece_btn').click(function(){
+               add_cut_pieces();
+            });
+        }
+
+        $(document).ready(function () {
+            item_object = JSON.parse($('#item_json').val());
+
+            $('#surging_options').change(function() {
+                var selectedOption = $(this).find('option:selected');
+                var charges = selectedOption.attr('charges');
+                console.log('Charges:', charges);
+                // console.log('itemid:', $('#item_id').val());
+                $('#surging_charges').val(charges);
+                $('#charges').val(charges);
+                $('#sergingtypeno').val(selectedOption.attr('value'));
+                $('#desc').val(selectedOption.attr('desc'));
+            });
+
+            var defaultOption1 = $('#roll_pieces').val();
+            $('#roll_pieces').change(function() {
+                // console.log($('#customer_id').val());
+                $.ajax({
+                    method: 'POST',
+                    url: '{{route("frontend.item.ats")}}',
+                    data: {
+                        '_token': '{{csrf_token()}}',
+                        'item_id': $("#item_id").val(),
+                        'customer_id': $('#customer_id').val()
+                    },
+                    success: function (response) {
+                        console.log(response.data['Price']);
+                        $("#sq-ft").val(response.data['Price']);
+                        updatePrices();
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+                var selectedOption = $(this).find('option:selected');
+                var width = selectedOption.attr('width');
+                var length = selectedOption.attr('length');
+                console.log(width)
+                console.log(length)
+                let lengthfeet = Math.floor(length / 12);
+
+                let lengthinches = length % 12;
+
+                let widthfeet = Math.floor(width / 12);
+
+                let widthinches = width % 12;
+
+
+                $('.Twidth').val(widthfeet);
+                $('.Tlength').val(lengthfeet);
+                $('#TlengthInch').val(lengthinches);
+                $('#TwidthInch').val(widthinches);
+                $('.Tlength').val(lengthfeet);
+                $('.Twidth').attr('max', widthfeet);
+                $('.Tlength').attr('max', lengthfeet);
+                $('#roll_id').val(selectedOption.attr('value'));
+                $('#cutpiece_id').val(selectedOption.attr('cutpieceID'));
+                $('#atslength').val(selectedOption.attr('length'));
+                $('#totalwidth').val(selectedOption.attr('width'));
+                $('#totalsqft').val(selectedOption.attr('SQFT'));
+                $('#cuttype').val(selectedOption.attr('cutType'));
+                $('#locationid').val(selectedOption.attr('location'));
+
+            });
+
+            
+            // init();
             bindClicks();
-            init_sliders();
+            // init_sliders();
 
             // $('.owl-carousel').owlCarousel(
             // {

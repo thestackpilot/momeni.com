@@ -54,7 +54,7 @@ use App\Http\Controllers\CommonController;
                                 <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}">
 
                                 <h3 class="price {{isset($is_oak) && $is_oak ? 'd-none' : ''}}" id="product-heading">{{$items['Items'][0]['ItemName']}}<b>{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
-                                
+
                                 <div class="quickview-peragraph">
                                     <h3 class="detiel-heading"> Description</h3>
                                     <p id="product-description">{!! trim($items['Items'][0]['ProductDescription']) == '' || strtolower(trim($items['Items'][0]['ProductDescription'])) == 'not available' ? '' : $items['Items'][0]['ProductDescription'] !!}</p>
@@ -62,8 +62,8 @@ use App\Http\Controllers\CommonController;
                                     <table class="table my-table" id="item-udf-fields">
                                         @foreach($items['Items'][0]['UDFFields'] as $field)
                                         @if (
-                                            $field['FieldName'] == 'Color' || 
-                                            $field['FieldName'] == 'Size' || 
+                                            $field['FieldName'] == 'Color' ||
+                                            $field['FieldName'] == 'Size' ||
                                             $field['Value'] == '-' ||
                                             $field['Value'] == 'N/A' ||
                                             !strlen($field['Value'])
@@ -77,7 +77,7 @@ use App\Http\Controllers\CommonController;
                                         @endforeach
                                     </table>
                                 </div>
-                                
+
                                 <div class="section over-hide z-bigger" id="item_variant_parent">
                                     <h3 class="detiel-heading">Collection</h3>
                                     <div id="item_variant" class="d-flex flex-wrap justify-flex justify-content-start flex-row variant-details">
@@ -186,7 +186,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
 
                                 @endif
-                                
+
                             </div>
                         </div>
                     </div>
@@ -208,7 +208,7 @@ use App\Http\Controllers\CommonController;
                                                     <td width="15%" align="center" class="PAChart-Within30Days PAChart-text-Heading">Within30 Days</td>
                                                     <td width="15%" align="center" class="PAChart-Within2Months PAChart-text-Heading">Within 2 Months</td>
                                                     <td width="15%" align="center" class="PAChart-Over2Months PAChart-text-Heading">Over 2 Months</td>
-                                                    @if (!in_array('.PAChart-Price', $dont_show))
+                                                    @if (!empty($dont_show) && !in_array('.PAChart-Price', $dont_show))
                                                         <td width="15%" align="center" class="PAChart-Price PAChart-text-Heading">Price</td>
                                                     @endif
                                                 </tr>
@@ -219,7 +219,7 @@ use App\Http\Controllers\CommonController;
                                                         <td width="15%" align="center" class="PAChart-Within30Days PAChart-text-Within30Days"> {{ $itemETA['QtyThirtyDay'] }}</td>
                                                         <td width="15%" align="center" class="PAChart-Within2Months"> {{ $itemETA['QtyTwoMonth'] }}</td>
                                                         <td width="15%" align="center" class="PAChart-Over2Months"> {{ $itemETA['QtyOverTwoMonth'] }}</td>
-                                                        @if (!in_array('.PAChart-Price', $dont_show))
+                                                        @if (!empty($dont_show) && !in_array('.PAChart-Price', $dont_show))
                                                             <td width="15%" align="center" class="PAChart-Price">
                                                                 {{ ConstantsController::CURRENCY . number_format($itemETA['BasePrice'], ConstantsController::ALLOWED_DECIMALS, '.', '') }}
                                                             </td>
@@ -625,7 +625,7 @@ use App\Http\Controllers\CommonController;
                 if (item.UserCustomerInfo.IsSaleRep == 1) {
                     getCustomers(item);
                     var customer_id = item.UserCustomerInfo.CustomerSet ? item.UserCustomerInfo.CustomerSet : '';
-                  
+
                     // $('#item_customer input[name=customer]').prop('disabled', 'disabled');
                     $('#qty-main, .base_price').addClass('muted');
                     $('#qty_msg').css('opacity', '0.4');
@@ -1046,7 +1046,7 @@ use App\Http\Controllers\CommonController;
         //         }
         //     }
         // });
-        
+
     });
 </script>
 @endsection

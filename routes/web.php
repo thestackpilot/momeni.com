@@ -64,11 +64,11 @@ Route::post( '/designs/{id}/{filter}/{type}/{page}', [DesignController::class, '
 Route::post( '/designs/{id}/{filter}/{type}/{with_title}/{page}', [DesignController::class, 'get_paginated_designs'] )->name( 'frontend.designs_page' );
 //Item Routes
 Route::get( '/item/{id}/{designId}/{colorId?}', [ItemController::class, 'index'] )->name( 'frontend.item' );
-Route::get('/broad-loom/{id}/{cust_id}', [BroadloomController::class, 'index'])->name('broadloom.cart');
+Route::get('/broad-loom/{id}/{cust_id}/{color_id}', [BroadloomController::class, 'index'])->name('broadloom.cart');
 Route::get('/broad-loom/{flag?}', [BroadloomController::class, 'shopping_cart'])->name('broadloom.shopping_cart');
 Route::get('/broad-loom-checkout', [BroadloomController::class, 'checkout'])->name('broadloom.checkout');
 Route::get('/broad-loom-order-complete', [BroadloomController::class, 'order_complete'])->name('broadloom.order_complete');
-Route::get('/broad-loom', [BroadloomController::class, 'AddCutPiece'])->name('broadloom.cutPiece');
+Route::post('/cut-pieces', [BroadloomController::class, 'AddCutPiece'])->name('broadloom.cutPiece');
 Route::post( '/item/ats', [ItemController::class, 'get_item_ats'] )->name( 'frontend.item.ats' );
 //Search Routes
 Route::get( '/search/{string}/{type?}', [SearchController::class, 'index'] )->name( 'frontend.search' );

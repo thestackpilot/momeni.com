@@ -13141,3 +13141,9 @@ h3.selected-fltr {
 .add-to-cart-broadloom-btn {
     background: #660000;
 }
+
+
+.badge-default {
+    background-color: #660000;
+    color: #fff;
+}
