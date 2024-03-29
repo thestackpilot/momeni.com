@@ -152,8 +152,9 @@ use App\Http\Controllers\CommonController;
             <div class="checkout_items_wrap mt-4">
                 @foreach($cart -> items as $item)
                     @php
+                    //dd(unserialize($item->item_data));
                         if(isset($item -> item_data) && $item -> item_data) {
-                            $item_data = json_decode(unserialize($item -> item_data));
+                            $item_data = json_decode($item -> item_data);
                         }
                     @endphp
                     <div class="d-flex flex-row justify-content-between align-items-center p-3 pt-3 border-bottom-thick" id="{{$item -> item_id}}__{{$item -> item_customer_id}}">

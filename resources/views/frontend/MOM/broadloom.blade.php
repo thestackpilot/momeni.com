@@ -4,7 +4,7 @@
 
     use App\Http\Controllers\ConstantsController;
     use App\Http\Controllers\CommonController;
-   
+
 @endphp
 
 @section('title', 'Item Detail Page' )
@@ -242,8 +242,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 mt-5 text-center">
-                                        <button class="show-piece-btn broadloom-btns" id="cut_piece_btn" >Add Cut Piece <i class="fa fa-long-arrow-right"></i></button>
-                                        <button class="show-piece-btn broadloom-btns" >Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="show-piece-btn broadloom-btns add-cut-piece-btn" id="cut_piece_btn" >Add Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn">Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">Add to Cart <i class="fa fa-long-arrow-right"></i></button>
                                     </div>
                                 </div>
@@ -812,7 +812,7 @@
             $('#cart_item_quantity').val($('#item_qty').val());
             item = JSON.parse($('#item_json').val());
             console.log("item_json: ",$('input[name=size_price]').html() );
-            
+
                 $.ajax({
                     method: 'POST',
                     url: '{{route("frontend.cart.add")}}',
@@ -932,17 +932,14 @@
 
                                 let widthInches = item.ATSWidth % 12;
 
-                                console.log(lengthFeet + " ft " + lengthInches + " inches");
-                                console.log(widthFeet + " ft " + widthInches + " inches");
-
-                                var color = item.LengthStatus == 'F' ? 'Blue' : 'red';
+                                var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
                                 divContent += '<div class="badge badge-default broadloom-badge" style="background-color:'+ color+ '">';
                                 // divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"` + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
                                 var size = [];
                                 size['size'] = lengthFeet + `'`+ lengthInches +`" x ` + widthFeet + `'`+ widthInches + `"`;
                                 divContent += size['size'];
                                 divContent += '</div>';
-                               
+
                                 let totalLengthInInches = lengthFeet * 12 + lengthInches;
                                 let totalWidthInInches = widthFeet * 12 + widthInches;
 
@@ -959,20 +956,18 @@
                                 let sqYrdPrice =  $("#sq-ft").val() / 9; // Price per square yard
                                 let extPrice = totalAreaInSquareYards * sqYrdPrice;
                                 size['price'] = extPrice.toFixed(2);
-                               
+
                                 if ( item.LengthStatus == 'F' )
                                 {
-                                    console.log('in size');
-                                    sizes.push(size); 
+                                    sizes.push(size);
                                 }
-                                
+
                             });
                             divContent += `</div>`;
-                            console.log(sizes);   
 
                             $('#cut_piece_parent').html(divContent);
                             $('#size_price').data('myArray', sizes);
-                            
+
                             item_object.CutPieces = data['cut_piece']['OutPut']['AddCutPieces'];
                             $('#cut_pieces_json').val(JSON.stringify(data['cut_piece']['OutPut']['AddCutPieces']));
                             $('#item_json').val(JSON.stringify(item_object));
@@ -980,6 +975,7 @@
                                 hideDuration: 10000,
                                 closeButton: true,
                             });
+                            $('#show-cut-piece-btn').removeClass('d-none');
                         } else {
                             toastr.error(data.cut_piece.OutPut.Message, {
                                 hideDuration: 10000,
@@ -992,7 +988,11 @@
                     }
                 });
         }
-        
+
+        $('#show-cut-piece-btn').on('click', function () {
+            console.log($('#TempSalesOrderNo').val())
+        })
+
         //updated
         function updatePrices() {
             // Assuming perSquareFeetPrice is the price per square foot
@@ -1050,7 +1050,7 @@
                 console.log("in condition");
                 updatePrices();
             });
-            
+
             $("#TlengthInch, #TwidthInch").on("change", function() {
                 console.log("in condition");
                 updatePrices();
@@ -1136,7 +1136,7 @@
 
             });
 
-            
+
             // init();
             bindClicks();
             // init_sliders();
