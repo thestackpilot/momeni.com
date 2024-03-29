@@ -124,6 +124,7 @@ class Cart extends Model
         $cart['cart_count']    = $cart_count;
         $cart['cart_total']    = number_format( $cart_total, ConstantsController::ALLOWED_DECIMALS, '.', ',' );
         $cart['cart_currency'] = '$';
+        $cart['item_broadloom'] = $cart_item->item_broadloom;
 
         return $cart;
     }

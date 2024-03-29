@@ -431,6 +431,20 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Place_Order', 'Place Order', $post_array, ['Success', 'Message', 'ErrorDetail', 'ObjectID'], 0 );
     }
 
+    public function Place_BLOrder( $header_data = [], $detail = [] )
+    {
+        $post_array = [];
+
+        foreach ( $header_data as $key => $value )
+        {
+            $post_array[$key] = $value;
+        }
+
+        $post_array['Detail'] = $detail;
+
+        return $this->Post_API_Signature( 'Place_BLOrder', 'Place BL Order', $post_array, ['Success', 'Message', 'ErrorDetail', 'ObjectID'], 0 );
+    }
+
     public function Post_API_Signature( $api_slug, $api_text, $post_array, $specific_keys = array(), $only_on_success = 1, $json_reponse = 1, $get_type = 0 )
     {
         $all_params = [

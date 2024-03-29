@@ -274,6 +274,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
             $payment_success  = false;
             $itemDetail       = [];
             $requestDataArray = $request->all();
+            // dd($requestDataArray);
             $total_amount     = 0;
 
             $headers = [
@@ -334,7 +335,22 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 $headers['DeliveryTime'] = date( 'H:i:s', strtotime( $requestDataArray['ship_date'] ) );
             }
 
-            foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
+            if($requestDataArray['item_broadloom']){
+                $TempSalesOrderNo = "";
+                foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
+            {
+                $TempSalesOrderNo = json_decode($item['item_data'])->CutPieces[0]->TempSalesOrderNo;
+                array_push( $itemDetail, [
+                    'ItemID'    => $item['item_id'],
+                    'OrderQty'  => $item['item_quantity'],
+                    'UnitPrice' => $item['item_price'],
+                    'Items' => json_decode($item['item_data']),
+                    'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+                ] );
+                $total_amount += $item['item_price'];
+            }
+            }else{
+                foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
             {
                 array_push( $itemDetail, [
                     'ItemID'    => $item['item_id'],
@@ -344,6 +360,8 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 ] );
                 $total_amount += $item['item_price'];
             }
+            }
+            $headers['TempSalesOrderNo'] = $TempSalesOrderNo;
 
             $order_payment_hash             = md5( json_encode( ['general' => $headers, 'items' => $itemDetail] ) );
             $headers['IsAdvancePayment']    = false;
@@ -366,11 +384,19 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
             {
                 return response()->json( $payment_response );
             }
-
-            $result = $this->ApiObj->Place_Order(
-                $headers,
-                $itemDetail
-            );
+            // dd($headers, $itemDetail);
+            if($requestDataArray['item_broadloom'] == 1){
+                $result = $this->ApiObj->Place_BLOrder(
+                    $headers,
+                    $itemDetail
+                );
+            }else{
+                $result = $this->ApiObj->Place_Order(
+                    $headers,
+                    $itemDetail
+                );
+            }
+            dd($result);
 
             $order_payment = $this->order_payment_model->updateOrCreate(
                 ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
@@ -460,13 +486,13 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
         {
             prr( ['CheckoutController::EXCEPTION' => $e->getMessage()] );
 
-            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
+            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.', 'error' => $e->getMessage()]);
         }
         catch ( \Error$e )
         {
             prr( ['CheckoutController::ERROR' => $e->getMessage()] );
 
-            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
+            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.', 'error' => $e->getMessage()] );
         }
 
     }
