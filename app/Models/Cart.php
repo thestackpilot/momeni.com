@@ -178,23 +178,46 @@ class Cart extends Model
     // save or update menus and meta
     public function save_or_update_full_cart_item( $request )
     {
-        $item     = $this->where( 'user_id', Auth::user()->id )->where( 'customer_id', $request->cart_customer_id )->where( 'item_id', $request->cart_item_id )->first();
-        $quantity = $request->cart_item_quantity;
-
-        if ( $item )
-        {
-            $quantity += $item->item_quantity;
-        }
+       
 	// prr(number_format( str_replace(',', '', $request->cart_item_price), ConstantsController::ALLOWED_DECIMALS, '.', '' ));
-        $this->updateOrCreate(
-            ['user_id' => Auth::user()->id, 'customer_id' => $request->cart_customer_id, 'item_id' => $request->cart_item_id],
-            [
-                'user_id'    => Auth::user()->id, 'customer_id'           => $request->cart_customer_id, 'item_id'           => $request->cart_item_id,
-                'item_name'  => $request->cart_item_name, 'item_quantity' => $quantity, 'item_price'                         => floatval(number_format( str_replace(',', '', $request->cart_item_price), ConstantsController::ALLOWED_DECIMALS, '.', '' )),
-                'item_color' => $request->cart_item_color, 'item_size'    => $request->cart_item_size, 'item_currency'       => $request->cart_item_currency,
-                'item_image' => $request->cart_item_image, 'item_data'    => serialize( $request->cart_item_data ), 'item_eta' => $request->cart_item_eta
-            ]
-        );
+        if( $request->has("cart_item_broadloom") && $request->cart_item_broadloom == true )
+        {
+            $item     = $this->where( 'user_id', Auth::user()->id )->where( 'customer_id', $request->cart_customer_id )->where( 'item_id', $request->cart_item_id )->where( 'item_size' , $request->cart_item_size )->first();
+            $quantity = $request->cart_item_quantity;
+    
+            if ( $item )
+            {
+                $quantity += $item->item_quantity;
+            }
+            $this->updateOrCreate(
+                ['user_id' => Auth::user()->id, 'customer_id' => $request->cart_customer_id, 'item_id' => $request->cart_item_id, 'item_size' => $request->cart_item_size],
+                [
+                    'user_id'    => Auth::user()->id, 'customer_id'           => $request->cart_customer_id, 'item_id'           => $request->cart_item_id,
+                    'item_name'  => $request->cart_item_name, 'item_quantity' => $quantity, 'item_price'                         => floatval(number_format( str_replace(',', '', $request->cart_item_price), ConstantsController::ALLOWED_DECIMALS, '.', '' )),
+                    'item_color' => $request->cart_item_color, 'item_size'    => $request->cart_item_size, 'item_currency'       => $request->cart_item_currency,
+                    'item_image' => $request->cart_item_image, 'item_data'    => serialize( $request->cart_item_data ), 'item_eta' => $request->cart_item_eta, 'item_broadloom' =>true
+                ]
+            );
+        }
+        else{
+            $item     = $this->where( 'user_id', Auth::user()->id )->where( 'customer_id', $request->cart_customer_id )->where( 'item_id', $request->cart_item_id )->first();
+            $quantity = $request->cart_item_quantity;
+    
+            if ( $item )
+            {
+                $quantity += $item->item_quantity;
+            }
+            $this->updateOrCreate(
+                ['user_id' => Auth::user()->id, 'customer_id' => $request->cart_customer_id, 'item_id' => $request->cart_item_id],
+                [
+                    'user_id'    => Auth::user()->id, 'customer_id'           => $request->cart_customer_id, 'item_id'           => $request->cart_item_id,
+                    'item_name'  => $request->cart_item_name, 'item_quantity' => $quantity, 'item_price'                         => floatval(number_format( str_replace(',', '', $request->cart_item_price), ConstantsController::ALLOWED_DECIMALS, '.', '' )),
+                    'item_color' => $request->cart_item_color, 'item_size'    => $request->cart_item_size, 'item_currency'       => $request->cart_item_currency,
+                    'item_image' => $request->cart_item_image, 'item_data'    => serialize( $request->cart_item_data ), 'item_eta' => $request->cart_item_eta
+                ]
+            );
+        }
+        
     }
 
     // update cart value

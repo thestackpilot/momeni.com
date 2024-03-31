@@ -245,6 +245,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
 
         }
 
+
         $this->append_breadcrumbs( 'Checkout', route( 'frontend.checkout' ) );
 
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.checkout', [

@@ -643,11 +643,14 @@ use App\Http\Controllers\CommonController;
 
       $('.qty-add').on('click', function() {
          var value = $('input[type="number"]', $(this).parent()).val();
+         console.log(value);
+         console.log((parseInt(value) + 1) < 1001 ? parseInt(value) + 1 : 1000);
          $('input[type="number"]', $(this).parent()).val((parseInt(value) + 1) < 1001 ? parseInt(value) + 1 : 1000).change();
       });
 
       $('.qty-minus').on('click', function() {
          var value = $('input[type="number"]', $(this).parent()).val();
+         console.log(value);
          $('input[type="number"]', $(this).parent()).val((parseInt(value) - 1) > 1 ? parseInt(value) - 1 : 1).change();
       });
 

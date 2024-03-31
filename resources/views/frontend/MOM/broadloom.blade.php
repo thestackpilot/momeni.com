@@ -346,7 +346,7 @@
                         console.log('Value: ', new_html.find('#item_json').val());
                         $('#item_json').html(new_html.find('#item_json').html());
 
-                        item_object = JSON.parse($('#item_json').html());
+                        item_object = JSON.parse($('#item_json').val());
                         console.log(item_object);
                         $('#cart-parent').html(new_html.find('#cart-parent').html());
                         $('#profile-parent').html(new_html.find('#profile-parent').html());
@@ -812,7 +812,14 @@
             $('#cart_item_quantity').val($('#item_qty').val());
             item = JSON.parse($('#item_json').val());
             console.log("item_json: ",$('input[name=size_price]').html() );
-            
+            item.SQFTPrice = $('#sq-ft').val();
+            item.SQFTArea = $('#totalsqft').val();
+            item.CutPieceID =  $('#cutpiece_id').val();
+            item.RollID = $("#roll_id").val();
+            item.SergingCharges = $('surging_charges').val();
+            item.SergingType= $('surging_options').val();
+            $('#item_json').val(JSON.stringify(item));
+
                 $.ajax({
                     method: 'POST',
                     url: '{{route("frontend.cart.add")}}',
@@ -822,13 +829,15 @@
                         'cart_customer_id': $('#customer_id').val(),
                         'cart_item_name': item.ItemName,
                         'cart_item_quantity': 1,
+                        'cart_item_price': 0,
                         'cart_item_color': item.ItemColor,
                         'cart_item_size': $('#size_price').val(),
+                        'item_surging_price':  $('surging_charges').val(),
                         'cart_item_currency': '$',
                         'cart_item_image': item.ImageNameArray[0],
                         'cart_item_data': $('#item_json').val(),
                         // 'cart_item_data': $('#cart_item_oak').val(),
-                        'cart_item_eta': $('#cart_item_eta').val()
+                        'cart_item_broadloom': true
                     },
                     success: function (response) {
                         if (response.success) {
@@ -889,7 +898,7 @@
                 // totalLength = length + lengthInches;
                 console.log(length);
                 let width = parseInt($("#Twidth").val())*12 + parseInt($("#TwidthInch").val());
-                console.log(width);
+                // console.log($("#serging_check").val());
 
                 let sqtft = length * width;
                 $.ajax({
@@ -911,7 +920,7 @@
                         'Remnant': "N",
                         'AvailableForSale': "",
                         'IsremnantShipable': "",
-                        'serging': "Y",
+                        'serging': "N",
                         'LineNo': "1",
                         'UserRemarks': "Setting Data",
                         'sergingtypeno': $("#sergingtypeno").val(),
@@ -920,16 +929,13 @@
                     success: function(data){
                         if (data.cut_piece.OutPut.Success) {
                             $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
-                            var divContent = '<input type="hidden" id="size_price" name="size_price" value=""></input<div>';
-                                var sizes = [];
+                            var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
+                            var sizes = [];
                             $.each(data['cut_piece']['OutPut']['AddCutPieces'], function(index, item) {
 
                                 let lengthFeet = Math.floor(item.ATSLength / 12);
-
                                 let lengthInches = item.ATSLength % 12;
-
                                 let widthFeet = Math.floor(item.ATSWidth / 12);
-
                                 let widthInches = item.ATSWidth % 12;
 
                                 console.log(lengthFeet + " ft " + lengthInches + " inches");
@@ -937,12 +943,11 @@
 
                                 var color = item.LengthStatus == 'F' ? 'Blue' : 'red';
                                 divContent += '<div class="badge badge-default broadloom-badge" style="background-color:'+ color+ '">';
-                                // divContent += item.ATSLength + `'-0" x ` + item.ATSWidth + `'-0"` + '<a class="bg-primary" href="javascript:void(0)"><i class="fa fa-times"></i></a>';
-                                var size = [];
-                                size['size'] = lengthFeet + `'`+ lengthInches +`" x ` + widthFeet + `'`+ widthInches + `"`;
-                                divContent += size['size'];
+                                var size = {};
+                                size.size = lengthFeet + `'`+ lengthInches +`" x ` + widthFeet + `'`+ widthInches + `"`;
+                                divContent += size.size;
                                 divContent += '</div>';
-                               
+
                                 let totalLengthInInches = lengthFeet * 12 + lengthInches;
                                 let totalWidthInInches = widthFeet * 12 + widthInches;
 
@@ -958,20 +963,20 @@
                                 // Calculate the SQ-YRD Price ($) and EXT Price ($)
                                 let sqYrdPrice =  $("#sq-ft").val() / 9; // Price per square yard
                                 let extPrice = totalAreaInSquareYards * sqYrdPrice;
-                                size['price'] = extPrice.toFixed(2);
-                               
-                                if ( item.LengthStatus == 'F' )
-                                {
+                                size.price = extPrice.toFixed(2);
+
+                                if (item.LengthStatus == 'F') {
                                     console.log('in size');
-                                    sizes.push(size); 
+                                    sizes.push(size);
                                 }
-                                
                             });
+
                             divContent += `</div>`;
                             console.log(sizes);   
+                            console.log(JSON.stringify(sizes));
 
                             $('#cut_piece_parent').html(divContent);
-                            $('#size_price').data('myArray', sizes);
+                            $('#size_price').val(JSON.stringify(sizes));
                             
                             item_object.CutPieces = data['cut_piece']['OutPut']['AddCutPieces'];
                             $('#cut_pieces_json').val(JSON.stringify(data['cut_piece']['OutPut']['AddCutPieces']));
@@ -986,6 +991,7 @@
                                 closeButton: true,
                             });
                         }
+
                     },
                     error: function(xhr, status, error) {
                         console.error("Error occurred:", status, error);

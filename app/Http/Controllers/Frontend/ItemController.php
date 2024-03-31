@@ -293,7 +293,7 @@ class ItemController extends FrontendController
             $page = '.broadloom';
         }
         // die("<pre>".print_r( $main_collection['Description'], 1)."</pre>");
-//         dd($items);
+        // dd($items);
         return view( 'frontend.'.$this->active_theme->theme_abrv.$page, [
             'items'            => $items,
             'items_json'       => json_encode( $items ),
