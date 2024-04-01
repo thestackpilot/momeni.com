@@ -118,13 +118,13 @@ class Cart extends Model
             );
             $cart_count += $cart_item->item_quantity;
             $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
+            $cart['item_broadloom'] = $cart_item->item_broadloom;
             $cart['cart_currency'] = $cart_item->item_currency;
         }
 
         $cart['cart_count']    = $cart_count;
         $cart['cart_total']    = number_format( $cart_total, ConstantsController::ALLOWED_DECIMALS, '.', ',' );
         $cart['cart_currency'] = '$';
-        $cart['item_broadloom'] = $cart_item->item_broadloom;
 
         return $cart;
     }

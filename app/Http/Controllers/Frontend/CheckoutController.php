@@ -339,12 +339,20 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 $TempSalesOrderNo = "";
                 foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
             {
+                // dd($item);
                 $TempSalesOrderNo = json_decode($item['item_data'])->CutPieces[0]->TempSalesOrderNo;
                 array_push( $itemDetail, [
                     'ItemID'    => $item['item_id'],
                     'OrderQty'  => $item['item_quantity'],
                     'UnitPrice' => $item['item_price'],
-                    'Items' => json_decode($item['item_data']),
+                    'SQFTPrice' => json_decode($item['item_data'])->SQFTPrice,
+                    'SQFTArea' => json_decode($item['item_data'])->SQFTArea,
+                    'CutPieceID' => json_decode($item['item_data'])->CutPieceID,
+                    'RollID' => json_decode($item['item_data'])->RollID,
+                    'SergingCharges' => json_decode($item['item_data'])->SergingCharges,
+                    'SergingType' => json_decode($item['item_data'])->SergingType,
+                    // 'ETA_Date' => json_decode($item['item_data'])->item_price,
+                    'CutPieces' => json_decode($item['item_data'])->CutPieces,
                     'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
                 ] );
                 $total_amount += $item['item_price'];
@@ -384,7 +392,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
             {
                 return response()->json( $payment_response );
             }
-            // dd($headers, $itemDetail);
+            dd($headers, $itemDetail);
             if($requestDataArray['item_broadloom'] == 1){
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,
