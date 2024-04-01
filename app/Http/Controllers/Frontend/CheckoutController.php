@@ -344,8 +344,8 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 ] );
                 $total_amount += $item['item_price'];
             }
-            print_r("<pre>");
-            print_r($itemDetail); die();
+            // print_r("<pre>");
+            // print_r($itemDetail); die();
             $order_payment_hash             = md5( json_encode( ['general' => $headers, 'items' => $itemDetail] ) );
             $headers['IsAdvancePayment']    = false;
             $headers['AdvancePaymentAmout'] = 0;
