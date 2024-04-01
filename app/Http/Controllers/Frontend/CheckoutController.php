@@ -264,8 +264,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
     public function place_order( Request $request )
     {
         try {
-            // print_r("<pre>");
-            // print_r($request->all()); die();
+            
             $response = [
                 'data'    => [],
                 'success' => 0,
@@ -345,7 +344,8 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 ] );
                 $total_amount += $item['item_price'];
             }
-
+            print_r("<pre>");
+            print_r($itemDetail); die();
             $order_payment_hash             = md5( json_encode( ['general' => $headers, 'items' => $itemDetail] ) );
             $headers['IsAdvancePayment']    = false;
             $headers['AdvancePaymentAmout'] = 0;

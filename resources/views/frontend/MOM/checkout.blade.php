@@ -1038,11 +1038,10 @@ use App\Http\Controllers\CommonController;
             }
 
             $('.sidemark-section textarea').each(function() {
-             
-               var parentID = $(this).parent().attr('class');
-               console.log("Parent ID:", parentID);
-               console.log("textarea", $(this).val());
-               _formData[$(this).attr('name')] = $(this).val();
+               if ($(this).val().trim() !== '') {
+                  console.log("textarea", $(this).val());
+                  _formData[$(this).attr('name')] = $(this).val();
+               }
             });
 
             $.post("{{route('frontend.checkout.place_order')}}", _formData, function(data) {

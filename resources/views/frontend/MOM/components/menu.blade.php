@@ -148,8 +148,9 @@ use App\Http\Controllers\CommonController;
 
 
     @if ( ! Str::contains(request()->url(), 'checkout'))
-    @if(isset($cart -> items) && count((array)$cart -> items))
         <div class="quickCart position-fixed d-none container-checker" id="quickCart">
+            @if(isset($cart -> items) && count((array)$cart -> items))
+
             <div class="col-sm-12 m-md-2 checkout-balance col-12 position-absolute">
                 <i class="close-icon icon-cross position-absolute quickcart-closer"> </i>
                 <div class="checkout_items_wrap mt-4">
@@ -209,9 +210,7 @@ use App\Http\Controllers\CommonController;
                     <a href="{{route('frontend.checkout')}}" class="btn btn--md btn--border_1 mt-3 quick-cart-btn d-block">View Cart & Checkout<i class="icon-arrow-right"></i></a>
                 </div>
             </div>
-        </div>
-    @else
-        <div class="quickCart position-fixed d-none" >
+            @else
             <div class="d-flex align-items-center col-md-12 d-flex justify-content-center" style="height: 100%;">
                 <i class="close-icon icon-cross position-absolute quickcart-closer"> </i>
                 <div class="col-md-12">
@@ -220,8 +219,9 @@ use App\Http\Controllers\CommonController;
                     </h3>
                 </div>
             </div>
+            @endif
         </div>
-    @endif
+        
 @endif
 @endauth
 <div id="show-on-search" style="display: none;">

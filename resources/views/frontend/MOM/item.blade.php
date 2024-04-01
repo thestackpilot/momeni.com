@@ -467,7 +467,9 @@
                     $('#cart-parent').html(new_html.find('#cart-parent').html());
                     $('#quickCart').html(new_html.find('#quickCart').html());
                     $('#profile-parent').html(new_html.find('#profile-parent').html());
-
+                    console.log("quickcart");
+                    console.log(new_html.find('#quickCart').html());
+                    console.log( $('#quickCart').html());
                     $('#cart_main').html(new_html.find('#cart_main').html());
                     $('#cart_main').find('#add_to_cart').removeClass('d-none');
                     $('#cart_main').find('#login_by_popup').remove();
