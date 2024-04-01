@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Mail\SendMail;
+use App\Jobs\SendMail;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\OrderPayments;
