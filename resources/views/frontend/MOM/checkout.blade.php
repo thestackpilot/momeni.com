@@ -166,6 +166,9 @@ use App\Http\Controllers\CommonController;
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Color: {{$item -> item_color}}</p>
                                     </div>
+                                    <div class="row">
+                                       <p class="font-nexa-light m-0"> Size: {{$item -> item_size}}</p>
+                                    </div>
                                     @if($item->item_atsq <= 0 )
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Backorder/ETA: {{date('Y-m-d', strtotime($item -> item_eta))}}</p>
@@ -235,6 +238,9 @@ use App\Http\Controllers\CommonController;
                                     </div>
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Color: {{$item -> item_color}}</p>
+                                    </div>
+                                    <div class="row">
+                                       <p class="font-nexa-light m-0"> Size: {{$item -> item_size}}</p>
                                     </div>
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Backorder/ETA: {{date('Y-m-d', strtotime($item -> item_eta))}}</p>
