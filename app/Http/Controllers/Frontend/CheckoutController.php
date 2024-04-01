@@ -432,16 +432,10 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
 
                     try {
 
-                        $to_email = ConstantsController::ORDER_NOTIFICATION;
-
-                        if(isset($headers['Email']) && $headers['Email'] != ''){
-                            array_push($to_email, $headers['Email']);
-                        }
-
                         SendMail::dispatch( [
                             'data'     => $cart_data,
                             'slug'     => "Thank you: Order# " . $result['ObjectID'],
-                            'email'    => $to_email,
+                            'email'    => ConstantsController::ORDER_NOTIFICATION,
                             'template' => 'email.order-confirmation',
                             'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
                         ] );
