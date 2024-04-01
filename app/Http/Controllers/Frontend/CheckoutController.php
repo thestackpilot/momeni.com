@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Jobs\SendMail;
+use App\Mail\SendMail;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\OrderPayments;
@@ -534,13 +534,6 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
 
             return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
         }
-        catch ( \Error$e )
-        {
-            prr( ['CheckoutController::ERROR' => $e->getMessage()] );
-
-            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
-        }
-
     }
 
     public function pt_security()
