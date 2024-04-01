@@ -264,7 +264,8 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
     public function place_order( Request $request )
     {
         try {
-
+            // print_r("<pre>");
+            // print_r($request->all()); die();
             $response = [
                 'data'    => [],
                 'success' => 0,

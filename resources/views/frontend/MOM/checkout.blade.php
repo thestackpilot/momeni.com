@@ -4,7 +4,17 @@
 
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
-
+// print_r("<pre>");
+// print_r($cart->items);
+// foreach($cart->items as $item) {
+//    if( isset($item_data -> oak) && $item_data -> oak )
+//    {
+//       $item_data = json_decode(unserialize($item -> item_data));
+//       print_r($item_data->oak);
+//    }
+   
+// }
+// die();
 @endphp
 
 @extends('frontend.' . $active_theme -> theme_abrv . '.layouts.app')
@@ -156,9 +166,11 @@ use App\Http\Controllers\CommonController;
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Color: {{$item -> item_color}}</p>
                                     </div>
+                                    @if($item->item_atsq <= 0 )
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Backorder/ETA: {{date('Y-m-d', strtotime($item -> item_eta))}}</p>
                                     </div>
+                                    @endif
                                     <div class="row">
                                        <p class="font-nexa-light m-0 sidemark-section">
                                           <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a>
@@ -1026,6 +1038,10 @@ use App\Http\Controllers\CommonController;
             }
 
             $('.sidemark-section textarea').each(function() {
+             
+               var parentID = $(this).parent().attr('class');
+               console.log("Parent ID:", parentID);
+               console.log("textarea", $(this).val());
                _formData[$(this).attr('name')] = $(this).val();
             });
 

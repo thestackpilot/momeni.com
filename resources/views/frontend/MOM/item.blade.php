@@ -377,6 +377,7 @@
 @section('scripts')
 <script>
     var item_object = ""; //get the json decoded object
+    var broadloom_item_exist = '';
     var customerID = $('input[name="sale_rep"]').val() == 1 ? '' : 1;
     // Instantiate EasyZoom instances
     var $easyzoom = $('.easyzoom').easyZoom({
@@ -464,6 +465,7 @@
                     item_object = JSON.parse($('#item_json').html());
 
                     $('#cart-parent').html(new_html.find('#cart-parent').html());
+                    $('#quickCart').html(new_html.find('#quickCart').html());
                     $('#profile-parent').html(new_html.find('#profile-parent').html());
 
                     $('#cart_main').html(new_html.find('#cart_main').html());
@@ -1012,10 +1014,14 @@
             $('#item_qty').val(1);
             console.log('exists:',ATSInfo.ItemExistInCart);
             if(ATSInfo.ItemExistInCart) {
-                $("#qty_msg").text(ATSInfo.ItemExistInCart == 1 ? 'Item is already in your Cart.' : 'Item not available.');
-                $("#qty_msg").addClass('bg-warning');
-                show_components(['#qty_msg']);
-                hide_components(['#add_to_cart']);
+                broadloom_item_exist = ATSInfo.ItemExistInCart;
+                console.log("br_exist:", broadloom_item_exist);
+                // $("#qty_msg").text(ATSInfo.ItemExistInCart == 1 ? 'Item is already in your Cart.' : 'Item not available.');
+                // $("#qty_msg").addClass('bg-warning');
+                // // show_components(['#qty_msg']);
+                // show_components(['#add_to_cart']);
+            }else{
+                broadloom_item_exist = '';
             }
         }
     }
@@ -1054,11 +1060,9 @@
         // }
 
         ATSInfo.forEach(function(item, index) {
-            console.log("item.price: ", item.Price);
-            console.log("item.ATSQty: ", item.ATSQty);
             $('.cart_item_id').each(function() {
                 if ($(this).val() == item.ItemID) {
-                    console.log("bulk truee");
+                  
                     price = item.Price.toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD',
@@ -1087,6 +1091,7 @@
     }
 
     function pushToCart() {
+        
         $('#add_to_cart').addClass('btn-muted');
         $('#cart_item_quantity').val($('#item_qty').val());
         console.log("cart_customer_id: ", $('#cart_customer_id').val());
@@ -1225,6 +1230,31 @@
                         hideDuration: 10000,
                         closeButton: true,
                     });
+                else if('{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id)}}' ) {
+                        hide_components(['#qty_msg', '.postfix', '#item_variant_parent', '#item_color_parent', '#item_size_parent', '#qty-main', '#cart_main h3']);
+                        $('#item_qty').val(1);
+                        console.log('exists:',broadloom_item_exist);
+                            var message = '';
+                            if(broadloom_item_exist === 1){
+                                console.log('if');
+                                message = 'Item is already in your Cart.';
+                                toastr.warning(message, {
+                                        hideDuration: 10000,
+                                        closeButton: true,
+                                    });
+                            }else if(broadloom_item_exist === 0){
+                                console.log('else if');
+                                message = 'Item not available.'
+                                toastr.warning(message, {
+                                        hideDuration: 10000,
+                                        closeButton: true,
+                                    });
+                            }else{
+                                pushToCart();
+
+                            }
+                            
+                    }
                 else
                     pushToCart();
             });
