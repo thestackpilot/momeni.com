@@ -436,8 +436,8 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                             'data'     => $cart_data,
                             'slug'     => "Thank you: Order# " . $result['ObjectID'],
                             'email'    => ConstantsController::ORDER_NOTIFICATION,
-                            'template' => 'email.order-confirmation-test',
-                            'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+                            'template' => 'email.order-test',
+                            // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
                         ] );
 
                         prr( " :: Order Acknowledgment Email Sent :: " );
