@@ -992,17 +992,19 @@ use App\Http\Controllers\CommonController;
             $('input[type="number"]', $(this).parent()).val((parseInt(value) + 1) < 1001 ? parseInt(value) + 1 : 1000).change();
         });
 
-        $(document).on('change', 'input[type="radio"][name="customer"]', function() {
-        if ($(this).is(':checked')) {
-            var selectedId = $(this).closest('input').attr('id');
-            console.log("Selected ID:", selectedId);
-            $('#customer-id').val(selectedId);
+        $("#add_cart").on("click", function(){
+            if ( $('input[name="sale_rep"]').val() !== 1 &&   customerID.length !== 0) {
             var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id','color_id']) }}";
-            href = href.replace('cust_id', selectedId);
+            href = href.replace('cust_id', $('#cart_customer_id').val());
             href = href.replace('color_id', $('#color_id').val());
             $('#add_cart').attr('href', href);
+        }else{
+            toastr.warning('Please select a customer...', {
+                        hideDuration: 10000,
+                        closeButton: true,
+                    });
         }
-    });
+        });
 
         $('.qty-minus').on('click', function() {
             var value = $('input[type="number"]', $(this).parent()).val();
@@ -1036,7 +1038,7 @@ use App\Http\Controllers\CommonController;
         });
 
         init();
-        bindClicks();
+        // bindClicks();
         init_sliders();
 
         // $('.owl-carousel').owlCarousel(
