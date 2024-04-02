@@ -172,23 +172,23 @@
                                 if ($total_barcodes <= 10 && $total_barcodes > 8) {
                                     $margin = 2;
                                 } */
-                                $margin = -19;
+                                $margin = 0;
                                 $total_barcodes = count($barcodes);
 
                                 if ($total_barcodes <= 6 && $total_barcodes > 2) {
-                                   $margin = -15;
+                                    $margin = -5;
                                 }
 
                                 if ($total_barcodes <= 8 && $total_barcodes > 6) {
-                                    $margin = -4;
-                                }
-
-                                if ($total_barcodes <= 10 && $total_barcodes > 8) {
                                     $margin = 2;
                                 }
 
+                                if ($total_barcodes <= 10 && $total_barcodes > 8) {
+                                    $margin = 1;
+                                }
+
                                 if ($total_barcodes <= 12 && $total_barcodes > 10) {
-                                    $margin = -2;
+                                    $margin = 2;
                                 }
                             @endphp
                             <div class="left-wrapper" style="margin-top: {{ $margin }}rem">
