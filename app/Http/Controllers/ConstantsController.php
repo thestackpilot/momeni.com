@@ -14,6 +14,8 @@ class ConstantsController extends RootController
 
     const ORDER_NOTIFICATION = ["ahmadqalbi1991@gmail.com","imran.majeed@sparsus.com"];
 
+    const TEST_EMAIL = ['ahmadqalbi1991@gmail.com','imran.majeed@sparsus.com'];
+
     const ALLOWED_DECIMALS = 2;
 
     const ALLOWED_FILTER_OPERATIONS = [
