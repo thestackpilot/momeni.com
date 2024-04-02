@@ -416,7 +416,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 $response['success'] = 1;
                 $response['msg']     = $successMsg;
 
-                if ( isset($this->active_theme_json->general->order_ack) && $this->active_theme_json->general->order_ack ) {
+                // if ( isset($this->active_theme_json->general->order_ack) && $this->active_theme_json->general->order_ack ) {
                     // $headers['ShippingCost'] = number_format( $requestDataArray['shipping_cost'], ConstantsController::ALLOWED_DECIMALS, '.', ',' );
                     $cart_data = [
                         'shipping' => $headers,
@@ -446,7 +446,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                     {
                         prr( "Order Acknowledgment Email Exception :: ".$e->getMessage() );
                     }
-                }
+                // }
             }
             else
             {
