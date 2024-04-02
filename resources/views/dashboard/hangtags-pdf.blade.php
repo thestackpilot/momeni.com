@@ -123,7 +123,7 @@
         }
 
         p.sizes_12 {
-            font-size: 28px !important;
+            font-size: 25px !important;
             margin-bottom: 8px !important;
             color: grey;
         }
@@ -183,7 +183,7 @@
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
                                             @if ($total_barcodes <= 12 && $total_barcodes > 10)
-                                                <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 15) . '..' : $barcode['label'] }}</p>
+                                                <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 12) . '..' : $barcode['label'] }}</p>
                                             @else
                                                 <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 19) . '..' : $barcode['label'] }}</p>
                                             @endif
@@ -191,7 +191,7 @@
                                                 @if ($total_barcodes <= 12 && $total_barcodes > 10)
                                                     <img
                                                     src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
-                                                    width="150px" height="40px">
+                                                    width="100px" height="20px">
                                                 @else
                                                     <img
                                                     src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
