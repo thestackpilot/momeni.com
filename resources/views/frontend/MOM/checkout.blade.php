@@ -12,7 +12,7 @@ use App\Http\Controllers\CommonController;
 //       $item_data = json_decode(unserialize($item -> item_data));
 //       print_r($item_data->oak);
 //    }
-   
+
 // }
 // die();
 @endphp
@@ -176,8 +176,8 @@ use App\Http\Controllers\CommonController;
                                     @endif
                                     <div class="row">
                                        <p class="font-nexa-light m-0 sidemark-section">
-                                          <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a>
-                                          <textarea class="form-control d-none" maxlength="35" name="sidemark[{{$item -> item_id}}]"></textarea>
+                                          {{-- <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a> --}}
+                                          <textarea class="form-control side-mark-text-area-{{$item->item_id}}" maxlength="35" name="sidemark[{{$item -> item_id}}]"></textarea>
                                        </p>
                                     </div>
                                  </div>
@@ -247,8 +247,8 @@ use App\Http\Controllers\CommonController;
                                     </div>
                                     <div class="row">
                                        <p class="font-nexa-light m-0 sidemark-section">
-                                          <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a>
-                                          <textarea class="form-control d-none" maxlength="35" name="sidemark[{{$item -> item_id}}]"></textarea>
+                                          {{-- <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a> --}}
+                                          <textarea class="form-control side-mark-text-area-{{$item->item_id}}" maxlength="35" name="sidemark[{{$item -> item_id}}]"></textarea>
                                        </p>
                                     </div>
                                  </div>
@@ -547,6 +547,7 @@ use App\Http\Controllers\CommonController;
                                  <p class="specs m-0"> <strong class="font-crimson"> Color: </strong> <span class="font-ropa"> {{$item -> item_color}} </span> </p>
                                  <p class="specs m-0"> <strong class="font-crimson"> Size: </strong> <span class="font-ropa"> {{$item -> item_size}} </span> </p>
                                  <p class="specs m-0"> <strong class="font-crimson"> Qty: </strong> <span class="font-ropa"> {{$item -> item_quantity}} </span> </p>
+                                 <p class="specs m-0"> <strong class="font-crimson side-mark-{{$item->item_id}} d-none"> SideMark: </strong> <span class="font-ropa side-mark-span-{{$item -> item_id}}"></span> </p>
                                  <p class="price justify-content-end m-0"> Sub Total: {{$item -> item_currency}}{{$item -> item_total}} </p>
                               </div>
                            </div>
@@ -586,6 +587,7 @@ use App\Http\Controllers\CommonController;
             </div>
          </div>
       </section>
+      {{-- @dd($cart) --}}
    </main>
    @include('frontend.'.$active_theme -> theme_abrv.'.components.footer')
 </div>
@@ -653,7 +655,7 @@ use App\Http\Controllers\CommonController;
 
          for(i = step; i > 0; i--)
             $(`#progressbar li[data-step="${i}"]`).removeClass('muted').addClass('active');
-         
+
          $(`#progressbar li[data-step="${step}"]`).addClass('current');
 
          $('html, body').animate({scrollTop:0}, 'slow');
@@ -699,6 +701,15 @@ use App\Http\Controllers\CommonController;
          $('.step-2').removeClass('d-none');
          $('.go-back').attr('data-step', 'step-1');
          $('[name="ship-pickup"]').change();
+         var cartItems = {!! json_encode($cart->items) !!};
+         $.each(cartItems, function(index, item) {
+            console.log('.side-mark-text-area-' + item.item_id);
+            if($('.side-mark-text-area-' + item.item_id).val()){
+            console.log($('.side-mark-text-area-' + item.item_id).val());
+            $('.side-mark-' + item.item_id ).removeClass('d-none');
+            $('.side-mark-span-' + item.item_id).text($('.side-mark-text-area-' + item.item_id).val());
+        }
+            });
          update_active_step( 2 );
       });
 
@@ -890,7 +901,7 @@ use App\Http\Controllers\CommonController;
             $('.step-3').removeClass('d-none');
             $('.go-back').attr('data-step', 'step-2');
             update_active_step( 3 ); */
-            
+
             // skip payment-method
             $('.step-1, .step-2, .step-3').addClass('d-none');
             $('.step-4').removeClass('d-none');
@@ -948,9 +959,9 @@ use App\Http\Controllers\CommonController;
             return true;
       });
 
-      $('.add-sidemark').click(function() {
-         $('textarea', $(this).closest('.sidemark-section')).toggleClass('d-none');
-      });
+    //   $('.add-sidemark').click(function() {
+    //      $('textarea', $(this).closest('.sidemark-section')).toggleClass('d-none');
+    //   });
 
       $('.select-address').on('change', function() {
          $('.address-card').addClass('d-none');
