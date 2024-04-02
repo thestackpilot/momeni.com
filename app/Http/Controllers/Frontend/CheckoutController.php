@@ -434,7 +434,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
 
                         SendMail::dispatch( [
                             'data'     => $cart_data,
-                            'slug'     => "Thank you: Order# " . $result['ObjectID'],
+                            'slug'     => "Order Confirmed",
                             'email'    => ConstantsController::ORDER_NOTIFICATION,
                             'template' => 'email.order-confirmation',
                             // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
