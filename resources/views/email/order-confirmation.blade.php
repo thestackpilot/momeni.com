@@ -330,8 +330,8 @@
         </div>
 
         <div class="body-section">
-                <p>&copy; Copyright 2021 - LR Home. All rights reserved.
-                    <a href="https://www.lrhome.us/" class="float-right">www.LRHome.us</a>
+                <p>Copyright © 2024, Momeni. All rights reserved.
+                    <a href="https://www.momeni.com/" class="float-right">www.MOMENI.com</a>
                 </p>
         </div>
     </div>
