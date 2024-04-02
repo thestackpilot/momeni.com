@@ -58,10 +58,11 @@
                         <div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
                             <div class="product-details-left">
                                 <div class="product-details-images-2 slider-lg-image-2">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" class="poppu-img" id="product-main-image">
-                                                <img id="image_0" class="img-fluid" src="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" alt="{{$items['Items'][0]['ItemName']}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
+                                    <div class="easyzoom-style" style="
+                                    height: 100%;">
+                                        <div class="easyzoom easyzoom--overlay" style="height: 100%;">
+                                            <a style="height: 100%;" href="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" class="poppu-img" id="product-main-image">
+                                                <img style="height: 100%;" id="image_0" class="img-fluid" src="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" alt="{{$items['Items'][0]['ItemName']}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
                                             </a>
                                         </div>
                                     </div>
@@ -89,7 +90,7 @@
                                 <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}">
 
                                 <h3 class="price {{isset($is_oak) && $is_oak ? 'd-none' : ''}}" id="product-heading">{{$items['Items'][0]['ItemName']}}<b>{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
-                                
+
                                 <div class="quickview-peragraph">
                                     <h3 class="detiel-heading"> Description</h3>
                                     <p id="product-description">{!! trim($items['Items'][0]['ProductDescription']) == '' || strtolower(trim($items['Items'][0]['ProductDescription'])) == 'not available' ? '' : $items['Items'][0]['ProductDescription'] !!}</p>
@@ -97,8 +98,8 @@
                                     <table class="table my-table" id="item-udf-fields">
                                         @foreach($items['Items'][0]['UDFFields'] as $field)
                                         @if (
-                                            $field['FieldName'] == 'Color' || 
-                                            $field['FieldName'] == 'Size' || 
+                                            $field['FieldName'] == 'Color' ||
+                                            $field['FieldName'] == 'Size' ||
                                             $field['Value'] == '-' ||
                                             $field['Value'] == 'N/A' ||
                                             !strlen($field['Value'])
@@ -112,7 +113,7 @@
                                         @endforeach
                                     </table>
                                 </div>
-                                
+
                                 <div class="section over-hide z-bigger" id="item_variant_parent">
                                     <h3 class="detiel-heading">Collection</h3>
                                     <div id="item_variant" class="d-flex flex-wrap justify-flex justify-content-start flex-row variant-details">
@@ -221,13 +222,13 @@
                                 </div>
 
                                 @endif
-                                
+
                             </div>
                         </div>
                     </div>
 
 <!-- product size Chart -->
-                
+
                     @if (isset($items['ItemsETA']) && $items['ItemsETA'] && !$is_oak)
                     @auth()
                             <div class="m-auto mt-5 p-0 text-center product_chart">
@@ -317,7 +318,7 @@
                                                     class="PAChart-Dimensions-Weight PAChart-text-Heading">Shipping
                                                     Dimensions / Weight</td>
                                                 <td width="15%" align="center"
-                                                    class="PAChart-Color PAChart-text-Heading">Color</td> 
+                                                    class="PAChart-Color PAChart-text-Heading">Color</td>
                                             </tr>
                                             @foreach ($items['ItemsETA'] as $itemETA)
                                                 <tr class="">
@@ -459,7 +460,7 @@
                 },
                 success: function(response) {
                     var new_html = $($.parseHTML(response));
-         
+
                     $('#item_json').html(new_html.find('#item_json').html());
 
                     item_object = JSON.parse($('#item_json').html());
@@ -523,7 +524,7 @@
                                         .UserCustomerInfo.Customers[0].CustomerID, response.data);
                                 });
                             }
-                        
+
                 }
             });
         }
@@ -929,7 +930,7 @@
                                     startBuyingBulk(item_id, customer_id, response.data);
                                     console.log("bulk");
                                 });
-                            
+
                             // else {
                             if (!$('#qty-main').is(':visible'))
                                 show_components(['.qty-loader']);
@@ -1064,12 +1065,12 @@
         ATSInfo.forEach(function(item, index) {
             $('.cart_item_id').each(function() {
                 if ($(this).val() == item.ItemID) {
-                  
+
                     price = item.Price.toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD',
                     });
-                    
+
                     if (!price.includes('$'))
                         price = '$' + price;
 
@@ -1093,7 +1094,7 @@
     }
 
     function pushToCart() {
-        
+
         $('#add_to_cart').addClass('btn-muted');
         $('#cart_item_quantity').val($('#item_qty').val());
         console.log("cart_customer_id: ", $('#cart_customer_id').val());
@@ -1255,7 +1256,7 @@
                                 pushToCart();
 
                             }
-                            
+
                     }
                 else
                     pushToCart();
@@ -1335,7 +1336,7 @@
         //         }
         //     }
         // });
-        
+
     });
 </script>
 @endsection
