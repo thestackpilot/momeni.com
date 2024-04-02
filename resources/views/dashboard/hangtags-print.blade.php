@@ -208,7 +208,7 @@
                                                 @if ($total_barcodes <= 12 && $total_barcodes > 10)
                                                     <img
                                                     src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
-                                                    width="100px" height="20px">
+                                                    width="125px" height="30px">
                                                 @else
                                                     <img
                                                     src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
