@@ -12,7 +12,7 @@ class ConstantsController extends RootController
 
     const WEB_HOOK_EMAIL = ['testing.demo.as@gmail.com', "imran.majeed@sparsus.com", 'ahmadqalbi1991@gmail.com'];
 
-    const ORDER_NOTIFICATION = ["ahmadqalbi1991@gmail.com"];
+    const ORDER_NOTIFICATION = ["ahmadqalbi1991@gmail.com","imran.majeed@sparsus.com"];
 
     const ALLOWED_DECIMALS = 2;
 
