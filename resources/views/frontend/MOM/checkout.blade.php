@@ -177,6 +177,7 @@ use App\Http\Controllers\CommonController;
                                     <div class="row">
                                        <p class="font-nexa-light m-0 sidemark-section">
                                           {{-- <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a> --}}
+                                           <a href="javascript:void(0)"  style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1">Sidemark</a>
                                           <textarea class="form-control side-mark-text-area-{{$item->item_id}} mt-1" maxlength="35" name="sidemark[{{$item -> item_id}}]"></textarea>
                                        </p>
                                     </div>
