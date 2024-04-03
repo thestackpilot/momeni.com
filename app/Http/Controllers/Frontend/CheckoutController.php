@@ -432,7 +432,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
 
                     try {
 
-                        if (true) {
+                        if (!empty($cart_data['shipping']['Email'])) {
                             SendMail::dispatch( [
                                 'data'     => $cart_data,
                                 'slug'     => "Order Confirmed",
