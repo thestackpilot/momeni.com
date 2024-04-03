@@ -169,7 +169,7 @@ use App\Http\Controllers\CommonController;
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Size: {{$item -> item_size}}</p>
                                     </div>
-                                    @if($item->item_atsq <= 0 )
+                                    @if($item->ATSQ <= 0 )
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Backorder/ETA: {{date('Y-m-d', strtotime($item -> item_eta))}}</p>
                                     </div>

@@ -114,7 +114,8 @@ class Cart extends Model
                 "item_eta"               => $cart_item->item_eta,
                 "item_data"              => $cart_item->item_data,
                 "item_atsq"              => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['ATSQ'] : 9999,
-                "item_only_max_quantity" => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['OnlyMaxQuantity'] : false
+                "item_only_max_quantity" => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['OnlyMaxQuantity'] : false,
+                "ATSQ"                   => isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0
             );
             $cart_count += $cart_item->item_quantity;
             $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
