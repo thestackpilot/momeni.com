@@ -436,7 +436,8 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                             SendMail::dispatch( [
                                 'data'     => $cart_data,
                                 'slug'     => "Order Confirmed",
-                                'email'    => ['ahmadqalbi1991@gmail.com'],
+                                'email'    => ['ahmadqalbi1991@gmail.com', 'techbugs06@gmail.com'],
+//                                'email'    => $cart_data['shipping']['Email'],
                                 'template' => 'email.order-confirmation',
                                 // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
                             ] );
