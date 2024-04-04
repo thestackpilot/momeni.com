@@ -288,10 +288,13 @@ class ItemController extends FrontendController
         if ( strtolower( $id ) === 'oak' )
         {
             $items = $this->update_item_prices( $this->generate_size_name( $this->generate_color_name( $this->generate_price_delivery_info( $this->generate_user_customer_info( $this->generate_image_urls( $this->ApiObj->Get_Items( $id, '', '', '', '', '', '', '', '', '', '', '', '', $design_id ) ) ) ) ) ) );
+            $items['oak'] = true;
         }
         else
         {
             $items = $this->update_item_prices( $this->generate_size_name( $this->generate_color_name( $this->generate_price_delivery_info( $this->generate_user_customer_info( $this->generate_image_urls( $this->ApiObj->Get_Items( $id, $design_id ) ) ) ) ) ) );
+            $items['oak'] = false;
+            
         }
 
         // TODO - Need to REMOVE this chaipi at the top most PRIORITY
