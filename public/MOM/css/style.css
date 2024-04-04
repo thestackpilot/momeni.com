@@ -11706,7 +11706,7 @@ mark {
 }
 
 .muted-fields input,
-.muted-fields select,
+/* .muted-fields select, */
 .muted-fields textarea {
     opacity: 0.4;
     pointer-events: none;

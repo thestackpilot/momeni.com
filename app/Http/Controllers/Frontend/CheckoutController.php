@@ -173,44 +173,24 @@ class CheckoutController extends FrontendController
     {
         $customer_details    = $shipping_options    = $shippings    = $shipping_addresses    = $payment_terms_list    = $customer_payment_options    = $countries    = $states    = [];
         $default_ship_via_id = '';
-
-/*
-$countries        = $this->ApiObj->Get_CountriesList();
-$country_id       = 0;
-
-foreach ( $countries['Countries'] as $country )
-{
-
-if ( $country['OriginCode'] == 'US' )
-{
-$country_id = $country['CountryNo'];
-break;
-}
-
-}
-$states = $this->ApiObj->Get_CountryStates( $country_id );
- */
-
+        $countries        = $this->ApiObj->Get_CountriesList();
+        // $states = $this->ApiObj->Get_CountryStates( $country_id );
         if ( Auth::user() && $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] && $this->cart_model->get_cart_for_front( $this->ApiObj )['items'][0] )
         {
             $customer_details   = $this->ApiObj->Get_CustomerDetail(  ( new Cart() )->get_active_cart_customer() );
             $payment_terms_list = $this->ApiObj->Get_PaymentTermsList();
             $shippings          = $this->ApiObj->Get_ShipViaList();
-
             if ( $shippings && $shippings['Success'] == true )
             {
                 $temp = [];
-
                 foreach ( $shippings['ShipVias'] as $shipping )
                 {
                     $temp[$shipping['Description']] = $shipping;
                 }
-
                 ksort( $temp );
                 $shippings['ShipVias'] = $temp;
                 $shippings             = $shipping_options             = $shippings['ShipVias'];
             }
-
             if (
                 $this->active_theme_json->general->payment_method->enabled &&
                 $this->active_theme_json->general->payment_method->gateway == 'paytrace'
@@ -219,11 +199,9 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 $customer_payment_options = $this->paytrace->get_customer(  ( new Cart() )->get_active_cart_customer() );
                 prr( ['customer_payment_options' => $customer_payment_options] );
             }
-
             if ( $payment_terms_list && $payment_terms_list['Success'] )
             {
                 $payment_terms_list = $payment_terms_list['PaymentTerms'];
-
                 foreach ( $payment_terms_list as $payment_term )
                 {
 
@@ -246,7 +224,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
         }
 
         $this->append_breadcrumbs( 'Checkout', route( 'frontend.checkout' ) );
-
+            // dd($customer_details);
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.checkout', [
             'countries'           => $countries,
             'states'              => $states,
@@ -255,6 +233,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
             'default_ship_via_id' => $default_ship_via_id,
             'shipping_addresses'  => $shipping_addresses,
             'payment_terms_list'  => $payment_terms_list,
+            'customer_details'    => $customer_details,
             'customer_comment'    => isset( $customer_details['CustomerDetail']['Comment'] ) ? $customer_details['CustomerDetail']['Comment'] : '',
             'payment_term'        => isset( $customer_details['CustomerDetail']['PaymentTerm'] ) ? $customer_details['CustomerDetail']['PaymentTerm'] : '',
             'payment_options'     => isset( $customer_payment_options['customers'] ) && count( $customer_payment_options['customers'] ) > 0 ? $customer_payment_options['customers'][0] : []
