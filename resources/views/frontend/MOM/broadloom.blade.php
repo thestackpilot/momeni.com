@@ -219,23 +219,7 @@
                                     <div class="col-md-6 col-sm-12">
                                         <div class="cut-pieces-wrapper">
                                             <h4>Show Cut</h4>
-                                            <div class="cut-pieces">
-                                                <div class="length">
-                                                    13' -0 (Length)
-                                                </div>
-                                                <div class="pieces" style="height: 10cm">
-                                                    <div class="width">
-                                                        10' -0 (Width)
-                                                    </div>
-                                                    <div class="picese-wrapper">
-                                                        <div class="piece" style="height: 10cm; width: 8cm;">
-                                                            8' -0' X 10' -0'
-                                                        </div>
-                                                        <div class="piece" style="height: 10cm; width: 5cm;">
-                                                            5' -0' X 10' -0'
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="cut-pieces" id="cut-pieces">
                                             </div>
                                         </div>
                                     </div>
@@ -990,7 +974,16 @@
         }
 
         $('#show-cut-piece-btn').on('click', function () {
-            console.log($('#TempSalesOrderNo').val())
+            $.ajax({
+                url: "/get-cut-pieces",
+                type: "GET",
+                data: {
+                    temp_sales_order_no: $('#TempSalesOrderNo').val()
+                },
+                success: function (response) {
+                    $('#cut-pieces').html(response)
+                }
+            })
         })
 
         //updated

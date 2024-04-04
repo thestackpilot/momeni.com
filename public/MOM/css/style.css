@@ -13025,6 +13025,8 @@ h3.selected-fltr {
     border-top: 3rem solid #f3f3f3;
     border-left: 3rem solid #f3f3f3;
     display: flex;
+    flex-wrap: wrap;
+    height: 100%;
     margin-top: -3rem;
 
 }

@@ -618,6 +618,13 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Get_Orders', 'Ge Order', $post_array, ['Orders', 'TotalRows'] );
     }
 
+    public function Get_ShowCut( $TempSalesOrderNo = '' )
+    {
+        $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo );
+
+        return $this->Post_API_Signature( 'Get_ShowCut', 'Cut Pieces', $post_array, ['ShowCuts'] );
+    }
+
     public function __construct()
     {
         parent::__construct();

@@ -17,30 +17,27 @@ class ItemController extends FrontendController
         parent::__construct();
     }
 
-    public function generate_color_name( $items )
+    public function generate_color_name($items)
     {
         $ret_item = array();
-        $counter  = 0;
+        $counter = 0;
 
-        foreach ( $items['Items'] as $item )
-        {
-            $item_color       = 'N/A';
+        foreach ($items['Items'] as $item) {
+            $item_color = 'N/A';
             $item_color_image = '';
 
-            foreach ( $items['Colors'] as $color )
-            {
+            foreach ($items['Colors'] as $color) {
 
-                if ( $color['ColorID'] == $item['ColorID'] )
-                {
-                    $item_color       = $color['Description'];
-                    $item_color_image = CommonController::getApiFullImage( $color['ImageName'] );
+                if ($color['ColorID'] == $item['ColorID']) {
+                    $item_color = $color['Description'];
+                    $item_color_image = CommonController::getApiFullImage($color['ImageName']);
                     break;
                 }
 
             }
 
-            $ret_item[$counter]                     = $item;
-            $ret_item[$counter]['ItemColor']        = $item_color;
+            $ret_item[$counter] = $item;
+            $ret_item[$counter]['ItemColor'] = $item_color;
             $ret_item[$counter++]['ItemColorImage'] = $item_color_image;
         }
 
@@ -49,32 +46,26 @@ class ItemController extends FrontendController
         return $items;
     }
 
-    public function generate_image_urls( $items )
+    public function generate_image_urls($items)
     {
         $ret_item = array();
-        $counter  = 0;
+        $counter = 0;
 
-        foreach ( $items['Items'] as $item )
-        {
+        foreach ($items['Items'] as $item) {
             $image_url = array();
 
-            foreach ( $items['ItemImages'] as $imgarr )
-            {
+            foreach ($items['ItemImages'] as $imgarr) {
 
-                if ( $imgarr['ItemID'] == $item['ItemID'] )
-                {
+                if ($imgarr['ItemID'] == $item['ItemID']) {
 
-                    if ( ! in_array( CommonController::getApiFullImage( $imgarr['ImageName'] ), $image_url ) )
-                    {
-                        $image_url[] = CommonController::getApiFullImage( $imgarr['ImageName'] );
+                    if (!in_array(CommonController::getApiFullImage($imgarr['ImageName']), $image_url)) {
+                        $image_url[] = CommonController::getApiFullImage($imgarr['ImageName']);
                     }
 
-                    foreach ( $imgarr['ChildImages'] as $images )
-                    {
+                    foreach ($imgarr['ChildImages'] as $images) {
 
-                        if ( ! in_array( CommonController::getApiFullImage( $images['ImageName'] ), $image_url ) )
-                        {
-                            $image_url[] = CommonController::getApiFullImage( $images['ImageName'] );
+                        if (!in_array(CommonController::getApiFullImage($images['ImageName']), $image_url)) {
+                            $image_url[] = CommonController::getApiFullImage($images['ImageName']);
                         }
 
                     }
@@ -84,18 +75,14 @@ class ItemController extends FrontendController
 
             }
 
-            if ( ! $image_url )
-            {
+            if (!$image_url) {
 
-                foreach ( $items['Items'] as $inner_item )
-                {
+                foreach ($items['Items'] as $inner_item) {
 
-                    if ( isset( $inner_item['ImageName'] ) && $inner_item['ImageName'] )
-                    {
+                    if (isset($inner_item['ImageName']) && $inner_item['ImageName']) {
 
-                        if ( ! in_array( CommonController::getApiFullImage( $inner_item['ImageName'] ), $image_url ) )
-                        {
-                            $image_url[] = CommonController::getApiFullImage( $inner_item['ImageName'] );
+                        if (!in_array(CommonController::getApiFullImage($inner_item['ImageName']), $image_url)) {
+                            $image_url[] = CommonController::getApiFullImage($inner_item['ImageName']);
                         }
 
                     }
@@ -104,7 +91,7 @@ class ItemController extends FrontendController
 
             }
 
-            $ret_item[$counter]                     = $item;
+            $ret_item[$counter] = $item;
             $ret_item[$counter++]['ImageNameArray'] = $image_url;
         }
 
@@ -113,29 +100,24 @@ class ItemController extends FrontendController
         return $items;
     }
 
-    public function generate_price_delivery_info( $items )
+    public function generate_price_delivery_info($items)
     {
         // TODO - Remove this function for future useage
         return $items;
 
         $ret_item = array();
-        $counter  = 0;
+        $counter = 0;
 
-        foreach ( $items['Items'] as $item )
-        {
+        foreach ($items['Items'] as $item) {
             $ret_item[$counter] = $item;
-            $customer_counter   = 0;
+            $customer_counter = 0;
 
-            if (  ( new Cart() )->get_active_cart_customer() )
-            {
-                $ret_item[$counter]['UserCustomerInfo']['Customers'][$customer_counter++]['ATSInfo'] = $this->update_ats_prices( $this->ApiObj->Get_ATS( $item['ItemID'], ( new Cart() )->get_active_cart_customer() )['ATSInfo'], $item['ItemID'] );
-            }
-            else
-            {
+            if ((new Cart())->get_active_cart_customer()) {
+                $ret_item[$counter]['UserCustomerInfo']['Customers'][$customer_counter++]['ATSInfo'] = $this->update_ats_prices($this->ApiObj->Get_ATS($item['ItemID'], (new Cart())->get_active_cart_customer())['ATSInfo'], $item['ItemID']);
+            } else {
 
-                foreach ( $item['UserCustomerInfo']['Customers'] as $customers )
-                {
-                    $ret_item[$counter]['UserCustomerInfo']['Customers'][$customer_counter++]['ATSInfo'] = $this->update_ats_prices( $this->ApiObj->Get_ATS( $item['ItemID'], $customers['CustomerID'] )['ATSInfo'], $item['ItemID'] );
+                foreach ($item['UserCustomerInfo']['Customers'] as $customers) {
+                    $ret_item[$counter]['UserCustomerInfo']['Customers'][$customer_counter++]['ATSInfo'] = $this->update_ats_prices($this->ApiObj->Get_ATS($item['ItemID'], $customers['CustomerID'])['ATSInfo'], $item['ItemID']);
                 }
 
             }
@@ -146,25 +128,21 @@ class ItemController extends FrontendController
         $items['Items'] = $ret_item;
     }
 
-    public function generate_size_name( $items )
+    public function generate_size_name($items)
     {
         $ret_item = array();
-        $counter  = 0;
+        $counter = 0;
 
-        foreach ( $items['Items'] as $item )
-        {
-            $item_size          = 'N/A';
+        foreach ($items['Items'] as $item) {
+            $item_size = 'N/A';
             $shipping_dimension = '';
 
-            foreach ( $items['Sizes'] as $size )
-            {
+            foreach ($items['Sizes'] as $size) {
 
-                if ( $size['SizeID'] == $item['SizeID'] )
-                {
+                if ($size['SizeID'] == $item['SizeID']) {
                     $item_size = $size['Description'];
 
-                    if ( isset( $size['DimentionalWeight'] ) )
-                    {
+                    if (isset($size['DimentionalWeight'])) {
                         $shipping_dimension = [
                             'DimentionalWeight' => $size['DimentionalWeight'],
                             'ShippingDimension' => $size['ShippingDimension']
@@ -176,8 +154,8 @@ class ItemController extends FrontendController
 
             }
 
-            $ret_item[$counter]                        = $item;
-            $ret_item[$counter]['ItemSize']            = $item_size;
+            $ret_item[$counter] = $item;
+            $ret_item[$counter]['ItemSize'] = $item_size;
             $ret_item[$counter++]['ItemSizeDimension'] = $shipping_dimension;
         }
 
@@ -186,42 +164,35 @@ class ItemController extends FrontendController
         return $items;
     }
 
-    public function generate_user_customer_info( $items )
+    public function generate_user_customer_info($items)
     {
         $customer = array();
 
-        if ( Auth::user() )
-        {
+        if (Auth::user()) {
 
-            if ( Auth::user()->is_sale_rep )
-            {
+            if (Auth::user()->is_sale_rep) {
                 //check if some item in the cart exists for this user - if yes then change the data accordingly
-                $customer                 = json_decode( Auth::user()->sales_rep_customers, true );
-                $customer['IsSaleRep']    = 1;
+                $customer = json_decode(Auth::user()->sales_rep_customers, true);
+                $customer['IsSaleRep'] = 1;
                 $customer['UserLoggedIn'] = 1;
-                $customer['CustomerSet']  = ( new Cart() )->get_active_cart_customer();
-            }
-            else
-            {
-                $customer['Customers'][]  = array( 'CustomerID' => Auth::user()->customer_id, 'CompanyName' => Auth::user()->company );
-                $customer['IsSaleRep']    = 0;
+                $customer['CustomerSet'] = (new Cart())->get_active_cart_customer();
+            } else {
+                $customer['Customers'][] = array('CustomerID' => Auth::user()->customer_id, 'CompanyName' => Auth::user()->company);
+                $customer['IsSaleRep'] = 0;
                 $customer['UserLoggedIn'] = 1;
             }
 
-        }
-        else
-        {
-            $customer['Customers'][]  = array( 'CustomerID' => '0', 'CompanyName' => 'N/A' );
+        } else {
+            $customer['Customers'][] = array('CustomerID' => '0', 'CompanyName' => 'N/A');
             $customer['UserLoggedIn'] = 0;
-            $customer['IsSaleRep']    = 0;
+            $customer['IsSaleRep'] = 0;
         }
 
         $ret_item = array();
-        $counter  = 0;
+        $counter = 0;
 
-        foreach ( $items['Items'] as $item )
-        {
-            $ret_item[$counter]                       = $item;
+        foreach ($items['Items'] as $item) {
+            $ret_item[$counter] = $item;
             $ret_item[$counter++]['UserCustomerInfo'] = $customer;
         }
 
@@ -230,56 +201,48 @@ class ItemController extends FrontendController
         return $items;
     }
 
-    public function get_item_ats( Request $request )
+    public function get_item_ats(Request $request)
     {
 
-        $return = ['success' => 0, 'data' => json_encode( ['ATSQty' => 0, 'Price' => 0, 'ETADate' => null, 'ETAQty' => 0, 'Message' => 'Not Available'] )];
+        $return = ['success' => 0, 'data' => json_encode(['ATSQty' => 0, 'Price' => 0, 'ETADate' => null, 'ETAQty' => 0, 'Message' => 'Not Available'])];
 
-        if ( $request->has( 'item_id' ) && $request->has( 'customer_id' ) )
-        {
+        if ($request->has('item_id') && $request->has('customer_id')) {
             $return = [
                 'success' => 1,
-                'data'    => $this->update_ats_prices( $this->ApiObj->Get_ATS( $request->item_id, $request->customer_id )['ATSInfo'], $request->item_id, $request->customer_id )
+                'data' => $this->update_ats_prices($this->ApiObj->Get_ATS($request->item_id, $request->customer_id)['ATSInfo'], $request->item_id, $request->customer_id)
             ];
         }
 
-        return response()->json( $return );
+        return response()->json($return);
     }
 
     // Testing ideal link RZY = http://vcs.local.com/item/3/BQ4189
     // Testing ideal link LR = http://vcs.local.com/item/Rugs%20&%20Carpets/81451
-    public function index( $id, $design_id, $color_id = 0 )
+    public function index($id, $design_id, $color_id = 0)
     {
 
-        if ( strtolower( $id ) === 'oak' )
-        {
-            $items = $this->update_item_prices( $this->generate_size_name( $this->generate_color_name( $this->generate_price_delivery_info( $this->generate_user_customer_info( $this->generate_image_urls( $this->ApiObj->Get_Items( $id, '', '', '', '', '', '', '', '', '', '', '', '', $design_id ) ) ) ) ) ) );
-        }
-        else
-        {
-            $items = $this->update_item_prices( $this->generate_size_name( $this->generate_color_name( $this->generate_price_delivery_info( $this->generate_user_customer_info( $this->generate_image_urls( $this->ApiObj->Get_Items( $id, $design_id ) ) ) ) ) ) );
+        if (strtolower($id) === 'oak') {
+            $items = $this->update_item_prices($this->generate_size_name($this->generate_color_name($this->generate_price_delivery_info($this->generate_user_customer_info($this->generate_image_urls($this->ApiObj->Get_Items($id, '', '', '', '', '', '', '', '', '', '', '', '', $design_id)))))));
+        } else {
+            $items = $this->update_item_prices($this->generate_size_name($this->generate_color_name($this->generate_price_delivery_info($this->generate_user_customer_info($this->generate_image_urls($this->ApiObj->Get_Items($id, $design_id)))))));
         }
 
         // TODO - Need to REMOVE this chaipi at the top most PRIORITY
-        if ( isset( $_GET['refresh'] ) && $_GET['refresh'] )
-        {
-            $related_designs  = [];
+        if (isset($_GET['refresh']) && $_GET['refresh']) {
+            $related_designs = [];
             $main_collections = [];
-            $main_collection  = ( new MainCollectionController() )->get_main_collection( $id );
-        }
-        else
-        {
-            $related_designs  = ( new DesignController() )->addDesignUrls( $this->ApiObj->Get_Designs( $id, base64_decode(  ( new CollectionsController() )->generate_single_filter( "Collection", $items['Items'][0]['QualityDescription'] ) ) ), $id ); //
-            $main_collections = ( new MainCollectionController() )->get_main_collections();
-            $main_collection  = ( new MainCollectionController() )->get_main_collection( $id );
+            $main_collection = (new MainCollectionController())->get_main_collection($id);
+        } else {
+            $related_designs = (new DesignController())->addDesignUrls($this->ApiObj->Get_Designs($id, base64_decode((new CollectionsController())->generate_single_filter("Collection", $items['Items'][0]['QualityDescription']))), $id); //
+            $main_collections = (new MainCollectionController())->get_main_collections();
+            $main_collection = (new MainCollectionController())->get_main_collection($id);
 
-            $this->append_breadcrumbs( $main_collection['Description'], route( 'frontend.favourite', $id ) );
-            $this->append_breadcrumbs( $items['Items'][0]['QualityDescription'], route( 'frontend.designs', [$id, ( new CollectionsController() )->generate_single_filter( "Collection", $items['Items'][0]['QualityDescription'] ), '0'] ) );
+            $this->append_breadcrumbs($main_collection['Description'], route('frontend.favourite', $id));
+            $this->append_breadcrumbs($items['Items'][0]['QualityDescription'], route('frontend.designs', [$id, (new CollectionsController())->generate_single_filter("Collection", $items['Items'][0]['QualityDescription']), '0']));
 
             // $this->append_breadcrumbs( $items['Items'][0]['ItemName'], route( 'frontend.item', [$id, $design_id] ) );
-            if ( isset( $this->active_theme_json->general->extended_breadcrumbs ) && $this->active_theme_json->general->extended_breadcrumbs )
-            {
-                $this->append_breadcrumbs( $items['Items'][0]['DesignID'], route( 'frontend.item', [$id, $design_id] ) );
+            if (isset($this->active_theme_json->general->extended_breadcrumbs) && $this->active_theme_json->general->extended_breadcrumbs) {
+                $this->append_breadcrumbs($items['Items'][0]['DesignID'], route('frontend.item', [$id, $design_id]));
             }
 
         }
@@ -294,73 +257,118 @@ class ItemController extends FrontendController
         }
         // die("<pre>".print_r( $main_collection['Description'], 1)."</pre>");
 //         dd($items);
-        return view( 'frontend.'.$this->active_theme->theme_abrv.$page, [
-            'items'            => $items,
-            'items_json'       => json_encode( $items ),
+        return view('frontend.' . $this->active_theme->theme_abrv . $page, [
+            'items' => $items,
+            'items_json' => json_encode($items),
             'main_collections' => $main_collections,
-            'collection'       => $main_collection['Description'],
-            'collection_id'    => $id,
-            'related_designs'  => $related_designs,
-            'color'            => $color_id,
-	        'is_oak'	       => strtolower( $id ) === 'oak',
-	        'design_id'	       => $design_id
-        ] );
+            'collection' => $main_collection['Description'],
+            'collection_id' => $id,
+            'related_designs' => $related_designs,
+            'color' => $color_id,
+            'is_oak' => strtolower($id) === 'oak',
+            'design_id' => $design_id
+        ]);
 
     }
 
-    public function update_ats_prices( $data, $item_id, $customer_id = 0 )
+    public function update_ats_prices($data, $item_id, $customer_id = 0)
     {
         $multiplier = 1;
 
         if (
             Auth::user() &&
-            strcmp( Auth::user()->getDataAttribute( 'cost-type', 'my-cost' ), 'msrp' ) === 0 &&
-            Auth::user()->getDataAttribute( 'msrp-multiplier', 1 )
-        )
-        {
-            $multiplier    = Auth::user()->getDataAttribute( 'msrp-multiplier', 1 );
-            $data['Price'] = number_format( $data['Price'] * $multiplier, ConstantsController::ALLOWED_DECIMALS, '.', ',' );
+            strcmp(Auth::user()->getDataAttribute('cost-type', 'my-cost'), 'msrp') === 0 &&
+            Auth::user()->getDataAttribute('msrp-multiplier', 1)
+        ) {
+            $multiplier = Auth::user()->getDataAttribute('msrp-multiplier', 1);
+            $data['Price'] = number_format($data['Price'] * $multiplier, ConstantsController::ALLOWED_DECIMALS, '.', ',');
         }
 
         $data['OnlyMaxQuantity'] = (
-            CommonController::check_bit_field( $data, 'Discontinued' ) ||
-            CommonController::check_bit_field( $data, 'SpecialBuy' ) ||
-            CommonController::check_bit_field( $data, 'Reviewed' )
+            CommonController::check_bit_field($data, 'Discontinued') ||
+            CommonController::check_bit_field($data, 'SpecialBuy') ||
+            CommonController::check_bit_field($data, 'Reviewed')
         );
 
         $data['ATSQtyOrig'] = $data['ATSQty'];
-        $data['ATSQty']     = $data['ATSQty'] - ( new Cart() )->get_item_quantity( $item_id );
-        $data['ETADate']    = CommonController::get_date_format( $data['ETADate'] );
+        $data['ATSQty'] = $data['ATSQty'] - (new Cart())->get_item_quantity($item_id);
+        $data['ETADate'] = CommonController::get_date_format($data['ETADate']);
 
         // $data['ItemExistInCart']    =  ( new Cart() )->get_item_quantity( $item_id ) ? true : false;
-        $cart_item               = ( new Cart() )->get_item( $item_id );
-        $data['ItemExistInCart'] = $cart_item ? ( $cart_item->customer_id == $customer_id ? 1 : -1 ) : 0;
+        $cart_item = (new Cart())->get_item($item_id);
+        $data['ItemExistInCart'] = $cart_item ? ($cart_item->customer_id == $customer_id ? 1 : -1) : 0;
 
         return $data;
 
     }
 
-    public function update_item_prices( $items )
+    public function update_item_prices($items)
     {
         $multiplier = 1;
 
         if (
             Auth::user() &&
-            strcmp( Auth::user()->getDataAttribute( 'cost-type', 'my-cost' ), 'msrp' ) === 0 &&
-            Auth::user()->getDataAttribute( 'msrp-multiplier', 1 )
-        )
-        {
-            $multiplier = Auth::user()->getDataAttribute( 'msrp-multiplier', 1 );
+            strcmp(Auth::user()->getDataAttribute('cost-type', 'my-cost'), 'msrp') === 0 &&
+            Auth::user()->getDataAttribute('msrp-multiplier', 1)
+        ) {
+            $multiplier = Auth::user()->getDataAttribute('msrp-multiplier', 1);
 
-            foreach ( $items['Items'] as &$item )
-            {
-                $item['BasePrice'] = number_format( $item['BasePrice'] * $multiplier, ConstantsController::ALLOWED_DECIMALS, '.', ',' );
+            foreach ($items['Items'] as &$item) {
+                $item['BasePrice'] = number_format($item['BasePrice'] * $multiplier, ConstantsController::ALLOWED_DECIMALS, '.', ',');
             }
 
         }
 
         return $items;
 
+    }
+
+    public function get_cut_pieces(Request $request)
+    {
+        $id = $request->temp_sales_order_no;
+        $cut_pieces = $this->ApiObj->Get_ShowCut($id);
+
+        $total_length = $total_width = 0;
+        $dimensions = [];
+        foreach ($cut_pieces['ShowCuts'] as $key => $cut_piece) {
+            $length_in_feet = round($cut_piece['ATSLength'] / 12);
+            $length_in_inches = round($cut_piece['ATSLength'] % 12);
+            $width_in_feet = round($cut_piece['ATSWidth'] / 12);
+            $width_in_inches = round($cut_piece['ATSWidth'] % 12);
+            $dimension = $length_in_feet . "'" . $length_in_inches . '" x ' . $width_in_feet . "'" . $width_in_inches . '"';
+            $dimensions[$key] = [];
+            $length = $length_in_feet . '.' . $length_in_inches;
+            $width = $width_in_feet . '.' . $width_in_inches;
+            $total_length = $total_length + $length;
+            $total_width = $total_width + $width;
+            $dimensions[$key]['length'] = $length;
+            $dimensions[$key]['width'] = $width;
+            $dimensions[$key]['dimension'] = $dimension;
+        }
+
+        $html = '';
+        $html .= "<div class='length'>" . $total_length . "' (Length)</div>";
+        $html .= '<div class="pieces">';
+        $html .= "<div class='width'>" . $total_width . "' (Width)</div>";
+        $html .= '<div class="picese-wrapper" id="picese-wrapper">';
+        $multiplier = count($cut_pieces['ShowCuts']) <= 2 ? 1 : 2;
+        foreach ($dimensions as $dimension) {
+            $dimension_width = number_format((($dimension['width'] / $total_width) * 100) * $multiplier, 2);
+            $dimension_length = number_format((($dimension['length'] / $total_length) * 100) * $multiplier, 2);
+            if ($dimension_width > 100) {
+                $dimension_width = 100;
+            }
+
+            if ($dimension_length > 100) {
+                $dimension_length = 100;
+            }
+
+            $html .= '<div class="piece" style="width: ' . $dimension_length . '%; height: ' . $dimension_width . '%;">' . $dimension['dimension'] . '</div>';
+        }
+
+        $html .= '</div>';
+        $html .= '</div>';
+        return $html;
     }
 
 }
