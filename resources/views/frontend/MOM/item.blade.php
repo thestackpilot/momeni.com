@@ -58,10 +58,11 @@
                         <div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
                             <div class="product-details-left">
                                 <div class="product-details-images-2 slider-lg-image-2">
-                                    <div class="easyzoom-style">
-                                        <div class="easyzoom easyzoom--overlay">
-                                            <a href="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" class="poppu-img" id="product-main-image">
-                                                <img id="image_0" class="img-fluid" src="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" alt="{{$items['Items'][0]['ItemName']}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
+                                    <div class="easyzoom-style" style="
+                                    height: 100%;">
+                                        <div class="easyzoom easyzoom--overlay" style="height: 100%;">
+                                            <a style="height: 100%;" href="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" class="poppu-img" id="product-main-image">
+                                                <img style="height: 100%;" id="image_0" class="img-fluid" src="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" alt="{{$items['Items'][0]['ItemName']}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
                                             </a>
                                         </div>
                                     </div>
@@ -89,7 +90,7 @@
                                 <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}">
 
                                 <h3 class="price {{isset($is_oak) && $is_oak ? 'd-none' : ''}}" id="product-heading">{{$items['Items'][0]['ItemName']}}<b>{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
-                                
+
                                 <div class="quickview-peragraph">
                                     <h3 class="detiel-heading"> Description</h3>
                                     <p id="product-description">{!! trim($items['Items'][0]['ProductDescription']) == '' || strtolower(trim($items['Items'][0]['ProductDescription'])) == 'not available' ? '' : $items['Items'][0]['ProductDescription'] !!}</p>
@@ -97,8 +98,8 @@
                                     <table class="table my-table" id="item-udf-fields">
                                         @foreach($items['Items'][0]['UDFFields'] as $field)
                                         @if (
-                                            $field['FieldName'] == 'Color' || 
-                                            $field['FieldName'] == 'Size' || 
+                                            $field['FieldName'] == 'Color' ||
+                                            $field['FieldName'] == 'Size' ||
                                             $field['Value'] == '-' ||
                                             $field['Value'] == 'N/A' ||
                                             !strlen($field['Value'])
@@ -112,7 +113,7 @@
                                         @endforeach
                                     </table>
                                 </div>
-                                
+
                                 <div class="section over-hide z-bigger" id="item_variant_parent">
                                     <h3 class="detiel-heading">Collection</h3>
                                     <div id="item_variant" class="d-flex flex-wrap justify-flex justify-content-start flex-row variant-details">
@@ -221,13 +222,13 @@
                                 </div>
 
                                 @endif
-                                
+
                             </div>
                         </div>
                     </div>
 
 <!-- product size Chart -->
-                
+
                     @if (isset($items['ItemsETA']) && $items['ItemsETA'] && !$is_oak)
                     @auth()
                             <div class="m-auto mt-5 p-0 text-center product_chart">
@@ -317,7 +318,7 @@
                                                     class="PAChart-Dimensions-Weight PAChart-text-Heading">Shipping
                                                     Dimensions / Weight</td>
                                                 <td width="15%" align="center"
-                                                    class="PAChart-Color PAChart-text-Heading">Color</td> 
+                                                    class="PAChart-Color PAChart-text-Heading">Color</td>
                                             </tr>
                                             @foreach ($items['ItemsETA'] as $itemETA)
                                                 <tr class="">
@@ -377,6 +378,7 @@
 @section('scripts')
 <script>
     var item_object = ""; //get the json decoded object
+    var broadloom_item_exist = '';
     var customerID = $('input[name="sale_rep"]').val() == 1 ? '' : 1;
     // Instantiate EasyZoom instances
     var $easyzoom = $('.easyzoom').easyZoom({
@@ -458,14 +460,17 @@
                 },
                 success: function(response) {
                     var new_html = $($.parseHTML(response));
-         
+
                     $('#item_json').html(new_html.find('#item_json').html());
 
                     item_object = JSON.parse($('#item_json').html());
 
                     $('#cart-parent').html(new_html.find('#cart-parent').html());
+                    $('#quickCart').html(new_html.find('#quickCart').html());
                     $('#profile-parent').html(new_html.find('#profile-parent').html());
-
+                    console.log("quickcart");
+                    console.log(new_html.find('#quickCart').html());
+                    console.log( $('#quickCart').html());
                     $('#cart_main').html(new_html.find('#cart_main').html());
                     $('#cart_main').find('#add_to_cart').removeClass('d-none');
                     $('#cart_main').find('#login_by_popup').remove();
@@ -519,7 +524,7 @@
                                         .UserCustomerInfo.Customers[0].CustomerID, response.data);
                                 });
                             }
-                        
+
                 }
             });
         }
@@ -925,7 +930,7 @@
                                     startBuyingBulk(item_id, customer_id, response.data);
                                     console.log("bulk");
                                 });
-                            
+
                             // else {
                             if (!$('#qty-main').is(':visible'))
                                 show_components(['.qty-loader']);
@@ -1012,10 +1017,14 @@
             $('#item_qty').val(1);
             console.log('exists:',ATSInfo.ItemExistInCart);
             if(ATSInfo.ItemExistInCart) {
-                $("#qty_msg").text(ATSInfo.ItemExistInCart == 1 ? 'Item is already in your Cart.' : 'Item not available.');
-                $("#qty_msg").addClass('bg-warning');
-                show_components(['#qty_msg']);
-                hide_components(['#add_to_cart']);
+                broadloom_item_exist = ATSInfo.ItemExistInCart;
+                console.log("br_exist:", broadloom_item_exist);
+                // $("#qty_msg").text(ATSInfo.ItemExistInCart == 1 ? 'Item is already in your Cart.' : 'Item not available.');
+                // $("#qty_msg").addClass('bg-warning');
+                // // show_components(['#qty_msg']);
+                // show_components(['#add_to_cart']);
+            }else{
+                broadloom_item_exist = '';
             }
         }
     }
@@ -1054,16 +1063,14 @@
         // }
 
         ATSInfo.forEach(function(item, index) {
-            console.log("item.price: ", item.Price);
-            console.log("item.ATSQty: ", item.ATSQty);
             $('.cart_item_id').each(function() {
                 if ($(this).val() == item.ItemID) {
-                    console.log("bulk truee");
+
                     price = item.Price.toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD',
                     });
-                    
+
                     if (!price.includes('$'))
                         price = '$' + price;
 
@@ -1087,15 +1094,17 @@
     }
 
     function pushToCart() {
+
         $('#add_to_cart').addClass('btn-muted');
         $('#cart_item_quantity').val($('#item_qty').val());
         console.log("cart_customer_id: ", $('#cart_customer_id').val());
         if ((/^\+?[1-9]\d*/).test(parseInt($('#item_qty').val()))) {
             $.ajax({
                 method: 'POST',
+                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                 url: '{{route("frontend.cart.add")}}',
                 data: {
-                    '_token': '{{csrf_token()}}',
+                    // '_token': '{{csrf_token()}}',
                     'cart_item_id': $('#cart_item_id').val(),
                     'cart_customer_id': $('#cart_customer_id').val(),
                     'cart_item_name': $('#cart_item_name').val(),
@@ -1105,7 +1114,7 @@
                     'cart_item_size': $('#cart_item_size').val(),
                     'cart_item_currency': $('#cart_item_currency').val(),
                     'cart_item_image': $('#cart_item_image').val(),
-                    'cart_item_data': $('#item_json').html(),
+                    // 'cart_item_data': $('#item_json').html(),
                     // 'cart_item_data': $('#cart_item_oak').val(),
                     'cart_item_eta': $('#cart_item_eta').val()
                 },
@@ -1225,6 +1234,31 @@
                         hideDuration: 10000,
                         closeButton: true,
                     });
+                else if('{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id)}}' ) {
+                        hide_components(['#qty_msg', '.postfix', '#item_variant_parent', '#item_color_parent', '#item_size_parent', '#qty-main', '#cart_main h3']);
+                        $('#item_qty').val(1);
+                        console.log('exists:',broadloom_item_exist);
+                            var message = '';
+                            if(broadloom_item_exist === 1){
+                                console.log('if');
+                                message = 'Item is already in your Cart.';
+                                toastr.warning(message, {
+                                        hideDuration: 10000,
+                                        closeButton: true,
+                                    });
+                            }else if(broadloom_item_exist === 0){
+                                console.log('else if');
+                                message = 'Item not available.'
+                                toastr.warning(message, {
+                                        hideDuration: 10000,
+                                        closeButton: true,
+                                    });
+                            }else{
+                                pushToCart();
+
+                            }
+
+                    }
                 else
                     pushToCart();
             });
@@ -1303,7 +1337,7 @@
         //         }
         //     }
         // });
-        
+
     });
 </script>
 @endsection

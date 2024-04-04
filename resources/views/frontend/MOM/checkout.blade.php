@@ -4,7 +4,17 @@
 
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
+// print_r("<pre>");
+// print_r($cart->items);
+// foreach($cart->items as $item) {
+//    if( isset($item_data -> oak) && $item_data -> oak )
+//    {
+//       $item_data = json_decode(unserialize($item -> item_data));
+//       print_r($item_data->oak);
+//    }
 
+// }
+// die();
 @endphp
 
 @extends('frontend.' . $active_theme -> theme_abrv . '.layouts.app')
@@ -157,12 +167,18 @@ use App\Http\Controllers\CommonController;
                                        <p class="font-nexa-light m-0"> Color: {{$item -> item_color}}</p>
                                     </div>
                                     <div class="row">
+                                       <p class="font-nexa-light m-0"> Size: {{$item -> item_size}}</p>
+                                    </div>
+                                    @if($item->ATSQ <= 0 )
+                                    <div class="row">
                                        <p class="font-nexa-light m-0"> Backorder/ETA: {{date('Y-m-d', strtotime($item -> item_eta))}}</p>
                                     </div>
+                                    @endif
                                     <div class="row">
                                        <p class="font-nexa-light m-0 sidemark-section">
-                                          <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a>
-                                          <textarea class="form-control d-none" maxlength="35" name="sidemark[{{$item -> item_id}}]"></textarea>
+                                          {{-- <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a> --}}
+                                           <a href="javascript:void(0)"  style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1">Sidemark</a>
+                                          <textarea class="form-control side-mark-text-area-{{$item->item_id}} mt-1" maxlength="35" name="sidemark[{{$item -> item_id}}]"></textarea>
                                        </p>
                                     </div>
                                  </div>
@@ -225,12 +241,15 @@ use App\Http\Controllers\CommonController;
                                        <p class="font-nexa-light m-0"> Color: {{$item -> item_color}}</p>
                                     </div>
                                     <div class="row">
+                                       <p class="font-nexa-light m-0"> Size: {{$item -> item_size}}</p>
+                                    </div>
+                                    <div class="row">
                                        <p class="font-nexa-light m-0"> Backorder/ETA: {{date('Y-m-d', strtotime($item -> item_eta))}}</p>
                                     </div>
                                     <div class="row">
                                        <p class="font-nexa-light m-0 sidemark-section">
-                                          <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a>
-                                          <textarea class="form-control d-none" maxlength="35" name="sidemark[{{$item -> item_id}}]"></textarea>
+                                          {{-- <a href="javascript:void(0);" style="font-size: 12px;" class="btn--border-bottom m-0 mt-1 mb-1 add-sidemark"> Add Sidemark </a> --}}
+                                          <textarea class="form-control side-mark-text-area-{{$item->item_id}}" maxlength="35" name="sidemark[{{$item -> item_id}}]"></textarea>
                                        </p>
                                     </div>
                                  </div>
@@ -304,8 +323,10 @@ use App\Http\Controllers\CommonController;
                                  <div class="d-flex flex-row justify-content-between column-gap-20 mb-4">
                                     <div class="d-flex flex-column fullwidth">
                                        <label class="p-0 m-0 mb-3">State <span class="color-red">*</span> </label>
-                                       <input type="text" data-required="true" class="form-control bg-white" name="State" maxlength="50" aria-describedby="State" placeholder="State*">
-                                    </div>
+                                       <select class="form-control bg-white" name="State" aria-describedby="State" required id="state_dropdown">
+                                        <option value="">Select a state*</option>
+                                    </select>
+                                </div>
                                     <div class="d-flex flex-column fullwidth">
                                        <label class="p-0 m-0 mb-3">City <span class="color-red">*</span> </label>
                                        <input type="text" data-required="true" class="form-control bg-white" name="City" maxlength="35" aria-describedby="City" placeholder="City*">
@@ -315,7 +336,12 @@ use App\Http\Controllers\CommonController;
                               <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
                                  <div class="d-flex flex-column fullwidth">
                                     <label class="p-0 m-0 mb-3">Country <span class="color-red">*</span> </label>
-                                    <input type="text" data-required="true" name="country" maxlength="30" class="form-control bg-white" aria-describedby="Country" placeholder="Country*">
+                                    <select class="form-control bg-white" name="Country" aria-describedby="Country" required id="country_dropdown">
+                                        <option value="">Select a country*</option>
+                                        @foreach($countries['Countries'] as $row)
+                                        <option value="{{$row['OriginCode']}}">{{$row['Description']}}</option>
+                                        @endforeach
+                                    </select>
                                  </div>
                                  <div class="d-flex flex-column fullwidth">
                                     <label class="p-0 m-0 mb-3">Postal Code <span class="color-red">*</span> </label>
@@ -529,6 +555,7 @@ use App\Http\Controllers\CommonController;
                                  <p class="specs m-0"> <strong class="font-crimson"> Color: </strong> <span class="font-ropa"> {{$item -> item_color}} </span> </p>
                                  <p class="specs m-0"> <strong class="font-crimson"> Size: </strong> <span class="font-ropa"> {{$item -> item_size}} </span> </p>
                                  <p class="specs m-0"> <strong class="font-crimson"> Qty: </strong> <span class="font-ropa"> {{$item -> item_quantity}} </span> </p>
+                                 <p class="specs m-0"> <strong class="font-crimson side-mark-{{$item->item_id}} d-none"> SideMark: </strong> <span class="font-ropa side-mark-span-{{$item -> item_id}}"></span> </p>
                                  <p class="price justify-content-end m-0"> Sub Total: {{$item -> item_currency}}{{$item -> item_total}} </p>
                               </div>
                            </div>
@@ -568,6 +595,7 @@ use App\Http\Controllers\CommonController;
             </div>
          </div>
       </section>
+      {{-- @dd($cart) --}}
    </main>
    @include('frontend.'.$active_theme -> theme_abrv.'.components.footer')
 </div>
@@ -613,6 +641,9 @@ use App\Http\Controllers\CommonController;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
 <script>
    $(document).ready(function() {
+
+
+
       var visited_tab = [1, 2];
       var shipping_address = '';
       if (typeof paytrace !== 'undefined')
@@ -635,7 +666,7 @@ use App\Http\Controllers\CommonController;
 
          for(i = step; i > 0; i--)
             $(`#progressbar li[data-step="${i}"]`).removeClass('muted').addClass('active');
-         
+
          $(`#progressbar li[data-step="${step}"]`).addClass('current');
 
          $('html, body').animate({scrollTop:0}, 'slow');
@@ -681,6 +712,15 @@ use App\Http\Controllers\CommonController;
          $('.step-2').removeClass('d-none');
          $('.go-back').attr('data-step', 'step-1');
          $('[name="ship-pickup"]').change();
+         var cartItems = {!! json_encode($cart->items) !!};
+         $.each(cartItems, function(index, item) {
+            console.log('.side-mark-text-area-' + item.item_id);
+            if($('.side-mark-text-area-' + item.item_id).val()){
+            console.log($('.side-mark-text-area-' + item.item_id).val());
+            $('.side-mark-' + item.item_id ).removeClass('d-none');
+            $('.side-mark-span-' + item.item_id).text($('.side-mark-text-area-' + item.item_id).val());
+        }
+            });
          update_active_step( 2 );
       });
 
@@ -810,6 +850,65 @@ use App\Http\Controllers\CommonController;
          }
       });
 
+    //   console.log("hello " + "{{$customer_details['CustomerDetail']['Country']}}");
+            if("{{$customer_details['CustomerDetail']['Country']}}"){
+            var selectedCountry = "{{$customer_details['CustomerDetail']['Country']}}";
+            $('#country_dropdown option').each(function() {
+                if ($(this).text() === selectedCountry) {
+                    console.log(selectedCountry);
+                    $(this).prop('selected', true);
+                    $.ajax({
+                    url: "{{route('checkout.states', ['country' => $customer_details['CustomerDetail']['Country']])}}",
+                    type: 'POST',
+                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                    dataType: 'json',
+                    success: function(response) {
+                        $('#state_dropdown').empty();
+                        $('#state_dropdown').append('<option value="">Select a state*</option>');
+                        $.each(response, function(index, value) {
+                        var option = $('<option>', {
+                            value: value.StateID,
+                            text: value.StateName
+                        });
+                        if (value.StateName == "{{$customer_details['CustomerDetail']['State']}}") {
+                            option.prop('selected', true);
+                        }
+                        $('#state_dropdown').append(option);
+                    });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+                }
+            });
+            }
+
+            $('#country_dropdown').change(function() {
+            var selectedCountry = $(this).find('option:selected').text();
+            $.ajax({
+                url: "{{route('checkout.states')}}",
+                    type: 'POST',
+                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                    dataType: 'json',
+                data: {country: selectedCountry},
+                success: function(response) {
+                    $('#state_dropdown').empty();
+                        $('#state_dropdown').append('<option value="">Select a state*</option>');
+                        $.each(response, function(index, value) {
+                        var option = $('<option>', {
+                            value: value.StateID,
+                            text: value.StateName
+                        });
+                        $('#state_dropdown').append(option);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
       $('.go-to-payment').on('click', function() {
          shipping_address = '';
          if (!$('.other-address').hasClass('muted-fields')) {
@@ -872,7 +971,7 @@ use App\Http\Controllers\CommonController;
             $('.step-3').removeClass('d-none');
             $('.go-back').attr('data-step', 'step-2');
             update_active_step( 3 ); */
-            
+
             // skip payment-method
             $('.step-1, .step-2, .step-3').addClass('d-none');
             $('.step-4').removeClass('d-none');
@@ -930,9 +1029,9 @@ use App\Http\Controllers\CommonController;
             return true;
       });
 
-      $('.add-sidemark').click(function() {
-         $('textarea', $(this).closest('.sidemark-section')).toggleClass('d-none');
-      });
+    //   $('.add-sidemark').click(function() {
+    //      $('textarea', $(this).closest('.sidemark-section')).toggleClass('d-none');
+    //   });
 
       $('.select-address').on('change', function() {
          $('.address-card').addClass('d-none');
@@ -1026,7 +1125,10 @@ use App\Http\Controllers\CommonController;
             }
 
             $('.sidemark-section textarea').each(function() {
-               _formData[$(this).attr('name')] = $(this).val();
+               if ($(this).val().trim() !== '') {
+                  console.log("textarea", $(this).val());
+                  _formData[$(this).attr('name')] = $(this).val();
+               }
             });
 
             $.post("{{route('frontend.checkout.place_order')}}", _formData, function(data) {
