@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Jobs\SendMail;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\OrderPayments;
@@ -252,6 +253,7 @@ class CheckoutController extends FrontendController
 
             $payment_success  = false;
             $itemDetail       = [];
+            $cartItems        = [];
             $requestDataArray = $request->all();
             $total_amount     = 0;
 
@@ -321,9 +323,23 @@ class CheckoutController extends FrontendController
                     'UnitPrice' => $item['item_price'],
                     'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
                 ] );
+
+                array_push( $cartItems, [
+                    'Image'     => str_replace(' ', '%20', $item['item_image']),
+                    'ItemID'    => $item['item_id'],
+                    'Color'     => $item['item_color'],
+                    'Size'      => $item['item_size'],
+                    'OrderQty'  => $item['item_quantity'],
+                    'UnitPrice' => $item['item_price'],
+                    'SubTotal'  => $item['item_total'],
+                    'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+
+                ]);
+
                 $total_amount += $item['item_price'];
             }
-
+            // print_r("<pre>");
+            // print_r($itemDetail); die();
             $order_payment_hash             = md5( json_encode( ['general' => $headers, 'items' => $itemDetail] ) );
             $headers['IsAdvancePayment']    = false;
             $headers['AdvancePaymentAmout'] = 0;
@@ -378,6 +394,49 @@ class CheckoutController extends FrontendController
                 $successMsg          = str_replace( $matched_string, $updatedString, $successMsg );
                 $response['success'] = 1;
                 $response['msg']     = $successMsg;
+
+                // if ( isset($this->active_theme_json->general->order_ack) && $this->active_theme_json->general->order_ack ) {
+                    // $headers['ShippingCost'] = number_format( $requestDataArray['shipping_cost'], ConstantsController::ALLOWED_DECIMALS, '.', ',' );
+                    $cart_data = [
+                        'shipping' => $headers,
+                        'items'    => $cartItems,
+                        'total'    => number_format( $total_amount, ConstantsController::ALLOWED_DECIMALS, '.', ',' )
+                    ];
+
+                    if(array_key_exists('Instructions',$cart_data['shipping']) == false){
+                        $cart_data['shipping']['Instructions'] = $request->shipping_instructions;
+                    }
+
+                    $cart_data['shipping']['SO_Number'] = $result['ObjectID'];
+
+                    try {
+
+                        if (!empty($cart_data['shipping']['Email'])) {
+//                            SendMail::dispatch( [
+//                                'data'     => $cart_data,
+//                                'slug'     => "Order Confirmed",
+//                                'email'    => ['ahmadqalbi1991@gmail.com', 'techbugs06@gmail.com'],
+////                                'email'    => $cart_data['shipping']['Email'],
+//                                'template' => 'email.order-confirmation',
+//                                // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+//                            ] );
+                        }
+
+//                        SendMail::dispatch( [
+//                            'data'     => $cart_data,
+//                            'slug'     => "Order Confirmed",
+//                            'email'    => ConstantsController::ORDER_NOTIFICATION,
+//                            'template' => 'email.order-confirmation',
+//                            // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+//                        ] );
+
+                        prr( " :: Order Acknowledgment Email Sent :: " );
+                    }
+                    catch ( \Exception $e )
+                    {
+                        prr( "Order Acknowledgment Email Exception :: ".$e->getMessage() );
+                    }
+                // }
             }
             else
             {
@@ -393,6 +452,24 @@ class CheckoutController extends FrontendController
                     $this->cart_model->remove_cart_item( Auth::user()->id, ( new Cart() )->get_active_cart_customer(), 0, true );
                     $response['success'] = 1;
                     $response['msg']     = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: '.$order_payment_hash;
+
+                    try {
+                        $order_data = [
+                            'hash'         => $order_payment_hash,
+                            'order-detail' => serialize( [$headers, $itemDetail] )
+                        ];
+
+//                        SendMail::dispatch( [
+//                            'data'     => $order_data,
+//                            'slug'     => 'Web Hook Order',
+//                            'email'    => ConstantsController::WEB_HOOK_EMAIL,
+//                            'template' => 'email.web_hook_email'
+//                        ] );
+                    }
+                    catch ( \Exception $e )
+                    {
+                        prr( "Mail Exception: ".$e->getMessage() );
+                    }
                 }
                 else
                 {
@@ -441,13 +518,6 @@ class CheckoutController extends FrontendController
 
             return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
         }
-        catch ( \Error$e )
-        {
-            prr( ['CheckoutController::ERROR' => $e->getMessage()] );
-
-            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
-        }
-
     }
 
     public function pt_security()
