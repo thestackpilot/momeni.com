@@ -169,7 +169,7 @@ use App\Http\Controllers\CommonController;
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Size: {{$item -> item_size}}</p>
                                     </div>
-                                    @if($item->ATSQ <= 0 )
+                                     @if($item->item_atsq <= 0 && !$item->oak_item)
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Backorder/ETA: {{date('Y-m-d', strtotime($item -> item_eta))}}</p>
                                     </div>
@@ -323,9 +323,7 @@ use App\Http\Controllers\CommonController;
                                  <div class="d-flex flex-row justify-content-between column-gap-20 mb-4">
                                     <div class="d-flex flex-column fullwidth">
                                        <label class="p-0 m-0 mb-3">State <span class="color-red">*</span> </label>
-                                       <select class="form-control bg-white" name="State" aria-describedby="State" required id="state_dropdown">
-                                        <option value="">Select a state*</option>
-                                    </select>
+                                        <input type="text" data-required="true" class="form-control bg-white" name="State" maxlength="50" aria-describedby="State" placeholder="State*">
                                 </div>
                                     <div class="d-flex flex-column fullwidth">
                                        <label class="p-0 m-0 mb-3">City <span class="color-red">*</span> </label>
@@ -336,12 +334,7 @@ use App\Http\Controllers\CommonController;
                               <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
                                  <div class="d-flex flex-column fullwidth">
                                     <label class="p-0 m-0 mb-3">Country <span class="color-red">*</span> </label>
-                                    <select class="form-control bg-white" name="Country" aria-describedby="Country" required id="country_dropdown">
-                                        <option value="">Select a country*</option>
-                                        @foreach($countries['Countries'] as $row)
-                                        <option value="{{$row['OriginCode']}}">{{$row['Description']}}</option>
-                                        @endforeach
-                                    </select>
+                                     <input type="text" data-required="true" name="country" maxlength="30" class="form-control bg-white" aria-describedby="Country" placeholder="Country*">
                                  </div>
                                  <div class="d-flex flex-column fullwidth">
                                     <label class="p-0 m-0 mb-3">Postal Code <span class="color-red">*</span> </label>
