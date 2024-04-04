@@ -762,7 +762,6 @@ class GenericReportsController extends DashboardController
 
     public function view_order( Request $request )
     {
-
         if ( count( $request->all() ) > 0 )
         {
 
@@ -787,7 +786,8 @@ class GenericReportsController extends DashboardController
                 'total_qty'    => 'Total Quantity',
                 'status'       => 'Status',
                 'order_date'   => 'Order Date',
-                'actions'      => 'Actions'
+                'actions'      => 'Actions',
+                'other_actions' => 'Reports',
             ], 'tbody' => [] );
 
             if ( isset( $view_orders['Orders'] ) )
@@ -805,6 +805,7 @@ class GenericReportsController extends DashboardController
                         'tab'          => isset( $view_order['Header']['TabStatusDescription'] ) ? $view_order['Header']['TabStatusDescription'] : '',
                         'order_date'   => isset( $view_order['Header']['OrderDate'] ) ? CommonController::get_date_format( $view_order['Header']['OrderDate'] ) : 'N/A',
                         'actions'      => [['type' => 'modal', 'label' => 'View Details']],
+                        'other_actions' => [['type' => 'modal', 'label' => 'View Reports']],
                         'details'      => [
                             'heading' => $view_order['Header']['OrderNo'].' : '.$view_order['Header']['CustomerID'],
                             'body'    => [
@@ -1103,7 +1104,6 @@ class GenericReportsController extends DashboardController
 
     //Sales history
     public function sales_history(Request $request){
-
         if ( count( $request->all() ) > 0 )
         {
             $from_date = $request->has('from_date') ? $request->from_date : Carbon::now()->format('Y-m-d');
@@ -1214,6 +1214,23 @@ class GenericReportsController extends DashboardController
         View::share( 'reports_title', $reports_title );
 
         return view( 'dashboard.sales-history' );
+    }
+
+    public function order_report(Request $request){
+
+        $sales_rep = $request->sales_rep ? $request->sales_rep : "Bett01";
+        $report_title = $request->report_title ? $request->report_title : "mixC2_CustomerListing_ROLL";
+        $customer = $request->customer ? $request->customer : null;
+        $from_date = $request->has('from_date') ? $request->from_date : Carbon::now()->format('Y-m-d');
+        $to_date = $request->has('to_date') ? $request->to_date : Carbon::now()->format('Y-m-d');
+
+        $report = $this->ApiObj->Get_SalesReport( $sales_rep, $customer, $report_title, $from_date, $to_date, $request->quality, $request->item_id, $request->collection, $request->design);
+
+        if( $report['Success'] )
+        {
+            View::share( 'ReportData', $report['ReportData'] );
+            return  $report['ReportData'];
+        }
     }
 
     public function download_excel(Request $request)
