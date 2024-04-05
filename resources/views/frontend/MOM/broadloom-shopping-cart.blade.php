@@ -564,7 +564,7 @@
                     headers: { 'X_CSRF_TOKEN' : "{{ csrf_token() }}"},
                     data: formData,
                     success: function(response) {
-                        if(!response.success){
+                        if(response.success){
 
                             console.log('Form submitted successfully');
                         $('.stepper-heading').text('Order Complete');
