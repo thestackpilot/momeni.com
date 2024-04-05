@@ -20,18 +20,40 @@ class CartController extends FrontendController
     {
         try
         {
-
             if ( strcmp( ConstantsController::USER_ROLES['admin'], Auth::user()->role ) === 0 )
             {
                 return response()->json( array( 'success' => 0, 'message' => "Admin user cannot be used to place orders." ) );
             }
-            // print_r(( new Cart() )->get_active_cart_customer());
-            // print_r((new Cart() )->get_active_cart_customer() !== $request->cart_customer_id); die();
+     
             if (  ( new Cart() )->get_active_cart_customer() && ( new Cart() )->get_active_cart_customer() !== $request->cart_customer_id )
             {
                 return response()->json( array( 'success' => 0, 'message' => "You already have a different customer in the cart, please refresh the page and try again." ) );
             }
-            ( new Cart() )->save_or_update_full_cart_item( $request );
+            //braodloom
+            if( $request->has("cart_item_broadloom") && $request->cart_item_broadloom == true)
+            {
+                // print_r($request->cart_item_data);
+                // die();
+                $size_array = json_decode($request->cart_item_size, true);
+           
+                foreach ($size_array as $size_data) {
+                
+                    $request->merge([
+                        'cart_item_size' => $size_data['size'] + $request->item_serging_price,
+                        'cart_item_price' => $size_data['price']
+                    ]);
+                    
+                    (new Cart())->save_or_update_full_cart_item($request);
+                }
+                // die();
+
+            }
+            else
+            {
+                ( new Cart() )->save_or_update_full_cart_item( $request );
+
+            }
+
 
             return response()->json( array( 'success' => 1, 'message' => "Item is added in the Cart" ), 200 );
         }

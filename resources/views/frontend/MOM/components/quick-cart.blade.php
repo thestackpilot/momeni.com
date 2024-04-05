@@ -29,6 +29,36 @@ use App\Http\Controllers\CommonController;
                         $item_data = json_decode(unserialize($item -> item_data));
                     }
                 @endphp
+                @if( $item->broadloom_item)
+                <div class="d-flex flex-row justify-content-between align-items-center p-3 pt-3 border-bottom-thick" id="{{$item -> item_id}}__{{$item -> item_customer_id}}__{{$item -> item_size}}">
+                    <div class="col-md-3 products-thumbnails position-relative align-self-baseline p-0">
+                        <a href="javascript:void(0)" class="d-block newStyle">
+                            <i class="position-absolute icon-cross removeProd" onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}','{{$item -> item_size}}',true)"> </i>
+                            <img src="{{$item -> item_image}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" alt="{{$item -> item_name}}">
+                        </a>
+                    </div>
+                    <div class="col-md-9">
+                        <h3 class="font-ropa m-0">{{$item -> item_name}}</h3>
+                        {{-- 
+                        <p class="specs m-0"> <strong> Customer ID: </strong> <span> {{$item -> item_customer_id}} </span> </p>
+                        <p class="specs m-0"> <strong> Item ID: </strong> <span> {{$item -> item_id}} </span> </p>
+                        --}}
+                        <p class="specs m-0"> <strong> Color: </strong> <span> {{$item -> item_color}} </span> </p>
+                        <p class="specs m-0"> <strong> Size: </strong> <span> {{$item -> item_size}} </span> </p>
+                        <p class="price justify-content-end m-0">{{$item -> item_currency}}{{$item -> item_total}} </p>
+                        <hr>
+                        <div class="action-item-sm p-2 px-0 d-flex flex-row align-items-center justify-content-between col-sm-12 overflow-hidden">
+                            <input type="number" oninput="showUpdateCartButton('{{$item -> item_id}}__{{$item -> item_customer_id}}__{{$item -> item_size}}', true)" onkeydown="if(this.key==='.'){this.preventDefault();}" class="form-control" min="1" value="{{$item -> item_quantity}}" {{isset($item_data -> oak) && $item_data -> oak ? 'readonly' : ''}} style="margin-right: 10px; max-width: 80px;">
+                            <a href="javascript:void(0);" style="display: none;" onclick="updateCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}','{{$item -> item_size}}', true)" class="update-cart-button font-ropa ms-1"> Update </a>
+                            <div id="updating-cart" class="d-none flex-column text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only" style="opacity:0;">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @else
                 <div class="d-flex flex-row justify-content-between align-items-center p-3 pt-3 border-bottom-thick" id="{{$item -> item_id}}__{{$item -> item_customer_id}}">
                     <div class="col-md-3 products-thumbnails position-relative align-self-baseline p-0">
                         <a href="javascript:void(0)" class="d-block newStyle">
@@ -57,6 +87,7 @@ use App\Http\Controllers\CommonController;
                         </div>
                     </div>
                 </div>
+                @endif
                 @endforeach
                 <!-- <h2 class="text-muted text-center mt-5 mb-3 emptyCart"> Cart is empty! </h2> -->
             </div>

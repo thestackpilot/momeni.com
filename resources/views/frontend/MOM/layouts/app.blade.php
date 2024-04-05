@@ -258,7 +258,9 @@ use App\Http\Controllers\CommonController;
     {
         var itemNode = typeof isMobile !== "undefined" && isMobile ? "#mob_"+itemId+"__"+customerId : "#"+itemId+"__"+customerId;
         var quantity = $(itemNode+" input").val();
-
+        console.log(itemNode);
+        console.log(quantity);
+        console.log("updateCart");
         $(itemNode+" .update-cart-button").hide();
         if (typeof hideQuantity !== "undefined" && hideQuantity)
             $(itemNode+" .cart-actions .qty-styles").removeClass('d-flex').hide();
@@ -347,7 +349,7 @@ use App\Http\Controllers\CommonController;
         });
     }
 
-    function removeItemFromCart(itemId,token,customerId,hideQuantity,isMobile)
+    function removeItemFromCart(itemId,token,customerId,hideQuantity,isMobile, isBroadloom = false)
     {
         if (confirm("Are you sure to remove this Item?"))
         {
