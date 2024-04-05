@@ -843,65 +843,6 @@ use App\Http\Controllers\CommonController;
          }
       });
 
-    //   console.log("hello " + "{{$customer_details['CustomerDetail']['Country']}}");
-            if("{{$customer_details['CustomerDetail']['Country']}}"){
-            var selectedCountry = "{{$customer_details['CustomerDetail']['Country']}}";
-            $('#country_dropdown option').each(function() {
-                if ($(this).text() === selectedCountry) {
-                    console.log(selectedCountry);
-                    $(this).prop('selected', true);
-                    $.ajax({
-                    url: "{{route('checkout.states', ['country' => $customer_details['CustomerDetail']['Country']])}}",
-                    type: 'POST',
-                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                    dataType: 'json',
-                    success: function(response) {
-                        $('#state_dropdown').empty();
-                        $('#state_dropdown').append('<option value="">Select a state*</option>');
-                        $.each(response, function(index, value) {
-                        var option = $('<option>', {
-                            value: value.StateID,
-                            text: value.StateName
-                        });
-                        if (value.StateName == "{{$customer_details['CustomerDetail']['State']}}") {
-                            option.prop('selected', true);
-                        }
-                        $('#state_dropdown').append(option);
-                    });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-                }
-            });
-            }
-
-            $('#country_dropdown').change(function() {
-            var selectedCountry = $(this).find('option:selected').text();
-            $.ajax({
-                url: "{{route('checkout.states')}}",
-                    type: 'POST',
-                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                    dataType: 'json',
-                data: {country: selectedCountry},
-                success: function(response) {
-                    $('#state_dropdown').empty();
-                        $('#state_dropdown').append('<option value="">Select a state*</option>');
-                        $.each(response, function(index, value) {
-                        var option = $('<option>', {
-                            value: value.StateID,
-                            text: value.StateName
-                        });
-                        $('#state_dropdown').append(option);
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
       $('.go-to-payment').on('click', function() {
          shipping_address = '';
          if (!$('.other-address').hasClass('muted-fields')) {
