@@ -565,7 +565,6 @@
                     data: formData,
                     success: function(response) {
                         if(response.success){
-
                             console.log('Form submitted successfully');
                         $('.stepper-heading').text('Order Complete');
                         $('.section-3').addClass('active');
