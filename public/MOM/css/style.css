@@ -9423,6 +9423,91 @@ only screen and (max-width: 767px) {
     margin-right: 10px;
 }
 
+.c-stepper {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .c-stepper__item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .c-stepper__item:before {
+    --size: 3rem;
+    content: "";
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    margin: 1rem auto 0;
+  }
+
+  .steppers {
+    margin-top: 3rem;
+    width: 80%;
+    display: inline-block;
+}
+
+
+.steppers ol {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.steppers ol li {
+    font-size: 20px;
+    position: relative;
+    color: rgb(160, 160, 160);
+}
+
+.steppers ol li span{
+    display: inline-block;
+    width: 30px; /* Adjust according to your preference */
+    height: 30px; /* Adjust according to your preference */
+    border-radius: 50%; /* This creates a circular shape */
+    background-color: white; /* Background color */
+    text-align: center; /* Optional: Center text horizontally */
+    line-height: 30px; /* Optional: Center text vertically */
+    color: rgb(160, 160, 160);
+}
+.steppers ol li.checkout-step:after {
+    content: '';
+    width: 100px;
+    height: 2px;
+    background: #d2d2d2;
+    position: absolute;
+    top: 0;
+    margin: auto;
+    bottom: 0;
+    left: 112%;
+}
+
+.steppers ol li.active span{
+    font-weight: bold;
+    color: white;
+    background-color: #000;
+    
+}
+
+.steppers ol li.active{
+    font-weight: bold;
+    color: black;
+}
+
+.order-complete-border{
+    border-top: 3px dashed green;
+    border-bottom: 3px dashed green;
+    /* border-left: 3px dashed green; */
+}
+
 @media (min-width:1000px) {
     .menu-img-box img {
         display: block;

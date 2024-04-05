@@ -651,7 +651,15 @@ use App\Http\Controllers\CommonController;
                     if (item.UserCustomerInfo.CustomerSet) {
                         // startBuying(item.ItemID, item.UserCustomerInfo.Customers[0].CustomerID , item.UserCustomerInfo.Customers[0].ATSInfo);
                     }
+                    var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id','color_id']) }}";
+                    href = href.replace('cust_id', customer_id);
+                    href = href.replace('color_id', $('#color_id').val());
+                    $('#add_cart').attr('href', href);
                 } else {
+                    var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id','color_id']) }}";
+                    href = href.replace('cust_id', customer_id);
+                    href = href.replace('color_id', $('#color_id').val());
+                    $('#add_cart').attr('href', href);
                     $('#qty-main, .base_price').addClass('muted');
                     $('#qty_msg').css('opacity', '0.4');
                     if (!$('#qty-main').is(':visible'))

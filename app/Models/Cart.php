@@ -118,6 +118,7 @@ class Cart extends Model
             );
             $cart_count += $cart_item->item_quantity;
             $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
+            $cart['item_broadloom'] = $cart_item->item_broadloom;
             $cart['cart_currency'] = $cart_item->item_currency;
         }
 

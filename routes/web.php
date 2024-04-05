@@ -65,7 +65,9 @@ Route::post( '/designs/{id}/{filter}/{type}/{with_title}/{page}', [DesignControl
 //Item Routes
 Route::get( '/item/{id}/{designId}/{colorId?}', [ItemController::class, 'index'] )->name( 'frontend.item' );
 Route::get('/broad-loom/{id}/{cust_id}/{color_id}', [BroadloomController::class, 'index'])->name('broadloom.cart');
-Route::get('/broad-loom/{flag?}', [BroadloomController::class, 'shopping_cart'])->name('broadloom.shopping_cart');
+Route::get('/broad-loom-checkout/', [BroadloomController::class, 'shopping_cart'])->name('broadloom.shopping_cart');
+//Route::get('/broad-loom-checkout', [BroadloomController::class, 'checkout'])->name('broadloom.checkout');
+Route::get('/broad-loom-order-complete', [BroadloomController::class, 'order_complete'])->name('broadloom.order_complete');
 Route::post('/cut-pieces', [BroadloomController::class, 'AddCutPiece'])->name('broadloom.cutPiece');
 Route::post( '/item/ats', [ItemController::class, 'get_item_ats'] )->name( 'frontend.item.ats' );
 Route::post( '/item/design_ats', [ItemController::class, 'get_design_ats'] )->name( 'frontend.item.design_ats' );
@@ -77,6 +79,7 @@ Route::get( '/search/{string}/{type?}', [SearchController::class, 'index'] )->na
 Route::post( '/cart/add/', [CartController::class, 'add'] )->name( 'frontend.cart.add' );
 Route::post( '/cart/refresh/{type}', [CartController::class, 'refresh'] )->name( 'frontend.cart.refresh' );
 Route::post( '/cart/update/', [CartController::class, 'update'] )->name( 'frontend.cart.update' );
+Route::post( '/cart/blupdate/', [CartController::class, 'bl_update'] )->name( 'frontend.cart.blupdate' );
 Route::post( '/cart/remove/', [CartController::class, 'remove'] )->name( 'frontend.cart.remove' );
 
 //TODO : Checkout Routes - THIS IS NOT WORKING

@@ -115,4 +115,47 @@ class CartController extends FrontendController
 
     }
 
+    public function bl_update( Request $request )
+    {
+        $requestData = $request->all();
+
+// Decode JSON strings for itemID and quantity
+        $itemIDs = json_decode($requestData['itemID'], true);
+        $quantities = json_decode($requestData['quantity'], true);
+
+        $customerId = $requestData['CustomerId'];
+
+        try{
+        for ($i = 0; $i < count($itemIDs); $i++) {
+            $itemId = $itemIDs[$i];
+            $quantity = $quantities[$i];
+
+                    ( new Cart() )->update_cart_item( Auth::user()->id, $customerId, $itemId, $quantity );
+
+                    $cart_count = 0;
+                    $cart_total = 0;
+                    $cart_currency = '';
+                    $cart_items_total = array();
+                    $cart_items = ( new Cart() )->get_cart_for_front( $this->ApiObj );
+
+                    foreach ( $cart_items['items'] as $cart_item )
+                    {
+                        $cart_count += $cart_item['item_quantity'];
+                        $cart_total += ( $cart_item['item_price'] * $cart_item['item_quantity'] );
+                        $cart_currency = $cart_item['item_currency'];
+                        $cart_items_total[$cart_item['item_id']] = $cart_item['item_price'] * $cart_item['item_quantity'];
+                    }
+                    $cart_total = number_format( $cart_total, ConstantsController::ALLOWED_DECIMALS, '.', ',' );
+                }
+                    return response()->json( array( 'success' => 1, 'cart_count' => $cart_count, 'cart_currency' => $cart_currency, 'cart_items_total' => $cart_items_total, 'cart_total' => $cart_total, 'message' => "Cart is updated successfully" ), 200 );
+        }
+        catch ( \Exception$e )
+        {
+            prr( $e->getMessage() );
+
+            return response()->json( array( 'success' => 0, 'message' => "There is an error in updating your cart. Please try again." ), 400 );
+        }
+    }
+
 }
+

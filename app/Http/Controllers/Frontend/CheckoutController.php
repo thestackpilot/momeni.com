@@ -274,6 +274,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
             $payment_success  = false;
             $itemDetail       = [];
             $requestDataArray = $request->all();
+            // dd($requestDataArray);
             $total_amount     = 0;
 
             $headers = [
@@ -334,7 +335,39 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 $headers['DeliveryTime'] = date( 'H:i:s', strtotime( $requestDataArray['ship_date'] ) );
             }
 
-            foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
+            if($requestDataArray['item_broadloom']){
+                $TempSalesOrderNo = "";
+                $count = 0;
+                foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
+            {
+                $count++;
+                // dd($item);
+                $TempSalesOrderNo = json_decode($item['item_data'])->CutPieces[0]->TempSalesOrderNo;
+                array_push( $itemDetail, [
+                    'ItemID'    => $item['item_id'],
+                    'OrderQty'  => $item['item_quantity'],
+                    'UnitPrice' => $item['item_price'],
+                    'SQFTPrice' => json_decode($item['item_data'])->SQFTPrice,
+                    'SQFTArea' => json_decode($item['item_data'])->SQFTArea,
+                    'CutPieceID' => json_decode($item['item_data'])->CutPieceID,
+                    'RollID' => json_decode($item['item_data'])->RollID,
+                    'SergingCharges' => json_decode($item['item_data'])->SergingCharges,
+                    'SergingType' => json_decode($item['item_data'])->SergingType,
+                    'Line_No' => $count,
+                    "Discount"=> 0,
+                    "WHSID"=> null,
+                    "Remarks"=> null,
+                    "UserRemarks"=> null,
+                    "ETA_Date"=> "\/Date(-62135596800000)\/",
+                    'OrderLength' => json_decode($item['item_data'])->OrderLength,
+                    'CutPieces' => json_decode($item['item_data'])->CutPieces,
+                    'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+                ] );
+                $total_amount += $item['item_price'];
+            }
+            // $headers['Line_No'] = $count;
+            }else{
+                foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
             {
                 array_push( $itemDetail, [
                     'ItemID'    => $item['item_id'],
@@ -344,6 +377,8 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 ] );
                 $total_amount += $item['item_price'];
             }
+            }
+            $headers['TempSalesOrderNo'] = $TempSalesOrderNo;
 
             $order_payment_hash             = md5( json_encode( ['general' => $headers, 'items' => $itemDetail] ) );
             $headers['IsAdvancePayment']    = false;
@@ -366,11 +401,19 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
             {
                 return response()->json( $payment_response );
             }
-
-            $result = $this->ApiObj->Place_Order(
-                $headers,
-                $itemDetail
-            );
+            // dd($headers, $itemDetail);
+            if($requestDataArray['item_broadloom'] == 1){
+                $result = $this->ApiObj->Place_BLOrder(
+                    $headers,
+                    $itemDetail
+                );
+            }else{
+                $result = $this->ApiObj->Place_Order(
+                    $headers,
+                    $itemDetail
+                );
+            }
+            // dd($result);
 
             $order_payment = $this->order_payment_model->updateOrCreate(
                 ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
@@ -460,13 +503,13 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
         {
             prr( ['CheckoutController::EXCEPTION' => $e->getMessage()] );
 
-            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
+            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.', 'error' => $e->getMessage()]);
         }
         catch ( \Error$e )
         {
             prr( ['CheckoutController::ERROR' => $e->getMessage()] );
 
-            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
+            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.', 'error' => $e->getMessage()] );
         }
 
     }
