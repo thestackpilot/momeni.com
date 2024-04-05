@@ -337,8 +337,10 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
 
             if($requestDataArray['item_broadloom']){
                 $TempSalesOrderNo = "";
+                $count = 0;
                 foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
             {
+                $count++;
                 // dd($item);
                 $TempSalesOrderNo = json_decode($item['item_data'])->CutPieces[0]->TempSalesOrderNo;
                 array_push( $itemDetail, [
@@ -351,12 +353,19 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                     'RollID' => json_decode($item['item_data'])->RollID,
                     'SergingCharges' => json_decode($item['item_data'])->SergingCharges,
                     'SergingType' => json_decode($item['item_data'])->SergingType,
-                    // 'ETA_Date' => json_decode($item['item_data'])->item_price,
+                    'Line_No' => $count,
+                    "Discount"=> 0,
+                    "WHSID"=> null,
+                    "Remarks"=> null,
+                    "UserRemarks"=> null,
+                    "ETA_Date"=> "\/Date(-62135596800000)\/",
+                    'OrderLength' => json_decode($item['item_data'])->OrderLength,
                     'CutPieces' => json_decode($item['item_data'])->CutPieces,
                     'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
                 ] );
                 $total_amount += $item['item_price'];
             }
+            // $headers['Line_No'] = $count;
             }else{
                 foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
             {
@@ -392,7 +401,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
             {
                 return response()->json( $payment_response );
             }
-            dd($headers, $itemDetail);
+            // dd($headers, $itemDetail);
             if($requestDataArray['item_broadloom'] == 1){
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,
@@ -404,7 +413,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                     $itemDetail
                 );
             }
-            dd($result);
+            // dd($result);
 
             $order_payment = $this->order_payment_model->updateOrCreate(
                 ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],

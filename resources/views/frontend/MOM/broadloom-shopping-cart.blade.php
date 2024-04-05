@@ -353,7 +353,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <strong>January 18, 2022</strong>
+                                                <strong>{{ date('j F, Y') }}</strong>
                                             </div>
                                         </div>
                                     </div>
@@ -366,7 +366,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <strong>$55.00</strong>
+                                                <strong class="cart_total">${{$cart->cart_total}}</strong>
                                             </div>
                                         </div>
                                     </div>
@@ -387,38 +387,40 @@
                                         <hr class="mx-4" style="border-top-color: whitesmoke;">
                                     </div>
                                     <div class="col-md-5">
+                                        @foreach ( $cart->items as $item)
                                         <div class="row">
-                                            <div class="col-3"><img src="/MOM/images/product/1.jpg" alt="" height="100px">
+                                            <div class="col-3"><img src="{{$item_data['ImageNameArray'][0]}}" alt="$item_data['ItemID']" height="100px">
                                             </div>
                                             <div class="col-9" style="font-size: 12px">
                                                 <div class="mx-3 mt-2 font-weight--bold row">Design:
-                                                    <p class="font-weight--normal mx-2">Sim-I Ivory</p>
+                                                    <p class="font-weight--normal mx-2">{{$item->item_name}}</p>
                                                 </div>
-                                                <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">Sim-I Ivory</p>
+                                                <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p>
                                                 </div>
-                                                <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">3x5 Rugs</p>
+                                                <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">${{$item->item_size}}</p>
                                                 </div>
                                             </div>
                                         </div>
+                                        @endforeach
                                     </div>
-                                    <div class="col-md-3 text-right align-content-center">$45.00</div>
+                                    <div class="col-md-3 text-right align-content-center">${{$cart->cart_total}}</div>
                                     <div class="col-md-9">
                                         <hr class="mx-4" style="border-top-color: whitesmoke;">
                                     </div>
                                     <div class="col-md-4 align-content-center font-weight--bold">SubTotal</div>
-                                    <div class="col-md-4 align-content-center text-right font-weight--bold">$45.00</div>
+                                    <div class="col-md-4 align-content-center text-right font-weight--bold">${{$cart->cart_total}}</div>
                                     <div class="col-md-9">
                                         <hr class="mx-4" style="border-top-color: whitesmoke;">
                                     </div>
                                     <div class="col-md-4 align-content-center">Shipping Charges</div>
-                                    <div class="col-md-4 align-content-center text-right">$10.00</div>
+                                    <div class="col-md-4 align-content-center text-right">$0</div>
                                     <div class="col-md-9 mb-3">
                                         <hr class="mx-4" style="border-top-color: whitesmoke;">
                                     </div>
                                     <div class="col-md-4 align-content-center font-weight--bold" style="font-size: 20px">Total</div>
-                                    <div class="col-md-4 align-content-center text-right font-weight--bold mb-5" style="font-size: 20px">$55.00</div>
+                                    <div class="col-md-4 align-content-center text-right font-weight--bold mb-5 cart_total" style="font-size: 20px"></div>
                                     <div class="col-sm-8 my-5 row justify-content-center">
-                                        <a href="" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5" id="add_cart">
+                                        <a href="/" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5" id="add_cart">
                                             Go to dashboard &nbsp; &nbsp; &nbsp;<i class="fa fa-long-arrow-right pl-5"></i>
                                         </a>
                                     </div>
@@ -562,15 +564,17 @@
                     headers: { 'X_CSRF_TOKEN' : "{{ csrf_token() }}"},
                     data: formData,
                     success: function(response) {
-                        if(response.success){
+                        if(!response.success){
+
                             console.log('Form submitted successfully');
                         $('.stepper-heading').text('Order Complete');
                         $('.section-3').addClass('active');
                         $('#section1').attr('style', 'display:none;');
                         $('#section2').attr('style', 'display:none;');
                         $('#section3').attr('style', 'display:block;');
+
                     }else{
-                        console.log(response);
+                        alert(response.msg);
                     }
                     },
                     error: function(xhr, status, error) {
