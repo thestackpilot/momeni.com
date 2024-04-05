@@ -71,9 +71,8 @@
                                                     {{-- @dd($item) --}}
                                                     @php
                                                         if (isset($item->item_data) && $item->item_data) {
-                                                            //$item_data = json_decode(unserialize($item -> item_data));
-                                                            $item_data = json_decode($item->item_data, true);
-                                                            //    dd($item_data, $cart);
+                                                            $item_data = json_decode(unserialize($item -> item_data));
+                                                            //dd($item_data);
                                                         }
                                                     @endphp
                                                     <tr>
@@ -82,13 +81,13 @@
                                                                 <div class="col-1 justify-content-center align-content-center delete-row"
                                                                     style="color: red;cursor: pointer;">x</div>
                                                                 <div class="col-3"><img
-                                                                        src={{ $item_data['ImageNameArray'][0] }}
-                                                                        alt="{{ $item_data['ItemID'] }}" height="100px">
+                                                                        src={{ CommonController::getApiFullImage($item_data->ImageName) }}
+                                                                        alt="{{ $item_data->ItemID }}" height="100px">
                                                                 </div>
                                                                 <div class="col-8" style="font-size: 12px">
                                                                     <div class=" mt-2 font-weight--bold row">Design: <p
                                                                             class="font-weight--normal mx-2">
-                                                                            {{ $item_data['ItemName'] }}</p>
+                                                                            {{ $item_data->ItemName }}</p>
                                                                     </div>
                                                                     <div class=" mt-2 row">SKU: <p
                                                                             class="font-weight--normal mx-2">N/A</p>
@@ -114,7 +113,7 @@
                                                                 <a href="javascript:void(0);" class="qty-add qty-action"> +
                                                                 </a>
                                                                 <input type="hidden" class="item_id" name="item_id"
-                                                                    value="{{ $item_data['ItemID'] }}">
+                                                                    value="{{ $item_data->ItemID }}">
                                                             </div>
                                                         </td>
                                                         <td class="align-content-center">
@@ -282,7 +281,7 @@
                                                 @foreach ( $cart->items as $item)
                                                 <div class="row px-5">
                                                     <div class="col-md-9"><div class="row">
-                                                        <div class="col-3"><img src="{{$item_data['ImageNameArray'][0]}}" alt="$item_data['ItemID']" height="100px"></div>
+                                                        <div class="col-3"><img src="{{ CommonController::getApiFullImage($item_data->ImageName) }}" alt="$item_data->ItemID" height="100px"></div>
                                                         <div class="col-9" style="font-size: 12px">
                                                             <div class="mx-3 mt-2 font-weight--bold row">Design: <p class="font-weight--normal mx-2">{{$item->item_name}}</p></div>
                                                             <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p></div>
@@ -389,7 +388,7 @@
                                     <div class="col-md-5">
                                         @foreach ( $cart->items as $item)
                                         <div class="row">
-                                            <div class="col-3"><img src="{{$item_data['ImageNameArray'][0]}}" alt="$item_data['ItemID']" height="100px">
+                                            <div class="col-3"><img src="{{ CommonController::getApiFullImage($item_data->ImageName) }}" alt="$item_data->ItemID" height="100px">
                                             </div>
                                             <div class="col-9" style="font-size: 12px">
                                                 <div class="mx-3 mt-2 font-weight--bold row">Design:
