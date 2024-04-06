@@ -353,8 +353,8 @@ class ItemController extends FrontendController
         $html .= '<div class="picese-wrapper" id="picese-wrapper">';
         $multiplier = count($cut_pieces['ShowCuts']) <= 2 ? 1 : 2;
         foreach ($dimensions as $dimension) {
-            $dimension_width = number_format((($dimension['width'] / $total_width) * 100) * $multiplier, 2);
-            $dimension_length = number_format((($dimension['length'] / $total_length) * 100) * $multiplier, 2);
+            $dimension_width = number_format((($dimension['width'] / $total_width) * 100), 2);
+            $dimension_length = number_format((($dimension['length'] / $total_length) * 100), 2);
             if ($dimension_width > 100) {
                 $dimension_width = 100;
             }
@@ -363,12 +363,11 @@ class ItemController extends FrontendController
                 $dimension_length = 100;
             }
 
-            $html .= '<div class="piece" style="width: ' . $dimension_length . '%; height: ' . $dimension_width . '%;">' . $dimension['dimension'] . '</div>';
+            $html .= '<div class="piece" style="float:left; width: ' . $dimension_length . '%; height: ' . $dimension_width . '%;">' . $dimension['dimension'] . '</div>';
         }
 
         $html .= '</div>';
         $html .= '</div>';
         return $html;
     }
-
 }
