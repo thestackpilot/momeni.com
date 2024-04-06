@@ -1113,6 +1113,8 @@ class GenericReportsController extends DashboardController
             if( $report['Success'] )
             {
                 View::share( 'ReportData', $report['ReportData'] );
+                View::share( 'ReportTitle', $report['ReportTitle'] );
+                View::share( 'PreviewID', $report['PreviewID'] );
             }
 
         }
@@ -1214,4 +1216,22 @@ class GenericReportsController extends DashboardController
         return view( 'dashboard.sales-history' );
     }
 
+    public function download_excel(Request $request)
+    {
+        if ( count( $request->all() ) > 0 )
+        {
+
+            $report = $this->ApiObj->DownloadExcelReports( $request->report_title, $request->preview_id );
+
+            if( $report['Success'] )
+            {
+                return response()->json(['success' => 1, 'data' => $report]);
+            }
+            else
+            {
+                return response()->json(['success' => 0]);
+            }
+
+        }
+    }
 }
