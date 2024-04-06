@@ -820,7 +820,7 @@ item.SQFTPrice = $('#sq-ft').val();
                         'cart_item_image': item.ImageNameArray[0],
                         'cart_item_data': $('#item_json').val(),
                         // 'cart_item_data': $('#cart_item_oak').val(),
-                        'cart_item_broadloom': true
+                        'cart_item_broadloom': 1
                     },
                     success: function (response) {
                         if (response.success) {

@@ -17,24 +17,21 @@ class CheckoutController extends FrontendController
     public function __construct()
     {
         parent::__construct();
-        $this->cart_model          = new Cart();
+        $this->cart_model = new Cart();
         $this->order_payment_model = new OrderPayments();
-        $this->paytrace            = $this->active_theme_json->general->payment_method->enabled ? new PaytraceController() : '';
+        $this->paytrace = $this->active_theme_json->general->payment_method->enabled ? new PaytraceController() : '';
     }
 
-    public function check_for_payments( &$order_payment, $order_payment_hash, $total_amount, $requestDataArray, &$header )
+    public function check_for_payments(&$order_payment, $order_payment_hash, $total_amount, $requestDataArray, &$header)
     {
         $response['success'] = 1;
 
-        if ( $this->active_theme_json->general->payment_method->enabled && isset( $requestDataArray['card'] ) && $requestDataArray['card'] )
-        {
+        if ($this->active_theme_json->general->payment_method->enabled && isset($requestDataArray['card']) && $requestDataArray['card']) {
             $card_details = $requestDataArray['card'];
 
-            if ( strcmp( $order_payment->payment_status, ConstantsController::PAYMENT_STATUS['done'] ) !== 0 )
-            {
+            if (strcmp($order_payment->payment_status, ConstantsController::PAYMENT_STATUS['done']) !== 0) {
 
-                switch ( $this->active_theme_json->general->payment_method->gateway )
-                {
+                switch ($this->active_theme_json->general->payment_method->gateway) {
                     case 'paytrace':
                         $order_payment = $this->order_payment_model->updateOrCreate(
                             ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
@@ -43,70 +40,61 @@ class CheckoutController extends FrontendController
                             ]
                         );
 
-                        $payment_response = $this->paytrace->process_payment( $card_details, $total_amount, ( new Cart() )->get_active_cart_customer(), $order_payment_hash );
+                        $payment_response = $this->paytrace->process_payment($card_details, $total_amount, (new Cart())->get_active_cart_customer(), $order_payment_hash);
 
                         if (
                             $payment_response &&
                             (
                                 $payment_response['response_code'] != 101 ||
                                 $payment_response['success'] == '' ||
-                                ! $payment_response['success']
+                                !$payment_response['success']
                             )
-                        )
-                        {
+                        ) {
                             $response['success'] = 0;
-                            $response['msg']     = '<b style="color: red">Order cannot be placed due to the following reasons:</b> <br/><br/>'.$payment_response['status_message'];
-                            $errorDetails        = '';
+                            $response['msg'] = '<b style="color: red">Order cannot be placed due to the following reasons:</b> <br/><br/>' . $payment_response['status_message'];
+                            $errorDetails = '';
 
                             if (
-                                isset( $payment_response['errors'] ) )
-                            {
+                                isset($payment_response['errors'])) {
 
-                                foreach ( $payment_response['errors'] as $error )
-                                {
+                                foreach ($payment_response['errors'] as $error) {
                                     $errorDetails = "{$error[0]}<br/>";
                                 }
 
-                                $response['msg'] = '<b style="color: red">Order cannot be placed due to the following reasons:</b> <br/><br/><br/>'.$payment_response['status_message'].' <br/> <br/>'.$errorDetails;
+                                $response['msg'] = '<b style="color: red">Order cannot be placed due to the following reasons:</b> <br/><br/><br/>' . $payment_response['status_message'] . ' <br/> <br/>' . $errorDetails;
                             }
 
                             $order_payment = $this->order_payment_model->updateOrCreate(
                                 ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                                 [
-                                    'payment_response' => json_encode( ['payment' => $payment_response] ),
-                                    'payment_status'   => ConstantsController::PAYMENT_STATUS['failed']
+                                    'payment_response' => json_encode(['payment' => $payment_response]),
+                                    'payment_status' => ConstantsController::PAYMENT_STATUS['failed']
                                 ]
                             );
-                        }
-                        else
-                        {
+                        } else {
                             $client_response = ['msg' => 'Customer Already Exists'];
 
-                            if ( isset( $card_details['save-update-card'] ) && $card_details['save-update-card'] != 'false' )
-                            {
+                            if (isset($card_details['save-update-card']) && $card_details['save-update-card'] != 'false') {
 
-                                if ( ! isset( $card_details['type'] ) && $card_details['type'] == 'new' )
-                                {
-                                    $client_response = $this->paytrace->create_customer_from_transaction( $payment_response, ( new Cart() )->get_active_cart_customer(), $card_details );
-                                }
-                                else
-                                {
-                                    $client_response = $this->paytrace->update_customer(  ( new Cart() )->get_active_cart_customer(), $card_details );
+                                if (!isset($card_details['type']) && $card_details['type'] == 'new') {
+                                    $client_response = $this->paytrace->create_customer_from_transaction($payment_response, (new Cart())->get_active_cart_customer(), $card_details);
+                                } else {
+                                    $client_response = $this->paytrace->update_customer((new Cart())->get_active_cart_customer(), $card_details);
                                 }
 
                             }
 
-                            $header['IsAdvancePayment']    = true;
+                            $header['IsAdvancePayment'] = true;
                             $header['AdvancePaymentAmout'] = $total_amount;
-                            $header['TransactionCode']     = $payment_response['transaction_id'];
-                            $order_payment                 = $this->order_payment_model->updateOrCreate(
+                            $header['TransactionCode'] = $payment_response['transaction_id'];
+                            $order_payment = $this->order_payment_model->updateOrCreate(
                                 ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                                 [
-                                    'payment_response' => json_encode( [
+                                    'payment_response' => json_encode([
                                         'payment' => $payment_response,
-                                        'client'  => $client_response
-                                    ] ),
-                                    'payment_status'   => ConstantsController::PAYMENT_STATUS['done']
+                                        'client' => $client_response
+                                    ]),
+                                    'payment_status' => ConstantsController::PAYMENT_STATUS['done']
                                 ]
                             );
                         }
@@ -123,30 +111,25 @@ class CheckoutController extends FrontendController
 
     }
 
-    public function finalize_payment( &$order_payment, $order_payment_hash, $requestDataArray, $action )
+    public function finalize_payment(&$order_payment, $order_payment_hash, $requestDataArray, $action)
     {
 
-        if ( $this->active_theme_json->general->payment_method->enabled && isset( $requestDataArray['card'] ) && $requestDataArray['card'] )
-        {
+        if ($this->active_theme_json->general->payment_method->enabled && isset($requestDataArray['card']) && $requestDataArray['card']) {
 
-            if ( strcmp( $order_payment->payment_status, ConstantsController::PAYMENT_STATUS['done'] ) === 0 )
-            {
+            if (strcmp($order_payment->payment_status, ConstantsController::PAYMENT_STATUS['done']) === 0) {
 
-                switch ( $this->active_theme_json->general->payment_method->gateway )
-                {
+                switch ($this->active_theme_json->general->payment_method->gateway) {
                     case 'paytrace':
-                        $payment_response = json_decode( $order_payment->payment_response, 1 );
-                        prr( ['finalize_payment::payment_response' => $payment_response] );
+                        $payment_response = json_decode($order_payment->payment_response, 1);
+                        prr(['finalize_payment::payment_response' => $payment_response]);
 
-                        if ( isset( $payment_response['payment'] ) && isset( $payment_response['payment']['transaction_id'] ) )
-                        {
-                            $payment_response['settlement'] = $this->paytrace->capture_or_void_transaction( $payment_response['payment']['transaction_id'], $action );
-                            $payment_data                   = [
-                                'payment_response' => json_encode( $payment_response )
+                        if (isset($payment_response['payment']) && isset($payment_response['payment']['transaction_id'])) {
+                            $payment_response['settlement'] = $this->paytrace->capture_or_void_transaction($payment_response['payment']['transaction_id'], $action);
+                            $payment_data = [
+                                'payment_response' => json_encode($payment_response)
                             ];
 
-                            if ( $payment_response['settlement']['success'] )
-                            {
+                            if ($payment_response['settlement']['success']) {
                                 $payment_data['payment_status'] = ConstantsController::PAYMENT_STATUS['done'];
                             }
 
@@ -165,242 +148,230 @@ class CheckoutController extends FrontendController
 
     }
 
-    public function get_country_states( Request $request )
+    public function get_country_states(Request $request)
     {
-        return response()->json( $this->ApiObj->Get_CountryStates( $request->country ) );
+        return response()->json($this->ApiObj->Get_CountryStates($request->country));
     }
 
     public function index()
     {
-        $customer_details    = $shipping_options    = $shippings    = $shipping_addresses    = $payment_terms_list    = $customer_payment_options    = $countries    = $states    = [];
+        $customer_details = $shipping_options = $shippings = $shipping_addresses = $payment_terms_list = $customer_payment_options = $countries = $states = [];
         $default_ship_via_id = '';
-        $countries        = $this->ApiObj->Get_CountriesList();
+        $countries = $this->ApiObj->Get_CountriesList();
         // $states = $this->ApiObj->Get_CountryStates( $country_id );
-        if ( Auth::user() && $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] && $this->cart_model->get_cart_for_front( $this->ApiObj )['items'][0] )
-        {
-            $customer_details   = $this->ApiObj->Get_CustomerDetail(  ( new Cart() )->get_active_cart_customer() );
+        if (Auth::user() && $this->cart_model->get_cart_for_front($this->ApiObj)['items'] && $this->cart_model->get_cart_for_front($this->ApiObj)['items'][0]) {
+            $customer_details = $this->ApiObj->Get_CustomerDetail((new Cart())->get_active_cart_customer());
             $payment_terms_list = $this->ApiObj->Get_PaymentTermsList();
-            $shippings          = $this->ApiObj->Get_ShipViaList();
-            if ( $shippings && $shippings['Success'] == true )
-            {
+            $shippings = $this->ApiObj->Get_ShipViaList();
+            if ($shippings && $shippings['Success'] == true) {
                 $temp = [];
-                foreach ( $shippings['ShipVias'] as $shipping )
-                {
+                foreach ($shippings['ShipVias'] as $shipping) {
                     $temp[$shipping['Description']] = $shipping;
                 }
-                ksort( $temp );
+                ksort($temp);
                 $shippings['ShipVias'] = $temp;
-                $shippings             = $shipping_options             = $shippings['ShipVias'];
+                $shippings = $shipping_options = $shippings['ShipVias'];
             }
             if (
                 $this->active_theme_json->general->payment_method->enabled &&
                 $this->active_theme_json->general->payment_method->gateway == 'paytrace'
-            )
-            {
-                $customer_payment_options = $this->paytrace->get_customer(  ( new Cart() )->get_active_cart_customer() );
-                prr( ['customer_payment_options' => $customer_payment_options] );
+            ) {
+                $customer_payment_options = $this->paytrace->get_customer((new Cart())->get_active_cart_customer());
+                prr(['customer_payment_options' => $customer_payment_options]);
             }
-            if ( $payment_terms_list && $payment_terms_list['Success'] )
-            {
+            if ($payment_terms_list && $payment_terms_list['Success']) {
                 $payment_terms_list = $payment_terms_list['PaymentTerms'];
-                foreach ( $payment_terms_list as $payment_term )
-                {
+                foreach ($payment_terms_list as $payment_term) {
 
 // Update keys to minimize working in blade
-                    if ( ! in_array( md5( $payment_term['Description'] ), $payment_terms_list ) )
-                    {
-                        $payment_terms_list[md5( $payment_term['Description'] )] = $payment_term;
+                    if (!in_array(md5($payment_term['Description']), $payment_terms_list)) {
+                        $payment_terms_list[md5($payment_term['Description'])] = $payment_term;
                     }
 
                 }
 
             }
 
-            if ( $customer_details && $customer_details['Success'] == true )
-            {
-                $shipping_addresses  = $customer_details['CustomerDetail']['CustomerAddressDetail'];
-                $default_ship_via_id = isset( $customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0] ) ? $customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]['ShipViaID'] : '';
+            if ($customer_details && $customer_details['Success'] == true) {
+                $shipping_addresses = $customer_details['CustomerDetail']['CustomerAddressDetail'];
+                $default_ship_via_id = isset($customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]) ? $customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]['ShipViaID'] : '';
             }
 
         }
 
 
-        $this->append_breadcrumbs( 'Checkout', route( 'frontend.checkout' ) );
-        return view( 'frontend.'.$this->active_theme->theme_abrv.'.checkout', [
-            'countries'           => $countries,
-            'states'              => $states,
-            'shipping_options'    => $shipping_options,
-            'shippings'           => $shippings,
+        $this->append_breadcrumbs('Checkout', route('frontend.checkout'));
+        return view('frontend.' . $this->active_theme->theme_abrv . '.checkout', [
+            'countries' => $countries,
+            'states' => $states,
+            'shipping_options' => $shipping_options,
+            'shippings' => $shippings,
             'default_ship_via_id' => $default_ship_via_id,
-            'shipping_addresses'  => $shipping_addresses,
-            'payment_terms_list'  => $payment_terms_list,
-            'customer_comment'    => isset( $customer_details['CustomerDetail']['Comment'] ) ? $customer_details['CustomerDetail']['Comment'] : '',
-            'payment_term'        => isset( $customer_details['CustomerDetail']['PaymentTerm'] ) ? $customer_details['CustomerDetail']['PaymentTerm'] : '',
-            'payment_options'     => isset( $customer_payment_options['customers'] ) && count( $customer_payment_options['customers'] ) > 0 ? $customer_payment_options['customers'][0] : []
-        ] );
+            'shipping_addresses' => $shipping_addresses,
+            'payment_terms_list' => $payment_terms_list,
+            'customer_comment' => isset($customer_details['CustomerDetail']['Comment']) ? $customer_details['CustomerDetail']['Comment'] : '',
+            'payment_term' => isset($customer_details['CustomerDetail']['PaymentTerm']) ? $customer_details['CustomerDetail']['PaymentTerm'] : '',
+            'payment_options' => isset($customer_payment_options['customers']) && count($customer_payment_options['customers']) > 0 ? $customer_payment_options['customers'][0] : []
+        ]);
     }
 
-    public function place_order( Request $request )
+    public function place_order(Request $request)
     {
         try {
 
             $response = [
-                'data'    => [],
+                'data' => [],
                 'success' => 0,
-                'msg'     => 'Sorry something went wrong...'
+                'msg' => 'Sorry something went wrong...'
             ];
 
-            $payment_success  = false;
-            $itemDetail       = [];
-            $cartItems        = [];
+            $payment_success = false;
+            $itemDetail = [];
+            $cartItems = [];
             $requestDataArray = $request->all();
             // dd($requestDataArray);
-            $total_amount     = 0;
+            $total_amount = 0;
 
             $headers = [
-                'CustomerID'  => ( new Cart() )->get_active_cart_customer(),
-                'FirstName'   => $requestDataArray['FirstName'],
-                'LastName'    => $requestDataArray['LastName'],
-                'Email'       => $requestDataArray['Email'],
-                'Address1'    => $requestDataArray['Address1'],
-                'Address2'    => $requestDataArray['Address2'],
-                'City'        => $requestDataArray['City'],
-                'State'       => $requestDataArray['State'],
-                'Zip'         => $requestDataArray['Zip'],
+                'CustomerID' => (new Cart())->get_active_cart_customer(),
+                'FirstName' => $requestDataArray['FirstName'],
+                'LastName' => $requestDataArray['LastName'],
+                'Email' => $requestDataArray['Email'],
+                'Address1' => $requestDataArray['Address1'],
+                'Address2' => $requestDataArray['Address2'],
+                'City' => $requestDataArray['City'],
+                'State' => $requestDataArray['State'],
+                'Zip' => $requestDataArray['Zip'],
                 'ShipViaCode' => $requestDataArray['shipping_method'],
-                'OrderDate'   => date( "Y-m-d" ),
+                'OrderDate' => date("Y-m-d"),
                 'AddressType' => 'RESIDENTIAL' // if dropship
             ];
 
-            if ( isset( $requestDataArray['country'] ) )
-            {
+            if (isset($requestDataArray['country'])) {
                 $headers['Country'] = $requestDataArray['country'];
             }
 
-            if ( isset( $requestDataArray['Country'] ) )
-            {
+            if (isset($requestDataArray['Country'])) {
                 $headers['Country'] = $requestDataArray['Country'];
             }
 
-            if ( isset( $requestDataArray['AddressID'] ) )
-            {
-                $headers['ShipToCode']  = $requestDataArray['AddressID'];
+            if (isset($requestDataArray['AddressID'])) {
+                $headers['ShipToCode'] = $requestDataArray['AddressID'];
                 $headers['AddressType'] = 'COMMERCIAL'; // if selected a given address
             }
 
-            if ( isset( $requestDataArray['shipping_cost'] ) )
-            {
+            if (isset($requestDataArray['shipping_cost'])) {
                 $headers['ShippingCost'] = $requestDataArray['shipping_cost'];
                 $total_amount += $headers['ShippingCost'];
             }
 
-            if ( isset( $requestDataArray['payment_term'] ) )
-            {
+            if (isset($requestDataArray['payment_term'])) {
                 $headers['PaymentTerm'] = $requestDataArray['payment_term'];
             }
 
-            if ( isset( $requestDataArray['reference_number'] ) )
-            {
+            if (isset($requestDataArray['reference_number'])) {
                 $headers['CustomerPO'] = $requestDataArray['reference_number'];
             }
 
-            if ( isset( $requestDataArray['shipping_instructions'] ) )
-            {
+            if (isset($requestDataArray['shipping_instructions'])) {
                 $headers['Instructions'] = $requestDataArray['shipping_instructions'];
             }
 
-            if ( isset( $requestDataArray['ship_date'] ) )
-            {
-                $headers['ShipDate']     = date( 'Y-m-d', strtotime( $requestDataArray['ship_date'] ) );
-                $headers['DeliveryTime'] = date( 'H:i:s', strtotime( $requestDataArray['ship_date'] ) );
+            if (isset($requestDataArray['ship_date'])) {
+                $headers['ShipDate'] = date('Y-m-d', strtotime($requestDataArray['ship_date']));
+                $headers['DeliveryTime'] = date('H:i:s', strtotime($requestDataArray['ship_date']));
             }
 
-            if($requestDataArray['item_broadloom']){
-                $TempSalesOrderNo = "";
+            $TempSalesOrderNo = "";
+            if ($requestDataArray['item_broadloom']) {
                 $count = 0;
-                foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
-            {
-                $count++;
-                // dd($item);
-                $TempSalesOrderNo = json_decode($item['item_data'])->CutPieces[0]->TempSalesOrderNo;
-                array_push( $itemDetail, [
-                    'ItemID'    => $item['item_id'],
-                    'OrderQty'  => $item['item_quantity'],
-                    'UnitPrice' => $item['item_price'],
-                    'SQFTPrice' => json_decode($item['item_data'])->SQFTPrice,
-                    'SQFTArea' => json_decode($item['item_data'])->SQFTArea,
-                    'CutPieceID' => json_decode($item['item_data'])->CutPieceID,
-                    'RollID' => json_decode($item['item_data'])->RollID,
-                    'SergingCharges' => json_decode($item['item_data'])->SergingCharges,
-                    'SergingType' => json_decode($item['item_data'])->SergingType,
-                    'Line_No' => $count,
-                    "Discount"=> 0,
-                    "WHSID"=> null,
-                    "Remarks"=> null,
-                    "UserRemarks"=> null,
-                    "ETA_Date"=> "\/Date(-62135596800000)\/",
-                    'OrderLength' => json_decode($item['item_data'])->OrderLength,
-                    'CutPieces' => json_decode($item['item_data'])->CutPieces,
-                    'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
-                ] );
+                foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
+                    $count++;
+                    $item_data = json_decode(unserialize($item['item_data']));
+                    $cut_pieces = $item_data->CutPieces;
+                    $order_length = 0;
+                    foreach ($cut_pieces as $key => $cut_piece) {
+                        $cut_pieces->TempSalesOrderNo = $item_data->TempSalesOrderNo;
+                        $order_length += $cut_piece->ATSLength;
+                    }
 
-                array_push( $cartItems, [
-                    'Image'     => str_replace(' ', '%20', $item['item_image']),
-                    'ItemID'    => $item['item_id'],
-                    'Color'     => $item['item_color'],
-                    'Size'      => $item['item_size'],
-                    'OrderQty'  => $item['item_quantity'],
-                    'UnitPrice' => $item['item_price'],
-                    'SubTotal'  => $item['item_total'],
-                    'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+                    dd($cut_pieces);
 
-                ]);
+                    array_push($itemDetail, [
+                        'ItemID' => $item['item_id'],
+                        'OrderQty' => $item['item_quantity'],
+                        'UnitPrice' => $item['item_price'],
+                        'SQFTPrice' => $item_data->SQFTPrice,
+                        'SQFTArea' => $item_data->SQFTArea,
+                        'CutPieceID' => $item_data->CutPieceID,
+                        'RollID' => $item_data->RollID,
+                        'SergingCharges' => !empty($item_data->SergingCharges) ? $item_data->SergingCharges : 0,
+                        'SergingType' => !empty($item_data->SergingType) ? $item_data->SergingType : "N",
+                        'Line_No' => $count,
+                        "Discount" => 0,
+                        "WHSID" => null,
+                        "Remarks" => null,
+                        "UserRemarks" => null,
+                        "ETA_Date" => "\/Date(-62135596800000)\/",
+                        'OrderLength' => $order_length,
+                        'CutPieces' => $item_data->CutPieces,
+                        'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+                    ]);
 
-                $total_amount += $item['item_price'];
+                    array_push($cartItems, [
+                        'Image' => str_replace(' ', '%20', $item['item_image']),
+                        'ItemID' => $item['item_id'],
+                        'Color' => $item['item_color'],
+                        'Size' => $item['item_size'],
+                        'OrderQty' => $item['item_quantity'],
+                        'UnitPrice' => $item['item_price'],
+                        'SubTotal' => $item['item_total'],
+                        'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+
+                    ]);
+
+                    $total_amount += $item['item_price'];
+                }
+                // $headers['Line_No'] = $count;
+            } else {
+                foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
+                    array_push($itemDetail, [
+                        'ItemID' => $item['item_id'],
+                        'OrderQty' => $item['item_quantity'],
+                        'UnitPrice' => $item['item_price'],
+                        'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+                    ]);
+                    $total_amount += $item['item_price'];
+                }
             }
-            // $headers['Line_No'] = $count;
-            }else{
-                foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
-            {
-                array_push( $itemDetail, [
-                    'ItemID'    => $item['item_id'],
-                    'OrderQty'  => $item['item_quantity'],
-                    'UnitPrice' => $item['item_price'],
-                    'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
-                ] );
-                $total_amount += $item['item_price'];
-            }
-            }
-            $headers['TempSalesOrderNo'] = $TempSalesOrderNo;
 
-            $order_payment_hash             = md5( json_encode( ['general' => $headers, 'items' => $itemDetail] ) );
-            $headers['IsAdvancePayment']    = false;
+            $order_payment_hash = md5(json_encode(['general' => $headers, 'items' => $itemDetail]));
+            $headers['IsAdvancePayment'] = false;
             $headers['AdvancePaymentAmout'] = 0;
-            $headers['TransactionCode']     = '';
+            $headers['TransactionCode'] = '';
 
             $order_payment = $this->order_payment_model->updateOrCreate(
                 ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                 [
-                    'user_id'      => Auth::user()->id,
-                    'hash'         => $order_payment_hash,
-                    'order_data'   => serialize( [$headers, $itemDetail] ),
+                    'user_id' => Auth::user()->id,
+                    'hash' => $order_payment_hash,
+                    'order_data' => serialize([$headers, $itemDetail]),
                     'order_status' => ConstantsController::ORDER_STATUS['not-applicable']
                 ]
             );
 
-            $payment_response = $this->check_for_payments( $order_payment, $order_payment_hash, $total_amount, $requestDataArray, $headers );
+            $payment_response = $this->check_for_payments($order_payment, $order_payment_hash, $total_amount, $requestDataArray, $headers);
 
-            if ( ! $payment_response['success'] )
-            {
-                return response()->json( $payment_response );
+            if (!$payment_response['success']) {
+                return response()->json($payment_response);
             }
             // dd($headers, $itemDetail);
-            if($requestDataArray['item_broadloom'] == 1){
+            if ($requestDataArray['item_broadloom'] == 1) {
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,
                     $itemDetail
                 );
-            }else{
+            } else {
                 $result = $this->ApiObj->Place_Order(
                     $headers,
                     $itemDetail
@@ -411,48 +382,49 @@ class CheckoutController extends FrontendController
             $order_payment = $this->order_payment_model->updateOrCreate(
                 ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                 [
-                    'order_response' => json_encode( $result ),
-                    'order_status'   => ConstantsController::ORDER_STATUS['processed']
+                    'order_response' => json_encode($result),
+                    'order_status' => ConstantsController::ORDER_STATUS['processed']
                 ]
             );
 
-            if ( $result['Success'] )
-            {
-                $this->finalize_payment( $order_payment, $order_payment_hash, $requestDataArray, 'capture' );
+            dd($result);
+
+            if ($result['Success']) {
+                $this->finalize_payment($order_payment, $order_payment_hash, $requestDataArray, 'capture');
                 $order_payment = $this->order_payment_model->updateOrCreate(
                     ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                     [
-                        'hash' => md5( json_encode( ['general' => $headers, 'items' => $itemDetail, 'status' => ConstantsController::ORDER_STATUS['done']] ) ), // update this hash to avoid any repeating order to be caught by this
+                        'hash' => md5(json_encode(['general' => $headers, 'items' => $itemDetail, 'status' => ConstantsController::ORDER_STATUS['done']])), // update this hash to avoid any repeating order to be caught by this
                         'order_status' => ConstantsController::ORDER_STATUS['done']
                     ]
                 );
 
-                $this->cart_model->remove_cart_item( Auth::user()->id, ( new Cart() )->get_active_cart_customer(), 0, true );
+                $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, true);
                 $successMsg = $result['Message'];
-                preg_match( "/\[[^\]]*\]/", $successMsg, $matches );
-                $matched_string      = $matches[0];
-                $updatedString       = '<span>'.$matched_string.'</span>';
-                $successMsg          = str_replace( $matched_string, $updatedString, $successMsg );
+                preg_match("/\[[^\]]*\]/", $successMsg, $matches);
+                $matched_string = $matches[0];
+                $updatedString = '<span>' . $matched_string . '</span>';
+                $successMsg = str_replace($matched_string, $updatedString, $successMsg);
                 $response['success'] = 1;
-                $response['msg']     = $successMsg;
+                $response['msg'] = $successMsg;
 
                 // if ( isset($this->active_theme_json->general->order_ack) && $this->active_theme_json->general->order_ack ) {
-                    // $headers['ShippingCost'] = number_format( $requestDataArray['shipping_cost'], ConstantsController::ALLOWED_DECIMALS, '.', ',' );
-                    $cart_data = [
-                        'shipping' => $headers,
-                        'items'    => $cartItems,
-                        'total'    => number_format( $total_amount, ConstantsController::ALLOWED_DECIMALS, '.', ',' )
-                    ];
+                // $headers['ShippingCost'] = number_format( $requestDataArray['shipping_cost'], ConstantsController::ALLOWED_DECIMALS, '.', ',' );
+                $cart_data = [
+                    'shipping' => $headers,
+                    'items' => $cartItems,
+                    'total' => number_format($total_amount, ConstantsController::ALLOWED_DECIMALS, '.', ',')
+                ];
 
-                    if(array_key_exists('Instructions',$cart_data['shipping']) == false){
-                        $cart_data['shipping']['Instructions'] = $request->shipping_instructions;
-                    }
+                if (array_key_exists('Instructions', $cart_data['shipping']) == false) {
+                    $cart_data['shipping']['Instructions'] = $request->shipping_instructions;
+                }
 
-                    $cart_data['shipping']['SO_Number'] = $result['ObjectID'];
+                $cart_data['shipping']['SO_Number'] = $result['ObjectID'];
 
-                    try {
+                try {
 
-                        if (!empty($cart_data['shipping']['Email'])) {
+                    if (!empty($cart_data['shipping']['Email'])) {
 //                            SendMail::dispatch( [
 //                                'data'     => $cart_data,
 //                                'slug'     => "Order Confirmed",
@@ -461,7 +433,7 @@ class CheckoutController extends FrontendController
 //                                'template' => 'email.order-confirmation',
 //                                // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
 //                            ] );
-                        }
+                    }
 
 //                        SendMail::dispatch( [
 //                            'data'     => $cart_data,
@@ -471,16 +443,12 @@ class CheckoutController extends FrontendController
 //                            // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
 //                        ] );
 
-                        prr( " :: Order Acknowledgment Email Sent :: " );
-                    }
-                    catch ( \Exception $e )
-                    {
-                        prr( "Order Acknowledgment Email Exception :: ".$e->getMessage() );
-                    }
+                    prr(" :: Order Acknowledgment Email Sent :: ");
+                } catch (\Exception $e) {
+                    prr("Order Acknowledgment Email Exception :: " . $e->getMessage());
+                }
                 // }
-            }
-            else
-            {
+            } else {
                 $order_payment = $this->order_payment_model->updateOrCreate(
                     ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                     [
@@ -488,16 +456,15 @@ class CheckoutController extends FrontendController
                     ]
                 );
 
-                if ( isset( $result['Exception'] ) && $result['Exception'] || $result['ObjectID'] >= 900 )
-                {
-                    $this->cart_model->remove_cart_item( Auth::user()->id, ( new Cart() )->get_active_cart_customer(), 0, true );
+                if (isset($result['Exception']) && $result['Exception'] || $result['ObjectID'] >= 900) {
+                    $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, true);
                     $response['success'] = 1;
-                    $response['msg']     = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: '.$order_payment_hash;
+                    $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash;
 
                     try {
                         $order_data = [
-                            'hash'         => $order_payment_hash,
-                            'order-detail' => serialize( [$headers, $itemDetail] )
+                            'hash' => $order_payment_hash,
+                            'order-detail' => serialize([$headers, $itemDetail])
                         ];
 
 //                        SendMail::dispatch( [
@@ -506,111 +473,104 @@ class CheckoutController extends FrontendController
 //                            'email'    => ConstantsController::WEB_HOOK_EMAIL,
 //                            'template' => 'email.web_hook_email'
 //                        ] );
+                    } catch (\Exception $e) {
+                        prr("Mail Exception: " . $e->getMessage());
                     }
-                    catch ( \Exception $e )
-                    {
-                        prr( "Mail Exception: ".$e->getMessage() );
-                    }
-                }
-                else
-                {
-                    $this->finalize_payment( $order_payment, $order_payment_hash, $requestDataArray, 'void' );
+                } else {
+                    $this->finalize_payment($order_payment, $order_payment_hash, $requestDataArray, 'void');
                     $errorMsg = $result['Message'];
 
-                    if ( $result['ErrorDetail'] )
-                    {
+                    if ($result['ErrorDetail']) {
 
-                        if ( is_array( $result['ErrorDetail'] ) )
-                        {
+                        if (is_array($result['ErrorDetail'])) {
                             $errorDetails = '';
 
-                            foreach ( $result['ErrorDetail'] as $errorDetail )
-                            {
-                                $errorDetails .= $errorDetail['ErrorDescription'].'<br>';
+                            foreach ($result['ErrorDetail'] as $errorDetail) {
+                                $errorDetails .= $errorDetail['ErrorDescription'] . '<br>';
                             }
 
-                            if ( $errorDetails )
-                            {
-                                $errorMsg = '<b style="color: red">'.$errorMsg.'</b> <br/><br/>Following are the details: <br/>'.$errorDetails;
+                            if ($errorDetails) {
+                                $errorMsg = '<b style="color: red">' . $errorMsg . '</b> <br/><br/>Following are the details: <br/>' . $errorDetails;
                             }
 
-                        }
-                        else
-                        {
-                            $errorMsg = $errorMsg.' ['.$result['ErrorDetail']['ErrorDescription'].']';
+                        } else {
+                            $errorMsg = $errorMsg . ' [' . $result['ErrorDetail']['ErrorDescription'] . ']';
                         }
 
                     }
 
                     $response['success'] = 0;
-                    $response['msg']     = $errorMsg;
+                    $response['msg'] = $errorMsg;
                 }
 
             }
 
             // TODO : we have a btter way of doing this - Adil needs to look into this
 
-            return response()->json( $response );
+            return response()->json($response);
 
-        }
-        catch ( \Exception$e )
-        {
-            prr( ['CheckoutController::EXCEPTION' => $e->getMessage()] );
+        } catch (\Exception$e) {
+            prr(['CheckoutController::EXCEPTION' => $e->getMessage()]);
 
-            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.', 'error' => $e->getMessage()]);
-        }
-        catch ( \Error$e )
-        {
-            prr( ['CheckoutController::ERROR' => $e->getMessage()] );
+            return response()->json(['success' => 0, 'msg' => 'Something went wrong, please try again.', 'error' => $e->getMessage()]);
+        } catch (\Error$e) {
+            prr(['CheckoutController::ERROR' => $e->getMessage()]);
 
-            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.', 'error' => $e->getMessage()] );
+            return response()->json(['success' => 0, 'msg' => 'Something went wrong, please try again.', 'error' => $e->getMessage()]);
         }
 
     }
 
     public function pt_security()
     {
-        die( file_exists( storage_path( 'app/storage/pem_file/security.pem' ) ) ? file_get_contents( storage_path( 'app/storage/pem_file/security.pem' ) ) : '' );
+        die(file_exists(storage_path('app/storage/pem_file/security.pem')) ? file_get_contents(storage_path('app/storage/pem_file/security.pem')) : '');
     }
 
-    public function shipping_rate( Request $request )
+    public function shipping_rate(Request $request)
     {
-        $request         = $request->all();
+        $request = $request->all();
         $shipping_method = $request['shipping_method'];
-        $details         = [];
-        $customer_id     = '';
+        $details = [];
+        $customer_id = '';
 
-        foreach ( $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] as $item )
-        {
+        foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
             $customer_id = $item['item_customer_id'];
-            array_push( $details, [
+            array_push($details, [
                 'ItemID' => $item['item_id'],
-                'Qty'    => $item['item_quantity'],
-                'Price'  => $item['item_price']
-            ] );
+                'Qty' => $item['item_quantity'],
+                'Price' => $item['item_price']
+            ]);
         }
 
-        $shipping_rate_response = $this->ApiObj->Get_Shipping_Rates( $customer_id, $shipping_method, $details );
-        prr( ['$shipping_rate_response' => $shipping_rate_response] );
+        $shipping_rate_response = $this->ApiObj->Get_Shipping_Rates($customer_id, $shipping_method, $details);
+        prr(['$shipping_rate_response' => $shipping_rate_response]);
 
-        if ( $shipping_rate_response['Success'] == 1 )
-        {
-            $this->jsonResponseArray['data']    = $shipping_rate_response['ShippingRates'][0]['Rate'];
+        if ($shipping_rate_response['Success'] == 1) {
+            $this->jsonResponseArray['data'] = $shipping_rate_response['ShippingRates'][0]['Rate'];
             $this->jsonResponseArray['success'] = 1;
-        }
-        else
-        {
-            $this->jsonResponseArray['msg']     = $shipping_rate_response['Message'];
+        } else {
+            $this->jsonResponseArray['msg'] = $shipping_rate_response['Message'];
             $this->jsonResponseArray['success'] = 0;
         }
 
         // TODO : we have a btter way of doing this - Adil needs to look into this
 
-        return response()->json( $this->jsonResponseArray );
+        return response()->json($this->jsonResponseArray);
     }
 
-    public function thankYou( $msg )
+    public function check_cart_items($broadloom_item_flag = false)
     {
+        $cart = $this->cart_model->get_cart_for_front($this->ApiObj, $broadloom_item_flag);
+        if (count($cart['items'])) {
+            return true;
         }
 
+        return false;
+    }
+
+    public function delete_cart_items()
+    {
+        $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, true);
+        return 1;
+    }
 }

@@ -24,7 +24,7 @@ class CartController extends FrontendController
             {
                 return response()->json( array( 'success' => 0, 'message' => "Admin user cannot be used to place orders." ) );
             }
-     
+
             if (  ( new Cart() )->get_active_cart_customer() && ( new Cart() )->get_active_cart_customer() !== $request->cart_customer_id )
             {
                 return response()->json( array( 'success' => 0, 'message' => "You already have a different customer in the cart, please refresh the page and try again." ) );
@@ -35,14 +35,14 @@ class CartController extends FrontendController
                 // print_r($request->cart_item_data);
                 // die();
                 $size_array = json_decode($request->cart_item_size, true);
-           
+
                 foreach ($size_array as $size_data) {
-                
+
                     $request->merge([
-                        'cart_item_size' => $size_data['size'] + $request->item_serging_price,
-                        'cart_item_price' => $size_data['price']
+                        'cart_item_size' => $size_data['size'],
+                        'cart_item_price' => $size_data['price'] + $request->item_serging_price,
                     ]);
-                    
+
                     (new Cart())->save_or_update_full_cart_item($request);
                 }
                 // die();

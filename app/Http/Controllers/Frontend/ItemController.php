@@ -295,9 +295,7 @@ class ItemController extends FrontendController
         }
         // die("<pre>".print_r( $main_collection['Description'], 1)."</pre>");
         // dd($items);
-        return view('frontend.' . $this->active_theme->theme_abrv . $page, [
-            'items' => $items,
-            'items_json' => json_encode($items),
+
         foreach ( $items['ItemsETA'] as &$itemETA )
         {
             foreach ( $items['Items'] as $item )
@@ -320,7 +318,7 @@ class ItemController extends FrontendController
 
         // die("<pre>".print_r($items, 1)."</pre>");
 
-        return view( 'frontend.'.$this->active_theme->theme_abrv.'.item', [
+        return view( 'frontend.'.$this->active_theme->theme_abrv . $page , [
             'items'            => $items,
             'items_json'       => json_encode( $items ),
             'main_collections' => $main_collections,

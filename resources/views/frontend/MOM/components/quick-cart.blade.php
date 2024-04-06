@@ -5,7 +5,7 @@
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
 
-@endphp 
+@endphp
 @php
 // TODO : If the cart is empty then what visual will come up
 // TODO : On click of the product image in the cart the page should go to that item page
@@ -29,7 +29,7 @@ use App\Http\Controllers\CommonController;
                         $item_data = json_decode(unserialize($item -> item_data));
                     }
                 @endphp
-                @if( $item->broadloom_item)
+                @if( $item->item_broadloom)
                 <div class="d-flex flex-row justify-content-between align-items-center p-3 pt-3 border-bottom-thick" id="{{$item -> item_id}}__{{$item -> item_customer_id}}__{{$item -> item_size}}">
                     <div class="col-md-3 products-thumbnails position-relative align-self-baseline p-0">
                         <a href="javascript:void(0)" class="d-block newStyle">
@@ -39,7 +39,7 @@ use App\Http\Controllers\CommonController;
                     </div>
                     <div class="col-md-9">
                         <h3 class="font-ropa m-0">{{$item -> item_name}}</h3>
-                        {{-- 
+                        {{--
                         <p class="specs m-0"> <strong> Customer ID: </strong> <span> {{$item -> item_customer_id}} </span> </p>
                         <p class="specs m-0"> <strong> Item ID: </strong> <span> {{$item -> item_id}} </span> </p>
                         --}}
@@ -68,7 +68,7 @@ use App\Http\Controllers\CommonController;
                     </div>
                     <div class="col-md-9">
                         <h3 class="font-ropa m-0">{{$item -> item_name}}</h3>
-                        {{-- 
+                        {{--
                         <p class="specs m-0"> <strong> Customer ID: </strong> <span> {{$item -> item_customer_id}} </span> </p>
                         <p class="specs m-0"> <strong> Item ID: </strong> <span> {{$item -> item_id}} </span> </p>
                         --}}

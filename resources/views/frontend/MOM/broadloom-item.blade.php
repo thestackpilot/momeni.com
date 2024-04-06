@@ -191,7 +191,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
                                 <div class="mt-4 d-flex justify-content-end mx-5">
                                     @auth
-                                    <a href="" class="add-to-cart-button btn btn-dark" id="add_cart">
+                                    <a href="javascript:void(0)" class="add-to-cart-button btn btn-dark" id="add_cart">
                                         Place Order <i class="fa fa-long-arrow-right"></i>
                                     </a>
                                     @endauth
@@ -654,12 +654,12 @@ use App\Http\Controllers\CommonController;
                     var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id','color_id']) }}";
                     href = href.replace('cust_id', customer_id);
                     href = href.replace('color_id', $('#color_id').val());
-                    $('#add_cart').attr('href', href);
+                    // $('#add_cart').attr('href', href);
                 } else {
                     var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id','color_id']) }}";
                     href = href.replace('cust_id', customer_id);
                     href = href.replace('color_id', $('#color_id').val());
-                    $('#add_cart').attr('href', href);
+                    // $('#add_cart').attr('href', href);
                     $('#qty-main, .base_price').addClass('muted');
                     $('#qty_msg').css('opacity', '0.4');
                     if (!$('#qty-main').is(':visible'))
@@ -867,8 +867,9 @@ use App\Http\Controllers\CommonController;
                     'cart_item_size': $('#cart_item_size').val(),
                     'cart_item_currency': $('#cart_item_currency').val(),
                     'cart_item_image': $('#cart_item_image').val(),
-                    // 'cart_item_data': $('#item_json').html(),
-                    'cart_item_data': $('#cart_item_oak').val(),
+                    'cart_item_data': $('#item_json').html(),
+                    // 'cart_item_data': $('#cart_item_oak').val(),
+                    'cart_item_broadloom': 1,
                     'cart_item_eta': $('#cart_item_eta').val()
                 },
                 success: function(response) {
@@ -1000,18 +1001,48 @@ use App\Http\Controllers\CommonController;
             $('input[type="number"]', $(this).parent()).val((parseInt(value) + 1) < 1001 ? parseInt(value) + 1 : 1000).change();
         });
 
-        $("#add_cart").on("click", function(){
-            if ( $('input[name="sale_rep"]').val() !== 1 &&   customerID.length !== 0) {
+        function generateBroadloomUrl() {
             var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id','color_id']) }}";
             href = href.replace('cust_id', $('#cart_customer_id').val());
             href = href.replace('color_id', $('#color_id').val());
-            $('#add_cart').attr('href', href);
-        }else{
-            toastr.warning('Please select a customer...', {
-                        hideDuration: 10000,
-                        closeButton: true,
-                    });
+            // $('#add_cart').attr('href', href);
+            window.location.replace(href)
         }
+
+        $("#add_cart").on("click", function(){
+            if ( $('input[name="sale_rep"]').val() !== 1 &&   customerID.length !== 0) {
+                $.ajax({
+                    url: "{{ route('check-cart-item') }}",
+                    type: "GET",
+                    success: function (response) {
+                        if (response) {
+                            if (confirm('You have already items, You want to add broadloom item will remove previous items from cart, Are You sure?')) {
+                                $.ajax({
+                                    url: "{{ route('delete-cart-items') }}",
+                                    type: "GET",
+                                    success: function (response) {
+                                        if (response) {
+                                            generateBroadloomUrl();
+                                        } else {
+                                            toastr.error('Someting went wrong', {
+                                                hideDuration: 10000,
+                                                closeButton: true,
+                                            });
+                                        }
+                                    }
+                                })
+                            }
+                        } else {
+                            generateBroadloomUrl();
+                        }
+                    }
+                })
+            } else{
+                toastr.warning('Please select a customer...', {
+                    hideDuration: 10000,
+                    closeButton: true,
+                });
+            }
         });
 
         $('.qty-minus').on('click', function() {
