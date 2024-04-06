@@ -13087,17 +13087,19 @@ h3.selected-fltr {
 
 .cut-pieces {
     margin-top: 2rem;
+    height: 470px;
 }
 
 .pieces {
     width: 100%;
+    height: 470px;
     display: flex;
     margin-top: 3rem;
 }
 
 .width {
     width: 5%;
-    height: 100%;
+    height: 470px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13111,7 +13113,7 @@ h3.selected-fltr {
     border-left: 3rem solid #f3f3f3;
     display: flex;
     flex-wrap: wrap;
-    height: 100%;
+    height: 470px;
     margin-top: -3rem;
 
 }
