@@ -72,6 +72,8 @@ Route::post('/cut-pieces', [BroadloomController::class, 'AddCutPiece'])->name('b
 Route::post( '/item/ats', [ItemController::class, 'get_item_ats'] )->name( 'frontend.item.ats' );
 Route::post( '/item/design_ats', [ItemController::class, 'get_design_ats'] )->name( 'frontend.item.design_ats' );
 Route::get('/get-cut-pieces', [ItemController::class, 'get_cut_pieces'])->name('get-cut-pieces');
+Route::post( '/item/design_ats', [ItemController::class, 'get_design_ats'] )->name( 'frontend.item.design_ats' );
+
 //Search Routes
 Route::get( '/search/{string}/{type?}', [SearchController::class, 'index'] )->name( 'frontend.search' );
 

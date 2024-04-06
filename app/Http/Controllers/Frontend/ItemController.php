@@ -206,14 +206,49 @@ class ItemController extends FrontendController
 
         $return = ['success' => 0, 'data' => json_encode(['ATSQty' => 0, 'Price' => 0, 'ETADate' => null, 'ETAQty' => 0, 'Message' => 'Not Available'])];
 
-        if ($request->has('item_id') && $request->has('customer_id')) {
-            $return = [
-                'success' => 1,
-                'data' => $this->update_ats_prices($this->ApiObj->Get_ATS($request->item_id, $request->customer_id)['ATSInfo'], $request->item_id, $request->customer_id)
-            ];
+        if ( $request->has( 'item_id' ) && $request->has( 'customer_id' ) )
+        {
+            // print_r($request->SUK);
+            // die(var_dump( $request->SUK !== null));
+            if($request->SUK !== null)
+            {
+                // $request->item_id = $request->SUK;
+                $return = [
+                    'success' => 1,
+                    'data'    => $this->update_ats_prices( $this->ApiObj->Get_ATS( $request->SUK, $request->customer_id )['ATSInfo'], $request->item_id, $request->customer_id )
+                ];
+            }
+            else{
+                $return = [
+                    'success' => 1,
+                    'data'    => $this->update_ats_prices( $this->ApiObj->Get_ATS( $request->item_id, $request->customer_id )['ATSInfo'], $request->item_id, $request->customer_id )
+                ];
+            }
+
         }
 
         return response()->json($return);
+    }
+
+    public function get_design_ats( Request $request )
+    {
+        $return = ['success' => 0, 'data' => json_encode( ['ATSQty' => 0, 'Price' => 0, 'ETADate' => null, 'ETAQty' => 0, 'Message' => 'Not Available'] )];
+
+        if ( $request->has( 'design_id' ) && $request->has( 'customer_id' ) )
+        {
+            $design_ats = $this->ApiObj->Get_DesignATS( $request->design_id, $request->customer_id )['ATSInfo']['Items'];
+            $temp_data = array();
+            foreach( $design_ats as $data )
+            {
+                $temp_data[] = $this->update_ats_prices( $data, $data['ItemID'] );
+            }
+            $return = [
+                'success' => 1,
+                'data'    => $temp_data
+            ];
+        }
+
+        return response()->json( $return );
     }
 
     // Testing ideal link RZY = http://vcs.local.com/item/3/BQ4189
@@ -260,13 +295,39 @@ class ItemController extends FrontendController
         return view('frontend.' . $this->active_theme->theme_abrv . $page, [
             'items' => $items,
             'items_json' => json_encode($items),
+        foreach ( $items['ItemsETA'] as &$itemETA )
+        {
+            foreach ( $items['Items'] as $item )
+            {
+                if ( $item['ItemID'] === $itemETA['ItemID'] )
+                {
+                    foreach ($items['Colors'] as $color)
+                    {
+                        if ( $color['ColorID'] === $item['ColorID'] )
+                        {
+                            $itemETA['ItemColor'] = $color['Description'];
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+
+        // die("<pre>".print_r($items, 1)."</pre>");
+
+        return view( 'frontend.'.$this->active_theme->theme_abrv.'.item', [
+            'items'            => $items,
+            'items_json'       => json_encode( $items ),
             'main_collections' => $main_collections,
             'collection' => $main_collection['Description'],
             'collection_id' => $id,
             'related_designs' => $related_designs,
             'color' => $color_id,
             'is_oak' => strtolower($id) === 'oak',
-            'design_id' => $design_id
+            'design_id' => $design_id,
+            'SUK'              => strtolower( $id ) === 'oak' ? $design_id : null
         ]);
 
     }
@@ -293,9 +354,9 @@ class ItemController extends FrontendController
         $data['ATSQtyOrig'] = $data['ATSQty'];
         $data['ATSQty'] = $data['ATSQty'] - (new Cart())->get_item_quantity($item_id);
         $data['ETADate'] = CommonController::get_date_format($data['ETADate']);
-
         // $data['ItemExistInCart']    =  ( new Cart() )->get_item_quantity( $item_id ) ? true : false;
         $cart_item = (new Cart())->get_item($item_id);
+
         $data['ItemExistInCart'] = $cart_item ? ($cart_item->customer_id == $customer_id ? 1 : -1) : 0;
 
         return $data;

@@ -8,6 +8,7 @@ use App\Http\Controllers\CommonController;
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Frontend\MainCollectionController;
+use Illuminate\Support\Facades\Log;
 
 class HangtagsController extends DashboardController
 {
@@ -18,137 +19,151 @@ class HangtagsController extends DashboardController
 
     public function download_print_hangtags( Request $request )
     {
-        $validated_data = $request->validate( [
-            'submit'   => 'required',
-            'customer' => 'required',
-            'item'     => 'required'
-        ] );
+        ini_set('max_execution_time', 300);
+        ini_set('memory_limit', '256M');
+        try {
+            $validated_data = $request->validate( [
+                'submit'   => 'required',
+                'customer' => 'required',
+                'item'     => 'required'
+            ] );
 
-        $products = [];
+            $products = [];
 
-        foreach ( $validated_data['item'] as $k => $item )
-        {
-            $item       = json_decode( $item, 1 );
-            $items_data = $this->ApiObj->Get_GetHangTagsDetailData( $item['ItemID'], $validated_data['customer'], $request->has( 'with-map' ) ? true : '' );
+            foreach ( $validated_data['item'] as $k => $item )
+            {
+                $item       = json_decode( $item, 1 );
+                $items_data = $this->ApiObj->Get_GetHangTagsDetailData( $item['ItemID'], $validated_data['customer'], $request->has( 'with-map' ) ? true : '' );
 
-            try {
-
-                if ( $items_data && $items_data['Success'] && $items_data['HangTagsDetail'] )
-                {
-                    $products[$k] = [
-                        'category'     => $items_data['HangTagsDetail'][0]['Category'],
-                        'title'        => $items_data['HangTagsDetail'][0]['Design'],
-                        'attributes'   => [
-                            [
-                                'label' => 'Material',
-                                'value' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Fibers']))
-                            ],
-                            [
-                                'label' => 'Construction',
-                                'value' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Construction']))
-                            ],
-                            [
-                                'label' => 'Country',
-                                'value' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Country']))
-                            ]
-                        ],
-                        'construction' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Construction'])),
-                        'collection'   => ucwords(strtolower($items_data['HangTagsDetail'][0]['Collection'])),
-                        'image'        => CommonController::getApiFullImage( $item['ImageName'] )
-                       
-                    ];
+                try {
+                    if ( $items_data && $items_data['Success'] && $items_data['HangTagsDetail'] )
 
                     foreach ( $items_data['HangTagsDetail'] as $i => $data )
                     {
-                        $products[$k]['sizes'][$i] = [
-                            'label' => $data['SizeDescription'],
-                            'price' => ( $request->has( 'price-multiplier' ) && ( $request->{'price-multiplier'} ) > 1 ? $data['UnitPrice'] * ( $request->{'price-multiplier'} ) : $data['UnitPrice'] ),
-                            'raw'   => $data
+                        $products[$k] = [
+                            'category'     => $items_data['HangTagsDetail'][0]['Category'],
+                            'title'        => $items_data['HangTagsDetail'][0]['Design'],
+                            'color'        => $items_data['HangTagsDetail'][0]['Color'],
+                            'attributes'   => [
+                                [
+                                    'label' => 'Material',
+                                    'value' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Fibers']))
+                                ],
+                                [
+                                    'label' => 'Construction',
+                                    'value' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Construction']))
+                                ],
+                                [
+                                    'label' => 'Country',
+                                    'value' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Country']))
+                                ]
+                            ],
+                            'construction' => ucwords(strtolower($items_data['HangTagsDetail'][0]['Construction'])),
+                            'collection'   => ucwords(strtolower($items_data['HangTagsDetail'][0]['Collection'])),
+                            'image'        => CommonController::getApiFullImage( $item['ImageName'] )
+
                         ];
 
-                        if ( $request->has( 'round-price' ) )
+                        foreach ( $items_data['HangTagsDetail'] as $i => $data )
                         {
-                            $round_price = ( $request->{'round-price'} );
+                            $products[$k]['sizes'][$i] = [
+                                'label' => $data['SizeDescription'],
+                                'price' => ( $request->has( 'price-multiplier' ) && ( $request->{'price-multiplier'} ) > 1 ? $data['UnitPrice'] * ( $request->{'price-multiplier'} ) : $data['UnitPrice'] ),
+                                'raw'   => $data
+                            ];
 
-                            switch ( $round_price )
+                            if ( $request->has( 'round-price' ) )
                             {
-                                case '.00':
-                                case .00:
-                                    $products[$k]['sizes'][$i]['price'] = ConstantsController::CURRENCY.number_format( round( $products[$k]['sizes'][$i]['price'] ), 2 );
-                                    break;
-                                case '.99':
-                                case .99:
-                                    $products[$k]['sizes'][$i]['price'] = ConstantsController::CURRENCY.number_format( ceil( $products[$k]['sizes'][$i]['price'] / .99 ) * .99, 2 );
-                                    break;
-                                default:
-                                    $products[$k]['sizes'][$i]['price'] = ConstantsController::CURRENCY.number_format( $products[$k]['sizes'][$i]['price'], 2 );
-                                    break;
+                                $round_price = ( $request->{'round-price'} );
+
+                                switch ( $round_price )
+                                {
+                                    case '.00':
+                                    case .00:
+                                        $products[$k]['sizes'][$i]['price'] = ConstantsController::CURRENCY.number_format( round( $products[$k]['sizes'][$i]['price'] ), 2 );
+                                        break;
+                                    case '.99':
+                                    case .99:
+                                        $products[$k]['sizes'][$i]['price'] = ConstantsController::CURRENCY.number_format( ceil( $products[$k]['sizes'][$i]['price'] / .99 ) * .99, 2 );
+                                        break;
+                                    default:
+                                        $products[$k]['sizes'][$i]['price'] = ConstantsController::CURRENCY.number_format( $products[$k]['sizes'][$i]['price'], 2 );
+                                        break;
+                                }
+
+                            }
+                            else
+                            {
+                                $products[$k]['sizes'][$i]['price'] = ConstantsController::CURRENCY.number_format( $products[$k]['sizes'][$i]['price'], 2 );
                             }
 
+                            if ( $request->has( 'include-barcode' ) && ( $request->{'include-barcode'} ) )
+                            {
+                                $products[$k]['barcodes'][] = [
+                                    'label' => $data['SizeDescription'],
+                                    'code'  => $data['UPC']
+                                ];
+                            }
+                            $products[$k]['logo'] = $this->get_design_logo( $data['Designer']);
                         }
-                        else
-                        {
-                            $products[$k]['sizes'][$i]['price'] = ConstantsController::CURRENCY.number_format( $products[$k]['sizes'][$i]['price'], 2 );
-                        }
-
-                        if ( $request->has( 'include-barcode' ) && ( $request->{'include-barcode'} ) )
-                        {
-                            $products[$k]['barcodes'][] = [
-                                'label' => $data['SizeDescription'],
-                                'code'  => $data['UPC']
-                            ];
-                        }
-                        $products[$k]['logo'] = $this->get_design_logo( $data['Designer']);
+                        $barcodes = array_chunk($products[$k]['barcodes'], 10);
+                        $sizes = array_chunk($products[$k]['sizes'], 10);
+                        $products[$k]['barcodes'] = $barcodes;
+                        $products[$k]['sizes'] = $sizes;
                     }
 
                 }
+                catch ( \Exception $e )
+                {
+                    continue;
+                }
 
             }
-            catch ( \Exception $e )
+
+            $page_data = [
+                'products'      => $products,
+                'without_price' => $request->has( 'without-price' ),
+                'error_image'   => ConstantsController::IMAGE_PLACEHOLDER,
+                'header'        => $request->has( 'header' ) ? $request->header : '',
+                'footer'        => $request->has( 'footer' ) && $request->footer ? $request->footer : url( '/' )
+            ];
+
+            if ( $request->hasFile( 'custom-logo' ) && $request->file( 'custom-logo' )->isValid() )
             {
-                continue;
+                $file              = $request->file( 'custom-logo' )->move( public_path( 'uploads' ), 'tmpLogo.'.$request->file( 'custom-logo' )->extension() );
+                $page_data['logo'] = asset( 'uploads/'.$file->getFileName() );
+            }
+            else
+            {
+                $page_data['logo'] = asset( $this->basicSettings->logo_dark );
+            }
+
+            switch ( $validated_data['submit'] )
+            {
+                case 'print':
+                    $page_data['print'] = true;
+
+                    return view( 'dashboard.hangtags-print', $page_data );
+                    break;
+                case 'download':
+//                return view( 'dashboard.hangtags-pdf', $page_data );
+                    $html = view( 'dashboard.hangtags-pdf', $page_data )->render();
+                    $pdf  = PDF::loadHTML( $html )->setPaper('A4', 'landscape' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
+                    // $pdf = PDF::loadView( 'dashboard.hangtags-pdf', $page_data )->setPaper( [0, 0, 720, 970], 'portrait' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
+
+                    return $pdf->download( 'hangtags.pdf' );
+                    break;
+                default:
+                    return redirect()->route( 'dashboard.hangtags' )->with( 'message', ['type' => 'danger', 'body' => 'Invalid request.'] );
+                    break;
             }
 
         }
-
-        $page_data = [
-            'products'      => $products,
-            'without_price' => $request->has( 'without-price' ),
-            'error_image'   => ConstantsController::IMAGE_PLACEHOLDER,
-            'header'        => $request->has( 'header' ) ? $request->header : '',
-            'footer'        => $request->has( 'footer' ) && $request->footer ? $request->footer : url( '/' )
-        ];
-
-        if ( $request->hasFile( 'custom-logo' ) && $request->file( 'custom-logo' )->isValid() )
-        {
-            $file              = $request->file( 'custom-logo' )->move( public_path( 'uploads' ), 'tmpLogo.'.$request->file( 'custom-logo' )->extension() );
-            $page_data['logo'] = asset( 'uploads/'.$file->getFileName() );
+        catch (\Exception $e) {
+            // Handle any exceptions here
+            Log::error($e);
+            return response()->json(['error' => 'An error occurred'], 500);
         }
-        else
-        {
-            $page_data['logo'] = asset( $this->basicSettings->logo_dark );
-        }
-        
-        switch ( $validated_data['submit'] )
-        {
-            case 'print':
-                $page_data['print'] = true;
-
-                return view( 'dashboard.hangtags-print', $page_data );
-                break;
-            case 'download':
-
-                $html = view( 'dashboard.hangtags-pdf', $page_data )->render();
-                $pdf  = PDF::loadHTML( $html )->setPaper( [0, 0, 580, 870 ], 'landscape' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
-                // $pdf = PDF::loadView( 'dashboard.hangtags-pdf', $page_data )->setPaper( [0, 0, 720, 970], 'portrait' )->setOptions( ['isPhpEnabled' => true, 'isRemoteEnabled' => true] );
-
-                return $pdf->download( 'hangtags.pdf' );
-                break;
-            default:
-                return redirect()->route( 'dashboard.hangtags' )->with( 'message', ['type' => 'danger', 'body' => 'Invalid request.'] );
-                break;
-        }
-
     }
 
     public function fetch_hangtags( Request $request )
@@ -325,11 +340,11 @@ class HangtagsController extends DashboardController
             case 'NOVO01':
                 $logo = 'https://media.momeni.com/Full_Img/Novogratz_logo.png';
                 break;
-            
+
             case 'PURE01':
                 $logo = 'https://media.momeni.com/Full_Img/PureSalt_logo.png';
                 break;
-            
+
             default:
                 $logo = 'https://media.momeni.com/Full_Img/Momeni_logo.png';
                 break;

@@ -11,460 +11,226 @@
         curl_close($ch);
         return $data;
     }
-
-    function splitString($string, $chunkSize) {
-    $chunks = [];
-    $words = explode(" ", $string);
-    $currentChunk = '';
-    
-    foreach ($words as $word) {
-        if (strlen($currentChunk) + strlen($word) <= $chunkSize) {
-            $currentChunk .= $word . " ";
-        } else {
-            $chunks[] = trim($currentChunk);
-            $currentChunk = $word . " ";
-        }
-    }
-
-    // Add the remaining part
-    if (!empty($currentChunk)) {
-        $chunks[] = trim($currentChunk);
-    }
-    // die(print_r($chunks));
-    return $chunks;
-}
-
 @endphp
 <html>
 
 <head>
     <title>Hang Tags</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- <link href="https://fonts.cdnfonts.com/css/times-new-roman" rel="stylesheet"> -->
 
 
     <style type="text/css">
         @font-face {
-            font-family: "montserrat", sans-serif;
-            /* font-style: normal;
-            font-weight: normal; */
-            /* src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap'); */
-            src: url("https://use.typekit.net/lba7uat.css");
+            font-family: "Montserrat";
+            src: url({{ asset('fonts/static/Montserrat-Regular.ttf') }}) format('truetype');
+            /*    !* font-style: normal;*/
+            /*    font-weight: normal; *!*/
+            /*    !*src: url("/public/fonts/static/Montserrat.ttf");*!*/
+            /*    !*src: url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Protest+Riot&display=swap');*!*/
+            /*    !*src: url("https://use.typekit.net/lba7uat.css");*!*/
         }
-        @page {
-            size: 30cm 20cm;
-            margin: 0;
-        }
+
         body {
-            font-family: "montserrat", sans-serif;
-            font-optical-sizing: auto;
-            font-style: normal;
-            margin:0;
+            font-family: "Montserrat", sans-serif;
+            margin: 0;
             padding: 0;
         }
 
-
-        <!--
         .style2 {
             font-size: 12px;
         }
 
-        .style3 {
-            font-size: large;
+        .hangtags-wrapper {
+            width: 100%;
+            height: 80%;
+            display: flex;
+            flex-direction: row;
+            padding-top: 1.5rem;
         }
 
-        .style5 {
-            font-size: large;
-            font-weight: bold;
+        .left-wrapper {
+            /*display: inline;*/
+            text-align: center;
+            /*padding: 5rem 0;*/
+            /*margin-top: -2rem;*/
         }
-        -->
-        .divbg
-        {
-        /*background-image:
-        url('./Images/grey.png');
-        background-repeat:
-        repeat;
-        */
-        background:
-        white;
+
+        .barcodes {
+            width: 100%;
+            display: inline-block;
+            text-align: center;
+            margin-top: 40px;
         }
-        .divHeaderFooterbg
-        {
-        /*background-image:
-        url('./Images/Headerbg.png');
-        background-repeat:
-        repeat;
-        */
-        background:
-        white;
+
+        .barcode {
+            width: 230px;
+            margin: 0 5px;
+            display: inline-block;
         }
-        .imgHeight
-        {
-        max-width:
-        316px
-         !important;
-        max-height:
-        350px
-         !important;
+
+        .barcode p {
+            font-size: 24px;
+            margin: 4px 0 0;
+            line-height: 25px;
+            color: grey;
         }
-        .imgHeightNew1
-        {
-        max-width:
-        316px
-         !important;
-        max-height:
-        250px
-         !important;
+
+        p.barcode-label {
+            margin-top: -4px;
+            font-size: 12px;
+            color: #000;
+            font-weight: 700;
+            margin-bottom: 3px;
         }
-        .imgHeightNew2
-        {
-        max-width:
-        316px
-         !important;
-        max-height:
-        200px
-         !important;
+
+        .right-wrapper {
+            display: inline;
+            text-align: center;
+            padding: 5rem 0 0;
+            height: 100%;
         }
+
+        .hangtags-wrapper table {
+            width: 100%;
+        }
+
+        .hangtags-wrapper table td {
+            width: 50%;
+        }
+
+        td.left-td {
+            position: relative;
+            /* text-align: center; */
+        }
+
+        td.right-td {
+            position: relative;
+            /* text-align: center; */
+        }
+
+        p.sizes {
+            /*position: absolute;*/
+            /*top: 25px;*/
+            /*text-align: center;*/
+            /*right: 0;*/
+            /*left: 0;*/
+            /*font-weight: 600;*/
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: grey;
+        }
+
     </style>
-
-    <script>
-        function PrintDoc() {
-            window.print();
-            var tblHeight = $('#tblSize').height();
-
-            if (parseInt(tblHeight) >= 500 || parseInt(tblHeight) == 700) {
-                $('#imgID').removeClass('imgHeight');
-                $('#imgID').addClass('imgHeightNew1');
-            }
-
-            if (tblHeight >= 700 || tblHeight == 1000) {
-                $('#imgID').removeClass('imgHeight');
-                $('#imgID').addClass('imgHeightNew2');
-            }
-        }
-    </script>
 
 </head>
 
-<body marginstyle="width:0" marginheight="0" topmargin="0">
-    @foreach($products as $k => $product)
-    <div style="width:100%;" class="divbg">
-        <div style="height:50px;" class="divHeaderFooterbg"></div>
-
-        {{-- new design by asad 23/01/2024 --}}
-        <center>
-
-            <table width="100%" style="width: 100%; height:100%;">
-                <tbody>
+<body>
+@foreach($products as $i => $product)
+    @if(isset($product['barcodes']))
+        @foreach($product['barcodes'] as $j => $barcodes)
+            <div class="hangtags-wrapper">
+                <table>
                     <tr>
-                        <td style="width:50%; vertical-align: top; padding:0; margin:0;" class="left-div">
-                          <p style="border:0; background-color: #ffffff; ">
-                              <div style="border:0; background-color: #ffffff; ">
-                                <center>
-                                    <font color="#000000" style="font-size:40px; color:rgb(158, 155, 155);" >
-                                        <span>SIZES AVAILABLE</span>
-                                    </font>
+                        <td class="left-td">
+                            @php
+                                $margin = -17;
+                                $total_barcodes = count($barcodes);
 
-                                <div class="" style="margin-top: 70px;">
-                                    @if (isset($product['barcodes']))
-                                        @foreach($product['barcodes'] as $barcode)
-                                        <span style="border:0; background-color: #ffffff; width: 280px; display: inline-block; margin-bottom: 40px;line-space:1.2; position: relative;">
-                                            @php
-                                                $maxLength = 23;
-                                                $chunks = splitString($barcode['label'], $maxLength);
-                                            @endphp
-                                            @foreach($chunks as $key => $value)
-                                            {{-- <p> {{ $key }}</p> --}}
-                                            <div>   
-                                                <p style="font-size:24px; font-weight:normal; color: grey;overflow-wrap: break-word; ">{{$value}}</p><br>
-                                             </div>
-                                            @endforeach
-                                            <div style="margin-top: 5px; margin-bottom: 10px;">
-                                                <img src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}" width="170px" height="45px">
+                                if ($total_barcodes <= 6 && $total_barcodes > 2) {
+                                    $margin = -11;
+                                }
 
-                                                {{-- <img src="data:image/png;base64,{!! DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), true) !!}" width="150px" height="60px" alt="Barcode"> --}}
+                                if ($total_barcodes <= 8 && $total_barcodes > 6) {
+                                    $margin = -4;
+                                }
+
+                                if ($total_barcodes <= 10 && $total_barcodes > 8) {
+                                    $margin = 2;
+                                }
+                            @endphp
+                            <div class="left-wrapper" style="margin-top: {{ $margin }}rem">
+                                <p class="sizes">SIZES AVAILABLE</p>
+                                <div class="barcodes">
+                                    @foreach($barcodes as $k => $barcode)
+                                        <div class="barcode">
+                                            <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 19) . '..' : $barcode['label'] }}</p>
+                                            <div style="margin-top: 3px;">
+                                                <img
+                                                    src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
+                                                    width="170px" height="45px">
                                             </div>
-                                            <span style="margin-top: 10px;font-size: 10px; font-weight: bold;"> {{ $barcode['code']  }}</span>
-                                        </span>
-                                        @endforeach
-
-                                    @else
-                                        @foreach($product['sizes'] as $size)
-                                            <span style="width: 150px; display: inline-block; margin-bottom: 30px;">{{$size['label']}}</span>
-                                        @endforeach
-                                    @endif
+                                            <p style="margin-top: -4px; font-size: 12px; color: #000; font-weight: 700; margin-bottom: 3px;"> {{ $barcode['code']  }}</p>
+                                        </div>
+                                    @endforeach
                                 </div>
-
-                            </center>
-                              </div>
-                          </p>
+                            </div>
                         </td>
-                        <td style="width:50%; vertical-align: top; padding:0; margin:20%;" class="right-div">
-                                    {{-- logo --}}
-                                    <div class="mb-5 pb-3" style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
-                                        <img src = "{{ $product['logo'] }}" width="175" onerror="this.onerror=null; this.src='{{url('/').$error_image}}'" style="text-align: right;" />
-                                        @if(isset($header))
-                                            <div>
-                                                <font face="arial" style="color: gray;font-style: italic;font-size: 30px;">
-                                                    {{$header}}
-                                                </font>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    {{-- titles and details --}}
-
-                                    <div style="font-size: 28px; color: grey; text-align: center; margin-bottom: 10px;">
-                                        <p style="margin-bottom: 40px; overflow-wrap: break-word;"><b>{{$product['category']}}</b></p>
-                                        <p style="margin-bottom: 10px; overflow-wrap: break-word;">{{$product['title']}}</p>
-                                    </div>
-
-                                        <table style="width:100%" border="0" cellspacing="0" cellpadding="0" style="padding-top: 0px;">
-                                            <tbody>
-                                                {{-- line between --}}
-                                                <tr>
-                                                    <td><hr class="col-2 m-auto p-3 mt-4" style="width:16.66%; margin-top:60px; margin-bottom:30px; auto; padding:1rem; opacity: 1;"></td>
-                                                </tr>
-
-                                                {{-- details --}}
-
-                                                <tr>
-                                                    <td>
-                                                        @foreach($product['attributes'] as $attribute)
-                                                            <div class="style2 text-center" style="text-align: center;margin-top: 30px;">
-                                                                <div style="font-size:26px; color: grey;margin-bottom: 60px;">
-                                                                    <span style="color:rgb(104, 102, 102)">{{$attribute['label']}}:</span>
-                                                                    <span class="mb-0" style="overflow-wrap: break-word;">{{$attribute['value']}} </span>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                        <td class="right-td">
+                            <div class="right-wrapper">
+                                <table style="width: 100%">
+                                    <tbody style="line-height: 30px;">
+                                    <tr>
+                                        <td style="margin-bottom: 3rem; padding-bottom: 3rem; text-align: center;">
+                                            <img src="{{ $product['logo'] }}" width="150"
+                                                 onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
+                                                 style="text-align: center;"/>`
+                                        </td>
+                                    </tr>
+                                    @if(isset($header))
+                                        <tr>
+                                            <td>
+                                                <h3 style="color: gray;font-style: italic;font-size: 20px;">{{$header}}</h3>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                    <tr>
+                                        <td style="font-size:27px;color: rgb(80, 78, 78); text-align: center; margin-bottom: 30px;">
+                                            <p style="margin-bottom: 0px;"><b>{{$product['category']}}</b></p>
+                                            <p style="margin-bottom: 20px; font-size:27px;color: rgb(80, 78, 78);;">{{$product['title']. ' '. $product['color']}} </p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center">
+                                            <a href="https://www.momeni.com/search?q={{ $product['title']}}">
+                                                <img
+                                                    src="https://api.qrserver.com/v1/create-qr-code/?data=https://www.momeni.com/search?q={{ $product['title']}} "
+                                                    onerror="this.onerror=null; this.src='{{url('/').$error_image}}'"
+                                                    id="imgID" align="middle" border="0" class="imgHeight" height="60px"
+                                                    width="60px" alt="QR Code">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @foreach($product['attributes'] as $attribute)
+                                                <div class="style2 text-center"
+                                                     style="text-align: center;margin-top: 10px;">
+                                                    <div
+                                                        style="font-size:26px;margin-bottom: 15px; line-height: 30px !important;">
+                                                        <span
+                                                            style=" color: rgb(98, 99, 99)">{{$attribute['label']}}:</span>&nbsp;
+                                                        <span class="mb-0"
+                                                              style="color:rgb(136, 139, 139);">{{$attribute['value']}} </span>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </td>
-                      </tr>
-                </tbody>
-            </table>
-        </center>
-
-        {{-- old design --}}
-        <center class="d-none" style="display: none">
-            <div style="width:650;background-color:white;min-height:150px;">
-                <center>
-                    <img src="{!!$logo!!}" style="width:100%; max-width: 150px;" onerror="this.onerror=null; this.src='{{url('/').$error_image}}'" style="max-width:550px;margin-top:0px;max-height:110px" />
-                    <br>
-                    @if(isset($header))
-                    <div>
-                        <font face="arial" style="color: gray;font-style: italic;font-size: 20px;">
-                            {{$header}}
-                        </font>
-                    </div>
-                    @endif
-                </center>
-            </div>
-            <div style="background-color:white;width: 650;max-height: 795px; min-height: 600px;">
-                <br>
-                <table style="width:100%" border="0" cellspacing="0" cellpadding="0" style="padding-top: 0px;">
-                    <tbody>
-                        <tr>
-                            <td style="width:100%">
-                                <table style="width:100%" border="0" align="center" cellpadding="0" cellspacing="0">
-                                    <tbody>
-                                        <tr>
-                                            <td style="width:33%">&nbsp;</td>
-                                            <td style="width:33%">
-                                                <div align="center">
-                                                    <font face="Arial" style="font-size:22px;color: grey;">
-                                                        {{$product['category']}}
-                                                    </font>
-                                                </div>
-                                            </td>
-                                            <td style="width:34%"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:33%">&nbsp;</td>
-                                            <td style="width:33%">
-                                                <div align="center">
-                                                    <font face="Verdana" style="font-size:17px;color: grey; ">{{$product['title']}}</font>
-                                                </div>
-                                            </td>
-                                            <td style="width:34%"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td align="center">
-                                <table id="tblSize" style="width:100%" border="0" cellspacing="0" cellpadding="0">
-                                    <tbody>
-                                        <tr style="height:10px;">
-                                            <td class="Label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                            <td class="Label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:33%" valign="top">
-                                                <table align="center" style="width:70%" border="0" cellspacing="0" cellpadding="0">
-                                                    <caption>
-                                                        <font face="Arial" style="font-size:14px;font-weight:bold;color: grey;text-decoration:underline;">Available Sizes</font>
-                                                    </caption>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>&nbsp;</td>
-                                                        </tr>
-                                                        @foreach($product['sizes'] as $size)
-                                                        <tr class="txt11black">
-                                                            <td style="width:1%"></td>
-                                                            <td style="width:99%" align="center" valign="top" style="padding-bottom: 6px;">
-                                                                <font face="Arial" style="font-size:15px;font-weight:bolder">
-                                                                    {{$size['label']}}
-                                                                </font>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </td>
-
-                                            <td style="width:34%" valign="top">
-                                                @if(!$without_price)
-                                                <table align="center" style="width:70%" border="0" cellspacing="0" cellpadding="0">
-                                                    <caption>
-                                                        <font face="Arial" style="font-size:14px;font-weight:bold;color: grey;text-decoration:underline;">Sale Price</font>
-                                                    </caption>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>&nbsp;</td>
-                                                        </tr>
-                                                        @foreach($product['sizes'] as $size)
-                                                        <tr class="txt11black">
-                                                            <td style="width:1%"></td>
-                                                            <td style="width:99%" align="center" valign="top" style="padding-bottom: 6px;">
-                                                                <font face="Arial" style="font-size:15px;font-weight:bolder">
-                                                                    {{$size['price']}}
-                                                                </font>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <br>
-                                <table style="width:100%" border="0" align="center" cellpadding="0" cellspacing="0">
-                                    <tbody>
-                                        <tr>
-                                            <td style="width:33%" valign="top">
-                                                <table align="center" style="width:100%" border="0" cellspacing="0" cellpadding="0">
-                                                    <tbody>
-                                                        @foreach($product['attributes'] as $attribute)
-                                                        <tr class="txt11black">
-                                                            <td style="width:1%">
-                                                                <div align="center" class="style2">
-                                                                    <font color="#000000" face="Arial" style="font-size:14px;font-weight:bold;color: grey;text-decoration:underline;">
-                                                                    {{$attribute['label']}}
-                                                                    </font>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>&nbsp;</td>
-                                                        </tr>
-                                                        <tr class="txt11black">
-                                                            <td style="width:99%">
-                                                                <div align="center" class="style2">
-                                                                    <font color="#000000" face="Arial">
-                                                                        {{$attribute['value']}}
-                                                                    </font>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>&nbsp;</td>
-                                                        </tr>
-                                                        @endforeach
-                                                        <tr class="txt11black"></tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                            <td style="width:1%" valign="top"></td>
-                                            <td style="width:33%" valign="top">
-                                                <div align="center" class="style2">
-                                                    @php
-                                                    $image = $product['image'];
-                                                    try {
-                                                        if (
-                                                            !isset($print)
-                                                        ) {
-                                                            $image = curl_get_contents($image);
-                                                            if ( getimagesizefromstring($image) )
-                                                                $image = 'data:image/jpg;base64, ' . base64_encode($image);
-                                                            else
-                                                                $image = url('/').$error_image;
-                                                        }
-                                                    } catch(\Exception $e) {
-                                                        $image = url('/').$error_image;
-                                                    } catch(\Error $e) {
-                                                        $image = url('/').$error_image;
-                                                    }
-                                                    @endphp
-                                                    <img src="{{$image}}" onerror="this.onerror=null; this.src='{{url('/').$error_image}}'" id="imgID" align="middle" border="0" class="imgHeight">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </td>
-                        </tr>
-                    </tbody>
+                    </tr>
                 </table>
-            </div>
-            <div style="height:50px;" class="divHeaderFooterbg">
-                <center class="divHeaderFooterbg" style="padding-top:15px">
-                    {{$footer}}
-                </center>
-            </div>
 
-        </center>
-    </div>
-    {{-- @if(isset($product['barcodes']) || $k < (count($products) - 1))
-    <p style="page-break-after:always;"></p>
-    @endif --}}
-    @if (isset($product['barcodes']))
-    <center class="d-none" style="display: none">
-        <table style="width:100%; text-align: center;" border="0" align="center" cellpadding="0" cellspacing="0">
-            <tbody>
-                @foreach($product['barcodes'] as $barcode)
-                <tr>
-                    <td style="width:99%" valign="bottom">
-                        <font face="Arial" style="font-size:15px;font-weight:bolder">
-                            {{$barcode['label']}}
-                        </font>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width:99%" style="padding-bottom: 6px;">
-                        <img src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), true)!!}">
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </center>
-    @if($k < (count($products) - 1))
-    <!-- <p style="page-break-after:always;"></p> -->
+            </div>
+        @endforeach
+
     @endif
-    @endif
-    @endforeach
+@endforeach
 </body>
 
 </html>

@@ -49,6 +49,14 @@ class ApisController extends RootController
 
         return array( "ATSInfo" => $responseArray['OutPut'] );
     }
+    
+    public function Get_DesignATS($designId, $customerId = '')
+    {
+        $post_array    = array('DesignID' => $designId, 'CustomerID' => $customerId);
+        $responseArray = $this->Post_API_Signature('Get_DesignATS', 'Get ATS', $post_array);
+
+        return array("ATSInfo" => $responseArray['OutPut']);
+    }
 
     public function Get_B2BOrderInquiryData( $FilterType, $Category = '', $SubCategory = '', $Collection = '', $Design = '', $Color = '', $Size = '' )
     {
@@ -176,9 +184,9 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Get_CustomerDetail', 'Get Customer Details', $post_array, ['Success', 'Message', 'CustomerDetail'] );
     }
 
-    public function Get_DebitMemos( $customerId, $FromDate = '', $ToDate = '', $PayableInvoiceNo = '', $VendorID = '' )
+    public function Get_DebitMemos( $customerId, $FromDate = '', $ToDate = '', $PayableInvoiceNo = '', $VendorID = '', $PageIndex = 1, $PageSize = 25 )
     {
-        $post_array = array( 'CustomerID' => $customerId, 'FromDate' => $FromDate, 'ToDate' => $ToDate, 'PayableInvoiceNo' => $PayableInvoiceNo, 'VendorID' => $VendorID );
+        $post_array = array( 'CustomerID' => $customerId, 'FromDate' => $FromDate, 'ToDate' => $ToDate, 'PayableInvoiceNo' => $PayableInvoiceNo, 'VendorID' => $VendorID, 'PageIndex' => $PageIndex, 'PageSize' => $PageSize );
 
         return $this->Post_API_Signature( 'Get_DebitMemos', 'Get Debit Memos', $post_array, ['DebitMemos'] );
     }
@@ -249,9 +257,9 @@ class ApisController extends RootController
         return $this->Post_API_Signature('DownloadExcelReports', 'Download Excel Reports', $post_array, ['Success', 'Message', 'ReportData'], 1, 1, 0);
     }
 
-    public function Get_SalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '')
+    public function Get_SalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '', $Collection = '', $Design = '')
     {
-        $post_array = array('SalesRepID' => $SalesRep, 'CustomerID' => $CustomerID, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID);
+        $post_array = array('SalesRepID' => $SalesRep, 'CustomerID' => $CustomerID, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
 
         return $this->Post_API_Signature('Get_SalesReport', 'Get Sales Report', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
     }
@@ -494,7 +502,7 @@ class ApisController extends RootController
                 $p_array = ["Input" => $post_array];
                 //
 		prr("TOKEN: " . print_r([$this->accessTokenArray, $p_array], 1));
-                $response = Http::timeout( 90 )->withHeaders( $this->accessTokenArray )->$request_type( $this->active_theme->theme_api_base_url.$api_slug, $p_array );
+                $response = Http::timeout( 300 )->withHeaders( $this->accessTokenArray )->$request_type( $this->active_theme->theme_api_base_url.$api_slug, $p_array );
 
                 $ret = null;
 
@@ -625,9 +633,9 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Update_ShippingFreightRate', 'Update Shipping Freight Rate', $post_array, ['Success', 'Message', 'CustomerAddress'] );
     }
 
-    public function View_Order( $CustomerID = '', $ExternalID = '', $DateFrom = '', $DateTo = '', $SalesRep = '', $PageIndex = 1, $PageSize = 25 )
+    public function View_Order( $CustomerID = '', $ExternalID = '', $DateFrom = '', $DateTo = '', $SalesRep = '', $PageIndex = 1, $PageSize = 25, $po_number = '', $order_number = '' )
     {
-        $post_array = array( 'CustomerID' => $CustomerID, 'ExternalID' => $ExternalID, 'DateFrom' => $DateFrom, 'DateTo' => $DateTo, 'SalesRep' => $SalesRep, 'PageIndex' => $PageIndex, 'PageSize' => $PageSize );
+        $post_array = array( 'CustomerID' => $CustomerID, 'ExternalID' => $ExternalID, 'DateFrom' => $DateFrom, 'DateTo' => $DateTo, 'SalesRep' => $SalesRep, 'CustomerPO' => $po_number, 'SalesOrderNo' => $order_number, 'PageIndex' => $PageIndex, 'PageSize' => $PageSize );
 
         return $this->Post_API_Signature( 'Get_Orders', 'Ge Order', $post_array, ['Orders', 'TotalRows'] );
     }

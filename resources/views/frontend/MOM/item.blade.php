@@ -1,9 +1,44 @@
 @php
-// $active_theme object is available containing the theme developer json loaded.
-// This is for the theme developers who want to load further view assets
+    // $active_theme object is available containing the theme developer json loaded.
+    // This is for the theme developers who want to load further view assets
 
-use App\Http\Controllers\ConstantsController;
-use App\Http\Controllers\CommonController;
+    use App\Http\Controllers\ConstantsController;
+    use App\Http\Controllers\CommonController;
+
+    $dont_show = [];
+    if (Auth::check() && strcmp(ConstantsController::USER_ROLES['staff'], Auth::user()->role) === 0) {
+        if (!in_array('show-price', $permission)) {
+            $dont_show[] = '.base_price';
+            $dont_show[] = '.PAChart-Price';
+        }
+        if (!in_array('allow-checkout', $permission)) {
+            $dont_show[] = '#qty-main';
+            $dont_show[] = '.PAChart-Quantity';
+            $dont_show[] = '#add_to_cart';
+        }
+    }
+    $items_images = [];
+    foreach ($items['Items'] as $item) {
+        if (isset($item['ImageNameArray']) && $item['ImageNameArray']) {
+            foreach ($item['ImageNameArray'] as $image) {
+                if (!in_array($image, $items_images)) {
+                    $items_images[] = $image;
+                }
+            }
+        }
+    }
+
+    $size_heading = isset($main_collection['Description']) && strtolower($main_collection['Description']) == 'rugs' ? 'Approximate Size' : 'Size';
+
+    // backorder and qty when stock will be availe to separate the data from array of date and qty
+    // by asad
+    function formatETA($eta)
+    {
+        preg_match('/(\d{2}-\d{2}-\d{4})\((\d+)\)/', $eta, $matches);
+        return ['date' => $matches[1], 'quantity' => $matches[2]];
+    }
+        // print_r("<pre>");
+        // print_r($items['ItemsETA']);
 
 @endphp
 
@@ -135,7 +170,7 @@ use App\Http\Controllers\CommonController;
                                     <span class="base_price muted" id="base_price">0</span>
                                     <span class="postfix muted" style="text-transform: initial;margin-left: 5px;font-size: 16px;margin-top: 5px;">wholesale</span>
                                 </div>
-                                <div class="d-flex align-items-center mb-20 d-none">
+                                <div class="d-flex align-items-center mb-20">
                                     <span class="form-label font-crimson bg-secondary" id="qty_msg">Loading...</span>
                                 </div>
 
@@ -192,35 +227,68 @@ use App\Http\Controllers\CommonController;
                     </div>
 
 <!-- product size Chart -->
-                    @if (isset($items['ItemsETA']) && $items['ItemsETA'])
+
+                    @if (isset($items['ItemsETA']) && $items['ItemsETA'] && !$is_oak)
+                    @auth()
                             <div class="m-auto mt-5 p-0 text-center product_chart">
-                                <div id="prodAvlChart" class="prodAvlChart" style="display: block;">
+                                <div id="prodAvlChart" class="prodAvlChart" style="display: block; width:100%; align:center; margin-top:30px;display: block;">
                                     <div class="mb-4">
                                         <p class="heading-PAChart">Product Availability Chart</p>
                                     </div>
-                                    <div style="overflow-x:auto;">
+                                    <div style="overflow-x:auto; overflow-x:auto; height:100%;">
                                         <table id="tblProductSizes" class="table" border="0" cellpadding="3"
                                             cellspacing="2" width="100%">
                                             <tbody>
                                                 <tr style="vertical-align: middle;border-top: 1px solid #a5a9aa;">
                                                     <td width="15%" align="center" class="PAChart-Size PAChart-text-Heading">Size</td>
+                                                    <td width="15%" align="center"
+                                                    class="PAChart-Dimensions-Weight PAChart-text-Heading">Shipping
+                                                    Dimensions / Weight</td>
+                                                    <td width="10%" align="center" class="PAChart-Color PAChart-text-Heading">Color</td>
                                                     <td width="10%" align="center" class="PAChart-InStock PAChart-text-Heading">In-Stock</td>
-                                                    <td width="15%" align="center" class="PAChart-Within30Days PAChart-text-Heading">Within30 Days</td>
-                                                    <td width="15%" align="center" class="PAChart-Within2Months PAChart-text-Heading">Within 2 Months</td>
-                                                    <td width="15%" align="center" class="PAChart-Over2Months PAChart-text-Heading">Over 2 Months</td>
+                                                    <td width="13%" align="center" class="PAChart-Within30Days PAChart-text-Heading">Within30 Days</td>
+                                                    <td width="13%" align="center" class="PAChart-Within2Months PAChart-text-Heading">Within 2 Months</td>
+                                                    <td width="13%" align="center" class="PAChart-Over2Months PAChart-text-Heading">Over 2 Months</td>
                                                     @if (!empty($dont_show) && !in_array('.PAChart-Price', $dont_show))
-                                                        <td width="15%" align="center" class="PAChart-Price PAChart-text-Heading">Price</td>
+                                                        <td width="13%" align="center" class="PAChart-Price PAChart-text-Heading">Price</td>
                                                     @endif
                                                 </tr>
                                                 @foreach ($items['ItemsETA'] as $itemETA)
                                                     <tr class="">
+                                                        <input type="hidden" class="cart_item_id"
+                                                            name="product_cart_item_id[]"
+                                                            value="{{ $itemETA['ItemID'] }}">
+                                                        <input type="hidden" class="cart_design_id"
+                                                            name="cart_design_id[]" value="{{ $itemETA['DesignID'] }}">
+                                                        <input type="hidden" class="cart_customer_id"
+                                                            name="cart_customer_id" value="">
+                                                        <input type="hidden" class="cart_item_name"
+                                                            name="cart_item_name[]" value="{{ $itemETA['ItemName'] }}">
+                                                        <input type="hidden" class="cart_item_quantity"
+                                                            name="cart_item_quantity" value="">
+                                                        <input type="hidden" class="cart_item_price"
+                                                            name="cart_item_price[]" value="{{ $itemETA['BasePrice'] }}">
+                                                        <input type="hidden" class="cart_item_color"
+                                                            name="cart_item_color[]" value="{{ $itemETA['ItemColor'] }}">
+                                                        <input type="hidden" class="cart_item_size"
+                                                            name="cart_item_size[]" value="{{ $itemETA['Size'] }}">
+                                                        <input type="hidden" class="cart_item_currency"
+                                                            name="cart_item_currency[]" value="">
+                                                        <input type="hidden" class="cart_item_image"
+                                                            name="cart_item_image[]" value="{{ $itemETA['ImageName'] }}">
+                                                        <input type="hidden" class="cart_item_eta"
+                                                            name="cart_item_eta[]" value="">
                                                         <td width="15%" align="center" class="PAChart-Size"> {{ $itemETA['Size'] }}</td>
+                                                        <td width="15%" align="center" class="PAChart-Dimensions-Weight">
+                                                            {{ $itemETA['ShippingDimension'] }}<br />{{ $itemETA['DimentionalWeight'] }}
+                                                        </td>
+                                                        <td width="10%" align="center" class="PAChart-Color"> {{ $itemETA['ItemColor'] }}</td>
                                                         <td width="10%" align="center" class="PAChart-InStock"> {{ $itemETA['QtyInStock'] }}</td>
-                                                        <td width="15%" align="center" class="PAChart-Within30Days PAChart-text-Within30Days"> {{ $itemETA['QtyThirtyDay'] }}</td>
-                                                        <td width="15%" align="center" class="PAChart-Within2Months"> {{ $itemETA['QtyTwoMonth'] }}</td>
-                                                        <td width="15%" align="center" class="PAChart-Over2Months"> {{ $itemETA['QtyOverTwoMonth'] }}</td>
+                                                        <td width="13%" align="center" class="PAChart-Within30Days PAChart-text-Within30Days"> {{ $itemETA['QtyThirtyDay'] }}</td>
+                                                        <td width="13%" align="center" class="PAChart-Within2Months"> {{ $itemETA['QtyTwoMonth'] }}</td>
+                                                        <td width="13%" align="center" class="PAChart-Over2Months"> {{ $itemETA['QtyOverTwoMonth'] }}</td>
                                                         @if (!empty($dont_show) && !in_array('.PAChart-Price', $dont_show))
-                                                            <td width="15%" align="center" class="PAChart-Price">
+                                                            <td width="13%" align="center" class="PAChart-Price">
                                                                 {{ ConstantsController::CURRENCY . number_format($itemETA['BasePrice'], ConstantsController::ALLOWED_DECIMALS, '.', '') }}
                                                             </td>
                                                         @endif
@@ -231,6 +299,43 @@ use App\Http\Controllers\CommonController;
                                     </div>
                                 </div>
                             </div>
+                        @endauth
+                        @guest
+                        <div class="m-auto p-0 text-center product_chart_main">
+                            <div id="" class="prodAvlChart">
+                                <div class="mb-4 mt-4">
+                                    <p class="heading-PAChart">Product Chart</p>
+                                </div>
+                                <div style="overflow-x:auto;">
+                                    <table id="tblProductSizes" class="table" border="0" cellpadding="3"
+                                        cellspacing="2" width="100%">
+                                        <tbody>
+                                            <tr style="vertical-align: middle;border-top: 1px solid #a5a9aa;">
+                                                <td width="15%" align="center"
+                                                    class="PAChart-Size PAChart-text-Heading">{{ $size_heading }}</td>
+                                                <td width="15%" align="center"
+                                                    class="PAChart-Dimensions-Weight PAChart-text-Heading">Shipping
+                                                    Dimensions / Weight</td>
+                                                <td width="15%" align="center"
+                                                    class="PAChart-Color PAChart-text-Heading">Color</td>
+                                            </tr>
+                                            @foreach ($items['ItemsETA'] as $itemETA)
+                                                <tr class="">
+                                                    <td width="15%" align="center" class="PAChart-Size">
+                                                        {{ $itemETA['Size'] }}</td>
+                                                    <td width="15%" align="center" class="PAChart-Dimensions-Weight">
+                                                        {{ $itemETA['ShippingDimension'] }}<br />{{ $itemETA['DimentionalWeight'] }}
+                                                    </td>
+                                                    <td width="15%" align="center" class="PAChart-Color">
+                                                        {{ $itemETA['ItemColor'] }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        @endguest
                         @endif
                 </div>
             </div>
@@ -353,19 +458,18 @@ use App\Http\Controllers\CommonController;
                 },
                 success: function(response) {
                     var new_html = $($.parseHTML(response));
-                     console.log('Length: ', new_html.find('#item_json').length);
-                        console.log('Value: ', new_html.find('#item_json').val());
+
                     $('#item_json').html(new_html.find('#item_json').html());
 
                     item_object = JSON.parse($('#item_json').html());
-                    console.log(item_object);
+
                     $('#cart-parent').html(new_html.find('#cart-parent').html());
                     $('#profile-parent').html(new_html.find('#profile-parent').html());
 
                     $('#cart_main').html(new_html.find('#cart_main').html());
                     $('#cart_main').find('#add_to_cart').removeClass('d-none');
                     $('#cart_main').find('#login_by_popup').remove();
-
+                    $('.product_chart_main').html(new_html.find('.product_chart').html());
                     $('#add_to_cart').off('click');
                     $('#add_to_cart').on('click', function(e) {
                         if (
@@ -383,6 +487,39 @@ use App\Http\Controllers\CommonController;
                         callback();
                     }
                     getQuantity($("#item_size input:radio[name=size]:checked").val().trim());
+
+                            // $('#grid_item_customer').prop('disabled', false);
+                            if (item_object.Items[0].UserCustomerInfo.IsSaleRep == 1) {
+                                getCustomers(item_object.Items[0]);
+                                console.log(item_object.Items[0].UserCustomerInfo.CustomerSet);
+                                // if (item_object.Items[0].UserCustomerInfo.CustomerSet) {
+                                    // $('#grid_item_customer').prop('disabled', 'disabled');
+                                    // var split_arr = $('#grid_item_customer').val().split(' :: ');
+                                    var customer_id = item_object.Items[0].UserCustomerInfo.CustomerSet;
+                                    console.log("sales rep");
+                                    console.log(customer_id);
+                                    $.post('{{ route('frontend.item.design_ats') }}', {
+                                        _token: '{{ csrf_token() }}',
+                                        design_id: item_object.Items[0]['DesignID'],
+                                        customer_id: customer_id
+                                    }, function(response) {
+                                        startBuyingBulk(item_object.Items[0].ItemID, customer_id,
+                                            response.data);
+                                    });
+                                // }
+                            } else {
+                                console.log("not in sales rep");
+                                $.post('{{ route('frontend.item.design_ats') }}', {
+                                    _token: '{{ csrf_token() }}',
+                                    design_id: item_object.Items[0]['DesignID'],
+                                    customer_id: item_object.Items[0].UserCustomerInfo.Customers[0]
+                                        .CustomerID
+                                }, function(response) {
+                                    startBuyingBulk(item_object.Items[0].ItemID, item_object.Items[0]
+                                        .UserCustomerInfo.Customers[0].CustomerID, response.data);
+                                });
+                            }
+
                 }
             });
         }
@@ -467,6 +604,32 @@ use App\Http\Controllers\CommonController;
 
     function init() {
         item_object = JSON.parse($('#item_json').html());
+        if (item_object.Items[0].UserCustomerInfo.IsSaleRep == 1) {
+            getCustomers(item_object.Items[0]);
+            if (item_object.Items[0].UserCustomerInfo.CustomerSet) {
+                // $('#grid_item_customer').prop('disabled', 'disabled');
+                // var split_arr = $('#grid_item_customer').val().split(' :: ');
+                var customer_id = item_object.Items[0].UserCustomerInfo.CustomerSet;
+                // console.log("customerrr");
+                // console.log($('#cart_customer_id').val());
+                $.post('{{ route('frontend.item.design_ats') }}', {
+                    _token: '{{ csrf_token() }}',
+                    design_id: item_object.Items[0]['DesignID'],
+                    customer_id: customer_id
+                }, function(response) {
+                    startBuyingBulk(item_object.Items[0].ItemID, customer_id, response.data);
+                });
+            }
+        } else {
+            $.post('{{ route('frontend.item.design_ats') }}', {
+                _token: '{{ csrf_token() }}',
+                design_id: item_object.Items[0]['DesignID'],
+                customer_id: item_object.Items[0].UserCustomerInfo.Customers[0].CustomerID
+            }, function(response) {
+                startBuyingBulk(item_object.Items[0].ItemID, item_object.Items[0].UserCustomerInfo
+                    .Customers[0].CustomerID, response.data);
+            });
+        }
         var counter = 0;
         console.log("item_object: ", item_object);
         $('#item_variant').html('');
@@ -619,13 +782,15 @@ use App\Http\Controllers\CommonController;
             hide_components(['#qty-main', '#cart_main', '#add_to_cart']);
             return true;
         }
+        var SUK = '{{ $SUK }}';
+
         item_object.Items.forEach(function(item, index) {
             if ((item.ItemID == ItemID)) {
                 $('#item_customer input[name=customer]').prop('disabled', false);
                 if (item.UserCustomerInfo.IsSaleRep == 1) {
                     getCustomers(item);
                     var customer_id = item.UserCustomerInfo.CustomerSet ? item.UserCustomerInfo.CustomerSet : '';
-
+console.log('customer_id1: ', customer_id);
                     // $('#item_customer input[name=customer]').prop('disabled', 'disabled');
                     $('#qty-main, .base_price').addClass('muted');
                     $('#qty_msg').css('opacity', '0.4');
@@ -634,6 +799,7 @@ use App\Http\Controllers\CommonController;
                     $.post('{{route("frontend.item.ats")}}', {
                         _token: '{{csrf_token()}}',
                         item_id: item.ItemID,
+                        SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                         customer_id: customer_id
                     }, function(response) {
                         startBuying(item.ItemID, customer_id, response.data);
@@ -650,6 +816,7 @@ use App\Http\Controllers\CommonController;
                     $.post('{{route("frontend.item.ats")}}', {
                         _token: '{{csrf_token()}}',
                         item_id: item.ItemID,
+                        SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                         customer_id: typeof item.UserCustomerInfo.Customers[0].CustomerID !== "undefined" ? item.UserCustomerInfo.Customers[0].CustomerID : ''
                     }, function(response) {
                         startBuying(item.ItemID, item.UserCustomerInfo.Customers[0].CustomerID, response.data);
@@ -744,24 +911,38 @@ use App\Http\Controllers\CommonController;
         var split_arr = item_customer_id.split(' :: ');
         var item_id = split_arr[0].trim();
         var customer_id = split_arr[1].trim();
+        var SUK = '{{ $SUK }}';
+
         item_object.Items.forEach(function(item, index) {
             if ((item.ItemID == item_id)) {
-                item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
-                    if (Customer.CustomerID == customer_id) {
-                        $('#qty_msg').css('opacity', '0.4');
-                        if (!$('#qty-main').is(':visible'))
-                            show_components(['.qty-loader']);
-                        $.post('{{route("frontend.item.ats")}}', {
-                            _token: '{{csrf_token()}}',
-                            item_id: item_id,
-                            customer_id: customer_id
-                        }, function(response) {
-                            startBuying(item_id, customer_id, response.data);
-                        });
-                        // startBuying(item_id, customer_id , Customer.ATSInfo);
-                    }
-                });
-            }
+                    item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
+                        if (Customer.CustomerID == customer_id) {
+                                $.post('{{ route('frontend.item.design_ats') }}', {
+                                    _token: '{{ csrf_token() }}',
+                                    design_id: item.DesignID,
+                                    customer_id: customer_id
+                                }, function(response) {
+                                    startBuyingBulk(item_id, customer_id, response.data);
+                                    console.log("bulk");
+                                });
+
+                            // else {
+                            if (!$('#qty-main').is(':visible'))
+                                show_components(['.qty-loader']);
+                            $.post('{{ route('frontend.item.ats') }}', {
+                                _token: '{{ csrf_token() }}',
+                                item_id: item_id,
+                                SUK: (SUK && SUK.trim() !== '') ? SUK : '',
+                                customer_id: customer_id
+                            }, function(response) {
+                                startBuying(item_id, customer_id, response.data);
+                                console.log("buy");
+                            });
+                            // }
+
+                        }
+                    });
+                }
         });
     }
 
@@ -797,10 +978,39 @@ use App\Http\Controllers\CommonController;
             }
         });
 
+
+        // $.post('{{ route('frontend.item.design_ats') }}', {
+        //     _token: '{{ csrf_token() }}',
+        //     design_id: item_object.Items[0].DesignID,
+        //     customer_id: CustomerID
+        // }, function(response) {
+        //     console.log(response.data);
+        //     response.data.forEach(function(item, index) {
+        //     console.log("item.ATSQty: ", item.Price);
+        //     // console.log($(this).val());
+        //     // console.log($(this).val());
+        //     $('.cart_item_id').each(function() {
+        //         if ($(this).val() == item.ItemID) {
+        //             console.log("truee");
+        //             $(this).siblings('.PAChart-Price').text(item.Price.toLocaleString('en-US', {
+        //                 style: 'currency',
+        //                 currency: 'USD',
+        //             }));
+        //             $(this).siblings('.cart_item_price').val(item.Price);
+        //             $(this).siblings('.PAChart-InStock').text(item.ATSQty < 0 ? 0 : item.ATSQty);
+        //             $(this).siblings('.PAChart-Quantity').children('.item_qty').attr('max', item
+        //                 .OnlyMaxQuantity ? item.ATSQty : 9999);
+        //         }
+        //     });
+        //     });
+        //     // startBuyingBulk(ItemID, CustomerID, response.data);
+        // });
+
         //handling OAK items here
         if('{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id)}}' ) {
             hide_components(['#qty_msg', '.postfix', '#item_variant_parent', '#item_color_parent', '#item_size_parent', '#qty-main', '#cart_main h3']);
             $('#item_qty').val(1);
+            console.log('exists:',ATSInfo.ItemExistInCart);
             if(ATSInfo.ItemExistInCart) {
                 $("#qty_msg").text(ATSInfo.ItemExistInCart == 1 ? 'Item is already in your Cart.' : 'Item not available.');
                 $("#qty_msg").addClass('bg-warning');
@@ -832,6 +1042,50 @@ use App\Http\Controllers\CommonController;
         }
     }
 
+    function startBuyingBulk(ItemID, CustomerID, ATSInfo) {
+        console.log("In startBuyingBulk");
+        // console.log("ATSInfo: ", ATSInfo);
+        // if ($('#login_by_popup').length) {
+        //     show_components(['#login_by_popup', '#cart_main', '#grid_cart_main', '.product_chart_main']);
+        //     hide_components([]);
+        // } else {
+        //     hide_components([]);
+        //     show_components(['#cart_main', '#grid_add_to_cart', '#grid_cart_main']);
+        // }
+
+        ATSInfo.forEach(function(item, index) {
+            console.log("item.price: ", item.Price);
+            console.log("item.ATSQty: ", item.ATSQty);
+            $('.cart_item_id').each(function() {
+                if ($(this).val() == item.ItemID) {
+                    console.log("bulk truee");
+                    price = item.Price.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                    });
+
+                    if (!price.includes('$'))
+                        price = '$' + price;
+
+                    $(this).siblings('.PAChart-Price').text(price);
+                    $(this).siblings('.cart_item_price').val(item.Price);
+                    $(this).siblings('.PAChart-InStock').text(item.ATSQty < 0 ? 0 : item.ATSQty);
+                    $(this).siblings('.PAChart-Quantity').children('.item_qty').attr('max', item
+                        .OnlyMaxQuantity ? item.ATSQty : 9999);
+                }
+            });
+        });
+
+        // item_object.ItemsETA.forEach(function(item, index) {
+        //     if ((item['ItemID'] == ItemID)) {
+        //         // $('.cart_customer_id').val(CustomerID);
+        //         $('.cart_customer_id').each(function() {
+        //             $(this).val(CustomerID);
+        //         });
+        //     }
+        // });
+    }
+
     function pushToCart() {
         $('#add_to_cart').addClass('btn-muted');
         $('#cart_item_quantity').val($('#item_qty').val());
@@ -859,6 +1113,7 @@ use App\Http\Controllers\CommonController;
                     if (response.success) {
                         console.log("new ",$('#item_json').length);
                         if ($('#item_json').length) {
+                            console.log("if");
                             refreshItemJson(function() {
                                 toastr.success(response.message, {
                                     hideDuration: 10000,
@@ -868,6 +1123,7 @@ use App\Http\Controllers\CommonController;
                                 // $('.quickCart-opener').trigger('click');
                             });
                         } else {
+                            console.log("else");
                             refreshUser('quick-cart', function() {
                                 refreshUser('profile', function() {
                                     $("#quick_cart").removeClass('d-none');
@@ -952,6 +1208,7 @@ use App\Http\Controllers\CommonController;
                 var item_id = split_arr[0].trim();
                 refresh_product(item_id);
                 customerID = $(this).val();
+                console.log($(this).val());
                 getCartReady($(this).val());
             });
 

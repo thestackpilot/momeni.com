@@ -2338,6 +2338,51 @@ only screen and (max-width: 767px) {
     }
 }
 
+.heading-PAChart {
+    margin: 0;
+    color: #444444;
+    font-size: 38px;
+    font-weight: normal;
+}
+.heading-Date-PAChart {
+    font-size: 16px;
+    margin-bottom: 2px;
+    font-weight: 400;
+    color: #212529;
+}
+.heading-DateTime-Color {
+    color: blue;
+}
+.PAChart-text-Heading {
+    font-weight: bold;
+    font-size: 14px !important;
+}
+.PAChart-Size {
+    background-color: #afb1b1 !important
+}
+.PAChart-Dimensions-Weight{
+    background-color: #bbbdbd !important
+}
+.PAChart-Color {
+    background-color: #CECFD0 !important;
+}
+.PAChart-InStock {
+    background-color: #dddedf !important;
+}
+.PAChart-Within30Days {
+    background-color: #F7F7F6  !important;
+}
+/* .PAChart-text-Within30Days {
+    font-size: 12px;
+    padding-left: 87px;
+} */
+.PAChart-Price{
+    border-right: 1px solid #aca9a9;;
+}
+#tblProductSizes td {
+    font-size: 14px;
+    border: 0.5px solid #9b9797;
+}
 .header-cart {
     position: relative;
 }
