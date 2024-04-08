@@ -15,6 +15,7 @@ class ItemController extends FrontendController
     public function __construct()
     {
         parent::__construct();
+        $this->cart_model = new Cart();
     }
 
     public function generate_color_name($items)
