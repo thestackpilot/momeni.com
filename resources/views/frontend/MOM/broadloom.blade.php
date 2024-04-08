@@ -360,6 +360,7 @@
                         item_object = JSON.parse($('#item_json').val());
                         console.log(item_object);
                         $('#cart-parent').html(new_html.find('#cart-parent').html());
+                        $('#quickCart').html(new_html.find('#quickCart').html());
                         $('#profile-parent').html(new_html.find('#profile-parent').html());
 
                         $('#cart_main').html(new_html.find('#cart_main').html());
@@ -382,7 +383,7 @@
                         if (callback) {
                             callback();
                         }
-                        getQuantity($("#item_size input:radio[name=size]:checked").val().trim());
+                        // getQuantity($("#item_size input:radio[name=size]:checked").val().trim());
                     }
                 });
             }
@@ -956,8 +957,8 @@
                 },
                 success: function (data) {
                     if (data.cut_piece.OutPut.Success) {
-                        $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'
-                        ])var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
+                        $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
+                        var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
                         var sizes = [];
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
 
@@ -1136,9 +1137,9 @@
                 $('#desc').val(selectedOption.attr('desc'));
             });
 
-            var defaultOption1 = $('#roll_pieces').val();
             $('#roll_pieces').change(function () {
                 // console.log($('#customer_id').val());
+                console.log('sadadd')
                 $.ajax({
                     method: 'POST',
                     url: '{{ route('frontend.item.ats') }}',
