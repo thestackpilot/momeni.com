@@ -288,16 +288,27 @@ class CheckoutController extends FrontendController
                 foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
                     $count++;
                     $item_data = json_decode(unserialize($item['item_data']));
-                    $cut_pieces = $item_data->CutPieces;
+                    $cut_pieces = [];
                     $order_length = 0;
-                    foreach ($cut_pieces as $key => $cut_piece) {
-                        $cut_pieces->TempSalesOrderNo = $item_data->TempSalesOrderNo;
+                    $line = 0;
+                    foreach ($item_data->CutPieces as $key => $cut_piece) {
+                        $cut_pieces[$key]['TempSalesOrderNo'] = $cut_piece->TempSalesOrderNo;
+                        $cut_pieces[$key]['ItemID'] = $cut_piece->ItemID;
+                        $cut_pieces[$key]['RollID'] = $cut_piece->RollID;
+                        $cut_pieces[$key]['CutPieceID'] = $cut_piece->CutPieceID;
+                        $cut_pieces[$key]['ActualLength'] = $cut_piece->ATSLength;
+                        $cut_pieces[$key]['ActualWidth'] = $cut_piece->ATSWidth;
+                        $cut_pieces[$key]['ActualSQFT'] = $cut_piece->ATSWidth * $cut_piece->ATSLength;
+                        $cut_pieces[$key]['CutType'] = $item_data->cut_type;
+                        $cut_pieces[$key]['LocationID'] = $item_data->location_id;
+                        $cut_pieces[$key]['Serging'] = $item_data->Serging;
+                        $cut_pieces[$key]['SergingCharges'] = !empty($item_data->SergingCharges) ? $item_data->SergingCharges : 0;
+                        $cut_pieces[$key]['SergingType'] = !empty($item_data->SergingType) ? $item_data->SergingType : "N";
+                        $cut_pieces[$key]['LineNo'] = ++$line;
                         $order_length += $cut_piece->ATSLength;
                     }
 
-                    dd($cut_pieces);
-
-                    array_push($itemDetail, [
+                    $itemDetail[] = [
                         'ItemID' => $item['item_id'],
                         'OrderQty' => $item['item_quantity'],
                         'UnitPrice' => $item['item_price'],
@@ -314,11 +325,11 @@ class CheckoutController extends FrontendController
                         "UserRemarks" => null,
                         "ETA_Date" => "\/Date(-62135596800000)\/",
                         'OrderLength' => $order_length,
-                        'CutPieces' => $item_data->CutPieces,
+                        'CutPieces' => $cut_pieces,
                         'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : ''
-                    ]);
+                    ];
 
-                    array_push($cartItems, [
+                    $cartItems[] = [
                         'Image' => str_replace(' ', '%20', $item['item_image']),
                         'ItemID' => $item['item_id'],
                         'Color' => $item['item_color'],
@@ -328,7 +339,7 @@ class CheckoutController extends FrontendController
                         'SubTotal' => $item['item_total'],
                         'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : ''
 
-                    ]);
+                    ];
 
                     $total_amount += $item['item_price'];
                 }
@@ -386,8 +397,6 @@ class CheckoutController extends FrontendController
                     'order_status' => ConstantsController::ORDER_STATUS['processed']
                 ]
             );
-
-            dd($result);
 
             if ($result['Success']) {
                 $this->finalize_payment($order_payment, $order_payment_hash, $requestDataArray, 'capture');
@@ -456,7 +465,7 @@ class CheckoutController extends FrontendController
                     ]
                 );
 
-                if (isset($result['Exception']) && $result['Exception'] || $result['ObjectID'] >= 900) {
+                if ((isset($result['Exception']) && $result['Exception']) || (isset($result['ObjectID']) && $result['ObjectID'] >= 900)) {
                     $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, true);
                     $response['success'] = 1;
                     $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash;

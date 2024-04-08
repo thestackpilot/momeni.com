@@ -209,7 +209,6 @@ class Cart extends Model
             );
         }
         else{
-            dd('there');
             $item     = $this->where( 'user_id', Auth::user()->id )->where( 'customer_id', $request->cart_customer_id )->where( 'item_id', $request->cart_item_id )->first();
             $quantity = $request->cart_item_quantity;
 

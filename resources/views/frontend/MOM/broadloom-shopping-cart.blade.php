@@ -58,80 +58,82 @@
                                         @endforeach
                                         <input type="hidden" name="customer" id="customer_id" value="{{ $cust }}">
                                         <thead>
-                                            <tr>
-                                                <th>Product</th>
-                                                <th>Quantity</th>
-                                                <th>Price</th>
-                                                <th>SubTotal</th>
-                                            </tr>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>SubTotal</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            @if (count((array) $cart->items))
-                                                @foreach ($cart->items as $item)
-                                                    {{-- @dd($item) --}}
-                                                    @php
-                                                        if (isset($item->item_data) && $item->item_data) {
-                                                            $item_data = json_decode(unserialize($item -> item_data));
-                                                            //dd($item_data);
-                                                        }
-                                                    @endphp
-                                                    <tr>
-                                                        <th class="" scope="row">
-                                                            <div class="row">
-                                                                <div class="col-1 justify-content-center align-content-center delete-row"
-                                                                    style="color: red;cursor: pointer;">x</div>
-                                                                <div class="col-3"><img
-                                                                        src={{ CommonController::getApiFullImage($item_data->ImageName) }}
-                                                                        alt="{{ $item_data->ItemID }}" height="100px">
-                                                                </div>
-                                                                <div class="col-8" style="font-size: 12px">
-                                                                    <div class=" mt-2 font-weight--bold row">Design: <p
-                                                                            class="font-weight--normal mx-2">
-                                                                            {{ $item_data->ItemName }}</p>
-                                                                    </div>
-                                                                    <div class=" mt-2 row">SKU: <p
-                                                                            class="font-weight--normal mx-2">N/A</p>
-                                                                    </div>
-                                                                    <div class=" mt-2 row">Size: <p
-                                                                            class="font-weight--normal mx-2">
-                                                                            {{ $item->item_size }}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </th>
-                                                        <td class="align-content-center">
-                                                            <div class="d-flex flex-row qty-styles mb-2">
-                                                                <a href="javascript:void(0);" class="qty-minus qty-action">
-                                                                    -
-                                                                </a>
-                                                                <input type="number" id="item_qty" name="quantity"
-                                                                    autocomplete="off"
-                                                                    onkeydown="if(this.key==='.'){this.preventDefault();}"
-                                                                    class="form-control" min="1" max="9999"
-                                                                    maxlength="4" step="1" required
-                                                                    value="{{ $item->item_quantity }}" />
-                                                                <a href="javascript:void(0);" class="qty-add qty-action"> +
-                                                                </a>
-                                                                <input type="hidden" class="item_id" name="item_id"
-                                                                    value="{{ $item_data->ItemID }}">
-                                                            </div>
-                                                        </td>
-                                                        <td class="align-content-center">
-                                                            {{ $item->item_currency }}{{ $item->item_price }}</td>
-                                                        <td class="align-content-center">{{ $item->item_currency }}<span
-                                                                id="item_total_price">{{ $item->item_total }}</span></td>
-                                                    </tr>
-                                                @endforeach
-                                            @else
+                                        @if (count((array) $cart->items))
+                                            @foreach ($cart->items as $item)
+                                                {{-- @dd($item) --}}
+                                                @php
+                                                    if (isset($item->item_data) && $item->item_data) {
+                                                        $item_data = json_decode(unserialize($item -> item_data));
+                                                        //dd($item_data);
+                                                    }
+                                                @endphp
                                                 <tr>
-                                                    No Item in Cart
+                                                    <th class="" scope="row">
+                                                        <div class="row">
+                                                            <div
+                                                                class="col-1 justify-content-center align-content-center delete-row"
+                                                                style="color: red;cursor: pointer;">x
+                                                            </div>
+                                                            <div class="col-3"><img
+                                                                    src={{ CommonController::getApiFullImage($item_data->ImageName) }}
+                                                                        alt="{{ $item_data->ItemID }}" height="100px">
+                                                            </div>
+                                                            <div class="col-8" style="font-size: 12px">
+                                                                <div class=" mt-2 font-weight--bold row">Design: <p
+                                                                        class="font-weight--normal mx-2">
+                                                                        {{ $item_data->ItemName }}</p>
+                                                                </div>
+                                                                <div class=" mt-2 row">SKU: <p
+                                                                        class="font-weight--normal mx-2">N/A</p>
+                                                                </div>
+                                                                <div class=" mt-2 row">Size: <p
+                                                                        class="font-weight--normal mx-2">
+                                                                        {{ $item->item_size }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <td class="align-content-center">
+                                                        <div class="d-flex flex-row qty-styles mb-2">
+                                                            <a href="javascript:void(0);" class="qty-minus qty-action">
+                                                                -
+                                                            </a>
+                                                            <input type="number" id="item_qty" name="quantity"
+                                                                   autocomplete="off"
+                                                                   onkeydown="if(this.key==='.'){this.preventDefault();}"
+                                                                   class="form-control" min="1" max="9999"
+                                                                   maxlength="4" step="1" required
+                                                                   value="{{ $item->item_quantity }}"/>
+                                                            <a href="javascript:void(0);" class="qty-add qty-action"> +
+                                                            </a>
+                                                            <input type="hidden" class="item_id" name="item_id"
+                                                                   value="{{ $item_data->ItemID }}">
+                                                        </div>
+                                                    </td>
+                                                    <td class="align-content-center">
+                                                        {{ $item->item_currency }}{{ $item->item_price }}</td>
+                                                    <td class="align-content-center">{{ $item->item_currency }}<span
+                                                            id="item_total_price">{{ $item->item_total }}</span></td>
                                                 </tr>
-                                            @endif
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                No Item in Cart
+                                            </tr>
+                                        @endif
                                         </tbody>
                                     </table>
                                     <div class="mt-4 d-flex justify-content-end mx-5">
                                         <button href="#" class=" btn btn-dark align-content-center" id="update_cart"
-                                            disabled="disabled">
+                                                disabled="disabled">
                                             Update Cart
                                         </button>
                                     </div>
@@ -157,276 +159,336 @@
                                         <div class="col-md-6 font-weight-bold text-right cart_total"></div>
                                     </div>
                                     <btn class="add-to-cart-button text-left btn btn-dark col-md-12 mt-3 mb-3"
-                                        id="proceed_to_checkout">
+                                         id="proceed_to_checkout">
                                         Proceed to Checkout <i class="px-4 fa fa-long-arrow-right"></i>
-                                </button>
+                                        </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </div>
-                    </div>
-                    <div class="section" id="section2" style="display: none;" >
-                        <div class="site-wrapper-reveal">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-12 my-5">
-                                        <div class="mb-5">
-                                            <form class="needs-validation" id="customer_info" method="POST">
-                                                <div class="row">
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">First Name <span class="text-danger" style="font-size: 18px">*</span></label>
-                                                        <input class="form-control" type="text" id="" name="FirstName"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['FirstName']}}" required>
-                                                    </div>
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Last Name</label>
-                                                        <input class="form-control" type="text" id="" name="LastName"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['LastName']}}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Email</label>
-                                                        <input class="form-control" type="email" id="" name="Email"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Email']}}" required>
-                                                    </div>
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Phone</label>
-                                                        <input class="form-control" type="number" id="" name="Phone"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Phone1']}}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-10 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Street Address</label>
-                                                        <input class="form-control" type="text" id="" name="Address1"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Address1']}}" required>
-                                                    </div>
-                                                    <div class="col-md-10 mb-2">
-                                                        <input class="form-control" type="text" id="" name="Address2"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Address2']}}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Town/ City</label>
-                                                        <input class="form-control" type="text" id="" name="City"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['City']}}" required>
-                                                    </div>
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">State</label>
-                                                        <input class="form-control" type="text" id="" name="State"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['State']}}" required>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Zip Code</label>
-                                                        <input class="form-control" type="text" id="" name="Zip"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}" required>
-                                                    </div>
-                                                </div>
-                                                <p class="font-weight--bold " style="font-size: 18px" >Additional Information</p>
-                                                <div class="row">
-                                                    <div class="col-md-5 mb-2 align-content-center">
-                                                        <input class="form-check-input" type="checkbox" id="" name="ship_complete" required>
-                                                        <label class="form-check-label" for="" style="font-size: 14px">Ship Complete</label>
-                                                    </div>
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">P.O or Reference Number</label>
-                                                        <input class="form-control" type="text" id="" name="reference_number"
-                                                            placeholder="" value="" required>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Shipping Date</label>
-                                                        <input class="form-control" type="text" id="" name="ship_date"
-                                                            placeholder="" value="" required>
-                                                    </div>
-                                                    <div class="col-md-5 mb-2">
-                                                        <label for="" class="mb-0" style="font-size: 14px">Order Notes (optional)</label>
-                                                        <textarea class="form-control" id="" name="shipping_instructions" style="height: 8rem;" placeholder=""></textarea>
-                                                        <input type="hidden" name="item_broadloom" id="item_broadloom" value="{{$cart->item_broadloom}}">
-                                                    </div>
-                                                    <p class="font-weight--bold " style="font-size: 18px" >Shipping Method</p>
-                                                    <div class="row">
-                                                    <div class="col-md-5 mb-2">
-                                                        <select name="shipping_method">
-                                                            @if($shipping_options)
+                </div>
+            </div>
+            <div class="section" id="section2" style="display: none;">
+                <div class="site-wrapper-reveal">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 my-5">
+                                <div class="mb-5">
+                                    <form class="needs-validation" id="customer_info" method="POST">
+                                        <div class="row">
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0" style="font-size: 14px">First Name
+                                                    <span class="text-danger" style="font-size: 18px">*</span></label>
+                                                <input class="form-control" type="text" id="" name="FirstName"
+                                                       placeholder=""
+                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['FirstName']}}"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0" style="font-size: 14px">Last
+                                                    Name</label>
+                                                <input class="form-control" type="text" id="" name="LastName"
+                                                       placeholder=""
+                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['LastName']}}"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0"
+                                                       style="font-size: 14px">Email</label>
+                                                <input class="form-control" type="email" id="" name="Email"
+                                                       placeholder=""
+                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Email']}}"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0"
+                                                       style="font-size: 14px">Phone</label>
+                                                <input class="form-control" type="number" id="" name="Phone"
+                                                       placeholder=""
+                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Phone1']}}"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-10 mb-2">
+                                                <label for="" class="form-label mb-0" style="font-size: 14px">Street
+                                                    Address</label>
+                                                <input class="form-control" type="text" id="" name="Address1"
+                                                       placeholder=""
+                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Address1']}}"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-10 mb-2">
+                                                <input class="form-control" type="text" id="" name="Address2"
+                                                       placeholder=""
+                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Address2']}}"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0" style="font-size: 14px">Town/
+                                                    City</label>
+                                                <input class="form-control" type="text" id="" name="City"
+                                                       placeholder=""
+                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['City']}}"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0"
+                                                       style="font-size: 14px">State</label>
+                                                <input class="form-control" type="text" id="" name="State"
+                                                       placeholder=""
+                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['State']}}"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0" style="font-size: 14px">Zip
+                                                    Code</label>
+                                                <input class="form-control" type="text" id="" name="Zip"
+                                                       placeholder=""
+                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <p class="font-weight--bold " style="font-size: 18px">Additional Information</p>
+                                        <div class="row">
+                                            <div class="col-md-5 mb-2 align-content-center">
+                                                <input class="form-check-input" type="checkbox" id=""
+                                                       name="ship_complete" required>
+                                                <label class="form-check-label" for="" style="font-size: 14px">Ship
+                                                    Complete</label>
+                                            </div>
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0" style="font-size: 14px">P.O or
+                                                    Reference Number</label>
+                                                <input class="form-control" type="text" id="" name="reference_number"
+                                                       placeholder="" value="" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0" style="font-size: 14px">Shipping
+                                                    Date</label>
+                                                <input class="form-control" type="text" id="" name="ship_date"
+                                                       placeholder="" value="" required>
+                                            </div>
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="mb-0" style="font-size: 14px">Order Notes
+                                                    (optional)</label>
+                                                <textarea class="form-control" id="" name="shipping_instructions"
+                                                          style="height: 8rem;" placeholder=""></textarea>
+                                                <input type="hidden" name="item_broadloom" id="item_broadloom"
+                                                       value="{{$cart->item_broadloom}}">
+                                            </div>
+                                            <p class="font-weight--bold " style="font-size: 18px">Shipping Method</p>
+                                            <div class="row">
+                                                <div class="col-md-5 mb-2">
+                                                    <select name="shipping_method">
+                                                        @if($shipping_options)
                                                             @foreach($shipping_options as $shipping_option)
-                                                                <option {{ $default_ship_via_id == $shipping_option['ShipViaID'] ? 'selected' : '' }} value="{{$shipping_option['ShipViaID']}}">{{$shipping_option['Description']}}</option>
+                                                                <option
+                                                                    {{ $default_ship_via_id == $shipping_option['ShipViaID'] ? 'selected' : '' }} value="{{$shipping_option['ShipViaID']}}">{{$shipping_option['Description']}}</option>
                                                             @endforeach
-                                                            @else
+                                                        @else
                                                             <option value="3RDP">Standard ShipVia</option>
-                                                            @endif
-                                                        </select>
-                                                    </div>
+                                                        @endif
+                                                    </select>
                                                 </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    {{-- --}}
-                                    <div class="col-md-6 col-sm-12 my-5">
-                                        <div style="background-color: whitesmoke;">
-                                            <div class="d-flex justify-content-around align-items-left flex-column">
-                                                <p class="mt-2 mb-2 text-center fa-2x">Your Order</p>
-                                                <div class="row mt-3 px-5">
-                                                    <div class="col-md-6">Product</div>
-                                                    <div class="col-md-6 text-right">SubTotal</div>
-                                                </div>
-                                                <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                                @foreach ( $cart->items as $item)
-                                                <div class="row px-5">
-                                                    <div class="col-md-9"><div class="row">
-                                                        <div class="col-3"><img src="{{ CommonController::getApiFullImage($item_data->ImageName) }}" alt="$item_data->ItemID" height="100px"></div>
-                                                        <div class="col-9" style="font-size: 12px">
-                                                            <div class="mx-3 mt-2 font-weight--bold row">Design: <p class="font-weight--normal mx-2">{{$item->item_name}}</p></div>
-                                                            <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p></div>
-                                                            <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">{{$item->item_size}}</p></div>
-                                                        </div>
-                                                    </div></div>
-                                                    <div class="col-md-3 text-right align-content-center">{{$item->item_currency}}{{$item->item_total}}</div>
-                                                </div>
-                                                <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                                @endforeach
-                                                <div class="row px-5">
-                                                    <div class="col-md-6 font-weight-bold">SubTotal</div>
-                                                    <div class="col-md-6 font-weight-bold text-right section_2_subtotal">{{$item->item_currency}}{{$cart->cart_total}}</div>
-                                                </div>
-                                                <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                                <div class="row px-5">
-                                                    <div class="col-md-9">Shipping Charges</div>
-                                                    <div class="col-md-3 text-right section_2_shipping_charges">$0</div>
-                                                </div>
-                                                <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                                <div class="row my-4 px-5">
-                                                    <div class="col-md-9 font-weight--bold">Total</div>
-                                                    <div class="col-md-3 font-weight--bold text-right section_2_cart_total"></div>
-                                                </div>
-                                                <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                                <div class="row my-4 px-5 justify-content-center">
-                                                    <div class="col-md-12">
-                                                        <p class="text-center">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
-                                                        <div class="text-center">
-                                                            <button class="add-to-cart-button btn btn-dark align-content-center text-left" id="place_order">
-                                                                Place Order &nbsp; &nbsp; &nbsp;<i class="fa fa-long-arrow-right pl-5"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="section" id="section3" style="display: none;">
-                        <div class="container">
-                            <div class="mt-5 mb-4 text-center" style="color: green; font-size:22px;">
-                                Your order is processed and you will get the confirmation soon. Your Order Detail is:
-                            </div>
-                            <div class="container my-5">
-                                <div class="row justify-content-center">
-                                    <div class="col-sm-3 text-center p-3 order-complete-border" style="border-left: 2px dashed green;">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div>Order Number</div>
-                                            </div>
+                            {{-- --}}
+                            <div class="col-md-6 col-sm-12 my-5">
+                                <div style="background-color: whitesmoke;">
+                                    <div class="d-flex justify-content-around align-items-left flex-column">
+                                        <p class="mt-2 mb-2 text-center fa-2x">Your Order</p>
+                                        <div class="row mt-3 px-5">
+                                            <div class="col-md-6">Product</div>
+                                            <div class="col-md-6 text-right">SubTotal</div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <strong>4818</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3 text-center p-3 order-complete-border" style="border-left: 2px dashed green;">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div>Date</div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <strong>{{ date('j F, Y') }}</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3 text-center p-3 order-complete-border"
-                                        style="border-right:  2px dashed green; border-left: 2px dashed green;">
-                                        <div class="row">
-                                            <div class="col">
-                                                <div>Total</div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <strong class="cart_total">${{$cart->cart_total}}</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="text-center fa-3x font-weight--bold">Order Details</div>
-                            </div>
-                            <div class="container my-5">
-                                <div class="row justify-content-center mb-5">
-                                    <div class="col-sm-4 text-left fa">
-                                        PRODUCT
-                                    </div>
-                                    <div class="col-sm-4 text-right fa">
-                                        SUBTOTAL
-                                    </div>
-                                    <div class="col-md-9">
-                                        <hr class="mx-4" style="border-top-color: whitesmoke;">
-                                    </div>
-                                    <div class="col-md-5">
+                                        <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                         @foreach ( $cart->items as $item)
-                                        <div class="row">
-                                            <div class="col-3"><img src="{{ CommonController::getApiFullImage($item_data->ImageName) }}" alt="$item_data->ItemID" height="100px">
+                                            <div class="row px-5">
+                                                <div class="col-md-9">
+                                                    <div class="row">
+                                                        <div class="col-3"><img
+                                                                src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
+                                                                alt="$item_data->ItemID" height="100px"></div>
+                                                        <div class="col-9" style="font-size: 12px">
+                                                            <div class="mx-3 mt-2 font-weight--bold row">Design: <p
+                                                                    class="font-weight--normal mx-2">{{$item->item_name}}</p>
+                                                            </div>
+                                                            <div class="mx-3 mt-2 row">SKU: <p
+                                                                    class="font-weight--normal mx-2">N/A</p></div>
+                                                            <div class="mx-3 mt-2 row">Size: <p
+                                                                    class="font-weight--normal mx-2">{{$item->item_size}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="col-md-3 text-right align-content-center">{{$item->item_currency}}{{$item->item_total}}</div>
                                             </div>
-                                            <div class="col-9" style="font-size: 12px">
-                                                <div class="mx-3 mt-2 font-weight--bold row">Design:
-                                                    <p class="font-weight--normal mx-2">{{$item->item_name}}</p>
-                                                </div>
-                                                <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p>
-                                                </div>
-                                                <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">${{$item->item_size}}</p>
+                                            <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                        @endforeach
+                                        <div class="row px-5">
+                                            <div class="col-md-6 font-weight-bold">SubTotal</div>
+                                            <div
+                                                class="col-md-6 font-weight-bold text-right section_2_subtotal">{{$item->item_currency}}{{$cart->cart_total}}</div>
+                                        </div>
+                                        <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                        <div class="row px-5">
+                                            <div class="col-md-9">Shipping Charges</div>
+                                            <div class="col-md-3 text-right section_2_shipping_charges">$0</div>
+                                        </div>
+                                        <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                        <div class="row my-4 px-5">
+                                            <div class="col-md-9 font-weight--bold">Total</div>
+                                            <div
+                                                class="col-md-3 font-weight--bold text-right section_2_cart_total"></div>
+                                        </div>
+                                        <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                        <div class="row my-4 px-5 justify-content-center">
+                                            <div class="col-md-12">
+                                                <p class="text-center">Your personal data will be used to process your
+                                                    order, support your experience throughout this website, and for
+                                                    other purposes described in our privacy policy.</p>
+                                                <div class="text-center">
+                                                    <button
+                                                        class="add-to-cart-button btn btn-dark align-content-center text-left"
+                                                        id="place_order">
+                                                        Place Order &nbsp; &nbsp; &nbsp;<i
+                                                            class="fa fa-long-arrow-right pl-5"></i>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        @endforeach
-                                    </div>
-                                    <div class="col-md-3 text-right align-content-center">${{$cart->cart_total}}</div>
-                                    <div class="col-md-9">
-                                        <hr class="mx-4" style="border-top-color: whitesmoke;">
-                                    </div>
-                                    <div class="col-md-4 align-content-center font-weight--bold">SubTotal</div>
-                                    <div class="col-md-4 align-content-center text-right font-weight--bold">${{$cart->cart_total}}</div>
-                                    <div class="col-md-9">
-                                        <hr class="mx-4" style="border-top-color: whitesmoke;">
-                                    </div>
-                                    <div class="col-md-4 align-content-center">Shipping Charges</div>
-                                    <div class="col-md-4 align-content-center text-right">$0</div>
-                                    <div class="col-md-9 mb-3">
-                                        <hr class="mx-4" style="border-top-color: whitesmoke;">
-                                    </div>
-                                    <div class="col-md-4 align-content-center font-weight--bold" style="font-size: 20px">Total</div>
-                                    <div class="col-md-4 align-content-center text-right font-weight--bold mb-5 cart_total" style="font-size: 20px"></div>
-                                    <div class="col-sm-8 my-5 row justify-content-center">
-                                        <a href="/" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5" id="add_cart">
-                                            Go to dashboard &nbsp; &nbsp; &nbsp;<i class="fa fa-long-arrow-right pl-5"></i>
-                                        </a>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="section" id="section3" style="display: none;">
+                <div class="container">
+                    <div class="mt-5 mb-4 text-center" style="color: green; font-size:22px;">
+                        Your order is processed and you will get the confirmation soon. Your Order Detail is:
+                    </div>
+                    <div class="container my-5">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-3 text-center p-3 order-complete-border"
+                                 style="border-left: 2px dashed green;">
+                                <div class="row">
+                                    <div class="col">
+                                        <div>Order Number</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>4818</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 text-center p-3 order-complete-border"
+                                 style="border-left: 2px dashed green;">
+                                <div class="row">
+                                    <div class="col">
+                                        <div>Date</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>{{ date('j F, Y') }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 text-center p-3 order-complete-border"
+                                 style="border-right:  2px dashed green; border-left: 2px dashed green;">
+                                <div class="row">
+                                    <div class="col">
+                                        <div>Total</div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <strong class="cart_total">${{$cart->cart_total}}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center fa-3x font-weight--bold">Order Details</div>
+                    </div>
+                    <div class="container my-5">
+                        <div class="row justify-content-center mb-5">
+                            <div class="col-sm-4 text-left fa">
+                                PRODUCT
+                            </div>
+                            <div class="col-sm-4 text-right fa">
+                                SUBTOTAL
+                            </div>
+                            <div class="col-md-9">
+                                <hr class="mx-4" style="border-top-color: whitesmoke;">
+                            </div>
+                            <div class="col-md-5">
+                                @foreach ( $cart->items as $item)
+                                    <div class="row">
+                                        <div class="col-3"><img
+                                                src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
+                                                alt="$item_data->ItemID" height="100px">
+                                        </div>
+                                        <div class="col-9" style="font-size: 12px">
+                                            <div class="mx-3 mt-2 font-weight--bold row">Design:
+                                                <p class="font-weight--normal mx-2">{{$item->item_name}}</p>
+                                            </div>
+                                            <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p>
+                                            </div>
+                                            <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">
+                                                    ${{$item->item_size}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="col-md-3 text-right align-content-center">${{$cart->cart_total}}</div>
+                            <div class="col-md-9">
+                                <hr class="mx-4" style="border-top-color: whitesmoke;">
+                            </div>
+                            <div class="col-md-4 align-content-center font-weight--bold">SubTotal</div>
+                            <div class="col-md-4 align-content-center text-right font-weight--bold">
+                                ${{$cart->cart_total}}</div>
+                            <div class="col-md-9">
+                                <hr class="mx-4" style="border-top-color: whitesmoke;">
+                            </div>
+                            <div class="col-md-4 align-content-center">Shipping Charges</div>
+                            <div class="col-md-4 align-content-center text-right">$0</div>
+                            <div class="col-md-9 mb-3">
+                                <hr class="mx-4" style="border-top-color: whitesmoke;">
+                            </div>
+                            <div class="col-md-4 align-content-center font-weight--bold" style="font-size: 20px">Total
+                            </div>
+                            <div class="col-md-4 align-content-center text-right font-weight--bold mb-5 cart_total"
+                                 style="font-size: 20px"></div>
+                            <div class="col-sm-8 my-5 row justify-content-center">
+                                <a href="/" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5"
+                                   id="add_cart">
+                                    Go to dashboard &nbsp; &nbsp; &nbsp;<i class="fa fa-long-arrow-right pl-5"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
         @include('frontend.' . $active_theme->theme_abrv . '.components.footer')
     </div>
@@ -435,14 +497,14 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " "));
-                var shippingCharges = parseFloat($(".section_2_shipping_charges").text().replace('$', ''));
-                var total = subtotal + shippingCharges;
-                $(".section_2_cart_total").text("$" + total.toFixed(2));
+            var shippingCharges = parseFloat($(".section_2_shipping_charges").text().replace('$', ''));
+            var total = subtotal + shippingCharges;
+            $(".section_2_cart_total").text("$" + total.toFixed(2));
 
-            $('.delete-row').click(function() {
+            $('.delete-row').click(function () {
                 $(this).closest('tr').remove();
             });
 
@@ -455,14 +517,14 @@
             }
 
             // Event listener for quantity change
-            $('#item_qty').on('change', function() {
+            $('#item_qty').on('change', function () {
                 updateTotalPrice();
                 var $hiddenInput = $(this).closest('.qty-styles').find('.item_id');
                 $('#item_ids').val($hiddenInput);
             });
 
             // Event listener for minus button
-            $('.qty-minus').on('click', function() {
+            $('.qty-minus').on('click', function () {
                 if ($('#update_cart').is(':disabled')) {
                     $('#update_cart').removeAttr('disabled');
                 }
@@ -479,7 +541,7 @@
             });
 
             // Event listener for plus button
-            $('.qty-add').on('click', function() {
+            $('.qty-add').on('click', function () {
                 if ($('#update_cart').is(':disabled')) {
                     $('#update_cart').removeAttr('disabled');
                 }
@@ -519,11 +581,11 @@
             }
 
             updateTotal();
-            $("#item_subtotal_price").on("DOMSubtreeModified", function() {
+            $("#item_subtotal_price").on("DOMSubtreeModified", function () {
                 updateTotal();
             });
 
-            $('#update_cart').on('click', function() {
+            $('#update_cart').on('click', function () {
                 if ($(this).is(':disabled')) {
                     return;
                 }
@@ -537,17 +599,17 @@
                         "quantity": $('#quantities').val(),
                         "CustomerId": $('#customer_id').val()
                     },
-                    success: function(response) {
+                    success: function (response) {
                         location.reload();
                         console.log(response);
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.log(error);
                     }
                 });
             });
 
-            $('#proceed_to_checkout').click(function() {
+            $('#proceed_to_checkout').click(function () {
                 $('.stepper-heading').text('Checkout');
                 $('.section-2').addClass('active');
                 $('#section1').attr('style', 'display:none;');
@@ -555,27 +617,29 @@
                 $('#section2').attr('style', 'display:block;');
             });
 
-            $('#place_order').click(function() {
+            $('#place_order').click(function () {
                 var formData = $('#customer_info').serialize();
                 $.ajax({
                     url: '{{route("frontend.checkout.place_order")}}',
                     type: "POST",
-                    headers: { 'X_CSRF_TOKEN' : "{{ csrf_token() }}"},
+                    headers: {'X_CSRF_TOKEN': "{{ csrf_token() }}"},
                     data: formData,
-                    success: function(response) {
-                        if(response.success){
-                            console.log('Form submitted successfully');
-                        $('.stepper-heading').text('Order Complete');
-                        $('.section-3').addClass('active');
-                        $('#section1').attr('style', 'display:none;');
-                        $('#section2').attr('style', 'display:none;');
-                        $('#section3').attr('style', 'display:block;');
+                    success: function (response) {
+                        if (response.success) {
+                            $('.stepper-heading').text('Order Complete');
+                            $('.section-3').addClass('active');
+                            $('#section1').attr('style', 'display:none;');
+                            $('#section2').attr('style', 'display:none;');
+                            $('#section3').attr('style', 'display:block;');
 
-                    }else{
-                        alert(response.msg);
-                    }
+                        } else {
+                            toastr.error(response.msg, {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                        }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error('Form submission error:', error);
                     }
                 });
