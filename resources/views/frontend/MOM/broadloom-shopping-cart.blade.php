@@ -180,26 +180,26 @@
                                                             placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['FirstName']}}" required>
                                                     </div>
                                                     <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Last Name</label>
+                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Last Name <span class="text-danger" style="font-size: 18px">*</span></label>
                                                         <input class="form-control" type="text" id="" name="LastName"
                                                             placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['LastName']}}" required>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Email</label>
+                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Email <span class="text-danger" style="font-size: 18px">*</span></label>
                                                         <input class="form-control" type="email" id="" name="Email"
                                                             placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Email']}}" required>
                                                     </div>
                                                     <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Phone</label>
+                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Phone <span class="text-danger" style="font-size: 18px">*</span></label>
                                                         <input class="form-control" type="number" id="" name="Phone"
                                                             placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Phone1']}}" required>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-10 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Street Address</label>
+                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Street Address <span class="text-danger" style="font-size: 18px">*</span></label>
                                                         <input class="form-control" type="text" id="" name="Address1"
                                                             placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Address1']}}" required>
                                                     </div>
@@ -210,19 +210,19 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Town/ City</label>
+                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Town/ City<span class="text-danger" style="font-size: 18px">*</span></label>
                                                         <input class="form-control" type="text" id="" name="City"
                                                             placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['City']}}" required>
                                                     </div>
                                                     <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">State</label>
+                                                        <label for="" class="form-label mb-0" style="font-size: 14px">State<span class="text-danger" style="font-size: 18px">*</span></label>
                                                         <input class="form-control" type="text" id="" name="State"
                                                             placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['State']}}" required>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Zip Code</label>
+                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Zip Code<span class="text-danger" style="font-size: 18px">*</span></label>
                                                         <input class="form-control" type="text" id="" name="Zip"
                                                             placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}" required>
                                                     </div>
@@ -230,40 +230,36 @@
                                                 <p class="font-weight--bold " style="font-size: 18px" >Additional Information</p>
                                                 <div class="row">
                                                     <div class="col-md-5 mb-2 align-content-center">
-                                                        <input class="form-check-input" type="checkbox" id="" name="ship_complete" required>
+                                                        <input class="form-check-input" type="checkbox" id="" name="ship_complete" >
                                                         <label class="form-check-label" for="" style="font-size: 14px">Ship Complete</label>
                                                     </div>
                                                     <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">P.O or Reference Number</label>
+                                                        <label for="" class="form-label mb-0" style="font-size: 14px">P.O or Reference Number<span class="text-danger" style="font-size: 18px">*</span></label>
                                                         <input class="form-control" type="text" id="" name="reference_number"
                                                             placeholder="" value="" required>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-5 mb-2">
-                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Shipping Date</label>
-                                                        <input class="form-control" type="text" id="" name="ship_date"
+                                                        <label for="" class="form-label mb-0" style="font-size: 14px">Shipping Date<span class="text-danger" style="font-size: 18px">*</span></label>
+                                                        <input class="form-control mb-2 datepicker" type="text" id="datepicker" data-date-format="dd-mm-yyyy" name="ship_date"
                                                             placeholder="" value="" required>
+                                                            <label for="" class="form-label mb-1" style="font-size: 14px">Shipping Method</label>
+                                                            <select name="shipping_method" class="form-control">
+                                                                @if($shipping_options)
+                                                                @foreach($shipping_options as $shipping_option)
+                                                                    <option {{ $default_ship_via_id == $shipping_option['ShipViaID'] ? 'selected' : '' }} value="{{$shipping_option['ShipViaID']}}">{{$shipping_option['Description']}}</option>
+                                                                @endforeach
+                                                                @else
+                                                                <option value="3RDP">Standard ShipVia</option>
+                                                                @endif
+                                                            </select>
                                                     </div>
                                                     <div class="col-md-5 mb-2">
                                                         <label for="" class="mb-0" style="font-size: 14px">Order Notes (optional)</label>
                                                         <textarea class="form-control" id="" name="shipping_instructions" style="height: 8rem;" placeholder=""></textarea>
                                                         <input type="hidden" name="item_broadloom" id="item_broadloom" value="{{$cart->item_broadloom}}">
                                                     </div>
-                                                    <p class="font-weight--bold " style="font-size: 18px" >Shipping Method</p>
-                                                    <div class="row">
-                                                    <div class="col-md-5 mb-2">
-                                                        <select name="shipping_method">
-                                                            @if($shipping_options)
-                                                            @foreach($shipping_options as $shipping_option)
-                                                                <option {{ $default_ship_via_id == $shipping_option['ShipViaID'] ? 'selected' : '' }} value="{{$shipping_option['ShipViaID']}}">{{$shipping_option['Description']}}</option>
-                                                            @endforeach
-                                                            @else
-                                                            <option value="3RDP">Standard ShipVia</option>
-                                                            @endif
-                                                        </select>
-                                                    </div>
-                                                </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -556,9 +552,12 @@
             });
 
             $('#place_order').click(function() {
-                var formData = $('#customer_info').serialize();
-                $.ajax({
-                    url: '{{route("frontend.checkout.place_order")}}',
+                var form = $('#customer_info')[0];
+                if((form.checkValidity())){
+
+                    var formData = $('#customer_info').serialize();
+                    $.ajax({
+                        url: '{{route("frontend.checkout.place_order")}}',
                     type: "POST",
                     headers: { 'X_CSRF_TOKEN' : "{{ csrf_token() }}"},
                     data: formData,
@@ -579,6 +578,20 @@
                         console.error('Form submission error:', error);
                     }
                 });
+            }else{
+                alert("Please fill all the required fields");
+            }
+            });
+            $('.datepicker').datepicker({
+                format: "yyyy-mm-dd",
+                startDate: "-10Y",
+                maxViewMode: 3,
+                todayBtn: "linked",
+                clearBtn: false,
+                keyboardNavigation: false,
+                autoclose: true,
+                todayHighlight: true,
+                toggleActive: true
             });
         });
     </script>

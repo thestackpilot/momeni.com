@@ -191,7 +191,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
                                 <div class="mt-4 d-flex justify-content-end mx-5">
                                     @auth
-                                    <a href="javascript:void(0)" class="add-to-cart-button btn btn-dark" id="add_cart">
+                                    <a href="javascript:void(0)" class="add-to-cart-button align-content-center btn btn-dark" id="add_cart">
                                         Place Order <i class="fa fa-long-arrow-right"></i>
                                     </a>
                                     @endauth
