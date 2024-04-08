@@ -224,7 +224,7 @@
                                                 <input class="form-control" type="text" id="" name="Address2"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['Address2']}}"
-                                                       required>
+                                                       >
                                             </div>
                                         </div>
                                         <div class="row">

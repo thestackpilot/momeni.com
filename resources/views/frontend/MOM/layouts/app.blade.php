@@ -58,6 +58,8 @@ use App\Http\Controllers\CommonController;
     <script src="{{asset('/MOM/js/toastr.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script src="https://img1.wsimg.com/tcc/tcc_l.combined.1.0.6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css" integrity="sha512-TQQ3J4WkE/rwojNFo6OJdyu6G8Xe9z8rMrlF9y7xpFbQfW5g8aSWcygCQ4vqRiJqFsDsE1T6MoAOMJkFXlrI9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="momeni">
 {{--    @include('frontend.'.$active_theme -> theme_abrv.'.components.side-icons')--}}
@@ -264,7 +266,7 @@ use App\Http\Controllers\CommonController;
         $(itemNode+" .update-cart-button").hide();
         if (typeof hideQuantity !== "undefined" && hideQuantity)
             $(itemNode+" .cart-actions .qty-styles").removeClass('d-flex').hide();
-       
+
        console.log(itemNode);
         console.log("qunatity: ", quantity);
         $(itemNode+" #updating-cart").removeClass('d-none');
