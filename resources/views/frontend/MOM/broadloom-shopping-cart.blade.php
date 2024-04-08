@@ -175,6 +175,7 @@
                             <div class="col-md-6 col-sm-12 my-5">
                                 <div class="mb-5">
                                     <form class="needs-validation" id="customer_info" method="POST">
+                                        @csrf
                                         <div class="row">
                                             <div class="col-md-5 mb-2">
                                                 <label for="" class="form-label mb-0" style="font-size: 14px">First Name
@@ -617,7 +618,6 @@
                     $.ajax({
                         url: '{{route("frontend.checkout.place_order")}}',
                     type: "POST",
-                    headers: {'X_CSRF_TOKEN': "{{ csrf_token() }}"},
                     data: formData,
                     success: function (response) {
                         if (response.success) {
