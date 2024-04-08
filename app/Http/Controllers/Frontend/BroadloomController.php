@@ -174,4 +174,52 @@ class BroadloomController extends FrontendController
             'cut_piece' => $res,
         ];
     }
+
+    public function get_cut_pieces(Request $request)
+    {
+        $id = $request->temp_sales_order_no;
+        $cut_pieces = $this->ApiObj->Get_ShowCut($id);
+
+        $total_length = $total_width = 0;
+        $dimensions = [];
+        foreach ($cut_pieces['ShowCuts'] as $key => $cut_piece) {
+            $length_in_feet = round($cut_piece['ATSLength'] / 12);
+            $length_in_inches = round($cut_piece['ATSLength'] % 12);
+            $width_in_feet = round($cut_piece['ATSWidth'] / 12);
+            $width_in_inches = round($cut_piece['ATSWidth'] % 12);
+            $dimension = $length_in_feet . "'" . $length_in_inches . '" x ' . $width_in_feet . "'" . $width_in_inches . '"';
+            $dimensions[$key] = [];
+            $length = $length_in_feet . '.' . $length_in_inches;
+            $width = $width_in_feet . '.' . $width_in_inches;
+            $total_length = $total_length + $length;
+            $total_width = $total_width + $width;
+            $dimensions[$key]['length'] = $length;
+            $dimensions[$key]['width'] = $width;
+            $dimensions[$key]['dimension'] = $dimension;
+        }
+
+        $html = '';
+        $html .= "<div class='length'>" . $total_length . "' (Length)</div>";
+        $html .= '<div class="pieces">';
+        $html .= "<div class='width'>" . $total_width . "' (Width)</div>";
+        $html .= '<div class="picese-wrapper" id="picese-wrapper">';
+        $multiplier = count($cut_pieces['ShowCuts']) <= 2 ? 1 : 2;
+        foreach ($dimensions as $dimension) {
+            $dimension_width = number_format((($dimension['width'] / $total_width) * 100), 2);
+            $dimension_length = number_format((($dimension['length'] / $total_length) * 100), 2);
+            if ($dimension_width > 100) {
+                $dimension_width = 100;
+            }
+
+            if ($dimension_length > 100) {
+                $dimension_length = 100;
+            }
+
+            $html .= '<div class="piece" style="float:left; width: ' . $dimension_length . '%; height: ' . $dimension_width . '%;">' . $dimension['dimension'] . '</div>';
+        }
+
+        $html .= '</div>';
+        $html .= '</div>';
+        return $html;
+    }
 }

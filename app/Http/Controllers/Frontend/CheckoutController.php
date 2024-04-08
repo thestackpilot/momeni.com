@@ -566,20 +566,4 @@ class CheckoutController extends FrontendController
 
         return response()->json($this->jsonResponseArray);
     }
-
-    public function check_cart_items($broadloom_item_flag = false)
-    {
-        $cart = $this->cart_model->get_cart_for_front($this->ApiObj, $broadloom_item_flag);
-        if (count($cart['items'])) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function delete_cart_items()
-    {
-        $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, true);
-        return 1;
-    }
 }
