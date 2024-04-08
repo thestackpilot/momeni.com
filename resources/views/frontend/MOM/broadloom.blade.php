@@ -7,17 +7,17 @@
 
 @endphp
 
-@section('title', 'Item Detail Page' )
-@extends('frontend.' . $active_theme -> theme_abrv . '.layouts.app')
+@section('title', 'Item Detail Page')
+@extends('frontend.' . $active_theme->theme_abrv . '.layouts.app')
 
 @section('content')
     <div class="wrapper">
-        @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
+        @include('frontend.' . $active_theme->theme_abrv . '.components.header')
         <main class="main-content">
-            @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs')
-            <input type="hidden" id="customer_id" value="{{$customer_id}}"></input>
-            <input type="hidden" id="item_json" value="{{$item_json}}"></input>
-            <input type="hidden" name="" id="item_id" value="{{$item['ItemID']}}">
+            @include('frontend.' . $active_theme->theme_abrv . '.components.breadcrumbs')
+            <input type="hidden" id="customer_id" value="{{ $customer_id }}"></input>
+            <input type="hidden" id="item_json" value="{{ $item_json }}"></input>
+            <input type="hidden" name="" id="item_id" value="{{ $item['ItemID'] }}">
             <input type="hidden" name="" id="cut_pieces_json" value="">
             {{-- <input type="hidden" name="" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemName']}}"> --}}
             <input type="hidden" name="" id="roll_id" value="">
@@ -64,11 +64,14 @@
                                                                 <label for="">Roll ID / Cut Piece ID</label>
                                                             </div>
                                                             <div class="col-6 text-right">
-                                                                <label for="">Length: <span style="color: #660000">0' - 0' / 0' - 0'</span></label>
+                                                                <label for="">Length: <span
+                                                                        style="color: #660000">0' - 0' / 0' -
+                                                                        0'</span></label>
                                                             </div>
                                                         </div>
                                                         <select name="" id="roll_pieces" class="form-control">
-                                                            <option value="" width="" length="">Select Option</option>
+                                                            <option value="" width="" length="">Select
+                                                                Option</option>
                                                             @foreach ($roll_pieces['OutPut']['RollsAndCutPieces'] as $row)
                                                                 <option value="{{$row['RollID']}}"
                                                                         width="{{$row['TotalWidth']}}"
@@ -97,7 +100,7 @@
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <select name="" id="TlengthInch"
-                                                                            class="form-control">
+                                                                        class="form-control">
                                                                         <option value="0">0</option>
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
@@ -136,7 +139,7 @@
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <select name="" id="TwidthInch"
-                                                                            class="form-control">
+                                                                        class="form-control">
                                                                         <option value="0">0</option>
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
@@ -162,21 +165,24 @@
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label for="">SQ-FT Price ($)</label>
-                                                        <input type="text" class="form-control" id="sq-ft" value=""
+                                                        <input type="text" class="form-control" id="sq-ft"
+                                                            value=""
                                                                disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label for="">SQ-YRD Price ($)</label>
-                                                        <input type="text" class="form-control" id="sq-yrd" value=""
+                                                        <input type="text" class="form-control" id="sq-yrd"
+                                                            value=""
                                                                disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label for="">EXT Price ($)</label>
-                                                        <input type="text" class="form-control" id="sq-ext" value=""
+                                                        <input type="text" class="form-control" id="sq-ext"
+                                                            value=""
                                                                disabled>
                                                     </div>
                                                 </div>
@@ -188,8 +194,8 @@
                                                                 disabled="disabled">
                                                             <option value="0" charges="">Select Option</option>
                                                             @foreach ($surging_types['OutPut']['SurgingTypesList'] as $row)
-                                                                <option value="{{$row["SergingTypeNo"]}}"
-                                                                        charges="{{$row["Charges"]}}"
+                                                                <option value="{{$row['SergingTypeNo']}}"
+                                                                        charges="{{$row['Charges']}}"
                                                                         desc="{{$row['Description']}}">{{$row['Description']}}</option>
                                                             @endforeach
                                                         </select>
@@ -243,7 +249,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 mt-5 text-center">
-                                        <button class="show-piece-btn broadloom-btns add-cut-piece-btn"
+                                        <button class="add-piece-btn broadloom-btns add-cut-piece-btn"
                                                 id="cut_piece_btn">Add Cut Piece <i class="fa fa-long-arrow-right"></i>
                                         </button>
                                         <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn">
@@ -258,9 +264,9 @@
                 </div>
             </div>
         </main>
-        @include('frontend.'.$active_theme -> theme_abrv.'.components.footer')
+        @include('frontend.' . $active_theme->theme_abrv . '.components.footer')
     </div>
-    @include('frontend.'.$active_theme -> theme_abrv.'.components.login-modal')
+    @include('frontend.' . $active_theme->theme_abrv . '.components.login-modal')
 @endsection
 
 @section('scripts')
@@ -275,7 +281,7 @@
 
         // TODO : Please add taoster library as it is needed - Asfand needs to do it
         function init_sliders() {
-            $('.product-details-thumbs-2').each(function () {
+            $('.product-details-thumbs-2').each(function() {
                 var $this = $(this);
                 var $details = $this.siblings('.product-details-images-2');
                 $this.slick({
@@ -295,11 +301,11 @@
                     nextArrow: '<i class="icon-arrow-down arrow-down"></i>',
                     // asNavFor: $details,
                     responsive: [{
-                        breakpoint: 1200,
-                        settings: {
-                            slidesToShow: 3,
-                        }
-                    },
+                            breakpoint: 1200,
+                            settings: {
+                                slidesToShow: 3,
+                            }
+                        },
                         {
                             breakpoint: 991,
                             settings: {
@@ -342,10 +348,10 @@
                     method: 'GET',
                     url: window.location.href,
                     data: {
-                        '_token': '{{csrf_token()}}',
+                        '_token': '{{ csrf_token() }}',
                         'refresh': true,
                     },
-                    success: function (response) {
+                    success: function(response) {
                         var new_html = $($.parseHTML(response));
                         console.log('Length: ', new_html.find('#item_json').length);
                         console.log('Value: ', new_html.find('#item_json').val());
@@ -361,7 +367,7 @@
                         $('#cart_main').find('#login_by_popup').remove();
 
                         $('#add_to_cart').off('click');
-                        $('#add_to_cart').on('click', function (e) {
+                        $('#add_to_cart').on('click', function(e) {
                             if (
                                 $('input[name="sale_rep"]').val() == 1 &&
                                 customerID.length == 0
@@ -383,12 +389,15 @@
         }
 
         function refresh_product(ItemID) {
-            item_object.Items.forEach(function (item, index) {
+            item_object.Items.forEach(function(item, index) {
                 if (item.ItemID == ItemID) {
-                    $('#product-main-image').fadeOut(400, function () {
-                        $("#image_0").attr('src', item.ImageNameArray[0]).attr('onerror', "this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'");
+                    $('#product-main-image').fadeOut(400, function() {
+                        $("#image_0").attr('src', item.ImageNameArray[0]).attr('onerror',
+                            "this.src='{{ url('/') . ConstantsController::IMAGE_PLACEHOLDER }}'");
                     }).fadeIn(400);
-                    setMainImage({src: item.ImageNameArray[0]});
+                    setMainImage({
+                        src: item.ImageNameArray[0]
+                    });
 
                     $('#image_0').attr('alt', item.ItemName);
                     $('#product_thumbnails').html('');
@@ -400,14 +409,16 @@
                             id: 'thumbnail_' + i,
                             src: item.ImageNameArray[i],
                             onclick: "setMainImage(this)",
-                            onerror: "this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'"
+                            onerror: "this.src='{{ url('/') . ConstantsController::IMAGE_PLACEHOLDER }}'"
                         }));
                         $('#product_thumbnails').append(div);
-                        //$('#thumbnail_'+i).attr('src',item.ImageNameArray[i]).attr('onerror', "this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'");
+                        //$('#thumbnail_'+i).attr('src',item.ImageNameArray[i]).attr('onerror', "this.src='{{ url('/') . ConstantsController::IMAGE_PLACEHOLDER }}'");
                     }
                     init_sliders();
                     // console.log(`${item.ItemName}${($("label", $("input[name='color']:checked").parent()).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}`);
-                    $('#product-heading').html(`${item.ItemName}<b>${($(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}</b>`);
+                    $('#product-heading').html(
+                        `${item.ItemName}<b>${($(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}</b>`
+                        );
 
                     if (item.ProductDescription == null) {
                         item.ProductDescription = '';
@@ -421,7 +432,7 @@
 
                     $('#item-udf-fields').html("");
                     if (item.UDFFields.length > 0) {
-                        item.UDFFields.forEach(function (field, f_index) {
+                        item.UDFFields.forEach(function(field, f_index) {
                             if (field.FieldName.trim() != 'Color' && field.FieldName.trim() != 'Size') {
                                 var tr = $("<tr class = 'UDField'> </tr>");
 
@@ -438,7 +449,8 @@
                         });
                     } else {
                         if (!$('.not-available').length) {
-                            $('.quickview-peragraph .detiel-heading').append('<span class="not-available">: N/A</span>');
+                            $('.quickview-peragraph .detiel-heading').append(
+                                '<span class="not-available">: N/A</span>');
                         }
                     }
                 }
@@ -446,14 +458,14 @@
         }
 
         function hide_components(class_arr) {
-            class_arr.forEach(function (component) {
+            class_arr.forEach(function(component) {
                 $(component).removeClass('d-none');
                 $(component).addClass('d-none');
             });
         }
 
         function show_components(class_arr) {
-            class_arr.forEach(function (component) {
+            class_arr.forEach(function(component) {
                 $(component).removeClass('d-none');
             });
         }
@@ -462,7 +474,7 @@
             var counter = 0;
             console.log("item_object: ", item_object);
             $('#item_variant').html('');
-            item_object.Items.forEach(function (item, index) {
+            item_object.Items.forEach(function(item, index) {
                 if (!$('#item_variant input[name=variant]:contains(' + item.ItemName + ')').length) {
                     $('#item_variant').append($('<input>', {
                         value: item.ItemID,
@@ -494,9 +506,11 @@
 
         function getColors(ItemName) {
             show_components(['#item_color_parent']);
-            hide_components(['#item_size_parent', '#item_customer_parent', '#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
+            hide_components(['#item_size_parent', '#item_customer_parent', '#qty-main', '#cart_main', '#add_to_cart',
+                '#login_by_popup'
+            ]);
             $('#item_color').html('');
-            item_object.Items.forEach(function (item, index) {
+            item_object.Items.forEach(function(item, index) {
                 if (item.ItemName.trim() == ItemName.trim()) {
                     if (!$('#item_color input[name=color]:contains(' + item.ItemColor + ')').length) {
                         $('#item_color').append($('<input>', {
@@ -526,19 +540,21 @@
 
             bindClicks();
 
-            var color = `{{isset($color) && $color ? $color : ''}}`;
+            var color = `{{ isset($color) && $color ? $color : '' }}`;
             var color_node = color.length ? `[data-color="${color}"]` : '#item_color label:first';
             $(color_node).click();
-            setTimeout(function () {
+            setTimeout(function() {
                 $(`${color_node}, #${$(color_node).attr('for')}`).click();
             }, 1500);
         }
 
         function getSizes(ItemName, ItemColor, ItemValue) {
             show_components(['#item_size_parent']);
-            hide_components(['#item_cover_parent', '#item_customer_parent', '#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
+            hide_components(['#item_cover_parent', '#item_customer_parent', '#qty-main', '#cart_main', '#add_to_cart',
+                '#login_by_popup'
+            ]);
             $('#item_size').html('');
-            item_object.Items.forEach(function (item, index) {
+            item_object.Items.forEach(function(item, index) {
                 if ((item.ItemName.trim() == ItemName.trim()) && (item.ItemColor.trim() == ItemColor.trim())) {
                     if (!$('#item_size input[name=size]:contains(' + item.ItemSize + ')').length) {
                         $('#item_size').append($('<input>', {
@@ -561,7 +577,7 @@
             bindClicks();
 
             $(`#item_size label:first, #item_size input[name=size]:first`).click();
-            setTimeout(function () {
+            setTimeout(function() {
                 $(`#item_size label:first, #item_size input[name=size]:first`).click();
             }, 1500);
         }
@@ -571,7 +587,7 @@
             $('#item_cover').html('');
             var ItemID = Item.val();
             var covers_available = false;
-            item_object.PillowCovers.forEach(function (cover, index) {
+            item_object.PillowCovers.forEach(function(cover, index) {
                 if (cover.ParentItemID.trim() == ItemID.trim()) {
                     if (!$('#item_cover input[name=cover]:contains(' + cover.Description + ')').length) {
                         $('#item_cover').append($('<input>', {
@@ -611,23 +627,24 @@
                 hide_components(['#qty-main', '#cart_main', '#add_to_cart']);
                 return true;
             }
-            item_object.Items.forEach(function (item, index) {
+            item_object.Items.forEach(function(item, index) {
                 if ((item.ItemID == ItemID)) {
                     $('#item_customer input[name=customer]').prop('disabled', false);
                     if (item.UserCustomerInfo.IsSaleRep == 1) {
                         getCustomers(item);
-                        var customer_id = item.UserCustomerInfo.CustomerSet ? item.UserCustomerInfo.CustomerSet : '';
+                        var customer_id = item.UserCustomerInfo.CustomerSet ? item.UserCustomerInfo.CustomerSet :
+                        '';
 
                         // $('#item_customer input[name=customer]').prop('disabled', 'disabled');
                         $('#qty-main, .base_price').addClass('muted');
                         $('#qty_msg').css('opacity', '0.4');
                         if (!$('#qty-main').is(':visible'))
                             show_components(['.qty-loader']);
-                        $.post('{{route("frontend.item.ats")}}', {
-                            _token: '{{csrf_token()}}',
+                        $.post('{{ route('frontend.item.ats') }}', {
+                            _token: '{{ csrf_token() }}',
                             item_id: item.ItemID,
                             customer_id: customer_id
-                        }, function (response) {
+                        }, function(response) {
                             startBuying(item.ItemID, customer_id, response.data);
                         });
 
@@ -639,12 +656,14 @@
                         $('#qty_msg').css('opacity', '0.4');
                         if (!$('#qty-main').is(':visible'))
                             show_components(['.qty-loader']);
-                        $.post('{{route("frontend.item.ats")}}', {
-                            _token: '{{csrf_token()}}',
+                        $.post('{{ route('frontend.item.ats') }}', {
+                            _token: '{{ csrf_token() }}',
                             item_id: item.ItemID,
-                            customer_id: typeof item.UserCustomerInfo.Customers[0].CustomerID !== "undefined" ? item.UserCustomerInfo.Customers[0].CustomerID : ''
-                        }, function (response) {
-                            startBuying(item.ItemID, item.UserCustomerInfo.Customers[0].CustomerID, response.data);
+                            customer_id: typeof item.UserCustomerInfo.Customers[0].CustomerID !==
+                                "undefined" ? item.UserCustomerInfo.Customers[0].CustomerID : ''
+                        }, function(response) {
+                            startBuying(item.ItemID, item.UserCustomerInfo.Customers[0].CustomerID, response
+                                .data);
                         });
                         // startBuying(item.ItemID, item.UserCustomerInfo.Customers[0].CustomerID , item.UserCustomerInfo.Customers[0].ATSInfo);
                     }
@@ -660,7 +679,7 @@
             show_components(['#item_customer_parent']);
             hide_components(['#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
             $('#item_customer').html('');
-            item.UserCustomerInfo.Customers.forEach(function (Customer, index) {
+            item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
                 if (item.UserCustomerInfo.CustomerSet) {
                     $('#active_customer_select').addClass('d-none');
                     $('#disabled_customer_select').removeClass('d-none');
@@ -706,7 +725,7 @@
         }
 
         function pupolateDimensions(parent, itemID) {
-            item_object.Items.forEach(function (item, index) {
+            item_object.Items.forEach(function(item, index) {
                 if ((item.ItemID == itemID)) {
                     if (
                         typeof item.ItemSizeDimension !== 'undefined' &&
@@ -736,18 +755,18 @@
             var split_arr = item_customer_id.split(' :: ');
             var item_id = split_arr[0].trim();
             var customer_id = split_arr[1].trim();
-            item_object.Items.forEach(function (item, index) {
+            item_object.Items.forEach(function(item, index) {
                 if ((item.ItemID == item_id)) {
-                    item.UserCustomerInfo.Customers.forEach(function (Customer, index) {
+                    item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
                         if (Customer.CustomerID == customer_id) {
                             $('#qty_msg').css('opacity', '0.4');
                             if (!$('#qty-main').is(':visible'))
                                 show_components(['.qty-loader']);
-                            $.post('{{route("frontend.item.ats")}}', {
-                                _token: '{{csrf_token()}}',
+                            $.post('{{ route('frontend.item.ats') }}', {
+                                _token: '{{ csrf_token() }}',
                                 item_id: item_id,
                                 customer_id: customer_id
-                            }, function (response) {
+                            }, function(response) {
                                 startBuying(item_id, customer_id, response.data);
                             });
                             // startBuying(item_id, customer_id , Customer.ATSInfo);
@@ -769,12 +788,14 @@
             $('#qty-main, .base_price').removeClass('muted');
             if (customerID.length != 0) $('#add_to_cart').removeAttr('disabled');
             $('#base_price').text(ATSInfo.Price);
-            $('#qty_msg').text(getQuantityMessage(ATSInfo)).css('opacity', '1').removeClass('bg-success').removeClass('bg-warning').removeClass('bg-img');
+            $('#qty_msg').text(getQuantityMessage(ATSInfo)).css('opacity', '1').removeClass('bg-success').removeClass(
+                'bg-warning').removeClass('bg-img');
             var qty_message = $('#qty_msg').text().toLowerCase();
-            $('#qty_msg').addClass((qty_message.indexOf('in stock') > -1 || qty_message.indexOf('units available') > -1) ? 'bg-success' : 'bg-warning');
+            $('#qty_msg').addClass((qty_message.indexOf('in stock') > -1 || qty_message.indexOf('units available') > -1) ?
+                'bg-success' : 'bg-warning');
             $('#item_qty').attr('max', ATSInfo.OnlyMaxQuantity ? ATSInfo.ATSQty : 9999);
 
-            item_object.Items.forEach(function (item, index) {
+            item_object.Items.forEach(function(item, index) {
                 if ((item.ItemID == ItemID)) {
                     $('#cart_item_id').val(item.ItemID);
                     $('#cart_customer_id').val(CustomerID);
@@ -829,9 +850,9 @@
             $('#item_json').val(JSON.stringify(item));
             $.ajax({
                 method: 'POST',
-                url: '{{route("frontend.cart.add")}}',
+                url: '{{ route('frontend.cart.add') }}',
                 data: {
-                    '_token': '{{csrf_token()}}',
+                    '_token': '{{ csrf_token() }}',
                     'cart_item_id': item.ItemID,
                     'cart_customer_id': $('#customer_id').val(),
                     'cart_item_name': item.ItemName,
@@ -846,11 +867,11 @@
                     // 'cart_item_data': $('#cart_item_oak').val(),
                     'cart_item_broadloom': 1
                 },
-                success: function (response) {
+                success: function(response) {
                     if (response.success) {
                         console.log("new ", $('#item_json').length);
                         if ($('#item_json').length) {
-                            refreshItemJson(function () {
+                            refreshItemJson(function() {
                                 toastr.success(response.message, {
                                     hideDuration: 10000,
                                     closeButton: true,
@@ -859,8 +880,8 @@
                                 // $('.quickCart-opener').trigger('click');
                             });
                         } else {
-                            refreshUser('quick-cart', function () {
-                                refreshUser('profile', function () {
+                            refreshUser('quick-cart', function() {
+                                refreshUser('profile', function() {
                                     $("#quick_cart").removeClass('d-none');
                                     toastr.success(response.message, {
                                         hideDuration: 10000,
@@ -879,7 +900,7 @@
                         $('#add_to_cart').removeClass('btn-muted');
                     }
                 },
-                error: function (response) {
+                error: function(response) {
                     toastr.warning(response.message, {
                         hideDuration: 10000,
                         closeButton: true,
@@ -908,10 +929,10 @@
 
             let sqtft = length * width;
             $.ajax({
-                url: "{{route('broadloom.cutPiece')}}",
+                url: "{{ route('broadloom.cutPiece') }}",
                 method: 'POST',
                 data: {
-                    '_token': '{{csrf_token()}}',
+                    '_token': '{{ csrf_token() }}',
                     'roll_id': $("#roll_id").val(),
                     'tempsalesorderno': $("#TempSalesOrderNo").val(),
                     'item_id': $("#item_id").val(),
@@ -935,8 +956,8 @@
                 },
                 success: function (data) {
                     if (data.cut_piece.OutPut.Success) {
-                        $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
-                        var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
+                        $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'
+                        ])var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
                         var sizes = [];
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
 
@@ -946,9 +967,12 @@
                             let widthInches = item.ATSWidth % 12;
 
                             var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
-                            divContent += '<div class="badge badge-default broadloom-badge" style="background-color:' + color + '">';
+                            divContent +=
+                                '<div class="badge badge-default broadloom-badge" style="background-color:' +
+                                color + '">';
                             var size = {};
-                            size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` + widthInches + `"`;
+                            size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
+                                widthInches + `"`;
                             divContent += size.size;
                             divContent += '</div>';
 
@@ -959,10 +983,12 @@
                             let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
 
                             // Convert square inches to square feet
-                            let totalAreaInSquareFeet = totalAreaInSquareInches / 144; // 1 square foot = 144 square inches
+                            let totalAreaInSquareFeet = totalAreaInSquareInches /
+                            144; // 1 square foot = 144 square inches
 
                             // Convert square feet to square yards
-                            let totalAreaInSquareYards = totalAreaInSquareFeet / 9; // 1 square yard = 9 square feet
+                            let totalAreaInSquareYards = totalAreaInSquareFeet /
+                            9; // 1 square yard = 9 square feet
 
                             // Calculate the SQ-YRD Price ($) and EXT Price ($)
                             let sqYrdPrice = $("#sq-ft").val() / 9; // Price per square yard
@@ -989,11 +1015,12 @@
                             closeButton: true,
                         });
                         $('#show-cut-piece-btn').removeClass('d-none');
-                    } else {
+                    $('#add_to_cart').removeClass('d-none');} else {
                         toastr.error(data.cut_piece.OutPut.Message, {
                             hideDuration: 10000,
                             closeButton: true,
                         });
+                    $('#add_to_cart').addClass('d-none');
                     }
 
                 },
@@ -1003,14 +1030,14 @@
             });
         }
 
-        $('#show-cut-piece-btn').on('click', function () {
+        $('#show-cut-piece-btn').on('click', function() {
             $.ajax({
                 url: "/get-cut-pieces",
                 type: "GET",
                 data: {
                     temp_sales_order_no: $('#TempSalesOrderNo').val()
                 },
-                success: function (response) {
+                success: function(response) {
                     $('#cut-pieces').html(response)
                 }
             })
@@ -1054,7 +1081,7 @@
             console.log("test");
             $('#add_to_cart')
                 .off('click')
-                .on('click', function (e) {
+                .on('click', function(e) {
                     console.log("in cart");
                     if (
                         $('input[name="sale_rep"]').val() == 1 &&
@@ -1094,9 +1121,10 @@
             });
         }
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             item_object = JSON.parse($('#item_json').val());
 
+            $('#add_to_cart').addClass('d-none');
             $('#surging_options').change(function () {
                 var selectedOption = $(this).find('option:selected');
                 var charges = selectedOption.attr('charges');
@@ -1113,18 +1141,18 @@
                 // console.log($('#customer_id').val());
                 $.ajax({
                     method: 'POST',
-                    url: '{{route("frontend.item.ats")}}',
+                    url: '{{ route('frontend.item.ats') }}',
                     data: {
-                        '_token': '{{csrf_token()}}',
+                        '_token': '{{ csrf_token() }}',
                         'item_id': $("#item_id").val(),
                         'customer_id': $('#customer_id').val()
                     },
-                    success: function (response) {
+                    success: function(response) {
                         console.log(response.data['Price']);
                         $("#sq-ft").val(response.data['Price']);
                         updatePrices();
                     },
-                    error: function (response) {
+                    error: function(response) {
                         console.log(response);
                     }
                 });
