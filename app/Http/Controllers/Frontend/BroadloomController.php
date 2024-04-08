@@ -199,9 +199,9 @@ class BroadloomController extends FrontendController
         }
 
         $html = '';
-        $html .= "<div class='length'>" . $total_length . "' (Length)</div>";
+        $html .= "<div class='length'><strong>" . $total_length . "' (Length)</strong></div>";
         $html .= '<div class="pieces">';
-        $html .= "<div class='width'>" . $total_width . "' (Width)</div>";
+        $html .= "<div class='width'><strong>" . $total_width . "' (Width)</strong></div>";
         $html .= '<div class="picese-wrapper" id="picese-wrapper">';
         $multiplier = count($cut_pieces['ShowCuts']) <= 2 ? 1 : 2;
         foreach ($dimensions as $dimension) {

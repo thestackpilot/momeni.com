@@ -41,9 +41,10 @@
             <input type="hidden" id="cart_item_image" name="cart_item_image" value="">
             <input type="hidden" id="cart_item_eta" name="cart_item_eta" value="">
             {{-- <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}"> --}}
+            {{-- @dd($item) --}}
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
-                    <h3>DIA-B Black</h3>
+                    <div style="font-size: 28px;"><strong>{{$item['ItemName']}}</strong></div>
                     <div class="card">
                         <div class="card-body">
                             <div class="container">
@@ -61,12 +62,12 @@
                                                     <div class="form-group">
                                                         <div class="row">
                                                             <div class="col-6">
-                                                                <label for="">Roll ID / Cut Piece ID</label>
+                                                                <label for=""><strong> Roll ID / Cut Piece ID</strong></label>
                                                             </div>
                                                             <div class="col-6 text-right">
-                                                                <label for="">Length: <span
+                                                                <label for=""><strong> Length: <span
                                                                         style="color: #660000">0' - 0' / 0' -
-                                                                        0'</span></label>
+                                                                        0'</span> </strong></label>
                                                             </div>
                                                         </div>
                                                         <select name="" id="roll_pieces" class="form-control">
@@ -86,14 +87,14 @@
                                                 </div>
                                                 <div class="col-md-6 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for="">Cut Length</label>
+                                                        <label for=""><strong> Cut Length </strong></label>
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Tlength"
                                                                            id="Tlength" placeholder="">
                                                                     <div class="input-group-prepend">
-                                                                        <div class="input-group-text">Ft</div>
+                                                                        <div class="input-group-text"><strong> Ft</strong></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -116,7 +117,7 @@
                                                                         <option value="12">12</option>
                                                                     </select>
                                                                     <div class="input-group-prepend">
-                                                                        <div class="input-group-text">In</div>
+                                                                        <div class="input-group-text"> <strong>In</strong></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -125,14 +126,14 @@
                                                 </div>
                                                 <div class="col-md-6 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for="">Cut Width</label>
+                                                        <label for=""><strong>Cut Width</strong></label>
                                                         <div class="row">
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Twidth"
                                                                            id="Twidth" placeholder="">
                                                                     <div class="input-group-prepend">
-                                                                        <div class="input-group-text">Ft</div>
+                                                                        <div class="input-group-text"><strong>Ft</strong></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -155,7 +156,7 @@
                                                                         <option value="12">12</option>
                                                                     </select>
                                                                     <div class="input-group-prepend">
-                                                                        <div class="input-group-text">In</div>
+                                                                        <div class="input-group-text"><strong>In</strong></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -164,7 +165,7 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for="">SQ-FT Price ($)</label>
+                                                        <label for=""><strong> SQ-FT Price ($)</strong></label>
                                                         <input type="text" class="form-control" id="sq-ft"
                                                             value=""
                                                                disabled>
@@ -172,7 +173,7 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for="">SQ-YRD Price ($)</label>
+                                                        <label for=""><strong> SQ-YRD Price ($)</strong></label>
                                                         <input type="text" class="form-control" id="sq-yrd"
                                                             value=""
                                                                disabled>
@@ -180,7 +181,7 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for="">EXT Price ($)</label>
+                                                        <label for=""><strong> EXT Price ($)</strong></label>
                                                         <input type="text" class="form-control" id="sq-ext"
                                                             value=""
                                                                disabled>
@@ -189,7 +190,7 @@
                                                 <div class="col-md-6 col-sm-12">
                                                     <div class="form-group">
                                                         <label for=""><input type="checkbox" name="" id="surging_check">
-                                                            With Serging</label>
+                                                           <strong> With Serging </strong></label>
                                                         <select name="" id="surging_options" class="form-control"
                                                                 disabled="disabled">
                                                             <option value="0" charges="">Select Option</option>
@@ -203,14 +204,14 @@
                                                 </div>
                                                 <div class="col-md-6 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for="">Serging Charges ($)</label>
+                                                        <label for=""><strong> Serging Charges ($)</strong></label>
                                                         <input class="form-control" type="text" name=""
                                                                id="surging_charges" value="" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="">Customer Instructions</label>
+                                                        <label for=""><strong>Customer Instructions</strong> </label>
                                                         <textarea name="" id="" class="form-control"
                                                                   rows="5"></textarea>
                                                     </div>
@@ -241,7 +242,7 @@
                                     </div>
                                     <div class="col-md-6 col-sm-12">
                                         <div class="cut-pieces-wrapper">
-                                            <h4>Show Cut</h4>
+                                            <div style="font-size: 22px;"><strong>Show Cut</strong></div>
                                             <div class="cut-pieces" id="cut-pieces">
                                             </div>
                                         </div>
