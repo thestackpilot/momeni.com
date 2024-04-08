@@ -205,7 +205,7 @@
                                                     </div>
                                                     <div class="col-md-10 mb-2">
                                                         <input class="form-control" type="text" id="" name="Address2"
-                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Address2']}}" required>
+                                                            placeholder="" value="{{$shipping_addresses['ShipToAddresses'][0]['Address2']}}">
                                                     </div>
                                                 </div>
                                                 <div class="row">
