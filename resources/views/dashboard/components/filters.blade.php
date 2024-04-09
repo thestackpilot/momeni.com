@@ -56,7 +56,6 @@ use App\Http\Controllers\CommonController;
             var dateInput = $(this).closest('.input-group').find('.datepicker');
             dateInput.focus();
         });
-        
       $('form.filters-form').on('submit', function() {
          var all_ok = true;
          if ($('[data-required="true"]').length) {
