@@ -34,6 +34,7 @@ function get_table( $table, $tab = '' ) {
     $table_body = '';
 
     if ( $table['tbody'] ) {
+        //dump($table['tbody']);
         foreach($table['tbody'] as $row ) {
             if ($tab && isset($row['tab']) && $tab != $row['tab']  && $tab != 'All') continue;
             $table_body .= '<tr>';
@@ -49,8 +50,20 @@ function get_table( $table, $tab = '' ) {
                         }
                     }
                     $table_body .= '</td>';
-                } else {
-                    $table_body .= '<td>'.$row[$key].'</td>';
+                }
+                else if ($key == 'other_actions') {
+                    $table_body .= '<td>';
+                    foreach($row['other_actions'] as $other_actions) {
+                        if($other_actions['type'] == 'modal') {
+                            $table_body .= '
+                            <button class="btn btn-sm btn-primary other-details" type="button">'.$other_actions['label'].'</button>
+                            ';
+                        }
+                    }
+                    $table_body .= '</td>';
+                }
+                else {
+                     $table_body .= '<td>'.$row[$key].'</td>';
                 }
             }
             $table_body .= '</tr>';
@@ -100,6 +113,20 @@ function get_table( $table, $tab = '' ) {
         </div>
     </div>
 </div>
+
+<div class="modal fade other-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-xl">
+        <div class="modal-content">
+            <div class="modal-header other-detail-modal-header text-center">
+            </div>
+            <div class="modal-body other-detail-modal-body p-5" id="section-details" style="background: #fff;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close-modal other-detail-modal-close" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section('styles')
 @parent
 <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" />
@@ -118,6 +145,10 @@ function get_table( $table, $tab = '' ) {
 
         $('.close-modal').click(function() {
             $('.details-modal').modal('hide');
+        });
+
+        $('.other-detail-modal-close').click(function() {
+            $('.other-detail-modal').modal('hide');
         });
 
         $(document).off('click', '#myTab button').on('click', '#myTab button', function (e) {
@@ -168,7 +199,7 @@ function get_table( $table, $tab = '' ) {
             });
             $('.details-modal .modal-header').html(`
                 <h1 class="col-md-12 text-center">
-                   
+
                     <form action="{{ route('dashboard.orders-print-download') }}" method="POST" target="_blank">
                         @csrf
                         <button type="submit" class="btn btn-secondary" style="float: right;">Print</button>
@@ -240,11 +271,16 @@ function get_table( $table, $tab = '' ) {
                                         $('.table.data-table:visible').attr('data-tab-name') != json.data[i]['tab'] &&
                                         $('.table.data-table:visible').attr('data-tab-name') != 'All'
                                     ) continue;
-                                    
+
                                     if (json.data[i]['actions'][0]['type'] == 'modal')
                                         json.data[i]['actions'] = `
                                             <button class="btn btn-sm btn-primary view-details" type="button">${json.data[i]['actions'][0]['label']}</button>
                                             <span class="row-details" style="display: none !important;">${JSON.stringify(json.data[i]['details'])}</span>
+                                        `;
+
+                                    if (json.data[i]['other_actions'][0]['type'] == 'modal')
+                                        json.data[i]['other_actions'] = `
+                                            <button class="btn btn-sm btn-primary other-details" type="button">${json.data[i]['other_actions'][0]['label']}</button>
                                         `;
 
                                     data.push(json.data[i]);
@@ -254,7 +290,7 @@ function get_table( $table, $tab = '' ) {
                                     json.recordsFiltered = data.length;
                                     json.recordsTotal = data.length;
                                 }
-                                
+
                                 return data;
                             }
                         },
@@ -270,7 +306,7 @@ function get_table( $table, $tab = '' ) {
         }
 
         initTable('');
-        
+
         function getDetails(section) {
             var modal_body = '';
             if (section.length < 1) {
@@ -294,7 +330,7 @@ function get_table( $table, $tab = '' ) {
                         if ( index == 'href' )
                         {
                             // continue;
-                        } 
+                        }
                         else
                         {
                             if( index == 'ImageName' && row[index] !== '')
@@ -320,6 +356,45 @@ function get_table( $table, $tab = '' ) {
 
             return modal_body;
         }
+
+        $(document).on('click', '.other-details', function(){
+            const url = `http://localhost:8000/dashboard/order_report`;
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    success: function(response) {
+                        $(".other-detail-modal").modal("show");
+                        var modalBody = $(".modal-body");
+                        $(".other-detail-modal-header").html("<h4>Report Details</h4>");
+
+                        var obj = document.createElement('object');
+                        obj.style.width = '100%';
+                        obj.style.height = '842pt';
+                        obj.type = 'application/pdf';
+                        obj.data = 'data:application/pdf;base64,' + response;
+                        document.body.appendChild(obj);
+                        console.log(obj);
+                        $(".other-detail-modal-body").append(obj);
+
+                        var link = document.createElement('a');
+                        link.innerHTML = 'Download Report';
+                        link.className = 'btn btn-primary my-3 py-3';
+                        link.download = 'Report.pdf';
+                        link.href = 'data:application/octet-stream;base64,' + response;
+                        document.body.appendChild(link);
+                        //$(".other-detail-modal-body").append(link);
+                    },
+                    error: function( error) {
+                        console.error("Error fetching", error);
+                    }
+                });
+        });
+
     });
 </script>
 @endsection
