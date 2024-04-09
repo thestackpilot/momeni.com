@@ -358,7 +358,7 @@ function get_table( $table, $tab = '' ) {
         }
 
         $(document).on('click', '.other-details', function(){
-            const url = `http://localhost:8000/dashboard/order_report`;
+            const url = "{{ route('dashboard.orderreport') }}";
                 $.ajax({
                     url: url,
                     type: "GET",
