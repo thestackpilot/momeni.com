@@ -53,6 +53,11 @@ use App\Http\Controllers\CommonController;
 <script>
    $(document).ready(function() {
       $('form.filters-form').on('submit', function() {
+        $('.bi-calendar').on('click', function() {
+            var dateInput = $(this).closest('.input-group').find('.datepicker');
+            dateInput.focus();
+        });
+
          var all_ok = true;
          if ($('[data-required="true"]').length) {
             $('[data-required="true"]').each(function() {

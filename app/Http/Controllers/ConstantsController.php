@@ -19,8 +19,8 @@ class ConstantsController extends RootController
     const ALLOWED_DECIMALS = 2;
 
     const ALLOWED_FILTER_OPERATIONS = [
-        'LIKE'     => 'Like',
-        'NOT LIKE' => 'Not Like',
+        'LIKE'     => 'Contains',
+        'NOT LIKE' => 'Does not contain',
         '='        => 'Equals'
     ];
 
