@@ -2,7 +2,7 @@
   'app' => 
   array (
     'name' => 'Momeni',
-    'env' => 'local',
+    'env' => 'staging',
     'debug' => true,
     'url' => 'http://localhost',
     'asset_url' => NULL,
@@ -177,7 +177,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\framework/cache/data',
+        'path' => '/var/www/momeni.com/public_html/storage/framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -298,7 +298,7 @@
         'port' => '3306',
         'database' => 'momeni',
         'username' => 'root',
-        'password' => '',
+        'password' => 'Jess@54788',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -318,7 +318,7 @@
         'port' => '3306',
         'database' => 'momeni',
         'username' => 'root',
-        'password' => '',
+        'password' => 'Jess@54788',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -333,7 +333,7 @@
         'port' => '3306',
         'database' => 'momeni',
         'username' => 'root',
-        'password' => '',
+        'password' => 'Jess@54788',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -377,13 +377,13 @@
       array (
         'Montserrat' => 
         array (
-          'normal' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\public\\/fonts/static/Montserrat-Regular.ttf',
+          'normal' => '/var/www/momeni.com/public_html/public/fonts/static/Montserrat-Regular.ttf',
         ),
       ),
-      'font_dir' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\public\\/fonts/static',
-      'font_cache' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\public\\/fonts/static',
-      'temp_dir' => 'C:\\Users\\immoh\\AppData\\Local\\Temp',
-      'chroot' => 'A:\\Ashtex\\VCS_Momeni\\momeni',
+      'font_dir' => '/var/www/momeni.com/public_html/public/fonts/static',
+      'font_cache' => '/var/www/momeni.com/public_html/public/fonts/static',
+      'temp_dir' => '/tmp',
+      'chroot' => '/var/www/momeni.com/public_html',
       'enable_font_subsetting' => false,
       'pdf_backend' => 'CPDF',
       'default_media_type' => 'screen',
@@ -406,12 +406,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\app',
+        'root' => '/var/www/momeni.com/public_html/storage/app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\app/storage',
+        'root' => '/var/www/momeni.com/public_html/storage/app/storage',
         'url' => '/storage',
         'visibility' => 'public',
       ),
@@ -428,7 +428,7 @@
     ),
     'links' => 
     array (
-      'A:\\Ashtex\\VCS_Momeni\\momeni\\public\\storage' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\app/storage',
+      '/var/www/momeni.com/public_html/public/storage' => '/var/www/momeni.com/public_html/storage/app/storage',
     ),
   ),
   'hashing' => 
@@ -462,13 +462,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\logs/laravel.log',
+        'path' => '/var/www/momeni.com/public_html/storage/logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\logs/laravel.log',
+        'path' => '/var/www/momeni.com/public_html/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -518,7 +518,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\logs/laravel.log',
+        'path' => '/var/www/momeni.com/public_html/storage/logs/laravel.log',
       ),
     ),
   ),
@@ -575,7 +575,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'A:\\Ashtex\\VCS_Momeni\\momeni\\resources\\views/vendor/mail',
+        0 => '/var/www/momeni.com/public_html/resources/views/vendor/mail',
       ),
     ),
   ),
@@ -654,7 +654,7 @@
     'lifetime' => '240',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\framework/sessions',
+    'files' => '/var/www/momeni.com/public_html/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -674,9 +674,9 @@
   array (
     'paths' => 
     array (
-      0 => 'A:\\Ashtex\\VCS_Momeni\\momeni\\resources\\views',
+      0 => '/var/www/momeni.com/public_html/resources/views',
     ),
-    'compiled' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\framework\\views',
+    'compiled' => '/var/www/momeni.com/public_html/storage/framework/views',
   ),
   'flare' => 
   array (
@@ -825,7 +825,7 @@
     ),
     'temporary_files' => 
     array (
-      'local_path' => 'A:\\Ashtex\\VCS_Momeni\\momeni\\storage\\framework/cache/laravel-excel',
+      'local_path' => '/var/www/momeni.com/public_html/storage/framework/cache/laravel-excel',
       'local_permissions' => 
       array (
       ),
