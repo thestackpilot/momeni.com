@@ -169,7 +169,7 @@ use App\Http\Controllers\CommonController;
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Size: {{$item -> item_size}}</p>
                                     </div>
-                                    @if($item->ATSQ <= 0 )
+                                     @if($item->item_atsq <= 0 && !$item->oak_item)
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Backorder/ETA: {{date('Y-m-d', strtotime($item -> item_eta))}}</p>
                                     </div>
@@ -323,9 +323,7 @@ use App\Http\Controllers\CommonController;
                                  <div class="d-flex flex-row justify-content-between column-gap-20 mb-4">
                                     <div class="d-flex flex-column fullwidth">
                                        <label class="p-0 m-0 mb-3">State <span class="color-red">*</span> </label>
-                                       <select class="form-control bg-white" name="State" aria-describedby="State" required id="state_dropdown">
-                                        <option value="">Select a state*</option>
-                                    </select>
+                                        <input type="text" data-required="true" class="form-control bg-white" name="State" maxlength="50" aria-describedby="State" placeholder="State*">
                                 </div>
                                     <div class="d-flex flex-column fullwidth">
                                        <label class="p-0 m-0 mb-3">City <span class="color-red">*</span> </label>
@@ -336,12 +334,7 @@ use App\Http\Controllers\CommonController;
                               <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
                                  <div class="d-flex flex-column fullwidth">
                                     <label class="p-0 m-0 mb-3">Country <span class="color-red">*</span> </label>
-                                    <select class="form-control bg-white" name="Country" aria-describedby="Country" required id="country_dropdown">
-                                        <option value="">Select a country*</option>
-                                        @foreach($countries['Countries'] as $row)
-                                        <option value="{{$row['OriginCode']}}">{{$row['Description']}}</option>
-                                        @endforeach
-                                    </select>
+                                     <input type="text" data-required="true" name="country" maxlength="30" class="form-control bg-white" aria-describedby="Country" placeholder="Country*">
                                  </div>
                                  <div class="d-flex flex-column fullwidth">
                                     <label class="p-0 m-0 mb-3">Postal Code <span class="color-red">*</span> </label>
@@ -849,65 +842,6 @@ use App\Http\Controllers\CommonController;
             update_active_step( 4 );
          }
       });
-
-    //   console.log("hello " + "{{$customer_details['CustomerDetail']['Country']}}");
-            if("{{$customer_details['CustomerDetail']['Country']}}"){
-            var selectedCountry = "{{$customer_details['CustomerDetail']['Country']}}";
-            $('#country_dropdown option').each(function() {
-                if ($(this).text() === selectedCountry) {
-                    console.log(selectedCountry);
-                    $(this).prop('selected', true);
-                    $.ajax({
-                    url: "{{route('checkout.states', ['country' => $customer_details['CustomerDetail']['Country']])}}",
-                    type: 'POST',
-                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                    dataType: 'json',
-                    success: function(response) {
-                        $('#state_dropdown').empty();
-                        $('#state_dropdown').append('<option value="">Select a state*</option>');
-                        $.each(response, function(index, value) {
-                        var option = $('<option>', {
-                            value: value.StateID,
-                            text: value.StateName
-                        });
-                        if (value.StateName == "{{$customer_details['CustomerDetail']['State']}}") {
-                            option.prop('selected', true);
-                        }
-                        $('#state_dropdown').append(option);
-                    });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-                }
-            });
-            }
-
-            $('#country_dropdown').change(function() {
-            var selectedCountry = $(this).find('option:selected').text();
-            $.ajax({
-                url: "{{route('checkout.states')}}",
-                    type: 'POST',
-                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-                    dataType: 'json',
-                data: {country: selectedCountry},
-                success: function(response) {
-                    $('#state_dropdown').empty();
-                        $('#state_dropdown').append('<option value="">Select a state*</option>');
-                        $.each(response, function(index, value) {
-                        var option = $('<option>', {
-                            value: value.StateID,
-                            text: value.StateName
-                        });
-                        $('#state_dropdown').append(option);
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
 
       $('.go-to-payment').on('click', function() {
          shipping_address = '';
