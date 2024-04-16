@@ -599,7 +599,6 @@
     }
 
     function getDetailedProductChart(color){
-        console.log('color', color);
         var itemsETAValue = $('#items-eta-data').val();
         var itemsETA = JSON.parse(itemsETAValue);
         var filteredData = itemsETA.filter(function(item) {
@@ -639,7 +638,6 @@
             var productChartfilteredData = productChartValue.filter(function(i) {
                 return i.ItemColor === color;
             });
-            console.log('unauth filter data', productChartfilteredData);
             $('#product-detailed .product-color').empty();
             filteredData.forEach(function(itemData) {
                 var row = '<tr class="product-color">' +
