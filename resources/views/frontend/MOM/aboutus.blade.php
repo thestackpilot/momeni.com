@@ -5,13 +5,13 @@
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
 
-@endphp 
+@endphp
 @extends('frontend.'.$active_theme -> theme_abrv.'.layouts.app')
 @section('title','About Us')
 @section('content')
 <div class="wrapper">
     @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
-    
+
 <section class="inner-banner our-story">
     <div class="container">
         <div class="row">
@@ -30,7 +30,7 @@ use App\Http\Controllers\CommonController;
             <div class="col-lg-6 col-md-6 col-sm-12 col-12 text-justify order-md-1 order-2">
               {!!$pages -> about_us -> sections -> about_us_items -> about_us_description_1!!}
             </div>
-            <div class="col-lg-6 col-md-6  col-sm-12 order-md-2 order-1"> 
+            <div class="col-lg-6 col-md-6  col-sm-12 order-md-2 order-1">
               <!-- <img src="https://lrhome.us/media/images/rug-makker2.jpg" class="catlog">  -->
               <img src="{{$pages -> about_us -> sections -> about_us_items -> about_us_image_1}}" class="catlog" />
             </div>
@@ -39,7 +39,7 @@ use App\Http\Controllers\CommonController;
         <section class="about-story">
           <div class="container">
             <div class="row align-items-center" style="margin-top: 10px;">
-              <div class="col-lg-6 col-md-6  col-sm-12"> 
+              <div class="col-lg-6 col-md-6  col-sm-12">
                 <!-- <img src="https://lrhome.us/media/images/rug-makker3.jpg" class="catlog">  -->
                 <img src="{{$pages -> about_us -> sections -> about_us_items -> about_us_image_2}}" class="catlog" />
               </div>
@@ -51,7 +51,7 @@ use App\Http\Controllers\CommonController;
               <div class="col-lg-6 col-md-6 col-sm-12 col-12 text-justify order-md-1 order-2">
                 {!!$pages -> about_us -> sections -> about_us_items -> about_us_description_3!!}
               </div>
-              <div class="col-lg-6 col-md-6  col-sm-12 order-md-2 order-1"> 
+              <div class="col-lg-6 col-md-6  col-sm-12 order-md-2 order-1">
                 <!-- <img src="https://lrhome.us/media/images/rug-makker4.jpg" class="catlog">  -->
                 <img src="{{$pages -> about_us -> sections -> about_us_items -> about_us_image_3}}" class="catlog" />
               </div>
@@ -64,8 +64,8 @@ use App\Http\Controllers\CommonController;
             <div class="partner-apply" id="partner-apply">
                 <div class="position-relative wrap">
                     <div class="pt-apply-title"><span>{{$pages -> home -> sections -> partnership -> title}}</span></div>
-                    <div class="pt-apply-button"> 
-                        <a href="{{$pages -> home -> sections -> partnership -> button_url}}" class="m-0">{{$pages -> home -> sections -> partnership -> button_text}}</a> 
+                    <div class="pt-apply-button">
+                        <a href="{{$pages -> home -> sections -> partnership -> button_url}}" class="m-0">{{$pages -> home -> sections -> partnership -> button_text}}</a>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@ use App\Http\Controllers\CommonController;
           <div class="partner-apply grey-row" id="partner-apply">
             <div class="wrap">
               <div class="section-title"><span>apply to become a LR HOME partner</span></div>
-              <div class="content"> 
+              <div class="content">
                 <p>Sign up to place orders and see pricing</p>
                 <div class="actions-toolbar">
                   <div class="primary darkbtn">
@@ -103,7 +103,7 @@ use App\Http\Controllers\CommonController;
         }
     </style>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> --}}
     <!-- <script src="assets/js/popper.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script src="{{url('/')}}/js/main.js"></script>

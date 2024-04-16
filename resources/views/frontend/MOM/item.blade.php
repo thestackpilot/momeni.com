@@ -229,6 +229,8 @@
 <!-- product size Chart -->
 
                     @if (isset($items['ItemsETA']) && $items['ItemsETA'] && !$is_oak)
+                    @php $jsonItemsETA = json_encode($items['ItemsETA']); @endphp
+                    <input type="hidden" id="items-eta-data" value="{{ $jsonItemsETA }}">
                     @auth()
                             <div class="m-auto mt-5 p-0 text-center product_chart">
                                 <div id="prodAvlChart" class="prodAvlChart" style="display: block; width:100%; align:center; margin-top:30px;display: block;">
@@ -238,7 +240,7 @@
                                     <div style="overflow-x:auto; overflow-x:auto; height:100%;">
                                         <table id="tblProductSizes" class="table" border="0" cellpadding="3"
                                             cellspacing="2" width="100%">
-                                            <tbody>
+                                            <tbody id="filtered-table-body">
                                                 <tr style="vertical-align: middle;border-top: 1px solid #a5a9aa;">
                                                     <td width="15%" align="center" class="PAChart-Size PAChart-text-Heading">Size</td>
                                                     <td width="15%" align="center"
@@ -253,7 +255,7 @@
                                                         <td width="13%" align="center" class="PAChart-Price PAChart-text-Heading">Price</td>
                                                     @endif
                                                 </tr>
-                                                @foreach ($items['ItemsETA'] as $itemETA)
+                                                {{-- @foreach ($items['ItemsETA'] as $itemETA)
                                                     <tr class="">
                                                         <input type="hidden" class="cart_item_id"
                                                             name="product_cart_item_id[]"
@@ -293,7 +295,7 @@
                                                             </td>
                                                         @endif
                                                     </tr>
-                                                @endforeach
+                                                @endforeach --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -301,6 +303,8 @@
                             </div>
                         @endauth
                         @guest
+                        @php $jsonItemsETA = json_encode($items['ItemsETA']); @endphp
+                        <input type="hidden" id="items-eta-product" value="{{ $jsonItemsETA }}">
                         <div class="m-auto p-0 text-center product_chart_main">
                             <div id="" class="prodAvlChart">
                                 <div class="mb-4 mt-4">
@@ -309,7 +313,7 @@
                                 <div style="overflow-x:auto;">
                                     <table id="tblProductSizes" class="table" border="0" cellpadding="3"
                                         cellspacing="2" width="100%">
-                                        <tbody>
+                                        <tbody id="product-detailed">
                                             <tr style="vertical-align: middle;border-top: 1px solid #a5a9aa;">
                                                 <td width="15%" align="center"
                                                     class="PAChart-Size PAChart-text-Heading">{{ $size_heading }}</td>
@@ -319,7 +323,7 @@
                                                 <td width="15%" align="center"
                                                     class="PAChart-Color PAChart-text-Heading">Color</td>
                                             </tr>
-                                            @foreach ($items['ItemsETA'] as $itemETA)
+                                            {{-- @foreach ($items['ItemsETA'] as $itemETA)
                                                 <tr class="">
                                                     <td width="15%" align="center" class="PAChart-Size">
                                                         {{ $itemETA['Size'] }}</td>
@@ -329,7 +333,7 @@
                                                     <td width="15%" align="center" class="PAChart-Color">
                                                         {{ $itemETA['ItemColor'] }}</td>
                                                 </tr>
-                                            @endforeach
+                                            @endforeach --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -532,6 +536,7 @@
     function refresh_product(ItemID) {
         item_object.Items.forEach(function(item, index) {
             if (item.ItemID == ItemID) {
+                getDetailedProductChart(item.ItemColor);
                 $('#product-main-image').fadeOut(400, function() {
                     $("#image_0").attr('src', item.ImageNameArray[0]).attr('onerror', "this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'");
                 }).fadeIn(400);
@@ -591,6 +596,60 @@
                 }
             }
         });
+    }
+
+    function getDetailedProductChart(color){
+        console.log('color', color);
+        var itemsETAValue = $('#items-eta-data').val();
+        var itemsETA = JSON.parse(itemsETAValue);
+        var filteredData = itemsETA.filter(function(item) {
+            return item.ItemColor === color;
+        });
+        $('#filtered-table-body .item-color').empty();
+        filteredData.forEach(function(itemETA) {
+            var basePrice = "{{ ConstantsController::CURRENCY }}" + parseFloat(itemETA.BasePrice).toFixed(parseInt("{{ ConstantsController::ALLOWED_DECIMALS }}"));
+            var row = '<tr class="item-color" id="chart-remove">' +
+                    '<input type="hidden" class="cart_item_id" name="product_cart_item_id[]" value="' + itemETA.ItemID + '">' +
+                    '<input type="hidden" class="cart_design_id" name="cart_design_id[]" value="' + itemETA.DesignID + '">' +
+                    '<input type="hidden" class="cart_customer_id" name="cart_customer_id" value="">' +
+                    '<input type="hidden" class="cart_item_name" name="cart_item_name[]" value="' + itemETA.ItemName + '">' +
+                    '<input type="hidden" class="cart_item_quantity" name="cart_item_quantity" value="">' +
+                    '<input type="hidden" class="cart_item_price" name="cart_item_price[]" value="' + itemETA.BasePrice + '">' +
+                    '<input type="hidden" class="cart_item_color" name="cart_item_color[]" value="' + itemETA.ItemColor + '">' +
+                    '<input type="hidden" class="cart_item_size" name="cart_item_size[]" value="' + itemETA.Size + '">' +
+                    '<input type="hidden" class="cart_item_currency" name="cart_item_currency[]" value="">' +
+                    '<input type="hidden" class="cart_item_image" name="cart_item_image[]" value="' + itemETA.ImageName + '">' +
+                    '<input type="hidden" class="cart_item_eta" name="cart_item_eta[]" value="">' +
+                    '<td width="15%" align="center" class="PAChart-Size">' + itemETA.Size + '</td>' +
+                    '<td width="15%" align="center" class="PAChart-Dimensions-Weight">' + itemETA.ShippingDimension + '<br />' + itemETA.DimentionalWeight + '</td>' +
+                    '<td width="10%" align="center" class="PAChart-Color">' + itemETA.ItemColor + '</td>' +
+                    '<td width="10%" align="center" class="PAChart-InStock">' + itemETA.QtyInStock + '</td>' +
+                    '<td width="13%" align="center" class="PAChart-Within30Days PAChart-text-Within30Days">' + itemETA.QtyThirtyDay + '</td>' +
+                    '<td width="13%" align="center" class="PAChart-Within2Months">' + itemETA.QtyTwoMonth + '</td>' +
+                    '<td width="13%" align="center" class="PAChart-Over2Months">' + itemETA.QtyOverTwoMonth + '</td>';
+                    @if(!in_array('.PAChart-Price', $dont_show))
+                        row += '<td width="13%" align="center" class="PAChart-Price">' + basePrice +'</td>';
+                    @endif
+            row += '</tr>';
+            $('#filtered-table-body').append(row);
+        });
+        var productChart = $('#items-eta-product').val() !== '' ? $('#items-eta-product').val() : '';
+        if(typeof productChart !== 'undefined'){
+            var productChartValue = JSON.parse(productChart);
+            var productChartfilteredData = productChartValue.filter(function(i) {
+                return i.ItemColor === color;
+            });
+            console.log('unauth filter data', productChartfilteredData);
+            $('#product-detailed .product-color').empty();
+            filteredData.forEach(function(itemData) {
+                var row = '<tr class="product-color">' +
+                '<td width="15%" align="center" class="PAChart-Size">' + itemData.Size + '</td>' +
+                '<td width="15%" align="center" class="PAChart-Dimensions-Weight">' + itemData.ShippingDimension + '<br />' + itemData.DimentionalWeight + '</td>' +
+                '<td width="15%" align="center" class="PAChart-Color">' + itemData.ItemColor + '</td>';
+                row += '</tr>';
+                $('#product-detailed').append(row);
+            });
+        }
     }
 
     function hide_components(class_arr) {

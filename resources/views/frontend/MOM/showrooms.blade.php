@@ -5,7 +5,7 @@
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
 
-@endphp 
+@endphp
 @extends('frontend.'.$active_theme -> theme_abrv.'.layouts.app')
 @section('title','Show Rooms')
 @section('content')
@@ -24,8 +24,8 @@ use App\Http\Controllers\CommonController;
                 <div class="column">
                     @if(isset($showrooms -> mom_showrooms))
                         @foreach($showrooms -> mom_showrooms -> metas as $showroom)
-                        
-                        <div class="showrom-inner-div"> 
+
+                        <div class="showrom-inner-div">
                             <div class="col-lg-6 col-md-6 col-sm-12 showroom-image">
                             @if(!empty($showroom->image))
                                 <img class="img-full" src="{{asset($showroom->image)}}" alt="{{ $showroom -> title }}">
@@ -36,7 +36,7 @@ use App\Http\Controllers\CommonController;
                                 <p class="showroom-address">{!! $showroom -> address !!}</p>
                             </div>
                         </div>
-                        
+
                         @endforeach
                     @endif
                 </div>
@@ -57,7 +57,7 @@ use App\Http\Controllers\CommonController;
         }
     </style>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> --}}
     <!-- <script src="assets/js/popper.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script src="{{url('/')}}/js/main.js"></script>
