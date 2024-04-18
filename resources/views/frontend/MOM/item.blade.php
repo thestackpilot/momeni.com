@@ -87,8 +87,7 @@
                                 <input type="hidden" id="cart_item_currency" name="cart_item_currency" value="">
                                 <input type="hidden" id="cart_item_image" name="cart_item_image" value="">
                                 <input type="hidden" id="cart_item_eta" name="cart_item_eta" value="">
-                                <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}">
-
+                                <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '1' : '0'}}">
                                 <h3 class="price {{isset($is_oak) && $is_oak ? 'd-none' : ''}}" id="product-heading">{{$items['Items'][0]['ItemName']}}<b>{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
 
                                 <div class="quickview-peragraph">
@@ -103,7 +102,7 @@
                                             $field['Value'] == '-' ||
                                             $field['Value'] == 'N/A' ||
                                             !strlen($field['Value'])
-                                        )
+                                            )
                                         @continue
                                         @endif
                                         <tr class="UDField">
@@ -1101,10 +1100,9 @@
         if ((/^\+?[1-9]\d*/).test(parseInt($('#item_qty').val()))) {
             $.ajax({
                 method: 'POST',
-                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                 url: '{{route("frontend.cart.add")}}',
                 data: {
-                    // '_token': '{{csrf_token()}}',
+                    '_token': '{{csrf_token()}}',
                     'cart_item_id': $('#cart_item_id').val(),
                     'cart_customer_id': $('#cart_customer_id').val(),
                     'cart_item_name': $('#cart_item_name').val(),
@@ -1114,8 +1112,8 @@
                     'cart_item_size': $('#cart_item_size').val(),
                     'cart_item_currency': $('#cart_item_currency').val(),
                     'cart_item_image': $('#cart_item_image').val(),
-                    // 'cart_item_data': $('#item_json').html(),
-                    // 'cart_item_data': $('#cart_item_oak').val(),
+                    'cart_item_data': $('#item_json').html(),
+                    'cart_item_oak': $('#cart_item_oak').val(),
                     'cart_item_eta': $('#cart_item_eta').val()
                 },
                 success: function(response) {

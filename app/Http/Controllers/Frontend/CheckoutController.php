@@ -225,7 +225,6 @@ class CheckoutController extends FrontendController
         }
 
         $this->append_breadcrumbs( 'Checkout', route( 'frontend.checkout' ) );
-            // dd($customer_details);
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.checkout', [
             'countries'           => $countries,
             'states'              => $states,
@@ -234,7 +233,6 @@ class CheckoutController extends FrontendController
             'default_ship_via_id' => $default_ship_via_id,
             'shipping_addresses'  => $shipping_addresses,
             'payment_terms_list'  => $payment_terms_list,
-            'customer_details'    => $customer_details,
             'customer_comment'    => isset( $customer_details['CustomerDetail']['Comment'] ) ? $customer_details['CustomerDetail']['Comment'] : '',
             'payment_term'        => isset( $customer_details['CustomerDetail']['PaymentTerm'] ) ? $customer_details['CustomerDetail']['PaymentTerm'] : '',
             'payment_options'     => isset( $customer_payment_options['customers'] ) && count( $customer_payment_options['customers'] ) > 0 ? $customer_payment_options['customers'][0] : []
