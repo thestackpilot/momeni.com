@@ -921,15 +921,11 @@
 
         //updated
         function add_cut_pieces() {
-            var itemId = $("#item_id").val();
-            let length = parseInt($("#Tlength").val()) * 12 + parseInt($("#TlengthInch").val());
-            // let lengthInches =;
-            // totalLength = length + lengthInches;
-            console.log(length);
-            let width = parseInt($("#Twidth").val()) * 12 + parseInt($("#TwidthInch").val());
-            // console.log($("#serging_check").val());
-
-            let sqtft = length * width;
+            let actual_length = parseInt($("#Tlength").val());
+            let actual_width = parseInt($("#Twidth").val())
+            let length = actual_length * 12 + parseInt($("#TlengthInch").val());
+            let width = actual_width * 12 + parseInt($("#TwidthInch").val());
+            let sqtft = parseFloat(actual_length + "." + $("#TlengthInch").val()) * parseFloat(actual_width +  "." + $("#TwidthInch").val());
             $.ajax({
                 url: "{{ route('broadloom.cutPiece') }}",
                 method: 'POST',
