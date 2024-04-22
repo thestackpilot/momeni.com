@@ -778,6 +778,7 @@ class GenericReportsController extends DashboardController
             }
 
             $view_orders = $this->ApiObj->View_Order( $request->customer, $request->external_number, $request->from_date, $request->to_date, $request->sales_rep, $page, $page_size, $request->customer_po, $request->order_number );
+          //  dd($view_orders);
             $table       = array( 'thead' => [
                 'order_no'     => 'Order Number',
                 'customer_id'  => 'Customer ID',
@@ -806,6 +807,9 @@ class GenericReportsController extends DashboardController
                         'order_date'   => isset( $view_order['Header']['OrderDate'] ) ? CommonController::get_date_format( $view_order['Header']['OrderDate'] ) : 'N/A',
                         'actions'      => [['type' => 'modal', 'label' => 'View Details']],
                         'other_actions' => [['type' => 'modal', 'label' => 'View Reports']],
+                        'other_actions_details' => [
+                            'OrderNo'   => $view_order['Header']['OrderNo'],
+                        ],
                         'details'      => [
                             'heading' => $view_order['Header']['OrderNo'].' : '.$view_order['Header']['CustomerID'],
                             'body'    => [
@@ -1216,20 +1220,22 @@ class GenericReportsController extends DashboardController
         return view( 'dashboard.sales-history' );
     }
 
-    public function order_report(Request $request){
+    public function order_report(Request $request)
+    {
+        try {
+            $SalesRepId = $request->has('SalesRepId') ? $request->SalesRepId : '';
+            $CustomerId = $request->has('CustomerId') ? $request->CustomerId : '';
+            $MenuTag = $request->has('MenuTag') ? $request->MenuTag : 'View Order';
+            $DocumentNo = $request->has('DocumentNo') ? $request->DocumentNo : 0000;
 
-        $sales_rep = $request->sales_rep ? $request->sales_rep : "Bett01";
-        $report_title = $request->report_title ? $request->report_title : "mixC2_CustomerListing_ROLL";
-        $customer = $request->customer ? $request->customer : null;
-        $from_date = $request->has('from_date') ? $request->from_date : Carbon::now()->format('Y-m-d');
-        $to_date = $request->has('to_date') ? $request->to_date : Carbon::now()->format('Y-m-d');
-
-        $report = $this->ApiObj->Get_SalesReport( $sales_rep, $customer, $report_title, $from_date, $to_date, $request->quality, $request->item_id, $request->collection, $request->design);
-
-        if( $report['Success'] )
-        {
-            View::share( 'ReportData', $report['ReportData'] );
-            return  $report['ReportData'];
+            $report = $this->ApiObj->Get_ViewDocumentsReport($SalesRepId, $CustomerId, $MenuTag, $DocumentNo);
+            if( $report['document']['Success'] )
+            {
+                View::share( 'ReportData', $report['document']['ReportData'] );
+                return $report['document']['ReportData'];
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred. Please try again later.']);
         }
     }
 
