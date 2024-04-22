@@ -655,6 +655,13 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Get_ShowCut', 'Cut Pieces', $post_array, ['ShowCuts'] );
     }
 
+    public function RemoveCutPiece( $TempSalesOrderNo = '', $CutPieceID = '', $RollID = '', $LineNo = '' )
+    {
+        $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo, 'CutPieceID' => $CutPieceID, 'RollID' => $RollID, 'LineNo' => $LineNo );
+
+        return $this->Post_API_Signature( 'RemoveCutPiece', 'Remove Cut Pieces', $post_array, ['OutPut'] );
+    }
+
     public function __construct()
     {
         parent::__construct();
