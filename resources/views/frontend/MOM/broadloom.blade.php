@@ -919,6 +919,34 @@
             // }
         }
 
+        function removeCutPiece(id, cut_piece_id, roll_id, line_no) {
+            $.ajax({
+                url: "{{ route('broadloom.removeCutPiece') }}",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    TempSalesOrderNo: $('#TempSalesOrderNo').val(),
+                    RollID: roll_id,
+                    CutPieceID: cut_piece_id,
+                    line_no: line_no
+                },
+                type: 'POST',
+                success: function (response) {
+                    if (response.Success) {
+                        $('#' + id).remove();
+                        toastr.success('Cut Piece Removed', {
+                            hideDuration: 10000,
+                            closeButton: true,
+                        });
+                    } else {
+                        toastr.error('Remnant cannot be removed', {
+                            hideDuration: 10000,
+                            closeButton: true,
+                        });
+                    }
+                }
+            })
+        }
+
         //updated
         function add_cut_pieces() {
             let actual_length = parseInt($("#Tlength").val());
@@ -957,7 +985,9 @@
                         $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
                         var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
                         var sizes = [];
+                        var line_no = 1;
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
+                            console.log(item)
 
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
@@ -965,14 +995,15 @@
                             let widthInches = item.ATSWidth % 12;
 
                             var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
+                            var item_id = item.ItemID.replace('-', '_');
                             divContent +=
-                                '<div class="badge badge-default broadloom-badge" style="background-color:' +
+                                '<div class="badge badge-default broadloom-badge" id="' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + line_no +'" style="background-color:' +
                                 color + '">';
                             var size = {};
                             size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
                                 widthInches + `"`;
                             divContent += size.size;
-                            divContent += '</div>';
+                            divContent += '<a href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + line_no + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
 
                             let totalLengthInInches = lengthFeet * 12 + lengthInches;
                             let totalWidthInInches = widthFeet * 12 + widthInches;
@@ -997,11 +1028,10 @@
                                 console.log('in size');
                                 sizes.push(size);
                             }
+                            line_no = line_no + 1;
                         });
 
                         divContent += `</div>`;
-                        console.log(sizes);
-                        console.log(JSON.stringify(sizes));
 
                         $('#cut_piece_parent').html(divContent);
                         $('#size_price').val(JSON.stringify(sizes));

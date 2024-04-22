@@ -49,7 +49,7 @@ class ApisController extends RootController
 
         return array( "ATSInfo" => $responseArray['OutPut'] );
     }
-    
+
     public function Get_DesignATS($designId, $customerId = '')
     {
         $post_array    = array('DesignID' => $designId, 'CustomerID' => $customerId);
@@ -645,6 +645,13 @@ class ApisController extends RootController
         $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo );
 
         return $this->Post_API_Signature( 'Get_ShowCut', 'Cut Pieces', $post_array, ['ShowCuts'] );
+    }
+
+    public function RemoveCutPiece( $TempSalesOrderNo = '', $CutPieceID = '', $RollID = '', $LineNo = '' )
+    {
+        $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo, 'CutPieceID' => $CutPieceID, 'RollID' => $RollID, 'LineNo' => $LineNo );
+
+        return $this->Post_API_Signature( 'RemoveCutPiece', 'Remove Cut Pieces', $post_array, ['OutPut'] );
     }
 
     public function __construct()

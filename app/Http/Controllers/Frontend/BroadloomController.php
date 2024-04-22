@@ -222,4 +222,8 @@ class BroadloomController extends FrontendController
         $html .= '</div>';
         return $html;
     }
+
+    public function RemoveCutPiece(Request $request) {
+        return $this->ApiObj->RemoveCutPiece($request->TempSalesOrderNo, $request->CutPieceID ? $request->CutPieceID  : '', $request->RollID ? $request->RollID : '', $request->line_no);
+    }
 }

@@ -1092,8 +1092,7 @@ console.log('customer_id1: ', customer_id);
         // });
     }
 
-    function pushToCart() {
-
+    function performAddToCart() {
         $('#add_to_cart').addClass('btn-muted');
         $('#cart_item_quantity').val($('#item_qty').val());
         console.log("cart_customer_id: ", $('#cart_customer_id').val());
@@ -1169,6 +1168,35 @@ console.log('customer_id1: ', customer_id);
             });
             $('#add_to_cart').removeClass('btn-muted');
         }
+    }
+
+    function pushToCart() {
+        $.ajax({
+            url: "/check-cart-item/1",
+            type: "GET",
+            success: function (response) {
+                if (response) {
+                    if (confirm('You have already broadloom items, You want to add item will remove previous broadloom items from cart, Are You sure?')) {
+                        $.ajax({
+                            url: "{{ route('delete-cart-items') }}",
+                            type: "GET",
+                            success: function (response) {
+                                if (response) {
+                                    performAddToCart();
+                                } else {
+                                    toastr.error('Someting went wrong', {
+                                        hideDuration: 10000,
+                                        closeButton: true,
+                                    });
+                                }
+                            }
+                        })
+                    }
+                } else {
+                    performAddToCart();
+                }
+            }
+        })
     }
 
     function bindClicks() {
