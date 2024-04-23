@@ -416,7 +416,7 @@
                                                         </label>
                                                         {{-- <input type="text" data-required="true" class="form-control bg-white" name="State" maxlength="50" aria-describedby="State" placeholder="State*"> --}}
                                                         @if(isset($cust_state))
-                                                        <select name="state" id="state_dropdown" class="">
+                                                        <select name="state" id="state_dropdown" class="form-control bg-white">
                                                             <option value="1">1</option>
                                                             <option value="2">2</option>
                                                             <option value="3">3</option>
@@ -441,7 +441,7 @@
                                                     <label class="p-0 m-0 mb-3">Country <span class="color-red">*</span>
                                                     </label>
                                                     @if (isset($countries))
-                                                    <select name="country" id="countries" class="">
+                                                    <select name="country" id="countries" class="form-control bg-white">
                                                         <option value="0">Select a Country</option>
                                                             @foreach ($countries['Countries'] as $row)
                                                             @php
@@ -462,7 +462,7 @@
                                                         @endif
                                                 </div>
                                                 <div class="d-flex flex-column fullwidth">
-                                                    <label class="p-0 m-0 mb-3">Postal Code <span
+                                                    <label class="p-0 m-0 mb-3">Zip Code <span
                                                             class="color-red">*</span> </label>
                                                     <input type="text" data-required="true"
                                                         class="form-control bg-white" name="Zip" maxlength="10"
