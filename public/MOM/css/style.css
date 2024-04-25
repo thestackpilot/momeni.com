@@ -12172,6 +12172,10 @@ input[type="checkbox"].save-update-card {
     text-align: center;
 }
 
+.checkout-dropdown {
+    padding-top: 7px !important;
+}
+
 /* css by asad */
 .lr-register-mode .reg-form-p, .lr-register-mode .reg-main-div,
 .lr-login-mode .login-form-p, .lr-login-mode .login-main-div {
