@@ -254,7 +254,7 @@ use App\Http\Controllers\CommonController;
         $('#'+itemId+' .update-cart-button').show();
     }
 
-    function updateCart(itemId,token,customerId,hideQuantity,isMobile)
+    function updateCart(itemId,token,customerId,hideQuantity,isChk,isMobile)
     {
         var itemNode = typeof isMobile !== "undefined" && isMobile ? "#mob_"+itemId+"__"+customerId : "#"+itemId+"__"+customerId;
         var quantity = $(itemNode+" input").val();
@@ -262,7 +262,9 @@ use App\Http\Controllers\CommonController;
         $(itemNode+" .update-cart-button").hide();
         if (typeof hideQuantity !== "undefined" && hideQuantity)
             $(itemNode+" .cart-actions .qty-styles").removeClass('d-flex').hide();
-
+       
+       console.log(itemNode);
+        console.log("qunatity: ", quantity);
         $(itemNode+" #updating-cart").removeClass('d-none');
 
         if( ! (/^\+?[1-9]\d*/).test(parseInt(quantity)) || parseInt(quantity) < 1 )

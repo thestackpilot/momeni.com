@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Jobs\SendMail;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\OrderPayments;
@@ -173,44 +174,24 @@ class CheckoutController extends FrontendController
     {
         $customer_details    = $shipping_options    = $shippings    = $shipping_addresses    = $payment_terms_list    = $customer_payment_options    = $countries    = $states    = [];
         $default_ship_via_id = '';
-
-/*
-$countries        = $this->ApiObj->Get_CountriesList();
-$country_id       = 0;
-
-foreach ( $countries['Countries'] as $country )
-{
-
-if ( $country['OriginCode'] == 'US' )
-{
-$country_id = $country['CountryNo'];
-break;
-}
-
-}
-$states = $this->ApiObj->Get_CountryStates( $country_id );
- */
-
+        $countries        = $this->ApiObj->Get_CountriesList();
+        // $states = $this->ApiObj->Get_CountryStates( $country_id );
         if ( Auth::user() && $this->cart_model->get_cart_for_front( $this->ApiObj )['items'] && $this->cart_model->get_cart_for_front( $this->ApiObj )['items'][0] )
         {
             $customer_details   = $this->ApiObj->Get_CustomerDetail(  ( new Cart() )->get_active_cart_customer() );
             $payment_terms_list = $this->ApiObj->Get_PaymentTermsList();
             $shippings          = $this->ApiObj->Get_ShipViaList();
-
             if ( $shippings && $shippings['Success'] == true )
             {
                 $temp = [];
-
                 foreach ( $shippings['ShipVias'] as $shipping )
                 {
                     $temp[$shipping['Description']] = $shipping;
                 }
-
                 ksort( $temp );
                 $shippings['ShipVias'] = $temp;
                 $shippings             = $shipping_options             = $shippings['ShipVias'];
             }
-
             if (
                 $this->active_theme_json->general->payment_method->enabled &&
                 $this->active_theme_json->general->payment_method->gateway == 'paytrace'
@@ -219,11 +200,9 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 $customer_payment_options = $this->paytrace->get_customer(  ( new Cart() )->get_active_cart_customer() );
                 prr( ['customer_payment_options' => $customer_payment_options] );
             }
-
             if ( $payment_terms_list && $payment_terms_list['Success'] )
             {
                 $payment_terms_list = $payment_terms_list['PaymentTerms'];
-
                 foreach ( $payment_terms_list as $payment_term )
                 {
 
@@ -246,7 +225,6 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
         }
 
         $this->append_breadcrumbs( 'Checkout', route( 'frontend.checkout' ) );
-
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.checkout', [
             'countries'           => $countries,
             'states'              => $states,
@@ -273,6 +251,7 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
 
             $payment_success  = false;
             $itemDetail       = [];
+            $cartItems        = [];
             $requestDataArray = $request->all();
             $total_amount     = 0;
 
@@ -342,9 +321,23 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                     'UnitPrice' => $item['item_price'],
                     'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
                 ] );
+
+                array_push( $cartItems, [
+                    'Image'     => str_replace(' ', '%20', $item['item_image']),
+                    'ItemID'    => $item['item_id'],
+                    'Color'     => $item['item_color'],
+                    'Size'      => $item['item_size'],
+                    'OrderQty'  => $item['item_quantity'],
+                    'UnitPrice' => $item['item_price'],
+                    'SubTotal'  => $item['item_total'],
+                    'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+
+                ]);
+
                 $total_amount += $item['item_price'];
             }
-
+            // print_r("<pre>");
+            // print_r($itemDetail); die();
             $order_payment_hash             = md5( json_encode( ['general' => $headers, 'items' => $itemDetail] ) );
             $headers['IsAdvancePayment']    = false;
             $headers['AdvancePaymentAmout'] = 0;
@@ -399,6 +392,49 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                 $successMsg          = str_replace( $matched_string, $updatedString, $successMsg );
                 $response['success'] = 1;
                 $response['msg']     = $successMsg;
+
+                // if ( isset($this->active_theme_json->general->order_ack) && $this->active_theme_json->general->order_ack ) {
+                    // $headers['ShippingCost'] = number_format( $requestDataArray['shipping_cost'], ConstantsController::ALLOWED_DECIMALS, '.', ',' );
+                    $cart_data = [
+                        'shipping' => $headers,
+                        'items'    => $cartItems,
+                        'total'    => number_format( $total_amount, ConstantsController::ALLOWED_DECIMALS, '.', ',' )
+                    ];
+
+                    if(array_key_exists('Instructions',$cart_data['shipping']) == false){
+                        $cart_data['shipping']['Instructions'] = $request->shipping_instructions;
+                    }
+
+                    $cart_data['shipping']['SO_Number'] = $result['ObjectID'];
+
+                    try {
+
+                        if (!empty($cart_data['shipping']['Email'])) {
+//                            SendMail::dispatch( [
+//                                'data'     => $cart_data,
+//                                'slug'     => "Order Confirmed",
+//                                'email'    => ['ahmadqalbi1991@gmail.com', 'techbugs06@gmail.com'],
+////                                'email'    => $cart_data['shipping']['Email'],
+//                                'template' => 'email.order-confirmation',
+//                                // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+//                            ] );
+                        }
+
+//                        SendMail::dispatch( [
+//                            'data'     => $cart_data,
+//                            'slug'     => "Order Confirmed",
+//                            'email'    => ConstantsController::ORDER_NOTIFICATION,
+//                            'template' => 'email.order-confirmation',
+//                            // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+//                        ] );
+
+                        prr( " :: Order Acknowledgment Email Sent :: " );
+                    }
+                    catch ( \Exception $e )
+                    {
+                        prr( "Order Acknowledgment Email Exception :: ".$e->getMessage() );
+                    }
+                // }
             }
             else
             {
@@ -414,6 +450,24 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
                     $this->cart_model->remove_cart_item( Auth::user()->id, ( new Cart() )->get_active_cart_customer(), 0, true );
                     $response['success'] = 1;
                     $response['msg']     = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: '.$order_payment_hash;
+
+                    try {
+                        $order_data = [
+                            'hash'         => $order_payment_hash,
+                            'order-detail' => serialize( [$headers, $itemDetail] )
+                        ];
+
+//                        SendMail::dispatch( [
+//                            'data'     => $order_data,
+//                            'slug'     => 'Web Hook Order',
+//                            'email'    => ConstantsController::WEB_HOOK_EMAIL,
+//                            'template' => 'email.web_hook_email'
+//                        ] );
+                    }
+                    catch ( \Exception $e )
+                    {
+                        prr( "Mail Exception: ".$e->getMessage() );
+                    }
                 }
                 else
                 {
@@ -462,13 +516,6 @@ $states = $this->ApiObj->Get_CountryStates( $country_id );
 
             return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
         }
-        catch ( \Error$e )
-        {
-            prr( ['CheckoutController::ERROR' => $e->getMessage()] );
-
-            return response()->json( ['success' => 0, 'msg' => 'Something went wrong, please try again.'] );
-        }
-
     }
 
     public function pt_security()

@@ -13,8 +13,7 @@ class Cart extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'customer_id', 'item_id', 'item_name', 'item_quantity', 'item_price', 'item_color', 'item_size', 'item_currency', 'item_image', 'item_eta', 'item_data'];
-
+    protected $fillable = ['user_id', 'customer_id', 'item_id', 'item_name', 'item_quantity', 'item_price', 'item_color', 'item_size', 'item_currency', 'item_image', 'item_eta', 'item_data', 'oak_item'];
     //check if the user has an active cart item
     public function get_active_cart_customer()
     {
@@ -83,12 +82,13 @@ class Cart extends Model
                     {
                         $item_quantity                         = $this->get_item_quantity( $item_price['ItemID'] );
                         $item_atsq                             = isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0;
-                        $item_atsq                             = $item_atsq ? ( $item_price['ATSQ'] - ( $item_quantity ? $item_quantity : 0 ) ) : $item_quantity;
+                        $item_atsq                             = $item_atsq && ($item_atsq != $item_quantity)  ? ( $item_price['ATSQ'] - ( $item_quantity ? $item_quantity : 0 ) ) : $item_atsq;
                         $max_quantities[$item_price['ItemID']] = [
-                            'ATSQ'            => $item_atsq > -1 ? $item_atsq : $item_quantity,
+                            'ATSQ'            => $item_atsq,
+                            'item_atsq'       => isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0,
                             'OnlyMaxQuantity' => CommonController::check_bit_field( $item_price, 'Discontinued' ) ||
-                            CommonController::check_bit_field( $item_price, 'SpecialBuy' ) ||
-                            CommonController::check_bit_field( $item_price, 'Reviewed' )
+                                CommonController::check_bit_field( $item_price, 'SpecialBuy' ) ||
+                                CommonController::check_bit_field( $item_price, 'Reviewed' )
                         ];
 
                     }
@@ -114,7 +114,9 @@ class Cart extends Model
                 "item_eta"               => $cart_item->item_eta,
                 "item_data"              => $cart_item->item_data,
                 "item_atsq"              => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['ATSQ'] : 9999,
-                "item_only_max_quantity" => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['OnlyMaxQuantity'] : false
+                "item_only_max_quantity" => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['OnlyMaxQuantity'] : false,
+                "oak_item"              => $cart_item->oak_item
+//                "ATSQ"                   => isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0
             );
             $cart_count += $cart_item->item_quantity;
             $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
@@ -192,7 +194,7 @@ class Cart extends Model
                 'user_id'    => Auth::user()->id, 'customer_id'           => $request->cart_customer_id, 'item_id'           => $request->cart_item_id,
                 'item_name'  => $request->cart_item_name, 'item_quantity' => $quantity, 'item_price'                         => floatval(number_format( str_replace(',', '', $request->cart_item_price), ConstantsController::ALLOWED_DECIMALS, '.', '' )),
                 'item_color' => $request->cart_item_color, 'item_size'    => $request->cart_item_size, 'item_currency'       => $request->cart_item_currency,
-                'item_image' => $request->cart_item_image, 'item_data'    => serialize( $request->cart_item_data ), 'item_eta' => $request->cart_item_eta
+                'item_image' => $request->cart_item_image, 'item_data'    => serialize( $request->cart_item_data ), 'item_eta' => $request->cart_item_eta, 'oak_item' => $request->cart_item_oak
             ]
         );
     }

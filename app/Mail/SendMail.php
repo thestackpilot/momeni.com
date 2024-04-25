@@ -10,21 +10,23 @@ use Illuminate\Queue\SerializesModels;
 class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
-    
+
     public $data;
     public $slug;
-  
+    public $template;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data, $slug)
+    public function __construct($data, $slug, $template = 'email.email')
     {
         $this->data = $data;
         $this->slug = $slug;
+        $this->template = $template;
     }
-  
+
     /**
      * Build the message.
      *
@@ -38,7 +40,7 @@ class SendMail extends Mailable
         }
         else
         {
-            return $this->subject( $this->slug )->view('email.email');
+            return $this->subject( $this->slug )->view($this->template);
         }
     }
 }
