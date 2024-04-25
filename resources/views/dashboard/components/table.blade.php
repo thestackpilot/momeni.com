@@ -119,11 +119,15 @@ function get_table( $table, $tab = '' ) {
     <div class="modal-dialog modal-lg modal-xl">
         <div class="modal-content">
             <div class="modal-header other-detail-modal-header text-center">
+                <h4 style='float: left;'>Report Details</h4>
+                <button type="button" class="close other-detail-modal-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="font-size: 40px;">&times;</span>
+                </button>
             </div>
             <div class="modal-body other-detail-modal-body p-5" id="section-details" style="background: #fff;">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary close-modal other-detail-modal-close" data-dismiss="modal">Close</button>
+                {{-- <button type="button" class="btn btn-secondary close-modal other-detail-modal-close" data-dismiss="modal">Close</button> --}}
             </div>
         </div>
     </div>
@@ -160,6 +164,7 @@ function get_table( $table, $tab = '' ) {
         });
 
         $('.other-detail-modal-close').click(function() {
+            console.log('btn click');
             $('.other-detail-modal').modal('hide');
         });
 
@@ -394,7 +399,6 @@ function get_table( $table, $tab = '' ) {
                       //  console.log('Response', response);
                         $(".other-detail-modal").modal("show");
                         var modalBody = $(".modal-body");
-                        $(".other-detail-modal-header").html("<h4>Report Details</h4>");
                         $(".other-detail-modal-body").empty();
                         var obj = document.createElement('object');
                         obj.style.width = '100%';
