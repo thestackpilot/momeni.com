@@ -295,7 +295,7 @@ function get_table( $table, $tab = '' ) {
                                             <span class="row-details" style="display: none !important;">${JSON.stringify(json.data[i]['details'])}</span>
                                         `;
 
-                                    if (json.data[i]['other_actions'][0]['type'] == 'modal')
+                                    if (typeof json.data[i]['other_actions'] !== 'undefined' && json.data[i]['other_actions'][0]['type'] == 'modal')
                                         json.data[i]['other_actions'] = `
                                             <button class="btn btn-sm btn-primary other-details" type="button">${json.data[i]['other_actions'][0]['label']}</button>
                                             <span class="other-row-details" style="display: none !important;">${JSON.stringify(json.data[i]['other_actions_details'])}</span>
