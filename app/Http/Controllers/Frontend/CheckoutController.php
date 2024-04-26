@@ -294,9 +294,6 @@ class CheckoutController extends FrontendController
                     $order_length = 0;
                     $line = 0;
                     foreach ($item_data->CutPieces as $key => $cut_piece) {
-                        dump($cut_piece->ATSLength);
-                        dump($cut_piece->ATSWidth);
-                        dump(round(($cut_piece->ATSWidth / 12) * ($cut_piece->ATSLength / 12), 2));
                         $cut_pieces[$key]['TempSalesOrderNo'] = $cut_piece->TempSalesOrderNo;
                         $cut_pieces[$key]['ItemID'] = $cut_piece->ItemID;
                         $cut_pieces[$key]['RollID'] = $cut_piece->RollID;
