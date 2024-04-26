@@ -612,8 +612,6 @@ class GenericReportsController extends DashboardController
 
         $return['filters'] = $filters;
 
-        dd($return, 'Hello');
-
         return $return;
     }
 
@@ -803,7 +801,6 @@ class GenericReportsController extends DashboardController
             }
 
             $view_orders = $this->ApiObj->View_Order( $request->customer, $request->external_number, $request->from_date, $request->to_date, $request->sales_rep, $page, $page_size, $request->customer_po, $request->order_number );
-          //  dd($view_orders);
             $table       = array( 'thead' => [
                 'order_no'     => 'Order Number',
                 'customer_id'  => 'Customer ID',
