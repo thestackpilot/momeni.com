@@ -218,7 +218,6 @@ class CheckoutController extends FrontendController
     public function place_order(Request $request)
     {
         try {
-
             $response = [
                 'data' => [],
                 'success' => 0,
@@ -292,13 +291,16 @@ class CheckoutController extends FrontendController
                     $order_length = 0;
                     $line = 0;
                     foreach ($item_data->CutPieces as $key => $cut_piece) {
+                        dump($cut_piece->ATSLength);
+                        dump($cut_piece->ATSWidth);
+                        dump(round(($cut_piece->ATSWidth / 12) * ($cut_piece->ATSLength / 12), 2));
                         $cut_pieces[$key]['TempSalesOrderNo'] = $cut_piece->TempSalesOrderNo;
                         $cut_pieces[$key]['ItemID'] = $cut_piece->ItemID;
                         $cut_pieces[$key]['RollID'] = $cut_piece->RollID;
                         $cut_pieces[$key]['CutPieceID'] = $cut_piece->CutPieceID;
                         $cut_pieces[$key]['ActualLength'] = $cut_piece->ATSLength;
                         $cut_pieces[$key]['ActualWidth'] = $cut_piece->ATSWidth;
-                        $cut_pieces[$key]['ActualSQFT'] = $cut_piece->ATSWidth * $cut_piece->ATSLength;
+                        $cut_pieces[$key]['ActualSQFT'] =  round(($cut_piece->ATSWidth / 12) * ($cut_piece->ATSLength / 12), 2); // $cut_piece->ATSWidth * $cut_piece->ATSLength;
                         $cut_pieces[$key]['CutType'] = $item_data->cut_type;
                         $cut_pieces[$key]['LocationID'] = $item_data->location_id;
                         $cut_pieces[$key]['Serging'] = $item_data->Serging;

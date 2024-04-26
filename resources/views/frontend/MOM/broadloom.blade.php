@@ -852,6 +852,7 @@
             $('#item_json').val(JSON.stringify(item));
             $.ajax({
                 method: 'POST',
+                headers: { 'X-CSRF-TOKEN': $('meta[name="token"]').attr('content') },
                 url: '{{ route('frontend.cart.add') }}',
                 data: {
                     '_token': '{{ csrf_token() }}',
@@ -987,7 +988,6 @@
                         var sizes = [];
                         var line_no = 1;
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
-                            console.log(item)
 
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;

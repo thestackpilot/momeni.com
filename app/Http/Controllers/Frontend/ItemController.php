@@ -389,11 +389,11 @@ class ItemController extends FrontendController
 
     public function check_cart_items($broadloom_item_flag = false)
     {
-        $cart = $this->cart_model->get_cart_for_front($this->ApiObj, $broadloom_item_flag);
-        if (count($cart['items'])) {
+        $cart = $this->cart_model->check_cart_items($broadloom_item_flag);
+
+        if (count($cart)) {
             return true;
         }
-
         return false;
     }
 

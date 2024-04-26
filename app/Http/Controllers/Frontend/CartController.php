@@ -60,7 +60,6 @@ class CartController extends FrontendController
         catch ( \Exception$e )
         {
             prr( $e->getMessage() );
-
             return response()->json( array( 'success' => 0, 'message' => "There is an error in saving your item in the cart. Please try again." ) );
         }
 

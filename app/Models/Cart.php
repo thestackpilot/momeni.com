@@ -28,9 +28,8 @@ class Cart extends Model
     }
 
     //data for the front end
-    public function get_cart_for_front( $ApiObj, $broadloom_item = false )
+    public function get_cart_for_front( $ApiObj, $broadloom_item = false)
     {
-
         if ( ! Auth::user() )
         {
             return array(
@@ -59,12 +58,10 @@ class Cart extends Model
         $cart_count = 0;
         $cart_total = 0;
 
-        $cart_items     = $this->where( 'user_id', $user_id )
-            ->whereIn( 'customer_id', $customers )
-            ->when($broadloom_item, function ($q) {
-                return $q->where('item_broadloom', 1);
-            })
-            ->get();
+        $cart_items = $this->where( 'user_id', $user_id )
+        ->whereIn( 'customer_id', $customers )
+        ->get();
+
         $max_quantities = [];
 
         if ( $cart_items )
@@ -135,6 +132,27 @@ class Cart extends Model
         $cart['cart_currency'] = '$';
 
         return $cart;
+    }
+
+    public function check_cart_items($broadloom_item = false) {
+        $user_id = Auth::user()->id;
+
+        $customers = array( Auth::user()->customer_id );
+        if ( strlen( Auth::user()->sales_rep_customers ) )
+        {
+            foreach ( json_decode( Auth::user()->sales_rep_customers )->Customers as $customer )
+            {
+                $customers[] = $customer->CustomerID;
+            }
+        }
+        $cart_items = $this->where( 'user_id', $user_id )
+        ->whereIn( 'customer_id', $customers );
+        if ($broadloom_item) {
+            $cart_items = $cart_items->where('item_broadloom', 1);
+        } else {
+            $cart_items = $cart_items->where('item_broadloom', 0);
+        }
+        return $cart_items->get();
     }
 
     public function get_cart_with_meta_raw()

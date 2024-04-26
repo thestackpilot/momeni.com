@@ -1016,7 +1016,8 @@ use App\Http\Controllers\CommonController;
                     type: "GET",
                     success: function (response) {
                         if (response) {
-                            if (confirm('You have already items, You want to add broadloom item will remove previous items from cart, Are You sure?')) {
+                            // confirm('You have already items, You want to add broadloom item will remove previous items from cart, Are You sure?')
+                            if (confirm('You have already other items in your cart')) {
                                 $.ajax({
                                     url: "{{ route('delete-cart-items') }}",
                                     type: "GET",
