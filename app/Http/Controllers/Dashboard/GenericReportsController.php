@@ -484,8 +484,18 @@ class GenericReportsController extends DashboardController
 
         if ( count( $request->all() ) > 0 && isset( $request->submit ) )
         {
+            if ( $request->has( 'draw' ) && $request->draw )
+            {
+                $page      = $request->start == 0 ? 1 : ( $request->start / $request->length ) + 1;
+                $page_size = $request->length;
+            }
+            else
+            {
+                $page      = 1;
+                $page_size = 25;
+            }
             // echo "<pre>" . print_r($request->all(), 1). "</pre>";
-            $memos = $this->ApiObj->Get_DebitMemos( $request->customer, $request->from_date, $request->to_date, $request->invoice_number, $request->vendor );
+            $memos = $this->ApiObj->Get_DebitMemos( $request->customer, $request->from_date, $request->to_date, $request->invoice_number, $request->vendor, $page, $page_size );
             $table = array( 'thead' => [
                 'memo_number'    => 'Memo Number',
                 // 'customer_id'    => 'Customer ID',
@@ -539,6 +549,18 @@ class GenericReportsController extends DashboardController
                     ];
                 }
 
+                if ( $request->has( 'draw' ) && $request->draw )
+                {
+                    die( json_encode(
+                        [
+                            'recordsFiltered' => $memos['TotalRows'],
+                            'recordsTotal'    => $memos['TotalRows'],
+                            'draw'            => $request->draw + 1,
+                            'data'            => $table['tbody']
+                        ]
+                    ) );
+                }
+
             }
 
             $return['memos'] = $memos;
@@ -589,6 +611,8 @@ class GenericReportsController extends DashboardController
         ];
 
         $return['filters'] = $filters;
+
+        dd($return, 'Hello');
 
         return $return;
     }

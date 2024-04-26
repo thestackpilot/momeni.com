@@ -157,7 +157,7 @@ class ApisController extends RootController
     {
         $post_array = array( 'CustomerID' => $customerId, 'FromDate' => $FromDate, 'ToDate' => $ToDate, 'PayableInvoiceNo' => $PayableInvoiceNo, 'VendorID' => $VendorID, 'PageIndex' => $PageIndex, 'PageSize' => $PageSize );
 
-        return $this->Post_API_Signature( 'Get_DebitMemos', 'Get Debit Memos', $post_array, ['DebitMemos'] );
+        return $this->Post_API_Signature( 'Get_DebitMemos', 'Get Debit Memos', $post_array, ['DebitMemos', 'TotalRows'] );
     }
 
     public function Get_Designs( $mainCollectionId = 1, $Filters = '', $SearchText = '', $LifeStyleID = '', $CollectionID = '', $DesignID = '', $ColorID = '', $SizeID = '', $ShapeID = '', $MaterialID = '', $WeavingID = '', $PageSize = 30, $PageIndex = "1" )
