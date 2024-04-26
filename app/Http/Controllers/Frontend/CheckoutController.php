@@ -283,7 +283,7 @@ class CheckoutController extends FrontendController
             }
 
             $TempSalesOrderNo = "";
-            if ($requestDataArray['item_broadloom']) {
+            if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom']) {
                 $count = 0;
                 foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
                     $count++;
@@ -377,7 +377,7 @@ class CheckoutController extends FrontendController
                 return response()->json($payment_response);
             }
             // dd($headers, $itemDetail);
-            if ($requestDataArray['item_broadloom'] == 1) {
+            if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] == 1) {
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,
                     $itemDetail
