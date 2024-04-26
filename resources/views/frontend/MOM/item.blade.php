@@ -39,7 +39,7 @@
     }
         // print_r("<pre>");
         // print_r($items['ItemsETA']);
-
+        // dd($items['Items'][0]['UserCustomerInfo']['Customers']);
 @endphp
 
 @section('title', 'Item Detail Page' )

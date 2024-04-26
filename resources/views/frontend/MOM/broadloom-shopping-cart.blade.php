@@ -72,7 +72,7 @@
                                                 @php
                                                     if (isset($item->item_data) && $item->item_data) {
                                                         $item_data = json_decode(unserialize($item -> item_data));
-                                                        //dd($item_data);
+                                                        // dump($item_data);
                                                     }
                                                 @endphp
                                                 <tr>
@@ -177,10 +177,35 @@
                                     <form class="needs-validation" id="customer_info" method="POST">
                                         @csrf
                                         <div class="row">
+                                            <div class="col-md-7 mb-2">
+                                                <div class="d-flex">
+                                                <input type="radio" name="shipping-address" class="existing-address customer-addr-select" id="existing-address" value="existing-address" />
+                                                <select class="p-0 m-0" class="select-address" style="height:40px !important; line-height: 20px !important; padding: 0.375rem 1rem !important;">
+                                                    @foreach($shipping_addresses['ShipToAddresses'] as $address)
+                                                        <option value="{{$address['AddressID']}}">
+                                                            {{$address['AddressID']}} : {!!$address['FirstName'] ? $address['FirstName'] . ( $address['LastName'] ? " {$address['LastName']}" : '' ) : ''!!}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @foreach($shipping_addresses['ShipToAddresses'] as $address)
+                                                    <p style="display: none !important;" class="card-text address-card d-none {{$address['AddressID']}}" id="{{$address['AddressID']}}">
+                                                        <input type="hidden" class="hidden-inp" name="shipping-address-data" value="{{json_encode($address)}}" />
+                                                    </p>
+                                                @endforeach
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mb-2">
+                                               <div class="d-flex">
+                                                <input type="radio" name="shipping-address" class="existing-address" id="other-address" value="other"/>
+                                                <label for="other" class="mt-2">Dropship</label>
+                                               </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-5 mb-2">
                                                 <label for="" class="form-label mb-0" style="font-size: 14px">First Name
                                                     <span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control" type="text" id="" name="FirstName"
+                                                <input class="form-control disable-toggle" type="text" id="" name="FirstName"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['FirstName']}}"
                                                        required>
@@ -188,7 +213,7 @@
                                             <div class="col-md-5 mb-2">
                                                 <label for="" class="form-label mb-0" style="font-size: 14px">Last
                                                     Name<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control" type="text" id="" name="LastName"
+                                                <input class="form-control disable-toggle" type="text" id="" name="LastName"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['LastName']}}"
                                                        required>
@@ -198,7 +223,7 @@
                                             <div class="col-md-5 mb-2">
                                                 <label for="" class="form-label mb-0"
                                                        style="font-size: 14px">Email<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control" type="email" id="" name="Email"
+                                                <input class="form-control disable-toggle" type="email" id="" name="Email"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['Email']}}"
                                                        required>
@@ -206,7 +231,7 @@
                                             <div class="col-md-5 mb-2">
                                                 <label for="" class="form-label mb-0"
                                                        style="font-size: 14px">Phone<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control" type="number" id="" name="Phone"
+                                                <input class="form-control disable-toggle" type="number" id="" name="Phone"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['Phone1']}}"
                                                        required>
@@ -216,13 +241,13 @@
                                             <div class="col-md-10 mb-2">
                                                 <label for="" class="form-label mb-0" style="font-size: 14px">Street
                                                     Address<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control" type="text" id="" name="Address1"
+                                                <input class="form-control disable-toggle new-address" type="text" id="" name="Address1"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['Address1']}}"
                                                        required>
                                             </div>
                                             <div class="col-md-10 mb-2">
-                                                <input class="form-control" type="text" id="" name="Address2"
+                                                <input class="form-control disable-toggle" type="text" id="" name="Address2"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['Address2']}}"
                                                        >
@@ -232,7 +257,7 @@
                                             <div class="col-md-5 mb-2">
                                                 <label for="" class="form-label mb-0" style="font-size: 14px">Town/
                                                     City<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control" type="text" id="" name="City"
+                                                <input class="form-control disable-toggle" type="text" id="" name="City"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['City']}}"
                                                        required>
@@ -240,7 +265,7 @@
                                             <div class="col-md-5 mb-2">
                                                 <label for="" class="form-label mb-0"
                                                        style="font-size: 14px">State<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control" type="text" id="" name="State"
+                                                <input class="form-control disable-toggle" type="text" id="" name="State"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['State']}}"
                                                        required>
@@ -250,7 +275,7 @@
                                             <div class="col-md-5 mb-2">
                                                 <label for="" class="form-label mb-0" style="font-size: 14px">Zip
                                                     Code<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control" type="text" id="" name="Zip"
+                                                <input class="form-control disable-toggle" type="text" id="" name="Zip"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}"
                                                        required>
@@ -313,7 +338,7 @@
                                                     <div class="row">
                                                         <div class="col-3"><img
                                                                 src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
-                                                                alt="$item_data->ItemID" height="100px"></div>
+                                                                alt="{{$item_data->ItemID}}" height="100px" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"></div>
                                                         <div class="col-9" style="font-size: 12px">
                                                             <div class="mx-3 mt-2 font-weight--bold row">Design: <p
                                                                     class="font-weight--normal mx-2">{{$item->item_name}}</p>
@@ -488,6 +513,16 @@
     @include('frontend.' . $active_theme->theme_abrv . '.components.login-modal')
 @endsection
 
+@section('styles')
+<style>
+    .muted-bd-fields{
+        opacity: 0.4;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+</style>
+@endsection
+
 @section('scripts')
     <script>
         $(document).ready(function () {
@@ -603,6 +638,9 @@
             });
 
             $('#proceed_to_checkout').click(function () {
+                $(".customer-addr-select").prop("checked", true);
+                $(".disable-toggle").addClass("muted-bd-fields");
+                $(".disable-toggle").removeAttr("required");
                 $('.stepper-heading').text('Checkout');
                 $('.section-2').addClass('active');
                 $('#section1').attr('style', 'display:none;');
@@ -615,11 +653,13 @@
                 if((form.checkValidity())){
 
                     var formData = $('#customer_info').serialize();
+                    console.log('form data', formData);
                     $.ajax({
-                        url: '{{route("frontend.checkout.place_order")}}',
+                       url: '{{route("frontend.checkout.place_order")}}',
                     type: "POST",
                     data: formData,
                     success: function (response) {
+                        console.log('response place ordr:: bd shop cart::', response)
                         if (response.success) {
                             $('.stepper-heading').text('Order Complete');
                             $('.section-3').addClass('active');
@@ -653,6 +693,27 @@
                 todayHighlight: true,
                 toggleActive: true
             });
+
+            $(document).on('click', 'input[name="shipping-address"]', function() {
+                var addressValue = $(this).val();
+                if (addressValue == 'existing-address') {
+                    $(".disable-toggle").addClass("muted-bd-fields");
+                    $(".disable-toggle").removeAttr("required");
+                } else {
+                    $(".disable-toggle").removeClass("muted-bd-fields");
+                    $(".hidden-inp").val("");
+                    $(".disable-toggle").attr("required", true);
+                }
+            });
+
+
+            $('.select-address').on('change', function() {
+                var address = JSON.parse($('.hidden-inp').val());
+                if(address != undefined){
+                    $('.new-address').val(address);
+                }
+            });
+
         });
     </script>
 @endsection

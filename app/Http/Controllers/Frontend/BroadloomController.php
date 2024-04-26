@@ -169,7 +169,6 @@ class BroadloomController extends FrontendController
         $userremarks = $request->input('UserRemarks');
 
         $res = $this->ApiObj->Get_AddCutPiece($tempsalesorderno, $cutpieceId, $rollId, $itemId, $atslength, $totalWidth, $totalSqft, $cutType, $description, $charges, $sergingTypeNo, $locationId, $waste, $remnant, $available, $isremship, $serging, $line, $userremarks);
-        // dd($res);
         return [
             'cut_piece' => $res,
         ];
@@ -183,9 +182,9 @@ class BroadloomController extends FrontendController
         $total_length = $total_width = 0;
         $dimensions = [];
         foreach ($cut_pieces['ShowCuts'] as $key => $cut_piece) {
-            $length_in_feet = round($cut_piece['ATSLength'] / 12);
+            $length_in_feet = floor($cut_piece['ATSLength'] / 12); //round($cut_piece['ATSLength'] / 12);
             $length_in_inches = round($cut_piece['ATSLength'] % 12);
-            $width_in_feet = round($cut_piece['ATSWidth'] / 12);
+            $width_in_feet =  floor($cut_piece['ATSWidth'] / 12); //round($cut_piece['ATSWidth'] / 12);
             $width_in_inches = round($cut_piece['ATSWidth'] % 12);
             $dimension = $length_in_feet . "'" . $length_in_inches . '" x ' . $width_in_feet . "'" . $width_in_inches . '"';
             $dimensions[$key] = [];

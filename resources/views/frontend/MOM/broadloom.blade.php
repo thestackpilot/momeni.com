@@ -41,7 +41,7 @@
             <input type="hidden" id="cart_item_image" name="cart_item_image" value="">
             <input type="hidden" id="cart_item_eta" name="cart_item_eta" value="">
             {{-- <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}"> --}}
-            {{-- @dd($item) --}}
+
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
                     <div style="font-size: 28px;"><strong>{{$item['ItemName']}}</strong></div>
@@ -866,7 +866,7 @@
                     'cart_item_currency': '$',
                     'cart_item_image': item.ImageNameArray[0],
                     'cart_item_data': $('#item_json').val(),
-                    // 'cart_item_data': $('#cart_item_oak').val(),
+                    //'cart_item_data': $('#cart_item_oak').val(),
                     'cart_item_broadloom': 1
                 },
                 success: function(response) {
@@ -987,7 +987,6 @@
                         var sizes = [];
                         var line_no = 1;
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
-                            console.log(item)
 
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
