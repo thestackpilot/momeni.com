@@ -84,7 +84,9 @@
                                                             </div>
                                                             <div class="col-3"><img
                                                                     src={{ CommonController::getApiFullImage($item_data->ImageName) }}
-                                                                        alt="{{ $item_data->ItemID }}" height="100px">
+                                                                        alt="{{ $item_data->ItemID }}" height="100px"
+                                                                        onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"
+                                                                    >
                                                             </div>
                                                             <div class="col-8" style="font-size: 12px">
                                                                 <div class=" mt-2 font-weight--bold row">Design: <p
@@ -338,7 +340,8 @@
                                                     <div class="row">
                                                         <div class="col-3"><img
                                                                 src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
-                                                                alt="{{$item_data->ItemID}}" height="100px" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"></div>
+                                                                alt="{{$item_data->ItemID}}" height="50px" width="80px"
+                                                                onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"></div>
                                                         <div class="col-9" style="font-size: 12px">
                                                             <div class="mx-3 mt-2 font-weight--bold row">Design: <p
                                                                     class="font-weight--normal mx-2">{{$item->item_name}}</p>
