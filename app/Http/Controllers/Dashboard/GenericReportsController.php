@@ -807,7 +807,7 @@ class GenericReportsController extends DashboardController
                         'tab'          => isset( $view_order['Header']['TabStatusDescription'] ) ? $view_order['Header']['TabStatusDescription'] : '',
                         'order_date'   => isset( $view_order['Header']['OrderDate'] ) ? CommonController::get_date_format( $view_order['Header']['OrderDate'] ) : 'N/A',
                         'actions'      => [['type' => 'modal', 'label' => 'View Details']],
-                        'other_actions' => [['type' => 'modal', 'label' => 'View Reports']],
+                        'other_actions' => [['type' => 'modal', 'label' => 'View Report']],
                         'other_actions_details' => [
                             'OrderNo'   => $view_order['Header']['OrderNo'],
                         ],
