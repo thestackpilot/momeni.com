@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use View;
 use App\Models\Cart;
 use Illuminate\Http\Request;
@@ -1235,6 +1236,7 @@ class GenericReportsController extends DashboardController
                 return $report['document']['ReportData'];
             }
         } catch (\Exception $e) {
+            Log::error($e);
             return response()->json(['error' => 'An error occurred. Please try again later.']);
         }
     }
