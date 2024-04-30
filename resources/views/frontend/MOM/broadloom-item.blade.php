@@ -20,7 +20,8 @@ use App\Http\Controllers\CommonController;
                 <h2 class="breadcrumb-title text-center">{{$items['Items'][0]['ItemName']}}<b>{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h2>
             </div>
         </div>
-        {{-- @dd($items); --}}
+        {{-- @dump($items)
+        @dump($items['Items'][0]['UDFFields']) --}}
         <div class="d-none" id="item_json">{{$items_json}}</div>
         <div class="site-wrapper-reveal">
             <div class="single-product-wrap">
@@ -69,9 +70,14 @@ use App\Http\Controllers\CommonController;
                                 <h3 class="price" id="product-heading"><b>{{$items['Items'][0]['ItemName']}}{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
 
                                 <div class="col-12 row">
+                                @foreach ($items['Items'][0]['UDFFields'] as  $des_val)
+                                    <div class="col-6 d-flex align-items-baseline">
+                                        <p class="col-6 me-1 p-0"><b>{{$des_val['FieldName']}} :</b></p>
+                                        <p class="col-6 ms-1 p-0">{{ $des_val['Value'] }}</p>
+                                    </div>
+                                {{-- <div class="col-12 row">
                                     <div class="col-6 d-flex align-items-baseline">
                                         <p class="col-6 me-1 p-0"><b>Material:</b></p>
-                                        <p class="col-6 ms-1 p-0">100% Wool</p>
                                     </div>
                                     <div class="col-6 d-flex align-items-baseline">
                                         <p class="col-6 me-1 p-0"><b>Width:</b></p>
@@ -101,7 +107,10 @@ use App\Http\Controllers\CommonController;
                                         <p class="col-6 me-1 p-0"><b>Recommended Usage:</b></p>
                                         <p class="col-6 ms-1 p-0">Perfect for any residential and medium commercial space</p>
                                     </div>
+                                </div> --}}
+                                @endforeach
                                 </div>
+
                                 {{-- <div class="d-flex flex-column justify-content-end d-none cart_main_custom" id="cart_main">
                                     <h3 class="detiel-heading d-flex">&nbsp;</h3>
                                     @auth()
@@ -533,7 +542,8 @@ use App\Http\Controllers\CommonController;
                     }).append(
                         $('<img>', {
                             src: item.ItemColorImage,
-                            alt: item.ItemColor
+                            alt: item.ItemColor,
+                            onerror: "this.onerror=null; this.src='" + '{{url('/').ConstantsController::SPARS_LOGO}}' + "'"
                         })
                     ));
                 }
