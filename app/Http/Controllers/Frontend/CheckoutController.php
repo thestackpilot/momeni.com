@@ -290,20 +290,25 @@ class CheckoutController extends FrontendController
                     $cut_pieces = [];
                     $order_length = 0;
                     $line = 0;
+                    $totalSQFT = 0;
                     foreach ($item_data->CutPieces as $key => $cut_piece) {
                         if ($cut_piece->LengthStatus !== "R") {
+
+                            $sqft =  round(($cut_piece->ATSWidth / 12) * ($cut_piece->ATSLength / 12), 2);
+                            $totalSQFT += $sqft;
+
                             $cut_pieces[$key]['TempSalesOrderNo'] = $cut_piece->TempSalesOrderNo;
                             $cut_pieces[$key]['ItemID'] = $cut_piece->ItemID;
                             $cut_pieces[$key]['RollID'] = $cut_piece->RollID;
                             $cut_pieces[$key]['CutPieceID'] = $cut_piece->CutPieceID;
                             $cut_pieces[$key]['ActualLength'] = $cut_piece->ATSLength;
                             $cut_pieces[$key]['ActualWidth'] = $cut_piece->ATSWidth;
-                            $cut_pieces[$key]['ActualSQFT'] =  round(($cut_piece->ATSWidth / 12) * ($cut_piece->ATSLength / 12), 2); // $cut_piece->ATSWidth * $cut_piece->ATSLength;
+                            $cut_pieces[$key]['ActualSQFT'] = $sqft;  // $cut_piece->ATSWidth * $cut_piece->ATSLength;
                             $cut_pieces[$key]['CutType'] = $item_data->cut_type;
                             $cut_pieces[$key]['LocationID'] = $item_data->location_id;
                             $cut_pieces[$key]['Serging'] = $item_data->Serging;
                             $cut_pieces[$key]['SergingCharges'] = !empty($item_data->SergingCharges) ? $item_data->SergingCharges : 0;
-                            $cut_pieces[$key]['SergingType'] = !empty($item_data->SergingType) ? $item_data->SergingType : "N";
+                            $cut_pieces[$key]['SergingType'] = !empty($item_data->SergingType) ? $item_data->SergingType : "0";
                             $cut_pieces[$key]['LineNo'] = ++$line;
                             $order_length += $cut_piece->ATSLength;
                         }
@@ -314,7 +319,7 @@ class CheckoutController extends FrontendController
                         'OrderQty' => $item['item_quantity'],
                         'UnitPrice' => $item['item_price'],
                         'SQFTPrice' => $item_data->SQFTPrice,
-                        'SQFTArea' => round( $item_data->SQFTArea / 12), // $item_data->SQFTArea
+                        'SQFTArea' => $totalSQFT,//round( $item_data->SQFTArea / 12), // $item_data->SQFTArea
                         'CutPieceID' => $item_data->CutPieceID,
                         'RollID' => $item_data->RollID,
                         'SergingCharges' => !empty($item_data->SergingCharges) ? $item_data->SergingCharges : 0,

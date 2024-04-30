@@ -466,7 +466,7 @@
                                     <div class="row">
                                         <div class="col-3"><img
                                                 src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
-                                                alt="$item_data->ItemID" height="100px">
+                                                alt="{{$item_data->ItemID}}" height="100px" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
                                         </div>
                                         <div class="col-9" style="font-size: 12px">
                                             <div class="mx-3 mt-2 font-weight--bold row">Design:
@@ -656,14 +656,15 @@
                 if((form.checkValidity())){
 
                     var formData = $('#customer_info').serialize();
-                    console.log('form data', formData);
+                 //   console.log('form data', formData);
                     $.ajax({
                        url: '{{route("frontend.checkout.place_order")}}',
                     type: "POST",
                     data: formData,
                     success: function (response) {
-                        console.log('response place ordr:: bd shop cart::', response)
+                        // console.log('response place ordr:: bd shop cart::', response)
                         if (response.success) {
+                            // console.log('if run', response.msg);
                             $('.stepper-heading').text('Order Complete');
                             $('.section-3').addClass('active');
                             $('#section1').attr('style', 'display:none;');
@@ -671,6 +672,7 @@
                             $('#section3').attr('style', 'display:block;');
 
                         } else {
+                            // console.log('else run', response.msg);
                             toastr.error(response.msg, {
                                 hideDuration: 10000,
                                 closeButton: true,
