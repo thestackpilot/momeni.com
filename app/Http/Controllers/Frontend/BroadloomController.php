@@ -54,6 +54,7 @@ class BroadloomController extends FrontendController
     {
         $customer_details = $shipping_options = $shippings = $shipping_addresses = $payment_terms_list = $customer_payment_options = $countries = $states = [];
         $default_ship_via_id = '';
+        $countries = $this->ApiObj->Get_CountriesList();
 
         if (Auth::user() && $this->cart_model->get_cart_for_front($this->ApiObj)['items'] && $this->cart_model->get_cart_for_front($this->ApiObj)['items'][0]) {
             $customer_details = $this->ApiObj->Get_CustomerDetail((new Cart())->get_active_cart_customer());
@@ -128,6 +129,7 @@ class BroadloomController extends FrontendController
         // dd($payload);
         return view('frontend.' . $this->active_theme->theme_abrv . '.broadloom-shopping-cart', [
             'countries' => $countries,
+            'cust_country' => $customer_details['CustomerDetail']['Country'],
             'states' => $states,
             'shipping_options' => $shipping_options,
             'shippings' => $shippings,

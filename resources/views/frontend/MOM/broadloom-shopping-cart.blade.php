@@ -282,6 +282,31 @@
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}"
                                                        required>
                                             </div>
+                                            <div class="col-md-5 mb-2">
+                                                <label for="" class="form-label mb-0" style="font-size: 14px">Country
+                                                    <span class="text-danger" style="font-size: 18px">*</span>
+                                                </label>
+                                                @if (isset($countries))
+                                                    <select name="country" id="countries" class="form-control bg-white disable-toggle">
+                                                        <option value="0">Select a Country</option>
+                                                            @foreach ($countries['Countries'] as $row)
+                                                                @php
+                                                                    $selected = '';
+                                                                    if (isset($cust_country) && $cust_country == $row['Description']) {
+                                                                        $selected = 'selected';
+                                                                    }
+                                                                    @endphp
+                                                                    <option value="{{ $row['CountryNo'] }}"
+                                                                        origincode="{{ $row['OriginCode'] }}" {{$selected}}>
+                                                                        {{ $row['Description'] }}</option>
+                                                            @endforeach
+                                                    </select>
+                                                    @elseif (!isset($countries) && isset($cust_country))
+                                                    <input type="text" data-required="true" name="country" maxlength="30" class="form-control bg-white" aria-describedby="Country" value="{{$cust_country}}">
+                                                    @else
+                                                    <input type="text" data-required="true" name="country" maxlength="30" class="form-control bg-white" aria-describedby="Country" placeholder="Country*">
+                                                @endif
+                                            </div>
                                         </div>
                                         <p class="font-weight--bold " style="font-size: 18px">Additional Information</p>
                                         <div class="row">
@@ -656,7 +681,7 @@
                 if((form.checkValidity())){
 
                     var formData = $('#customer_info').serialize();
-                 //   console.log('form data', formData);
+                    console.log('form data', formData);
                     $.ajax({
                        url: '{{route("frontend.checkout.place_order")}}',
                     type: "POST",
@@ -734,6 +759,17 @@
                 if(address != undefined){
                     $('.new-address').val(address);
                 }
+            });
+
+            @if(isset($cust_country))
+                    var custCountry = "{{$cust_country}}";
+                    var selectedValue = $('#countries').find('option').filter(function() {
+                        return $(this).text().trim() === custCountry.trim();
+                    }).val();
+            @endif
+
+            $('#countries').change(function(){
+                var selectedCountry = $(this).val();
             });
 
         });
