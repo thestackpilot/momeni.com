@@ -84,7 +84,7 @@
                                                             </div>
                                                             <div class="col-3"><img
                                                                     src={{ CommonController::getApiFullImage($item_data->ImageName) }}
-                                                                        alt="{{ $item_data->ItemID }}" height="100px"
+                                                                        alt="{{ $item_data->ItemID }}" height="80px" width="80px"
                                                                         onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"
                                                                     >
                                                             </div>
@@ -249,7 +249,7 @@
                                                        required>
                                             </div>
                                             <div class="col-md-10 mb-2">
-                                                <input class="form-control disable-toggle" type="text" id="" name="Address2"
+                                                <input class="form-control disable-toggle" type="text" id="bd-address2" name="Address2"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['Address2']}}"
                                                        >
@@ -415,7 +415,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col">
-                                        <strong>4818</strong>
+                                        <strong id="orderno">4818</strong>
                                     </div>
                                 </div>
                             </div>
@@ -466,7 +466,7 @@
                                     <div class="row">
                                         <div class="col-3"><img
                                                 src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
-                                                alt="{{$item_data->ItemID}}" height="100px" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
+                                                alt="{{$item_data->ItemID}}" height="80px" width="80px" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
                                         </div>
                                         <div class="col-9" style="font-size: 12px">
                                             <div class="mx-3 mt-2 font-weight--bold row">Design:
@@ -662,17 +662,33 @@
                     type: "POST",
                     data: formData,
                     success: function (response) {
-                        // console.log('response place ordr:: bd shop cart::', response)
                         if (response.success) {
-                            // console.log('if run', response.msg);
+                            $('#orderno').text('');
+                            var spanText = response.msg.match(/\[\s*(\d+)\s*\]/)[1];
+                            $('#orderno').text(spanText);
+
                             $('.stepper-heading').text('Order Complete');
                             $('.section-3').addClass('active');
                             $('#section1').attr('style', 'display:none;');
                             $('#section2').attr('style', 'display:none;');
                             $('#section3').attr('style', 'display:block;');
+                            $('.badge.badge-pill.badge-primary.position-absolute.cartCount').text('0');
 
+                            $.ajax({
+                                url: "{{ route('delete-cart-items') }}",
+                                type: "GET",
+                                success: function (response) {
+                                    if (response) {
+                                        console.log('cart empty is del', response);
+                                    } else {
+                                        toastr.error('Someting went wrong while empty the cart after place order.', {
+                                            hideDuration: 10000,
+                                            closeButton: true,
+                                        });
+                                    }
+                                }
+                            })
                         } else {
-                            // console.log('else run', response.msg);
                             toastr.error(response.msg, {
                                 hideDuration: 10000,
                                 closeButton: true,
@@ -708,6 +724,7 @@
                     $(".disable-toggle").removeClass("muted-bd-fields");
                     $(".hidden-inp").val("");
                     $(".disable-toggle").attr("required", true);
+                    $("#bd-address2").removeAttr("required")
                 }
             });
 
