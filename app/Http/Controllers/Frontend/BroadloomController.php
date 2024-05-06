@@ -15,9 +15,9 @@ class BroadloomController extends FrontendController
     public function __construct()
     {
         parent::__construct();
-        $this->cart_model          = new Cart();
+        $this->cart_model = new Cart();
         $this->order_payment_model = new OrderPayments();
-        $this->paytrace            = $this->active_theme_json->general->payment_method->enabled ? new PaytraceController() : '';
+        $this->paytrace = $this->active_theme_json->general->payment_method->enabled ? new PaytraceController() : '';
     }
 
 
@@ -188,7 +188,7 @@ class BroadloomController extends FrontendController
         foreach ($cut_pieces['ShowCuts'] as $key => $cut_piece) {
             $length_in_feet = floor($cut_piece['ATSLength'] / 12); //round($cut_piece['ATSLength'] / 12);
             $length_in_inches = round($cut_piece['ATSLength'] % 12);
-            $width_in_feet =  floor($cut_piece['ATSWidth'] / 12); //round($cut_piece['ATSWidth'] / 12);
+            $width_in_feet = floor($cut_piece['ATSWidth'] / 12); //round($cut_piece['ATSWidth'] / 12);
             $width_in_inches = round($cut_piece['ATSWidth'] % 12);
             $dimension = $length_in_feet . "'" . $length_in_inches . '" x ' . $width_in_feet . "'" . $width_in_inches . '"';
             $dimensions[$key] = [];
@@ -206,27 +206,51 @@ class BroadloomController extends FrontendController
             $dimensions[$key]['dimension'] = $dimension;
         }
         $max_length_cut = max(array_column($dimensions, 'length'));
-        $total_length =  $max_length_cut;
+        $total_length = $max_length_cut;
 
         $html = '';
         $html .= "<div class='length'><strong>" . $total_length . "' (Length)</strong></div>";
         $html .= '<div class="pieces">';
         $html .= "<div class='width'><strong>" . $total_width . "' (Width)</strong></div>";
         $html .= '<div class="picese-wrapper" id="picese-wrapper">';
-        $multiplier = count($cut_pieces['ShowCuts']) <= 2 ? 1 : 2;
 
+        foreach ($dimensions as $key => $dimension) {
+            if (empty($dimension['appended'])) {
+                $dimension_length = number_format((($dimension['length'] / $total_length) * 100), 2);
+                if ($dimension_length > 100) {
+                    $dimension_length = 100;
+                }
+                $dimension_width = number_format((($dimension['width'] / $total_width) * 100), 2);
+                if ($dimension_width > 100) {
+                    $dimension_width = 100;
+                }
 
-        foreach ($dimensions as $dimension) {
-            $dimension_length = number_format((($dimension['length'] / $total_length) * 100), 2);
-            if ($dimension_length > 100) {
-                $dimension_length = 100;
+                if ($dimension_length == 100) {
+                    $html .= '<div class="piece" style="width: ' . $dimension_length . '%; height: ' . $dimension_width . '%;">' . $dimension['dimension'] . '</div>';
+                    $dimensions[$key]['appended'] = 1;
+                } else {
+                    $total_div_width = 0;
+                    for ($i = 0; $i < count($dimensions); $i++) {
+                        if (empty($dimensions[$i]['appended']) && isset($dimensions[$i])) {
+                            $dimension_sub_length = number_format((($dimensions[$i]['length'] / $total_length) * 100), 2);
+                            if ($dimension_sub_length > 100) {
+                                $dimension_sub_length = 100;
+                            }
+                            $dimension_sub_width = number_format((($dimensions[$i]['width'] / $total_width) * 100), 2);
+                            if ($dimension_sub_width > 100) {
+                                $dimension_sub_width = 100;
+                            }
+                            $total_div_width = $dimension_sub_length;
+
+                            if ($total_div_width < 100) {
+                                $total_div_width += $dimension_sub_length;
+                                $html .= '<div class="piece" style="width: ' . $dimension_sub_length . '%; height: ' . $dimension_sub_width . '%;">' . $dimensions[$i]['dimension'] . '</div>';
+                                $dimensions[$i]['appended'] = 1;
+                            }
+                        }
+                    }
+                }
             }
-            $dimension_width = number_format((($dimension['width'] / $total_width) * 100), 2);
-            if ($dimension_width > 100) {
-                $dimension_width = 100;
-            }
-
-            $html .= '<div class="piece" style="width: ' . $dimension_length . '%; height: ' . $dimension_width . '%;">' . $dimension['dimension'] . '</div>';
         }
 
         $html .= '</div>';
@@ -234,7 +258,8 @@ class BroadloomController extends FrontendController
         return $html;
     }
 
-    public function RemoveCutPiece(Request $request) {
-        return $this->ApiObj->RemoveCutPiece($request->TempSalesOrderNo, $request->CutPieceID ? $request->CutPieceID  : '', $request->RollID ? $request->RollID : '', $request->line_no);
+    public function RemoveCutPiece(Request $request)
+    {
+        return $this->ApiObj->RemoveCutPiece($request->TempSalesOrderNo, $request->CutPieceID ? $request->CutPieceID : '', $request->RollID ? $request->RollID : '', $request->line_no);
     }
 }
