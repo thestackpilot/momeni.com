@@ -212,7 +212,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for=""><strong>Customer Instructions</strong> </label>
-                                                        <textarea name="" id="" class="form-control"
+                                                        <textarea name="" id="cust-inst" class="form-control"
                                                                   rows="5"></textarea>
                                                     </div>
                                                 </div>
@@ -879,6 +879,21 @@
                                     closeButton: true,
                                 });
                                 $('#add_to_cart').removeClass('btn-muted');
+
+                                $('#cut_piece_parent .broadloom-badge').remove();
+                                $('#roll_pieces').val('');
+                                $('#Tlength').val('');
+                                $('#TlengthInch').val('');
+                                $('#Twidth').val('');
+                                $('#TwidthInch').val('');
+                                $('#sq-ft').val('');
+                                $('#sq-yrd').val('');
+                                $('#sq-ext').val('');
+                                $('#surging_options').val('');
+                                $('#surging_check').prop('checked', false);
+                                $('#surging_charges').val('');
+                                $('#cust-inst').val('');
+
                                 // $('.quickCart-opener').trigger('click');
                             });
                         } else {
@@ -987,7 +1002,7 @@
                         var sizes = [];
                         var line_no = 1;
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
-
+                            console.log('addc cut', item);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
