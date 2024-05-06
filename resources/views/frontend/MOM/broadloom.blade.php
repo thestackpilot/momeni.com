@@ -1002,7 +1002,7 @@
                         var sizes = [];
                         var line_no = 1;
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
-
+                            console.log('addc cut', item);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);

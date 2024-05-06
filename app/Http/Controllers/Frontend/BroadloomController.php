@@ -40,7 +40,6 @@ class BroadloomController extends FrontendController
         $roll_pieces = $this->ApiObj->Get_ItemsRollAndCutPieceList($item['ItemID']);
         $surging_types = $this->ApiObj->Get_SurgingTypes();
         // dd($roll_pieces);
-
         return view('frontend.' . $this->active_theme->theme_abrv . '.broadloom', [
             'surging_types' => $surging_types,
             'roll_pieces' => $roll_pieces,
@@ -130,6 +129,7 @@ class BroadloomController extends FrontendController
         return view('frontend.' . $this->active_theme->theme_abrv . '.broadloom-shopping-cart', [
             'countries' => $countries,
             'cust_country' => $customer_details['CustomerDetail']['Country'],
+            'cust_state' => $customer_details['CustomerDetail']['State'],
             'states' => $states,
             'shipping_options' => $shipping_options,
             'shippings' => $shippings,
@@ -183,6 +183,7 @@ class BroadloomController extends FrontendController
 
         $total_length = $total_width = 0;
         $dimensions = [];
+        $prev_widths_in_feet = [];
 
         foreach ($cut_pieces['ShowCuts'] as $key => $cut_piece) {
             $length_in_feet = floor($cut_piece['ATSLength'] / 12); //round($cut_piece['ATSLength'] / 12);
@@ -194,7 +195,12 @@ class BroadloomController extends FrontendController
             $length = $length_in_feet . '.' . $length_in_inches;
             $width = $width_in_feet . '.' . $width_in_inches;
             $total_length = $total_length + $length;
-            $total_width = $total_width + $width;
+
+            if (!in_array($width, $prev_widths_in_feet)) {
+                $total_width = $total_width + $width;
+            }
+            $prev_widths_in_feet[] = $width;
+
             $dimensions[$key]['length'] = $length;
             $dimensions[$key]['width'] = $width;
             $dimensions[$key]['dimension'] = $dimension;
@@ -209,23 +215,18 @@ class BroadloomController extends FrontendController
         $html .= '<div class="picese-wrapper" id="picese-wrapper">';
         $multiplier = count($cut_pieces['ShowCuts']) <= 2 ? 1 : 2;
 
-        $max_length = 0;
-        foreach ($dimensions as $dimension) {
-            $length = $dimension['length'];
-            if ($length > $max_length) {
-                $max_length = $length;
-                $dimension_length = number_format((($length / $total_length) * 100), 2);
-                if ($dimension_length > 100) {
-                    $dimension_length = 100;
-                }
-            }
 
+        foreach ($dimensions as $dimension) {
+            $dimension_length = number_format((($dimension['length'] / $total_length) * 100), 2);
+            if ($dimension_length > 100) {
+                $dimension_length = 100;
+            }
             $dimension_width = number_format((($dimension['width'] / $total_width) * 100), 2);
             if ($dimension_width > 100) {
                 $dimension_width = 100;
             }
 
-            $html .= '<div class="piece" style="float:left; width: ' . $dimension_length . '%; height: ' . $dimension_width . '%;">' . $dimension['dimension'] . '</div>';
+            $html .= '<div class="piece" style="width: ' . $dimension_length . '%; height: ' . $dimension_width . '%;">' . $dimension['dimension'] . '</div>';
         }
 
         $html .= '</div>';

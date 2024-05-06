@@ -20,6 +20,8 @@
             {{-- @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs') --}}
             {{-- <div class="d-none" id="item_id" value="{{$roll_pieces['OutPut']["RollsAndCutPieces"][0]['ItemID']}}"></div> --}}
             <input type="hidden" name="" id="item_id" value="">
+            <input type="hidden" name="customer-country" id="customer_country" value="{{ $cust_country }}">
+            <input type="hidden" name="customer-state" id="customer_state" value="{{ $cust_state }}">
             <div class="container broadloom-wrapper" style="background-color: whitesmoke;">
                 <div class="fa-3x font-weight--bold text-center stepper-heading">Shopping cart</div>
                 <div class="steppers">
@@ -267,10 +269,18 @@
                                             <div class="col-md-5 mb-2">
                                                 <label for="" class="form-label mb-0"
                                                        style="font-size: 14px">State<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control disable-toggle" type="text" id="" name="State"
+                                                {{-- <input class="form-control disable-toggle" type="text" id="state" name="State"
                                                        placeholder=""
                                                        value="{{$shipping_addresses['ShipToAddresses'][0]['State']}}"
-                                                       required>
+                                                       required> --}}
+                                                       @if(isset($cust_state))
+                                                        <select name="State" id="state_dropdown" class="form-control bg-white checkout-dropdown">
+                                                        </select>
+                                                        @elseif(!isset($cust_state) && isset($cust_state))
+                                                            <input type="text" data-required="true" class="form-control bg-white" name="State" maxlength="50" aria-describedby="State" value="{{$cust_state}}">
+                                                        @else
+                                                            <input type="text" data-required="true" class="form-control bg-white" name="State" maxlength="50" aria-describedby="State" placeholder="State*">
+                                                        @endif
                                             </div>
                                         </div>
                                         <div class="row">
@@ -287,7 +297,7 @@
                                                     <span class="text-danger" style="font-size: 18px">*</span>
                                                 </label>
                                                 @if (isset($countries))
-                                                    <select name="country" id="countries" class="form-control bg-white disable-toggle">
+                                                    <select name="country" id="countries" class="form-control bg-white">
                                                         <option value="0">Select a Country</option>
                                                             @foreach ($countries['Countries'] as $row)
                                                                 @php
@@ -689,8 +699,9 @@
                     success: function (response) {
                         if (response.success) {
                             $('#orderno').text('');
-                            var spanText = response.msg.match(/\[\s*(\d+)\s*\]/)[1];
-                            $('#orderno').text(spanText);
+                            var spanText = response.msg.match(/\[\s*(\d+)\s*\]/);
+                            var newOrderNo = spanText ? spanText[1] : '';
+                            $('#orderno').text(newOrderNo);
 
                             $('.stepper-heading').text('Order Complete');
                             $('.section-3').addClass('active');
@@ -702,9 +713,12 @@
                             $.ajax({
                                 url: "{{ route('delete-cart-items') }}",
                                 type: "GET",
-                                success: function (response) {
-                                    if (response) {
-                                        console.log('cart empty is del', response);
+                                success: function (deleteResponse) {
+                                    if (deleteResponse) {
+                                        toastr.success('The order has been successfully processed, and the cart is now empty.', {
+                                            hideDuration: 10000,
+                                            closeButton: true,
+                                        });
                                     } else {
                                         toastr.error('Someting went wrong while empty the cart after place order.', {
                                             hideDuration: 10000,
@@ -762,15 +776,53 @@
             });
 
             @if(isset($cust_country))
-                    var custCountry = "{{$cust_country}}";
-                    var selectedValue = $('#countries').find('option').filter(function() {
-                        return $(this).text().trim() === custCountry.trim();
-                    }).val();
+                var custCountry = "{{$cust_country}}";
+                var selectedValue = $('#countries').find('option').filter(function() {
+                    return $(this).text().trim() === custCountry.trim();
+                }).val();
+                states(selectedValue)
             @endif
 
             $('#countries').change(function(){
                 var selectedCountry = $(this).val();
+                if (selectedCountry) {
+                    states(selectedCountry);
+                }
             });
+
+            function states(countryno) {
+                $.ajax({
+                            url: "{{route('checkout.states')}}",
+                            method: 'POST',
+                            headers: {'X-CSRF-TOKEN' : '{{ csrf_token() }}'},
+                            data: { country: countryno },
+                            success: function(response) {
+                                if(response.Success){
+                                    $('#state_dropdown').empty();
+                                    $('#state_dropdown').append('<option value="">Select a state*</option>');
+                                    $.each(response.States, function(index, value) {
+                                        console.log('state val', value);
+                                        var option = $('<option>', {
+                                            value: value.StateID.toString(),
+                                            text: value.StateName
+                                        });
+                                        if (value.StateCode == $('#customer_state').val()) {
+                                            option.prop('selected', true);
+                                        }
+                                        $('#state_dropdown').append(option);
+                                    });
+                                }else{
+                                    $('#state').val('');
+                                    $('#state_dropdown').empty();
+                                    $('#state_dropdown').append('<option value="">No States Available</option>');
+                                }
+                                console.log(response);
+                            },
+                            error: function(xhr, status, error) {
+                                alert(error);
+                            }
+                });
+            }
 
         });
     </script>
