@@ -416,7 +416,7 @@
                                                         </label>
                                                         {{-- <input type="text" data-required="true" class="form-control bg-white" name="State" maxlength="50" aria-describedby="State" placeholder="State*"> --}}
                                                         @if(isset($cust_state))
-                                                        <select name="state" id="state_dropdown" class="form-control bg-white checkout-dropdown">
+                                                        <select name="State" id="state_dropdown" class="form-control bg-white checkout-dropdown">
                                                             <option value="1">1</option>
                                                             <option value="2">2</option>
                                                             <option value="3">3</option>
@@ -911,7 +911,7 @@
                                     $('#state_dropdown').append('<option value="">Select a state*</option>');
                                     $.each(response.States, function(index, value) {
                                     var option = $('<option>', {
-                                        value: value.StateID,
+                                        value: value.StateID.toString(),
                                         text: value.StateName
                                     });
                                     if (value.StateCode == $('#customer_state').val()) {
