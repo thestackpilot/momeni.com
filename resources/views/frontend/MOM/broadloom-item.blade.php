@@ -45,10 +45,10 @@ use App\Http\Controllers\CommonController;
                                     </div>
                                 </div>
                                 <div class="product-details-thumbs-2 slider-thumbs-2 pt-3" id="product_thumbnails">
-                                    @php $i = 0 @endphp
+                                    {{-- @php $i = 0 @endphp
                                     @foreach($items['Items'][0]['ImageNameArray'] as $image)
                                     <div class="sm-image"> <img id="thumbnail_{{$i++}}" onclick="setMainImage(this)" src="{{$image}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" alt="{{$items['Items'][0]['ItemName']}}" /> </div>
-                                    @endforeach
+                                    @endforeach --}}
                                 </div>
                             </div>
                         </div>
@@ -246,7 +246,7 @@ use App\Http\Controllers\CommonController;
                                         <span class="base_price" id="base_price"></span>
                                     </div>
                                 </div> -->
-                                <div class="m-5 spinner-border qty-loader d-none" role="status">
+                                <div class="m-5 spinner-border qty-loader d-none" id="spinner" role="status">
                                     <span class="sr-only" style="opacity:0;">Loading...</span>
                                 </div>
 
@@ -425,7 +425,7 @@ use App\Http\Controllers\CommonController;
                         onclick: "setMainImage(this)",
                         onerror: "this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'"
                     }));
-                    $('#product_thumbnails').append(div);
+                    //$('#product_thumbnails').append(div);
                     //$('#thumbnail_'+i).attr('src',item.ImageNameArray[i]).attr('onerror', "this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'");
                 }
                 init_sliders();
@@ -674,6 +674,7 @@ use App\Http\Controllers\CommonController;
                     $('#qty_msg').css('opacity', '0.4');
                     if (!$('#qty-main').is(':visible'))
                         show_components(['.qty-loader']);
+                        hide_components(['.add-to-cart-button']);
                     $.post('{{route("frontend.item.ats")}}', {
                         _token: '{{csrf_token()}}',
                         item_id: item.ItemID,
@@ -778,6 +779,7 @@ use App\Http\Controllers\CommonController;
                         $('#qty_msg').css('opacity', '0.4');
                         if (!$('#qty-main').is(':visible'))
                             show_components(['.qty-loader']);
+                            hide_components(['.add-to-cart-button']);
                         $.post('{{route("frontend.item.ats")}}', {
                             _token: '{{csrf_token()}}',
                             item_id: item_id,
@@ -794,10 +796,11 @@ use App\Http\Controllers\CommonController;
 
     function startBuying(ItemID, CustomerID, ATSInfo) {
         if ($('#login_by_popup').length) {
-            show_components(['#login_by_popup', '#cart_main']);
+            show_components(['#login_by_popup', '#cart_main', '.add-to-cart-button']);
             hide_components(['#qty-main', '.qty-loader']);
         } else {
-            hide_components(['.qty-loader', '#login_by_popup']);
+            hide_components(['.qty-loader', '#login_by_popup', '.add-to-cart-button']);
+            show_components(['.add-to-cart-button']);
             // show_components(['#qty-main', '#cart_main', '#add_to_cart']);
             if (customerID.length != 0) show_components(['.base_price']);
         }
@@ -1089,6 +1092,7 @@ use App\Http\Controllers\CommonController;
         init();
         // bindClicks();
         init_sliders();
+
 
         // $('.owl-carousel').owlCarousel(
         // {

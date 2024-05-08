@@ -36,11 +36,15 @@ class CartController extends FrontendController
                 // die();
                 $size_array = json_decode($request->cart_item_size, true);
 
+                $request->merge([
+                   'cart_item_price' => floatval($request->cart_item_price) + floatval($request->item_surging_price),
+                ]);
+
                 foreach ($size_array as $size_data) {
 
                     $request->merge([
                         'cart_item_size' => $size_data['size'],
-                        'cart_item_price' => $size_data['price'] + $request->item_serging_price,
+                       // 'cart_item_price' => $size_data['price'] + $request->item_serging_price,
                     ]);
 
                     (new Cart())->save_or_update_full_cart_item($request);

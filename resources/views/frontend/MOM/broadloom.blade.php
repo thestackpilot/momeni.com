@@ -169,6 +169,9 @@
                                                         <input type="text" class="form-control" id="sq-ft"
                                                             value=""
                                                                disabled>
+                                                        <input type="hidden" class="form-control" id="ats-qty"
+                                                               value=""
+                                                                  disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
@@ -859,10 +862,10 @@
                     'cart_customer_id': $('#customer_id').val(),
                     'cart_item_name': item.ItemName,
                     'cart_item_quantity': 1,
-                    'cart_item_price': 0,
                     'cart_item_color': item.ItemColor,
                     'cart_item_size': $('#size_price').val(),
-                    'item_surging_price': $('surging_charges').val(),
+                    'cart_item_price': $("#sq-ext").val(),
+                    'item_surging_price': $('#surging_charges').val(),
                     'cart_item_currency': '$',
                     'cart_item_image': item.ImageNameArray[0],
                     'cart_item_data': $('#item_json').val(),
@@ -996,17 +999,25 @@
 
                 },
                 success: function (data) {
+                    console.log('add cut api res');
+                    console.log(data);
                     if (data.cut_piece.OutPut.Success) {
                         $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
                         var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
                         var sizes = [];
                         var line_no = 1;
+                        let totalLen = 1;
+                        let totalWid = 1;
+                        let totalSqftPrice = 0;
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
-                            console.log('addc cut', item);
+                            console.log('add cut res', item);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
                             let widthInches = item.ATSWidth % 12;
+
+                            totalLen *= lengthFeet;
+                            totalWid *= widthFeet;
 
                             var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
                             var item_id = item.ItemID.replace('-', '_');
@@ -1036,7 +1047,7 @@
                             // Calculate the SQ-YRD Price ($) and EXT Price ($)
                             let sqYrdPrice = $("#sq-ft").val() / 9; // Price per square yard
                             let extPrice = totalAreaInSquareYards * sqYrdPrice;
-                            size.price = extPrice.toFixed(2);
+                            // size.price = extPrice.toFixed(2);
 
                             if (item.LengthStatus == 'F') {
                                 console.log('in size');
@@ -1044,6 +1055,10 @@
                             }
                             line_no = line_no + 1;
                         });
+
+                        totalSqftPrice = totalLen + totalWid;
+                        $("#ats-qty").val(totalSqftPrice);
+                        updatePrices();
 
                         divContent += `</div>`;
 
@@ -1110,8 +1125,11 @@
             let totalAreaInSquareYards = totalAreaInSquareFeet / 9; // 1 square yard = 9 square feet
 
             // Calculate the SQ-YRD Price ($) and EXT Price ($)
-            let sqYrdPrice = perSquareFeetPrice / 9; // Price per square yard
-            let extPrice = totalAreaInSquareYards * sqYrdPrice;
+            //let sqYrdPrice = perSquareFeetPrice / 9; // Price per square yard
+           // let extPrice = totalAreaInSquareYards * sqYrdPrice;
+
+            let sqYrdPrice = perSquareFeetPrice * 9;
+            let extPrice = $("#sq-ft").val() *  $("#ats-qty").val();
 
             // Update the SQ-YRD Price ($) and EXT Price ($) fields
             $("#sq-yrd").val(sqYrdPrice.toFixed(2)); // Set SQ-YRD Price with two decimal places
@@ -1180,7 +1198,6 @@
 
             $('#roll_pieces').change(function () {
                 // console.log($('#customer_id').val());
-                console.log('sadadd')
                 $.ajax({
                     method: 'POST',
                     url: '{{ route('frontend.item.ats') }}',
@@ -1190,6 +1207,8 @@
                         'customer_id': $('#customer_id').val()
                     },
                     success: function(response) {
+                        console.log('check res');
+                        console.log(response);
                         console.log(response.data['Price']);
                         $("#sq-ft").val(response.data['Price']);
                         updatePrices();
