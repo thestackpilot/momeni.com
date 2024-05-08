@@ -184,18 +184,19 @@
                                             <div class="col-md-7 mb-2">
                                                 <div class="d-flex">
                                                 <input type="radio" name="shipping-address" class="existing-address customer-addr-select" id="existing-address" value="existing-address" />
-                                                <select class="p-0 m-0" class="select-address" style="height:40px !important; line-height: 20px !important; padding: 0.375rem 1rem !important;">
+                                                <select class="p-0 m-0" class="select-address" id="select-address" style="height:40px !important; line-height: 20px !important; padding: 0.375rem 1rem !important;">
                                                     @foreach($shipping_addresses['ShipToAddresses'] as $address)
-                                                        <option value="{{$address['AddressID']}}">
+                                                        <option value="{{$address['AddressID']}}~~~{{json_encode($address)}}">
                                                             {{$address['AddressID']}} : {!!$address['FirstName'] ? $address['FirstName'] . ( $address['LastName'] ? " {$address['LastName']}" : '' ) : ''!!}
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                @foreach($shipping_addresses['ShipToAddresses'] as $address)
-                                                    <p style="display: none !important;" class="card-text address-card d-none {{$address['AddressID']}}" id="{{$address['AddressID']}}">
-                                                        <input type="hidden" class="hidden-inp" name="shipping-address-data" value="{{json_encode($address)}}" />
-                                                    </p>
-                                                @endforeach
+                                                <p style="display: none !important;" class="card-text address-card d-none {{$address['AddressID']}}" id="{{$address['AddressID']}}">
+                                                    <input type="hidden" class="hidden-inp" name="shipping-address-data" value="{{json_encode($address)}}" />
+                                                </p>
+                                                <p style="display: none !important">
+                                                    <input type="hidden" id="hidden-address_id" name="AddressID" value="{{$shipping_addresses['ShipToAddresses'][0]['AddressID']}}" />
+                                                </p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3 mb-2">
@@ -762,17 +763,31 @@
                 } else {
                     $(".disable-toggle").removeClass("muted-bd-fields");
                     $(".hidden-inp").val("");
+                    $('#hidden-address_id').val("");
                     $(".disable-toggle").attr("required", true);
                     $("#bd-address2").removeAttr("required")
                 }
             });
 
 
-            $('.select-address').on('change', function() {
-                var address = JSON.parse($('.hidden-inp').val());
-                if(address != undefined){
-                    $('.new-address').val(address);
+            $('#select-address').on('change', function() {
+                var selectaddress = $('#select-address').val();
+                var parts = selectaddress.split('~~~');
+                var firstPart = parts[0];
+                var secondPart = parts[1];
+                $('.hidden-address_id').val('');
+                if(firstPart != undefined){
+                    $('#hidden-address_id').val(firstPart);
                 }
+                $('.hidden-inp').val('');
+                if(secondPart != undefined){
+                    $('.hidden-inp').val(secondPart);
+                }
+
+                let valSet = JSON.parse($('.hidden-inp').val());
+                $('input[name="Address1"]').val(valSet.Address1);
+                $('input[name="City"]').val(valSet.City);
+                $('input[name="Zip"]').val(valSet.Zip);
             });
 
             @if(isset($cust_country))
@@ -801,7 +816,7 @@
                                     $('#state_dropdown').empty();
                                     $('#state_dropdown').append('<option value="">Select a state*</option>');
                                     $.each(response.States, function(index, value) {
-                                        console.log('state val', value);
+                                        // console.log('state val', value);
                                         var option = $('<option>', {
                                             value: value.StateID.toString(),
                                             text: value.StateName
@@ -816,7 +831,6 @@
                                     $('#state_dropdown').empty();
                                     $('#state_dropdown').append('<option value="">No States Available</option>');
                                 }
-                                console.log(response);
                             },
                             error: function(xhr, status, error) {
                                 alert(error);
@@ -825,5 +839,28 @@
             }
 
         });
+
+
+        $(document).ready(function() {
+            var selectaddress = $('#select-address').val();
+            var parts = selectaddress.split('~~~');
+            var firstPart = parts[0];
+            var secondPart = parts[1];
+
+            $('.hidden-address_id').val('');
+            if(firstPart != undefined){
+                $('#hidden-address_id').val(firstPart);
+            }
+            $('.hidden-inp').val('');
+            if(secondPart != undefined){
+                $('.hidden-inp').val(secondPart);
+            }
+
+            let valSet = JSON.parse($('.hidden-inp').val());
+            $('input[name="Address1"]').val(valSet.Address1);
+            $('input[name="City"]').val(valSet.City);
+            $('input[name="Zip"]').val(valSet.Zip);
+        });
+
     </script>
 @endsection
