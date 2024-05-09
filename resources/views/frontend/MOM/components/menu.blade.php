@@ -169,9 +169,10 @@
                     <div class="checkout_items_wrap mt-4">
                         @foreach($cart -> items as $item)
                             @php
-                                //dd(unserialize($item->item_data));
                                 if(isset($item -> item_data) && $item -> item_data) {
-                                    $item_data = json_decode($item -> item_data);
+                                //dd(unserialize($item->item_data));
+                                    $item_data = json_decode(unserialize($item->item_data));
+                                    //$item_data = json_decode($item -> item_data);
                                 }
 
                                 if ($item->broadloom_item) {
