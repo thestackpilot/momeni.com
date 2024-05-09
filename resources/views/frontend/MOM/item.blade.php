@@ -1100,11 +1100,8 @@ console.log('customer_id1: ', customer_id);
             $.ajax({
                 method: 'POST',
                 url: '{{route("frontend.cart.add")}}',
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
                 data: {
-                    {{--'_token': '{{csrf_token()}}',--}}
+                    '_token': '{{csrf_token()}}',
                     'cart_item_id': $('#cart_item_id').val(),
                     'cart_customer_id': $('#cart_customer_id').val(),
                     'cart_item_name': $('#cart_item_name').val(),
@@ -1114,7 +1111,7 @@ console.log('customer_id1: ', customer_id);
                     'cart_item_size': $('#cart_item_size').val(),
                     'cart_item_currency': $('#cart_item_currency').val(),
                     'cart_item_image': $('#cart_item_image').val(),
-                    // 'cart_item_data': $('#item_json').html(),
+                    'cart_item_data': $('#item_json').html(),
                     'cart_item_oak': $('#cart_item_oak').val(),
                     'cart_item_eta': $('#cart_item_eta').val()
                 },
