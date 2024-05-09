@@ -1244,7 +1244,7 @@
                                         hideDuration: 10000,
                                         closeButton: true,
                                     });
-                            }else if(broadloom_item_exist === 0){
+                            }else if(broadloom_item_exist <= 0){
                                 console.log('else if');
                                 message = 'Item not available.'
                                 toastr.warning(message, {
