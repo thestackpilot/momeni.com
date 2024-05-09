@@ -600,53 +600,55 @@
 
     function getDetailedProductChart(color){
         var itemsETAValue = $('#items-eta-data').val();
-        var itemsETA = JSON.parse(itemsETAValue);
-        var filteredData = itemsETA.filter(function(item) {
-            return item.ItemColor === color;
-        });
-        $('#filtered-table-body .item-color').empty();
-        filteredData.forEach(function(itemETA) {
-            var basePrice = "{{ ConstantsController::CURRENCY }}" + parseFloat(itemETA.BasePrice).toFixed(parseInt("{{ ConstantsController::ALLOWED_DECIMALS }}"));
-            var row = '<tr class="item-color" id="chart-remove">' +
-                    '<input type="hidden" class="cart_item_id" name="product_cart_item_id[]" value="' + itemETA.ItemID + '">' +
-                    '<input type="hidden" class="cart_design_id" name="cart_design_id[]" value="' + itemETA.DesignID + '">' +
-                    '<input type="hidden" class="cart_customer_id" name="cart_customer_id" value="">' +
-                    '<input type="hidden" class="cart_item_name" name="cart_item_name[]" value="' + itemETA.ItemName + '">' +
-                    '<input type="hidden" class="cart_item_quantity" name="cart_item_quantity" value="">' +
-                    '<input type="hidden" class="cart_item_price" name="cart_item_price[]" value="' + itemETA.BasePrice + '">' +
-                    '<input type="hidden" class="cart_item_color" name="cart_item_color[]" value="' + itemETA.ItemColor + '">' +
-                    '<input type="hidden" class="cart_item_size" name="cart_item_size[]" value="' + itemETA.Size + '">' +
-                    '<input type="hidden" class="cart_item_currency" name="cart_item_currency[]" value="">' +
-                    '<input type="hidden" class="cart_item_image" name="cart_item_image[]" value="' + itemETA.ImageName + '">' +
-                    '<input type="hidden" class="cart_item_eta" name="cart_item_eta[]" value="">' +
-                    '<td width="15%" align="center" class="PAChart-Size">' + itemETA.Size + '</td>' +
-                    '<td width="15%" align="center" class="PAChart-Dimensions-Weight">' + itemETA.ShippingDimension + '<br />' + itemETA.DimentionalWeight + '</td>' +
-                    '<td width="10%" align="center" class="PAChart-Color">' + itemETA.ItemColor + '</td>' +
-                    '<td width="10%" align="center" class="PAChart-InStock">' + itemETA.QtyInStock + '</td>' +
-                    '<td width="13%" align="center" class="PAChart-Within30Days PAChart-text-Within30Days">' + itemETA.QtyThirtyDay + '</td>' +
-                    '<td width="13%" align="center" class="PAChart-Within2Months">' + itemETA.QtyTwoMonth + '</td>' +
-                    '<td width="13%" align="center" class="PAChart-Over2Months">' + itemETA.QtyOverTwoMonth + '</td>';
-                    @if(!in_array('.PAChart-Price', $dont_show))
-                        row += '<td width="13%" align="center" class="PAChart-Price">' + basePrice +'</td>';
-                    @endif
-            row += '</tr>';
-            $('#filtered-table-body').append(row);
-        });
-        var productChart = $('#items-eta-product').val() !== '' ? $('#items-eta-product').val() : '';
-        if(typeof productChart !== 'undefined'){
-            var productChartValue = JSON.parse(productChart);
-            var productChartfilteredData = productChartValue.filter(function(i) {
-                return i.ItemColor === color;
+        if(itemsETAValue != undefined){
+            var itemsETA = JSON.parse(itemsETAValue);
+            var filteredData = itemsETA.filter(function(item) {
+                return item.ItemColor === color;
             });
-            $('#product-detailed .product-color').empty();
-            filteredData.forEach(function(itemData) {
-                var row = '<tr class="product-color">' +
-                '<td width="15%" align="center" class="PAChart-Size">' + itemData.Size + '</td>' +
-                '<td width="15%" align="center" class="PAChart-Dimensions-Weight">' + itemData.ShippingDimension + '<br />' + itemData.DimentionalWeight + '</td>' +
-                '<td width="15%" align="center" class="PAChart-Color">' + itemData.ItemColor + '</td>';
+            $('#filtered-table-body .item-color').empty();
+            filteredData.forEach(function(itemETA) {
+                var basePrice = "{{ ConstantsController::CURRENCY }}" + parseFloat(itemETA.BasePrice).toFixed(parseInt("{{ ConstantsController::ALLOWED_DECIMALS }}"));
+                var row = '<tr class="item-color" id="chart-remove">' +
+                        '<input type="hidden" class="cart_item_id" name="product_cart_item_id[]" value="' + itemETA.ItemID + '">' +
+                        '<input type="hidden" class="cart_design_id" name="cart_design_id[]" value="' + itemETA.DesignID + '">' +
+                        '<input type="hidden" class="cart_customer_id" name="cart_customer_id" value="">' +
+                        '<input type="hidden" class="cart_item_name" name="cart_item_name[]" value="' + itemETA.ItemName + '">' +
+                        '<input type="hidden" class="cart_item_quantity" name="cart_item_quantity" value="">' +
+                        '<input type="hidden" class="cart_item_price" name="cart_item_price[]" value="' + itemETA.BasePrice + '">' +
+                        '<input type="hidden" class="cart_item_color" name="cart_item_color[]" value="' + itemETA.ItemColor + '">' +
+                        '<input type="hidden" class="cart_item_size" name="cart_item_size[]" value="' + itemETA.Size + '">' +
+                        '<input type="hidden" class="cart_item_currency" name="cart_item_currency[]" value="">' +
+                        '<input type="hidden" class="cart_item_image" name="cart_item_image[]" value="' + itemETA.ImageName + '">' +
+                        '<input type="hidden" class="cart_item_eta" name="cart_item_eta[]" value="">' +
+                        '<td width="15%" align="center" class="PAChart-Size">' + itemETA.Size + '</td>' +
+                        '<td width="15%" align="center" class="PAChart-Dimensions-Weight">' + itemETA.ShippingDimension + '<br />' + itemETA.DimentionalWeight + '</td>' +
+                        '<td width="10%" align="center" class="PAChart-Color">' + itemETA.ItemColor + '</td>' +
+                        '<td width="10%" align="center" class="PAChart-InStock">' + itemETA.QtyInStock + '</td>' +
+                        '<td width="13%" align="center" class="PAChart-Within30Days PAChart-text-Within30Days">' + itemETA.QtyThirtyDay + '</td>' +
+                        '<td width="13%" align="center" class="PAChart-Within2Months">' + itemETA.QtyTwoMonth + '</td>' +
+                        '<td width="13%" align="center" class="PAChart-Over2Months">' + itemETA.QtyOverTwoMonth + '</td>';
+                        @if(!in_array('.PAChart-Price', $dont_show))
+                            row += '<td width="13%" align="center" class="PAChart-Price">' + basePrice +'</td>';
+                        @endif
                 row += '</tr>';
-                $('#product-detailed').append(row);
+                $('#filtered-table-body').append(row);
             });
+            var productChart = $('#items-eta-product').val() !== '' ? $('#items-eta-product').val() : '';
+            if(typeof productChart !== 'undefined'){
+                var productChartValue = JSON.parse(productChart);
+                var productChartfilteredData = productChartValue.filter(function(i) {
+                    return i.ItemColor === color;
+                });
+                $('#product-detailed .product-color').empty();
+                filteredData.forEach(function(itemData) {
+                    var row = '<tr class="product-color">' +
+                    '<td width="15%" align="center" class="PAChart-Size">' + itemData.Size + '</td>' +
+                    '<td width="15%" align="center" class="PAChart-Dimensions-Weight">' + itemData.ShippingDimension + '<br />' + itemData.DimentionalWeight + '</td>' +
+                    '<td width="15%" align="center" class="PAChart-Color">' + itemData.ItemColor + '</td>';
+                    row += '</tr>';
+                    $('#product-detailed').append(row);
+                });
+            }
         }
     }
 
