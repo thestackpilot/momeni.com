@@ -251,6 +251,7 @@
                                                     <td width="13%" align="center" class="PAChart-Within30Days PAChart-text-Heading">Within30 Days</td>
                                                     <td width="13%" align="center" class="PAChart-Within2Months PAChart-text-Heading">Within 2 Months</td>
                                                     <td width="13%" align="center" class="PAChart-Over2Months PAChart-text-Heading">Over 2 Months</td>
+                                                    {{-- Check Condition of price --}}
                                                     @if (!in_array('.PAChart-Price', $dont_show))
                                                         <td width="13%" align="center" class="PAChart-Price PAChart-text-Heading">Price</td>
                                                     @endif
