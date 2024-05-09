@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use View;
 use App\Models\Cart;
 use Illuminate\Http\Request;
@@ -483,8 +484,18 @@ class GenericReportsController extends DashboardController
 
         if ( count( $request->all() ) > 0 && isset( $request->submit ) )
         {
+            if ( $request->has( 'draw' ) && $request->draw )
+            {
+                $page      = $request->start == 0 ? 1 : ( $request->start / $request->length ) + 1;
+                $page_size = $request->length;
+            }
+            else
+            {
+                $page      = 1;
+                $page_size = 25;
+            }
             // echo "<pre>" . print_r($request->all(), 1). "</pre>";
-            $memos = $this->ApiObj->Get_DebitMemos( $request->customer, $request->from_date, $request->to_date, $request->invoice_number, $request->vendor );
+            $memos = $this->ApiObj->Get_DebitMemos( $request->customer, $request->from_date, $request->to_date, $request->invoice_number, $request->vendor, $page, $page_size );
             $table = array( 'thead' => [
                 'memo_number'    => 'Memo Number',
                 // 'customer_id'    => 'Customer ID',
@@ -536,6 +547,18 @@ class GenericReportsController extends DashboardController
                             ]
                         ]
                     ];
+                }
+
+                if ( $request->has( 'draw' ) && $request->draw )
+                {
+                    die( json_encode(
+                        [
+                            'recordsFiltered' => $memos['TotalRows'],
+                            'recordsTotal'    => $memos['TotalRows'],
+                            'draw'            => $request->draw + 1,
+                            'data'            => $table['tbody']
+                        ]
+                    ) );
                 }
 
             }
@@ -778,7 +801,6 @@ class GenericReportsController extends DashboardController
             }
 
             $view_orders = $this->ApiObj->View_Order( $request->customer, $request->external_number, $request->from_date, $request->to_date, $request->sales_rep, $page, $page_size, $request->customer_po, $request->order_number );
-          //  dd($view_orders);
             $table       = array( 'thead' => [
                 'order_no'     => 'Order Number',
                 'customer_id'  => 'Customer ID',
@@ -806,7 +828,7 @@ class GenericReportsController extends DashboardController
                         'tab'          => isset( $view_order['Header']['TabStatusDescription'] ) ? $view_order['Header']['TabStatusDescription'] : '',
                         'order_date'   => isset( $view_order['Header']['OrderDate'] ) ? CommonController::get_date_format( $view_order['Header']['OrderDate'] ) : 'N/A',
                         'actions'      => [['type' => 'modal', 'label' => 'View Details']],
-                        'other_actions' => [['type' => 'modal', 'label' => 'View Reports']],
+                        'other_actions' => [['type' => 'modal', 'label' => 'View Report']],
                         'other_actions_details' => [
                             'OrderNo'   => $view_order['Header']['OrderNo'],
                         ],
@@ -1235,6 +1257,7 @@ class GenericReportsController extends DashboardController
                 return $report['document']['ReportData'];
             }
         } catch (\Exception $e) {
+            Log::error($e);
             return response()->json(['error' => 'An error occurred. Please try again later.']);
         }
     }

@@ -13,7 +13,7 @@ class Cart extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'customer_id', 'item_id', 'item_name', 'item_quantity', 'item_price', 'item_color', 'item_size', 'item_currency', 'item_image', 'item_eta', 'item_data', 'oak_item', 'item_broadloom'];
+    protected $fillable = ['user_id', 'customer_id', 'item_id', 'item_name', 'item_quantity', 'item_price', 'item_color', 'item_size', 'item_currency', 'item_image', 'item_eta', 'item_data', 'oak_item', 'oak_sku', 'item_broadloom'];
     //check if the user has an active cart item
     public function get_active_cart_customer()
     {
@@ -118,7 +118,8 @@ class Cart extends Model
                 "item_atsq"              => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['ATSQ'] : 9999,
                 "item_only_max_quantity" => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['OnlyMaxQuantity'] : false,
                 "oak_item"              => $cart_item->oak_item,
-                "broadloom_item"        => $cart_item->item_broadloom
+                "broadloom_item"        => $cart_item->item_broadloom,
+                "oak_sku"               =>  $cart_item->oak_sku
 //                "ATSQ"                   => isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0
             );
             $cart_count += $cart_item->item_quantity;
@@ -240,11 +241,10 @@ class Cart extends Model
                     'user_id'    => Auth::user()->id, 'customer_id'           => $request->cart_customer_id, 'item_id'           => $request->cart_item_id,
                     'item_name'  => $request->cart_item_name, 'item_quantity' => $quantity, 'item_price'                         => floatval(number_format( str_replace(',', '', $request->cart_item_price), ConstantsController::ALLOWED_DECIMALS, '.', '' )),
                     'item_color' => $request->cart_item_color, 'item_size'    => $request->cart_item_size, 'item_currency'       => $request->cart_item_currency,
-                    'item_image' => $request->cart_item_image, 'item_data'    => serialize( $request->cart_item_data ), 'item_eta' => $request->cart_item_eta, 'oak_item' => $request->cart_item_oak
+                    'item_image' => $request->cart_item_image, 'item_data'    => serialize( $request->cart_item_data ), 'item_eta' => $request->cart_item_eta, 'oak_item' => $request->cart_item_oak, 'oak_sku' => $request->cart_item_sku
                 ]
             );
         }
-
     }
 
     // update cart value
