@@ -806,6 +806,7 @@
                         SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                         customer_id: customer_id
                     }, function(response) {
+                        console.log('ats res', response);
                         startBuying(item.ItemID, customer_id, response.data);
                     });
 
@@ -1112,9 +1113,10 @@
                     'cart_item_size': $('#cart_item_size').val(),
                     'cart_item_currency': $('#cart_item_currency').val(),
                     'cart_item_image': $('#cart_item_image').val(),
-                    'cart_item_data': $('#item_json').html(),
+                    // 'cart_item_data': $('#item_json').html(),
                     'cart_item_oak': $('#cart_item_oak').val(),
-                    'cart_item_eta': $('#cart_item_eta').val()
+                    'cart_item_eta': $('#cart_item_eta').val(),
+                    'cart_item_sku': "{{ $SUK }}"
                 },
                 success: function(response) {
                     if (response.success) {
@@ -1244,7 +1246,7 @@
                                         hideDuration: 10000,
                                         closeButton: true,
                                     });
-                            }else if(broadloom_item_exist <= 0){
+                            }else if(broadloom_item_exist === 0){
                                 console.log('else if');
                                 message = 'Item not available.'
                                 toastr.warning(message, {

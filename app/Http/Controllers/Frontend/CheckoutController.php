@@ -319,7 +319,8 @@ class CheckoutController extends FrontendController
                     'ItemID'    => $item['item_id'],
                     'OrderQty'  => $item['item_quantity'],
                     'UnitPrice' => $item['item_price'],
-                    'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+                    'MarkFor'   => isset( $requestDataArray['sidemark'] ) && isset( $requestDataArray['sidemark'][$item['item_id']] ) ? $requestDataArray['sidemark'][$item['item_id']] : '',
+                    'SKU'       => $item['oak_sku']
                 ] );
 
                 array_push( $cartItems, [
