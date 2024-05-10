@@ -1172,7 +1172,7 @@ console.log('customer_id1: ', customer_id);
                     'cart_item_size': $('#cart_item_size').val(),
                     'cart_item_currency': $('#cart_item_currency').val(),
                     'cart_item_image': $('#cart_item_image').val(),
-                    // 'cart_item_data': $('#item_json').html(),
+                    'cart_item_data': $('#item_json').html(),
                     'cart_item_oak': $('#cart_item_oak').val(),
                     'cart_item_eta': $('#cart_item_eta').val(),
                     'cart_item_sku': "{{ $SUK }}"
