@@ -200,7 +200,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
                                 <div class="mt-4 d-flex justify-content-end mx-5">
                                     @auth
-                                    <a href="javascript:void(0)" class="add-to-cart-button align-content-center btn btn-dark" id="add_cart">
+                                    <a href="javascript:void(0)" class="add-to-cart-button align-content-center btn btn-dark d-none" id="add_cart" disabled>
                                         Place Order <i class="fa fa-long-arrow-right"></i>
                                     </a>
                                     @endauth
@@ -1088,7 +1088,6 @@ use App\Http\Controllers\CommonController;
                 }
             }]
         });
-
         init();
         // bindClicks();
         init_sliders();
@@ -1126,5 +1125,20 @@ use App\Http\Controllers\CommonController;
         // });
 
     });
+
+    setInterval(function() {
+        console.log('check button');
+        if($('.qty-loader').hasClass("d-none")){
+                console.log('if execute');
+                $('.qty-loader').addClass('active');
+                $('#add_cart').removeAttr('disabled');
+                $('#add_cart').removeClass('d-none');
+        }else{
+                console.log('else execute');
+                $('.qty-loader').removeClass('active');
+                $('#add_cart').addClass('d-none');
+                $('#add_cart').attr('disabled');
+        }
+    }, 100);
 </script>
 @endsection
