@@ -247,6 +247,24 @@
                                         <div class="cut-pieces-wrapper">
                                             <div style="font-size: 22px;"><strong>Show Cut</strong></div>
                                             <div class="cut-pieces" id="cut-pieces">
+                                                <div class="length"><strong>5.0' (Length)</strong></div>
+                                                <div class="pieces">
+                                                    <div class="width"><strong>24' (Width)</strong></div>
+                                                    <div class="picese-wrapper" id="picese-wrapper">
+                                                        <div class="parent-cut-piece" style="width: 100%">
+                                                            <div class="piece" style="width: 100.00%;">5'0" x 2'0"</div>
+                                                        </div>
+                                                        <div class="parent-cut-piece">
+                                                            <div class="piece" style=";">2'0" x 2'0"</div>
+                                                            <div class="piece" style="">2'0" x 9'0"</div>
+                                                            <div class="piece" style=";">2'0" x 2'0"</div>
+                                                        </div>
+                                                        <div class="parent-cut-piece">
+
+                                                            <div class="piece" style="">3'0" x 13'0"</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

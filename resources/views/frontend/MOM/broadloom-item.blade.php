@@ -200,7 +200,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
                                 <div class="mt-4 d-flex justify-content-end mx-5">
                                     @auth
-                                    <a href="javascript:void(0)" class="add-to-cart-button align-content-center btn btn-dark d-none" id="add_cart" disabled>
+                                    <a href="javascript:void(0)" class="add-to-cart-button align-content-center btn btn-dark d-none"  id="add_cart">
                                         Place Order <i class="fa fa-long-arrow-right"></i>
                                     </a>
                                     @endauth
@@ -1024,32 +1024,34 @@ use App\Http\Controllers\CommonController;
 
         $("#add_cart").on("click", function(){
             if ( $('input[name="sale_rep"]').val() !== 1 &&   customerID.length !== 0) {
-                $.ajax({
-                    url: "{{ route('check-cart-item') }}",
-                    type: "GET",
-                    success: function (response) {
-                        if (response) {
-                            if (confirm('You have already items in your cart, You want to add broadloom item will remove previous items from cart, Are You sure?')) {
-                                $.ajax({
-                                    url: "{{ route('delete-cart-items') }}",
-                                    type: "GET",
-                                    success: function (response) {
-                                        if (response) {
-                                            generateBroadloomUrl();
-                                        } else {
-                                            toastr.error('Someting went wrong', {
-                                                hideDuration: 10000,
-                                                closeButton: true,
-                                            });
+                if($('#cart_customer_id').val() != '' &&  $('#color_id').val() != ''){
+                    $.ajax({
+                        url: "{{ route('check-cart-item') }}",
+                        type: "GET",
+                        success: function (response) {
+                            if (response) {
+                                if (confirm('You have already items in your cart, You want to add broadloom item will remove previous items from cart, Are You sure?')) {
+                                    $.ajax({
+                                        url: "{{ route('delete-cart-items') }}",
+                                        type: "GET",
+                                        success: function (response) {
+                                            if (response) {
+                                                generateBroadloomUrl();
+                                            } else {
+                                                toastr.error('Someting went wrong', {
+                                                    hideDuration: 10000,
+                                                    closeButton: true,
+                                                });
+                                            }
                                         }
-                                    }
-                                })
+                                    })
+                                }
+                            } else {
+                                generateBroadloomUrl();
                             }
-                        } else {
-                            generateBroadloomUrl();
                         }
-                    }
-                })
+                    })
+                }
             } else{
                 toastr.warning('Please select a customer...', {
                     hideDuration: 10000,
@@ -1126,19 +1128,5 @@ use App\Http\Controllers\CommonController;
 
     });
 
-    setInterval(function() {
-        console.log('check button');
-        if($('.qty-loader').hasClass("d-none")){
-                console.log('if execute');
-                $('.qty-loader').addClass('active');
-                $('#add_cart').removeAttr('disabled');
-                $('#add_cart').removeClass('d-none');
-        }else{
-                console.log('else execute');
-                $('.qty-loader').removeClass('active');
-                $('#add_cart').addClass('d-none');
-                $('#add_cart').attr('disabled');
-        }
-    }, 100);
 </script>
 @endsection
