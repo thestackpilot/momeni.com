@@ -63,22 +63,22 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                     <div class="col-md-8 col-sm-12 col-12 d-flex flex-row justify-content-left three-col product-listing d-flex flex-wrap mb-5">
                         <div class="cu-top-filters col-12 d-flex justify-content-between align-items-center">
                             <div>
-                        
+
                                 <ul>
                                     @if($main_collection['MainCollectionID'] == 'Rugs')
-                                   <li> 
-                                            <input class="form-check-input" 
-                                            type="checkbox" 
-                                            name="discontinued" 
-                                            id="flexCheckChecked-discontinued" 
+                                   <li>
+                                            <input class="form-check-input"
+                                            type="checkbox"
+                                            name="discontinued"
+                                            id="flexCheckChecked-discontinued"
                                             {{ isset($is_discontinued) && $is_discontinued ? 'checked' : '' }}
                                             >
-                                           
+
                                         <label class="form-check-label" for="flexCheckChecked-discontinued"> Show Discontinued {{ $main_collection['Description'] }}</label>
                                        </li>
                                     </ul>
                                 @endif
-                   
+
                             </div>
                             <div class="d-flex align-items-center justify-content-start">
                                 <div>
@@ -87,7 +87,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                         <label class="form-check-label" for="ShowRugWithImage">Show Rugs With Images</label>
                                     </div> --}}
                                 </div>
-                           
+
                                 @if(($filters['Filters_Count']) > 0)
                                     @foreach($filters['Filters'] as $filter)
                                     @if(strtolower($filter['FilterID']) == 'sort')
@@ -99,7 +99,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                             @endforeach
                                         </select>
                                     </div>
-                                    
+
                                     @endif
                                     @endforeach
                                 @endif
@@ -115,7 +115,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                             <div class="carousel slide">
                                 @endif
                                 <div class="slider-for justify-content-center {{ $with_title ? 'rug-callection' : '' }}">
-                                    <a href="{{$collection['LinkUrl']}}">
+                                    <a href="{{$collection['LinkUrl']}}?colorId={{$collection['ColorDescription']}}">
                                         @if($with_title)
                                         <img class="single-img" src="{{CommonController::getApiFullImage($collection['ImageName'])}}" class="img-responsive" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
                                         @else
@@ -129,7 +129,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                         <a href="{{$collection['LinkUrl']}}" title="{{$collection['ColorDescription']}}">{{$collection['ColorDescription']}} </a>
                                     </h6>
                                     @endif
-                                   
+
                                     <h6 class="prodect-title">
                                         <a href="{{$collection['LinkUrl']}}" title="{{$collection['Description']}}">{{$collection['Description']}} </br> {{$collection['SizeID']}} </a>
                                     </h6>
@@ -202,7 +202,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                         <div class="carousel slide">
                                         @endif
                                         <div class="slider-for">
-                                            <a href="${design.LinkUrl}">
+                                            <a href="${design.LinkUrl}?colorId=${design.ColorDescription}">
                                                 @if($with_title)
                                                 <img class="single-img" src="${design.ImageUrl}" class="img-responsive" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
                                                 @else

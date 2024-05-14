@@ -131,13 +131,15 @@ class LoginController extends AuthController
 
             if ( $response['Success'] )
             {
+                $customer_details = $this->ApiObj->Get_CustomerDetail($response['UserDetails']['UserID']);
                 $user = $this->model->get_user( '', '', ['customer_id' => $credentials['email'], 'parent_id' => null] );
                 $data = [
                     'customer_id'         => $response['UserDetails']['UserID'],
                     'spars_id'            => $response['UserDetails']['SparsID'],
                     'sales_rep_customers' => json_encode( $response['UserDetails']['SalesRepCustomers'] ),
                     'is_customer'         => $response['UserDetails']['IsCustomer'],
-                    'is_sale_rep'         => $response['UserDetails']['IsSalesRep']
+                    'is_sale_rep'         => $response['UserDetails']['IsSalesRep'],
+                    'broadloom_user'      => !empty($response['UserDetails']['BroadloomCustomer']) && $response['UserDetails']['BroadloomCustomer'] == 'Y' ? 1 : 0
                 ];
 
                 if ( $user )

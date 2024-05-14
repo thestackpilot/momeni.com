@@ -66,8 +66,7 @@ use App\Http\Controllers\CommonController;
                                 <input type="hidden" id="cart_item_image" name="cart_item_image" value="">
                                 <input type="hidden" id="cart_item_eta" name="cart_item_eta" value="">
                                 <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}">
-
-                                <h3 class="price" id="product-heading"><b>{{$items['Items'][0]['ItemName']}}{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
+                                <h3 class="price" id="product-heading"><b>{{$items['Items'][0]['ItemName']}} {{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
 
                                 <div class="col-12 row">
                                 @foreach ($items['Items'][0]['UDFFields'] as  $des_val)
@@ -430,7 +429,7 @@ use App\Http\Controllers\CommonController;
                 }
                 init_sliders();
                 // console.log(`${item.ItemName}${($("label", $("input[name='color']:checked").parent()).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}`);
-                $('#product-heading').html(`${item.ItemName}<b>${($(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}</b>`);
+                $('#product-heading').html(`${item.ItemName} <b>${($(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}</b>`);
 
                 if (item.ProductDescription == null) {
                     item.ProductDescription = '';
@@ -509,7 +508,7 @@ use App\Http\Controllers\CommonController;
         if (counter > 1) {
             $("#item_variant input:radio[name=variant]:first").attr('checked', true);
         } else if (counter == 1) {
-            $("#item_variant input:radio[name=variant]:first").attr('checked', true);
+            $("#item_variant input:radio[name=variant]:last").attr('checked', true);
             hide_components(['#item_variant_parent']);
         } else {
             hide_components(['#item_variant_parent']);
@@ -521,6 +520,8 @@ use App\Http\Controllers\CommonController;
         show_components(['#item_color_parent']);
         hide_components(['#item_size_parent', '#item_customer_parent', '#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
         $('#item_color').html('');
+        var urlParamsColorId  = new URLSearchParams(window.location.search).get('colorId');
+
         item_object.Items.forEach(function(item, index) {
             if (item.ItemName.trim() == ItemName.trim()) {
                 if (!$('#item_color input[name=color]:contains(' + item.ItemColor + ')').length) {
@@ -531,6 +532,7 @@ use App\Http\Controllers\CommonController;
                         type: 'radio',
                         name: 'color',
                         id: 'color_' + item.ItemID,
+                        checked: (item.ItemColor == urlParamsColorId) ? true : false
                     }));
 
                     $('#item_color').append($('<label>', {
@@ -552,12 +554,29 @@ use App\Http\Controllers\CommonController;
 
         bindClicks();
 
-        var color = `{{isset($color) && $color ? $color : ''}}`;
-        var color_node = color.length ? `[data-color="${color}"]` : '#item_color label:first';
-        $(color_node).click();
-        setTimeout(function() {
-            $(`${color_node}, #${$(color_node).attr('for')}`).click();
-        }, 1500);
+        if(urlParamsColorId != undefined){
+            var color = '';
+            var forVal = '';
+            var color_node = '';
+            var titles = $('#item_color label').map(function() {
+                if($(this).attr('title') == urlParamsColorId){
+                    color = $(this).attr('title');
+                    forVal = $(this).attr('for');
+                };
+            }).get();
+            color_node = '#item_color label:has([title="' + color + '"])';
+            setTimeout(function() {
+                var label = $(color_node);
+                $(`${color_node}, #${forVal}`).click();
+            }, 1500);
+        }else{
+            var color = `{{isset($color) && $color ? $color : ''}}`;
+            var color_node = color.length ? `[data-color="${color}"]` : '#item_color label:first';
+            $(color_node).click();
+            setTimeout(function() {
+                $(`${color_node}, #${$(color_node).attr('for')}`).click();
+            }, 1500);
+        }
     }
 
     function getSizes(ItemName, ItemColor, ItemValue) {
@@ -631,6 +650,7 @@ use App\Http\Controllers\CommonController;
     }
 
     function getQuantity(ItemID) {
+    console.log('item id', ItemID);
         // TODO : The radio button is working but not getting highlighted - Adil needs to fix this
         if (ItemID == '0') {
             console.log('helooooo');
@@ -640,7 +660,7 @@ use App\Http\Controllers\CommonController;
         }
         item_object.Items.forEach(function(item, index) {
             if ((item.ItemID == ItemID)) {
-                console.log('sup');
+                console.log('sup c');
                 $('#item_customer input[name=customer]').prop('disabled', false);
                 if (item.UserCustomerInfo.IsSaleRep == 1) {
                     getCustomers(item);
@@ -697,45 +717,48 @@ use App\Http\Controllers\CommonController;
         hide_components(['#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
         $('#item_customer').html('');
         item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
-            if (item.UserCustomerInfo.CustomerSet) {
-                $('#active_customer_select').addClass('d-none');
-                $('#disabled_customer_select').removeClass('d-none');
-                if (Customer.CustomerID == item.UserCustomerInfo.CustomerSet) {
-                    customerID = Customer.CustomerID;
+            if(Customer.BroadloomCustomer == 'Y'){
+                console.log('check only broad cust allow: ', Customer.BroadloomCustomer);
+                if (item.UserCustomerInfo.CustomerSet) {
+                    $('#active_customer_select').addClass('d-none');
+                    $('#disabled_customer_select').removeClass('d-none');
+                    if (Customer.CustomerID == item.UserCustomerInfo.CustomerSet) {
+                        customerID = Customer.CustomerID;
+                        $('#item_customer').append($('<input>', {
+                            value: item.ItemID + ' :: ' + Customer.CustomerID,
+                            text: Customer.CompanyName,
+                            class: 'checkbox-tools',
+                            type: 'radio',
+                            name: 'customer',
+                            id: Customer.CustomerID,
+                            checked: 'checked'
+                        }));
+
+                        $('#item_customer').append($('<label>', {
+                            text: Customer.CompanyName,
+                            class: 'for-checkbox-tools',
+                            for: 'customer_' + item.ItemID + '-' + Customer.CustomerID
+                        }));
+                    }
+                } else {
+                    $('#active_customer_select').removeClass('d-none');
+                    $('#disabled_customer_select').addClass('d-none');
                     $('#item_customer').append($('<input>', {
                         value: item.ItemID + ' :: ' + Customer.CustomerID,
                         text: Customer.CompanyName,
                         class: 'checkbox-tools',
                         type: 'radio',
                         name: 'customer',
-                        id: Customer.CustomerID,
-                        checked: 'checked'
+                        id: Customer.CustomerID
                     }));
 
                     $('#item_customer').append($('<label>', {
                         text: Customer.CompanyName,
                         class: 'for-checkbox-tools',
-                        for: 'customer_' + item.ItemID + '-' + Customer.CustomerID
+                        for: Customer.CustomerID
                     }));
+                    customerID = '';
                 }
-            } else {
-                $('#active_customer_select').removeClass('d-none');
-                $('#disabled_customer_select').addClass('d-none');
-                $('#item_customer').append($('<input>', {
-                    value: item.ItemID + ' :: ' + Customer.CustomerID,
-                    text: Customer.CompanyName,
-                    class: 'checkbox-tools',
-                    type: 'radio',
-                    name: 'customer',
-                    id: Customer.CustomerID
-                }));
-
-                $('#item_customer').append($('<label>', {
-                    text: Customer.CompanyName,
-                    class: 'for-checkbox-tools',
-                    for: Customer.CustomerID
-                }));
-                customerID = '';
             }
         });
         bindClicks();
