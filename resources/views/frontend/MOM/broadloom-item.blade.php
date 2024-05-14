@@ -717,7 +717,7 @@ use App\Http\Controllers\CommonController;
         hide_components(['#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
         $('#item_customer').html('');
         item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
-            if(Customer.BroadloomCustomer == 'Y'){
+            // if(Customer.BroadloomCustomer == 'Y'){
                 console.log('check only broad cust allow: ', Customer.BroadloomCustomer);
                 if (item.UserCustomerInfo.CustomerSet) {
                     $('#active_customer_select').addClass('d-none');
@@ -759,7 +759,7 @@ use App\Http\Controllers\CommonController;
                     }));
                     customerID = '';
                 }
-            }
+            // }
         });
         bindClicks();
     }
