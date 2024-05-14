@@ -1025,8 +1025,10 @@
                                 '<div class="badge badge-default broadloom-badge" id="' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + line_no +'" style="background-color:' +
                                 color + '">';
                             var size = {};
-                            size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
-                                widthInches + `"`;
+                            // size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
+                            //     widthInches + `"`;
+                            size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
+                                        lengthInches + `"`;
                             divContent += size.size;
                             divContent += '<a href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + line_no + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
 
