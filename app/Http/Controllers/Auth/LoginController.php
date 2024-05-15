@@ -139,7 +139,8 @@ class LoginController extends AuthController
                     'sales_rep_customers' => json_encode( $response['UserDetails']['SalesRepCustomers'] ),
                     'is_customer'         => $response['UserDetails']['IsCustomer'],
                     'is_sale_rep'         => $response['UserDetails']['IsSalesRep'],
-                    'broadloom_user'      => !empty($response['UserDetails']['BroadloomCustomer']) && $response['UserDetails']['BroadloomCustomer'] == 'Y' ? 1 : 0
+                    'broadloom_user'      => !empty($response['UserDetails']['BroadloomCustomer']) && $response['UserDetails']['BroadloomCustomer'] == 'Y' ? 1 : 0,
+                    'spars_logged_user_no' => $response['UserDetails']['LoggedUserNo']
                 ];
 
                 if ( $user )

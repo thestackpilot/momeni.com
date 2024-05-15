@@ -870,7 +870,9 @@
                     'cart_item_image': item.ImageNameArray[0],
                     'cart_item_data': $('#item_json').val(),
                     //'cart_item_data': $('#cart_item_oak').val(),
-                    'cart_item_broadloom': 1
+                    'cart_item_broadloom': 1,
+                    'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}',
+                    'temp_sales_order_no': $('#TempSalesOrderNo').val(),
                 },
                 success: function(response) {
                     if (response.success) {
@@ -951,7 +953,8 @@
                     TempSalesOrderNo: $('#TempSalesOrderNo').val(),
                     RollID: roll_id,
                     CutPieceID: cut_piece_id,
-                    line_no: line_no
+                    line_no: line_no,
+                    logged_user_no: '{{ Auth::user()->spars_logged_user_no }}',
                 },
                 type: 'POST',
                 success: function (response) {
@@ -1003,7 +1006,7 @@
                     'LineNo': "1",
                     'UserRemarks': "Setting Data",
                     'sergingtypeno': $("#sergingtypeno").val(),
-
+                    'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}'
                 },
                 success: function (data) {
                     console.log('add cut api res');
@@ -1100,7 +1103,8 @@
                 url: "/get-cut-pieces",
                 type: "GET",
                 data: {
-                    temp_sales_order_no: $('#TempSalesOrderNo').val()
+                    temp_sales_order_no: $('#TempSalesOrderNo').val(),
+                    logged_user_no: '{{ Auth::user()->spars_logged_user_no }}',
                 },
                 success: function(response) {
                     $('#cut-pieces').html(response)

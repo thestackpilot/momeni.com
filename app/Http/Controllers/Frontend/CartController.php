@@ -51,13 +51,15 @@ class CartController extends FrontendController
                 }
                 // die();
 
+                $logged_user_no = $request->logged_user_no ? $request->logged_user_no : '';
+                $temp_sales_order_no = $request->temp_sales_order_no ? $request->temp_sales_order_no : '';
+                $res_cut = $this->ApiObj->RemoveAllCutPiece($temp_sales_order_no, $logged_user_no);
             }
             else
             {
                 ( new Cart() )->save_or_update_full_cart_item( $request );
 
             }
-
 
             return response()->json( array( 'success' => 1, 'message' => "Item is added in the Cart" ), 200 );
         }
