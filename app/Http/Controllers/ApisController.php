@@ -114,7 +114,7 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Get_SurgingTypes', 'Get Surging Types', false );
     }
 
-    public function Get_AddCutPiece($TempSalesOrderNo, $CutPieceID, $RollID, $ItemID, $ActualLength, $ActualWidth, $ActualSQFT, $CutType,  $Description, $SergingCharges, $SergingType, $LocationID, $waste, $remnant, $available, $isremship, $serging, $lineno, $userremarks){
+    public function Get_AddCutPiece($TempSalesOrderNo, $CutPieceID, $RollID, $ItemID, $ActualLength, $ActualWidth, $ActualSQFT, $CutType,  $Description, $SergingCharges, $SergingType, $LocationID, $waste, $remnant, $available, $isremship, $serging, $lineno, $userremarks, $LoggedUserNo){
         $post_array = array(
             'TempSalesOrderNo' => $TempSalesOrderNo,
             'CutPieceID' => $CutPieceID,
@@ -135,8 +135,8 @@ class ApisController extends RootController
             'IsRemnantShipable' => $isremship,
             'LineNo' => $lineno,
             'UserRemarks' => $userremarks,
+            'LoggedUserNo' => $LoggedUserNo,
         );
-        // dd($post_array);
         return $this->Post_API_Signature( 'Get_AddCutPiece', 'Get Add Cut Piece', $post_array );
     }
 
@@ -640,18 +640,22 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Get_Orders', 'Ge Order', $post_array, ['Orders', 'TotalRows'] );
     }
 
-    public function Get_ShowCut( $TempSalesOrderNo = '' )
+    public function Get_ShowCut( $TempSalesOrderNo = '', $LoggedUserNo = '' )
     {
-        $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo );
-
+        $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo, 'LoggedUserNo' => $LoggedUserNo  );
         return $this->Post_API_Signature( 'Get_ShowCut', 'Cut Pieces', $post_array, ['ShowCuts'] );
     }
 
-    public function RemoveCutPiece( $TempSalesOrderNo = '', $CutPieceID = '', $RollID = '', $LineNo = '' )
+    public function RemoveCutPiece( $TempSalesOrderNo = '', $CutPieceID = '', $RollID = '', $LineNo = '', $LoggedUserNo = '' )
     {
-        $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo, 'CutPieceID' => $CutPieceID, 'RollID' => $RollID, 'LineNo' => $LineNo );
-
+        $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo, 'CutPieceID' => $CutPieceID, 'RollID' => $RollID, 'LineNo' => $LineNo, 'LoggedUserNo' => $LoggedUserNo );
         return $this->Post_API_Signature( 'RemoveCutPiece', 'Remove Cut Pieces', $post_array, ['OutPut'] );
+    }
+
+    public function RemoveAllCutPiece( $TempSalesOrderNo = '',  $LoggedUserNo = '' )
+    {
+        $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo, 'LoggedUserNo' => $LoggedUserNo );
+        return $this->Post_API_Signature( 'RemoveAllCutPieces', 'Remove All Cut Pieces', $post_array, ['OutPut'] );
     }
 
     public function __construct()

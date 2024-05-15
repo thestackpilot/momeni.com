@@ -169,8 +169,9 @@ class BroadloomController extends FrontendController
         $serging = $request->input('serging');
         $line = $request->input('LineNo');
         $userremarks = $request->input('UserRemarks');
+        $logged_user_no = $request->logged_user_no;
 
-        $res = $this->ApiObj->Get_AddCutPiece($tempsalesorderno, $cutpieceId, $rollId, $itemId, $atslength, $totalWidth, $totalSqft, $cutType, $description, $charges, $sergingTypeNo, $locationId, $waste, $remnant, $available, $isremship, $serging, $line, $userremarks);
+        $res = $this->ApiObj->Get_AddCutPiece($tempsalesorderno, $cutpieceId, $rollId, $itemId, $atslength, $totalWidth, $totalSqft, $cutType, $description, $charges, $sergingTypeNo, $locationId, $waste, $remnant, $available, $isremship, $serging, $line, $userremarks, $logged_user_no);
         return [
             'cut_piece' => $res,
         ];
@@ -179,7 +180,8 @@ class BroadloomController extends FrontendController
     public function get_cut_pieces(Request $request)
     {
         $id = $request->temp_sales_order_no;
-        $cut_pieces = $this->ApiObj->Get_ShowCut($id);
+        $logged_user_no = $request->logged_user_no;
+        $cut_pieces = $this->ApiObj->Get_ShowCut($id, $logged_user_no);
 
         $total_length = $total_width = 0;
         $dimensions = [];
@@ -260,6 +262,7 @@ class BroadloomController extends FrontendController
 
     public function RemoveCutPiece(Request $request)
     {
-        return $this->ApiObj->RemoveCutPiece($request->TempSalesOrderNo, $request->CutPieceID ? $request->CutPieceID : '', $request->RollID ? $request->RollID : '', $request->line_no);
+        $logged_user_no = $request->logged_user_no ? $request->logged_user_no : '';
+        return $this->ApiObj->RemoveCutPiece($request->TempSalesOrderNo, $request->CutPieceID ? $request->CutPieceID : '', $request->RollID ? $request->RollID : '', $request->line_no, $logged_user_no);
     }
 }
