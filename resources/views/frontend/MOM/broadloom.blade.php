@@ -937,7 +937,13 @@
             // }
         }
 
-        function removeCutPiece(id, cut_piece_id, roll_id, line_no) {
+        function removeCutPiece(id, cut_piece_id, roll_id, line_no, lenghtStatus) {
+           if(lenghtStatus == 'R'){
+                toastr.error('Remnant cannot be removed', {
+                    hideDuration: 10000,
+                    closeButton: true,
+                });
+           }else{
             $.ajax({
                 url: "{{ route('broadloom.removeCutPiece') }}",
                 data: {
@@ -963,6 +969,7 @@
                     }
                 }
             })
+           }
         }
 
         //updated
@@ -1030,8 +1037,7 @@
                             size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
                                         lengthInches + `"`;
                             divContent += size.size;
-                            divContent += '<a href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + line_no + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
-
+                            divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + line_no + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
                             let totalLengthInInches = lengthFeet * 12 + lengthInches;
                             let totalWidthInInches = widthFeet * 12 + widthInches;
 
