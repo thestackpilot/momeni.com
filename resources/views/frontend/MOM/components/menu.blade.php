@@ -30,13 +30,13 @@
                    class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_caption}}</a>
             @endif
         </li>
-        @if(Auth::check() && (Auth::user()->broadloom_user || Auth::user()->is_sale_rep))
             @if($pages -> all_pages -> sections -> main_top_menu -> menu_2_caption !== null)
-                <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_2_url}}"
-                                    class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_2_caption}}</a>
+                <li class="parant" style="display: {{ !(Auth::check() && (Auth::user()->broadloom_user || Auth::user()->is_sale_rep)) ? 'inline-block' : 'none' }}" id="broadloomLi">
+                    <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_2_url}}" class="main-item">
+                        {{$pages -> all_pages -> sections -> main_top_menu -> menu_2_caption}}
+                    </a>
                 </li>
             @endif
-        @endif
 
         @if($pages -> all_pages -> sections -> main_top_menu -> menu_3_caption !== null)
             <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_url}}"
