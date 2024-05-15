@@ -95,8 +95,11 @@
                                                                         class="font-weight--normal mx-2">
                                                                         {{ $item_data->ItemName }}</p>
                                                                 </div>
-                                                                <div class=" mt-2 row">SKU: <p
+                                                                {{-- <div class=" mt-2 row">SKU: <p
                                                                         class="font-weight--normal mx-2">N/A</p>
+                                                                </div> --}}
+                                                                <div class=" mt-2 row">Roll Id: <p
+                                                                    class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
                                                                 </div>
                                                                 <div class=" mt-2 row">Size: <p
                                                                         class="font-weight--normal mx-2">
