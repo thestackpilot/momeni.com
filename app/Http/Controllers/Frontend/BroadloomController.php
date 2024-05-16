@@ -265,4 +265,10 @@ class BroadloomController extends FrontendController
         $logged_user_no = $request->logged_user_no ? $request->logged_user_no : '';
         return $this->ApiObj->RemoveCutPiece($request->TempSalesOrderNo, $request->CutPieceID ? $request->CutPieceID : '', $request->RollID ? $request->RollID : '', $request->line_no, $logged_user_no);
     }
+
+    public function RemoveAllCutPiece(Request $request){
+        $TempSalesOrderNo = $request->temp_sales_order_no ?  $request->temp_sales_order_no : '';
+        $LoggedUserNo = $request->logged_user_no ? $request->logged_user_no : '';
+        return $this->ApiObj->RemoveAllCutPiece($TempSalesOrderNo, $LoggedUserNo);
+    }
 }
