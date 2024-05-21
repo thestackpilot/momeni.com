@@ -274,6 +274,7 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('MOM/js/CutPiece.js') }}"></script>
     <script>
         var item_object = ""; //get the json decoded object
         var customerID = $('input[name="sale_rep"]').val() == 1 ? '' : 1;
@@ -1098,19 +1099,13 @@
             });
         }
 
-        $('#show-cut-piece-btn').on('click', function() {
-            $.ajax({
-                url: "/get-cut-pieces",
-                type: "GET",
-                data: {
-                    temp_sales_order_no: $('#TempSalesOrderNo').val(),
-                    logged_user_no: '{{ Auth::user()->spars_logged_user_no }}',
-                },
-                success: function(response) {
-                    $('#cut-pieces').html(response)
-                }
-            })
-        })
+        const showCutPieceObj = new ShowCutPiece();
+        $("#show-cut-piece-btn").click(function (event) {
+            let screen_coordinates = { x: event.target.getBoundingClientRect().left + (event.target.getBoundingClientRect().width / 2), y: event.target.getBoundingClientRect().top - event.target.getBoundingClientRect().height - 7 };
+            let payload = {temp_sales_order_no: $('#TempSalesOrderNo').val(), logged_user_no: '{{ Auth::user()->spars_logged_user_no }}'}
+
+            showCutPieceObj.cutPiecesInitilize(screen_coordinates, payload)
+        });
 
         //updated
         function updatePrices() {
