@@ -62,7 +62,11 @@
                                         <thead>
                                         <tr>
                                             <th>Product</th>
-                                            <th>Quantity</th>
+                                            @foreach ($cart->items as $item)
+                                                @if(!$item->broadloom_item)
+                                                <th>Quantity</th>
+                                                @endif
+                                            @endforeach
                                             <th>Price</th>
                                             <th>SubTotal</th>
                                         </tr>
@@ -108,6 +112,7 @@
                                                             </div>
                                                         </div>
                                                     </th>
+                                                    @if(!$item->broadloom_item)
                                                     <td class="align-content-center">
                                                         <div class="d-flex flex-row qty-styles mb-2">
                                                             <a href="javascript:void(0);" class="qty-minus qty-action">
@@ -125,6 +130,7 @@
                                                                    value="{{ $item_data->ItemID }}">
                                                         </div>
                                                     </td>
+                                                    @endif
                                                     <td class="align-content-center">
                                                         {{ $item->item_currency }}{{ $item->item_price }}</td>
                                                     <td class="align-content-center">{{ $item->item_currency }}<span

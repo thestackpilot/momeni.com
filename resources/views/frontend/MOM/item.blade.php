@@ -1173,7 +1173,7 @@ console.log('customer_id1: ', customer_id);
             type: "GET",
             success: function (response) {
                 if (response) {
-                    if (confirm('You have already broadloom items, You want to add item will remove previous broadloom items from cart, Are You sure?')) {
+                    if (confirm('Braodloom item is already in the cart, adding this item will remove the previous Broadloom item from your cart, are you sure you want to proceed ?')) {
                         $.ajax({
                             url: "{{ route('delete-cart-items') }}",
                             type: "GET",

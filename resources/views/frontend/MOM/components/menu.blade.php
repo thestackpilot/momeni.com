@@ -205,22 +205,24 @@
                                     </p>
                                     <p class="price justify-content-end m-0">{{$item -> item_currency}}{{$item -> item_total}} </p>
                                     <hr>
-                                    <div
-                                        class="action-item-sm p-2 px-0 d-flex flex-row align-items-center justify-content-between col-sm-12 overflow-hidden">
-                                        <input type="number"
-                                               oninput="showUpdateCartButton('{{$item -> item_id}}__{{$item -> item_customer_id}}')"
-                                               onkeydown="if(this.key==='.'){this.preventDefault();}"
-                                               class="form-control" min="1" value="{{$item -> item_quantity}}"
-                                               {{isset($item_data -> oak) && $item_data -> oak ? 'readonly' : ''}} style="margin-right: 10px; max-width: 80px;">
-                                        <a href="javascript:void(0);" style="display: none;"
-                                           onclick="updateCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}')"
-                                           class="update-cart-button font-ropa ms-1"> Update </a>
-                                        <div id="updating-cart" class="d-none flex-column text-center">
-                                            <div class="spinner-border" role="status">
-                                                <span class="sr-only" style="opacity:0;">Loading...</span>
+                                    @if(!$item->broadloom_item)
+                                        <div
+                                            class="action-item-sm p-2 px-0 d-flex flex-row align-items-center justify-content-between col-sm-12 overflow-hidden">
+                                            <input type="number"
+                                                oninput="showUpdateCartButton('{{$item -> item_id}}__{{$item -> item_customer_id}}')"
+                                                onkeydown="if(this.key==='.'){this.preventDefault();}"
+                                                class="form-control" min="1" value="{{$item -> item_quantity}}"
+                                                {{isset($item_data -> oak) && $item_data -> oak ? 'readonly' : ''}} style="margin-right: 10px; max-width: 80px;">
+                                            <a href="javascript:void(0);" style="display: none;"
+                                            onclick="updateCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}')"
+                                            class="update-cart-button font-ropa ms-1"> Update </a>
+                                            <div id="updating-cart" class="d-none flex-column text-center">
+                                                <div class="spinner-border" role="status">
+                                                    <span class="sr-only" style="opacity:0;">Loading...</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         @endforeach
