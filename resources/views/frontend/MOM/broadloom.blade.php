@@ -66,7 +66,7 @@
                                                             </div>
                                                             <div class="col-6 text-right">
                                                                 <label for=""><strong> Length: <span
-                                                                        style="color: #660000">0' - 0' / 0' -
+                                                                        style="color: #660000" id="lenght-width">0' - 0' / 0' -
                                                                         0'</span> </strong></label>
                                                             </div>
                                                         </div>
@@ -114,7 +114,7 @@
                                                                         <option value="9">9</option>
                                                                         <option value="10">10</option>
                                                                         <option value="11">11</option>
-                                                                        <option value="12">12</option>
+                                                                        {{-- <option value="12">12</option> --}}
                                                                     </select>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text"> <strong>In</strong></div>
@@ -153,7 +153,7 @@
                                                                         <option value="9">9</option>
                                                                         <option value="10">10</option>
                                                                         <option value="11">11</option>
-                                                                        <option value="12">12</option>
+                                                                        {{-- <option value="12">12</option> --}}
                                                                     </select>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text"><strong>In</strong></div>
@@ -190,7 +190,7 @@
                                                                disabled>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 col-sm-12">
+                                                <div class="col-md-8 col-sm-12">
                                                     <div class="form-group">
                                                         <label for=""><input type="checkbox" name="" id="surging_check">
                                                            <strong> With Serging </strong></label>
@@ -205,7 +205,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 col-sm-12">
+                                                <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label for=""><strong> Serging Charges ($)</strong></label>
                                                         <input class="form-control" type="text" name=""
@@ -1243,6 +1243,7 @@
                 $('#TlengthInch').val(lengthinches);
                 $('#TwidthInch').val(widthinches);
                 $('.Tlength').val(lengthfeet);
+                $('#lenght-width').text(`${lengthfeet}'-${lengthinches}'/${widthfeet}'-${widthinches}'`);
                 $('.Twidth').attr('max', widthfeet);
                 $('.Tlength').attr('max', lengthfeet);
                 $('#roll_id').val(selectedOption.attr('value'));

@@ -200,7 +200,7 @@ use App\Http\Controllers\CommonController;
                                 <div class="mt-4 d-flex justify-content-end mx-5">
                                     @auth
                                     <a href="javascript:void(0)" class="add-to-cart-button align-content-center btn btn-dark d-none"  id="add_cart">
-                                        Place Order <i class="fa fa-long-arrow-right"></i>
+                                        Add Cut Pieces <i class="fa fa-long-arrow-right"></i>
                                     </a>
                                     @endauth
                                     @guest()
