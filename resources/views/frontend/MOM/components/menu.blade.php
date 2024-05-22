@@ -70,7 +70,7 @@ use App\Http\Controllers\CommonController;
         </li>
         <li class="parant">
             <span id="cart-parent">
-                
+
                 <a href="javascript:void(0)" class="main-item quickCart-opener position-relative">
                     @auth()
                         <span class="badge badge-pill badge-primary position-absolute cartCount" style="top: auto">{{$cart -> cart_count}}</span>
@@ -168,6 +168,7 @@ use App\Http\Controllers\CommonController;
                                 </a>
                             </div>
                             <div class="col-md-9">
+                                @dump($item);
                                 <h3 class="font-ropa m-0">{{$item -> item_name}}</h3>
                                 {{--
                                 <p class="specs m-0"> <strong> Customer ID: </strong> <span> {{$item -> item_customer_id}} </span> </p>
@@ -175,6 +176,9 @@ use App\Http\Controllers\CommonController;
                                 --}}
                                 <p class="specs m-0"> <strong> Color: </strong> <span> {{$item -> item_color}} </span> </p>
                                 <p class="specs m-0"> <strong> Size: </strong> <span> {{$item -> item_size}} </span> </p>
+                                @if($item->oak_item)
+                                <p class="specs m-0"> <strong> SKU: </strong> <span> {{$item -> oak_sku}} </span> </p>
+                                @endif
                                 <p class="price justify-content-end m-0">{{$item -> item_currency}}{{$item -> item_total}} </p>
                                 <hr>
                                 <div class="action-item-sm p-2 px-0 d-flex flex-row align-items-center justify-content-between col-sm-12 overflow-hidden">
@@ -221,7 +225,7 @@ use App\Http\Controllers\CommonController;
             </div>
             @endif
         </div>
-        
+
 @endif
 @endauth
 <div id="show-on-search" style="display: none;">

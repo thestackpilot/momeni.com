@@ -169,6 +169,11 @@ use App\Http\Controllers\CommonController;
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Size: {{$item -> item_size}}</p>
                                     </div>
+                                    @if ($item->oak_item)
+                                        <div class="row">
+                                            <p class="font-nexa-light m-0"> SKU: {{$item -> oak_sku}}</p>
+                                        </div>
+                                    @endif
                                      @if($item->item_atsq <= 0 && !$item->oak_item)
                                     <div class="row">
                                        <p class="font-nexa-light m-0"> Backorder/ETA: {{date('Y-m-d', strtotime($item -> item_eta))}}</p>
@@ -547,6 +552,9 @@ use App\Http\Controllers\CommonController;
                                  <p class="specs m-0"> <strong class="font-crimson"> Item ID: </strong> <span class="font-ropa"> {{$item -> item_id}} </span> </p>
                                  <p class="specs m-0"> <strong class="font-crimson"> Color: </strong> <span class="font-ropa"> {{$item -> item_color}} </span> </p>
                                  <p class="specs m-0"> <strong class="font-crimson"> Size: </strong> <span class="font-ropa"> {{$item -> item_size}} </span> </p>
+                                 @if ($item->oak_item)
+                                 <p class="specs m-0"> <strong class="font-crimson"> SKU: </strong> <span class="font-ropa"> {{$item -> oak_sku}} </span> </p>
+                                 @endif
                                  <p class="specs m-0"> <strong class="font-crimson"> Qty: </strong> <span class="font-ropa"> {{$item -> item_quantity}} </span> </p>
                                  <p class="specs m-0"> <strong class="font-crimson side-mark-{{$item->item_id}} d-none"> SideMark: </strong> <span class="font-ropa side-mark-span-{{$item -> item_id}}"></span> </p>
                                  <p class="price justify-content-end m-0"> Sub Total: {{$item -> item_currency}}{{$item -> item_total}} </p>
