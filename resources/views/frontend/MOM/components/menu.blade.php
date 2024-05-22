@@ -194,7 +194,7 @@
                                     </a>
                                 </div>
                                 <div class="col-md-9">
-                                    <h3 class="font-ropa m-0">{{$item -> item_name}}</h3>
+                                    @dump($item);<h3 class="font-ropa m-0">{{$item -> item_name}}</h3>
                                     {{--
                                     <p class="specs m-0"> <strong> Customer ID: </strong> <span> {{$item -> item_customer_id}} </span> </p>
                                     <p class="specs m-0"> <strong> Item ID: </strong> <span> {{$item -> item_id}} </span> </p>
@@ -202,7 +202,9 @@
                                     <p class="specs m-0"><strong> Color: </strong>
                                         <span> {{$item -> item_color}} </span></p>
                                     <p class="specs m-0"><strong> Size: </strong> <span> {{$item -> item_size}} </span>
-                                    </p>
+                                    </p>@if($item->oak_item)
+                                <p class="specs m-0"> <strong> SKU: </strong> <span> {{$item -> oak_sku}} </span> </p>
+                                @endif
                                     <p class="price justify-content-end m-0">{{$item -> item_currency}}{{$item -> item_total}} </p>
                                     <hr>
                                     <div
