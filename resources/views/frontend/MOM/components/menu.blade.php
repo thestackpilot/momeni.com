@@ -168,7 +168,6 @@ use App\Http\Controllers\CommonController;
                                 </a>
                             </div>
                             <div class="col-md-9">
-                                @dump($item);
                                 <h3 class="font-ropa m-0">{{$item -> item_name}}</h3>
                                 {{--
                                 <p class="specs m-0"> <strong> Customer ID: </strong> <span> {{$item -> item_customer_id}} </span> </p>
