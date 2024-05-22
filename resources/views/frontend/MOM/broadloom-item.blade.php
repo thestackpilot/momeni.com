@@ -1156,7 +1156,7 @@ use App\Http\Controllers\CommonController;
             data:{
                 _token: "{{ csrf_token() }}",
                 TempSalesOrderNo: null,
-                logged_user_no: '{{ Auth::user()->spars_logged_user_no }}',
+                logged_user_no: '{{ isset(Auth::user()->spars_logged_user_no)? Auth::user()->spars_logged_user_no : '' }}',
             },
             type: 'POST',
             success: function (response) {
