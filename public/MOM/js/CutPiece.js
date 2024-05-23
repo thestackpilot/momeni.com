@@ -7,11 +7,11 @@ class ShowCutPiece {
         let frameOrientation = 'V';
         let labelH = 'Width';
         let labelV = 'Height';
-        let ratio = 5;
-        let ratioX = 5;
-        let ratioY = 5;
+        let ratio = 1;
+        let ratioX = 1;
+        let ratioY = 1;
         let size = {width: 0, height: 0};
-        let VerticalTextWidth = 30;
+        let VerticalTextWidth = 32;
         let rectangles = [];
         let rectangle = 'broadloom_cut_pieces';
 
@@ -159,7 +159,7 @@ class ShowCutPiece {
             });
 
             $.each(rectangleOnXon0, function (i, rect) {
-                frameWidth += rect.ATSLength;
+                frameWidth += parseFloat(rect.ATSLength);
             });
             this.setTotalFrameWidth(frameWidth);
         } else {
@@ -171,7 +171,7 @@ class ShowCutPiece {
             });
 
             $.each(rectangleOnXon0, function (i, rect) {
-                frameHeight += rect.ATSLength;
+                frameHeight += parseFloat(rect.ATSLength);
             });
             this.setTotalFrameHeight(frameHeight);
         }
@@ -321,7 +321,7 @@ class ShowCutPiece {
                 }
             }
         }
-
+        
         this.setRatio(ratio);
     }
 

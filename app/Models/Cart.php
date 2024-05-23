@@ -213,10 +213,10 @@ class Cart extends Model
             $item     = $this->where( 'user_id', Auth::user()->id )->where( 'customer_id', $request->cart_customer_id )->where( 'item_id', $request->cart_item_id )->where( 'item_size' , $request->cart_item_size )->first();
             $quantity = $request->cart_item_quantity;
 
-            if ( $item )
-            {
-                $quantity += $item->item_quantity;
-            }
+            // if ( $item )
+            // {
+            //     $quantity += $item->item_quantity;
+            // }
             $this->updateOrCreate(
                 ['user_id' => Auth::user()->id, 'customer_id' => $request->cart_customer_id, 'item_id' => $request->cart_item_id, 'item_size' => $request->cart_item_size],
                 [
