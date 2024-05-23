@@ -17,7 +17,7 @@ class CheckBroadLoomUser
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->broadloom_user == 1) {
+        if (Auth::check() && (Auth::user()->broadloom_user == 1 || Auth::user()->is_sale_rep)) {
             return $next($request);
         }
         // Redirect to home route if the user is not authenticated or broad_user is not 1
