@@ -1149,20 +1149,5 @@ use App\Http\Controllers\CommonController;
         //     }
         // });
     });
-
-    $(window).on('beforeunload', function() {
-        $.ajax({
-            url: "{{ route('broadloom.removeAllCutPiece') }}",
-            data:{
-                _token: "{{ csrf_token() }}",
-                TempSalesOrderNo: null,
-                logged_user_no: '{{ isset(Auth::user()->spars_logged_user_no)? Auth::user()->spars_logged_user_no : '' }}',
-            },
-            type: 'POST',
-            success: function (response) {
-                console.log('all cut response', response);
-            }
-        })
-    });
 </script>
 @endsection

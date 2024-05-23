@@ -1022,7 +1022,11 @@
                         let totalWid = 1;
                         let totalSqftPrice = 0;
                         let totalMaxLen = 0;
+                        let lenInchCal = 0;
+                        let widInchCal = 0;
                         let totalAddWid = 0;
+                        let lenghtWithInches = 0;
+                        let widthWithInches = 0;
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
                             console.log('add cut res', item);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
@@ -1030,13 +1034,18 @@
                             let widthFeet = Math.floor(item.ATSWidth / 12);
                             let widthInches = item.ATSWidth % 12;
 
-                            if (lengthFeet > totalMaxLen) {
-                                totalMaxLen = lengthFeet;
+                            lenInchCal = parseFloat((lengthInches / 12).toFixed(3));
+                            widInchCal = parseFloat((widthInches / 12).toFixed(3))
+                            lenghtWithInches = parseFloat((lengthFeet +  lenInchCal).toFixed(3));
+                            widthWithInches  = parseFloat((widthFeet + widInchCal).toFixed(3));
+
+                            if (lenghtWithInches > totalMaxLen) {
+                                totalMaxLen = lenghtWithInches;
                             }
 
                             totalLen *= lengthFeet;
                             totalWid *= widthFeet;
-                            totalAddWid += widthFeet;
+                            totalAddWid += widthWithInches;
 
                             var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
                             var item_id = item.ItemID.replace('-', '_');
@@ -1079,8 +1088,8 @@
                         totalSqftPrice = totalMaxLen * totalAddWid;
                         console.log('total len', totalLen);
                         console.log('total max len', totalMaxLen);
-                        console.log('total add wid', totalAddWid);
                         console.log('total wid', totalWid);
+                        console.log('total add wid', totalAddWid);
                         console.log('total sqft price', totalSqftPrice);
                         $("#ats-qty").val(totalSqftPrice);
                         console.log('ats quaantity', $("#ats-qty").val());
@@ -1246,12 +1255,12 @@
                             },
                             type: 'POST',
                             success: function (response) {
-                                console.log('all cut response', response);
+                                console.log('all cut response on change', response);
                             }
                         })
                     },
                     error: function(response) {
-                        console.log(response);
+                        console.log('error res',  response);
                     }
                 });
                 var selectedOption = $(this).find('option:selected');
@@ -1326,18 +1335,18 @@
     </script>
     <script>
         $(window).on('beforeunload', function() {
-        $.ajax({
-            url: "{{ route('broadloom.removeAllCutPiece') }}",
-            data:{
-                _token: "{{ csrf_token() }}",
-                TempSalesOrderNo: null,
-                logged_user_no: '{{ isset(Auth::user()->spars_logged_user_no)? Auth::user()->spars_logged_user_no : '' }}',
-            },
-            type: 'POST',
-            success: function (response) {
-                console.log('all cut response', response);
-            }
-        })
-    });
+            $.ajax({
+                url: "{{ route('broadloom.removeAllCutPiece') }}",
+                data:{
+                    _token: "{{ csrf_token() }}",
+                    TempSalesOrderNo: null,
+                    logged_user_no: '{{ isset(Auth::user()->spars_logged_user_no)? Auth::user()->spars_logged_user_no : '' }}',
+                },
+                type: 'POST',
+                success: function (response) {
+                    console.log('all cut response', response);
+                }
+            })
+        });
     </script>
 @endsection
