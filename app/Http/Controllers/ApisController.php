@@ -272,9 +272,9 @@ class ApisController extends RootController
     public function Get_SalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '', $Collection = '', $Design = '')
     {
         $sale_rep_id = Auth::user()->role === 'customer' ? '' : $SalesRep;
-        $customer_id = Auth::user()->role === 'customer' ? $CustomerID : '';
+        $customer_id = Auth::user()->role === 'customer' ? $SalesRep : '';
         $post_array = array('SalesRepID' => $sale_rep_id, 'CustomerID' => $customer_id, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
-
+        
         if (Auth::user()->role === 'customer') {
             return $this->Post_API_Signature('ViewCustomerReport', 'Get Sales Report', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
         }
