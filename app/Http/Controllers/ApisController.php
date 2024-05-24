@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Client\ConnectionException;
 use App\Http\Controllers\Frontend\FilterController;
+use Auth;
 
 class ApisController extends RootController
 {
@@ -85,6 +86,9 @@ class ApisController extends RootController
     {
         $post_array = [];
 
+        if (Auth::user()->role === 'customer') {
+            return $this->Post_API_Signature('Get_AllCustomerReports', 'Get All Reports', $post_array, ['Success', 'Message', 'ReportList'], 1, 1, 1);
+        }
         return $this->Post_API_Signature('Get_AllReports', 'Get All Reports', $post_array, ['Success', 'Message', 'ReportList'], 1, 1, 1);
     }
 
@@ -228,7 +232,13 @@ class ApisController extends RootController
 
     public function Get_SalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '', $Collection = '', $Design = '')
     {
-        $post_array = array('SalesRepID' => $SalesRep, 'CustomerID' => $CustomerID, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
+        $sale_rep_id = Auth::user()->role === 'customer' ? '' : $SalesRep;
+        $customer_id = Auth::user()->role === 'customer' ? $CustomerID : '';
+        $post_array = array('SalesRepID' => $sale_rep_id, 'CustomerID' => $customer_id, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
+
+        if (Auth::user()->role === 'customer') {
+            return $this->Post_API_Signature('ViewCustomerReport', 'Get Sales Report', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
+        }
 
         return $this->Post_API_Signature('Get_SalesReport', 'Get Sales Report', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
     }
