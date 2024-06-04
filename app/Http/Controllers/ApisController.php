@@ -649,7 +649,7 @@ class ApisController extends RootController
     public function RemoveCutPiece( $TempSalesOrderNo = '', $CutPieceID = '', $RollID = '', $LineNo = '', $LoggedUserNo = '' )
     {
         $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo, 'CutPieceID' => $CutPieceID, 'RollID' => $RollID, 'LineNo' => $LineNo, 'LoggedUserNo' => $LoggedUserNo );
-        return $this->Post_API_Signature( 'RemoveCutPiece', 'Remove Cut Pieces', $post_array, ['OutPut'] );
+        return $this->Post_API_Signature( 'RemoveCutPiece', 'Remove Cut Pieces', $post_array);
     }
 
     public function RemoveAllCutPiece( $TempSalesOrderNo = '',  $LoggedUserNo = '' )
