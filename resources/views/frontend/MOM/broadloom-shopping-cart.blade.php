@@ -557,13 +557,27 @@
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="col-md-3 text-right align-content-center">${{$cart->cart_total}}</div>
+
+                            @php $samNameItems = []; $bd_cart_price = 0; @endphp
+                            @foreach($cart->items as $item)
+                                @php
+                                    if(!in_array($item->item_name, $samNameItems)){
+                                        $bd_cart_price += $item->item_price;
+                                        $samNameItems[] = $item->item_name;
+                                    }
+                                @endphp
+                            @endforeach
+
+                            {{-- <div class="col-md-3 text-right align-content-center">${{$cart->cart_total}}</div> --}}
+                            <div class="col-md-3 text-right align-content-center">${{$bd_cart_price}}</div>
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
                             <div class="col-md-4 align-content-center font-weight--bold">SubTotal</div>
+                            {{-- <div class="col-md-4 align-content-center text-right font-weight--bold">
+                                ${{$cart->cart_total}}</div> --}}
                             <div class="col-md-4 align-content-center text-right font-weight--bold">
-                                ${{$cart->cart_total}}</div>
+                                ${{$bd_cart_price}}</div>
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>

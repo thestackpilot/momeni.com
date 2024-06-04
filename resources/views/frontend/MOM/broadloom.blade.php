@@ -1073,8 +1073,12 @@
                 },
                 type: 'POST',
                 success: function (response) {
-                    console.log('response removeCutPiece', response['OutPut']['Success']);
+                    var cutpieceLen = response['OutPut']['AddCutPieces'];
+                    console.log('response removeCutPiece', cutpieceLen.length);
                     console.log('response removeCutPiece', response['OutPut']['AddCutPieces']);
+                    if(cutpieceLen.length == 0){
+                            $('#show-cut-piece-btn').addClass('d-none');
+                    }
                     if (response['OutPut']['Success']) {
                         $('#' + id).remove();
                         console.log('id', id);
