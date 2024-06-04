@@ -103,6 +103,7 @@ class Cart extends Model
         foreach ( $cart_items as $cart_item )
         {
             $cart['items'][] = array(
+                "id"                     => $cart_item->id,
                 "item_id"                => $cart_item->item_id,
                 "item_customer_id"       => $cart_item->customer_id,
                 "item_name"              => $cart_item->item_name,

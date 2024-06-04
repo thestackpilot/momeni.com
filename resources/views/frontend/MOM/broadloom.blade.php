@@ -65,9 +65,8 @@
                                                                 <label for=""><strong> Roll ID / Cut Piece ID</strong></label>
                                                             </div>
                                                             <div class="col-6 text-right">
-                                                                <label for=""><strong> Length: <span
-                                                                        style="color: #660000" id="lenght-width">0' - 0' / 0' -
-                                                                        0'</span> </strong></label>
+                                                                <label for=""><strong> Length:
+                                                                    <span style="color: #660000" id="lenght-width">0' - 0' / </strong> <strong><span id="max-width" style="color: #660000">0' - 0'</span></strong></label>
                                                             </div>
                                                         </div>
                                                         <select name="" id="roll_pieces" class="form-control">
@@ -93,7 +92,7 @@
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Tlength"
-                                                                           id="Tlength" placeholder="">
+                                                                           id="Tlength" placeholder="" style="text-align:right;">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text"><strong> Ft</strong></div>
                                                                     </div>
@@ -132,7 +131,7 @@
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Twidth"
-                                                                           id="Twidth" placeholder="">
+                                                                           id="Twidth" placeholder="" style="text-align:right;">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text"><strong>Ft</strong></div>
                                                                     </div>
@@ -169,10 +168,10 @@
                                                         <label for=""><strong> SQ-FT Price ($)</strong></label>
                                                         <input type="text" class="form-control" id="sq-ft"
                                                             value=""
-                                                               disabled>
+                                                               disabled style="text-align:right;">
                                                         <input type="hidden" class="form-control" id="ats-qty"
                                                                value=""
-                                                                  disabled>
+                                                                  disabled style="text-align:right;">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
@@ -180,7 +179,7 @@
                                                         <label for=""><strong> SQ-YRD Price ($)</strong></label>
                                                         <input type="text" class="form-control" id="sq-yrd"
                                                             value=""
-                                                               disabled>
+                                                               disabled style="text-align:right;">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
@@ -188,7 +187,7 @@
                                                         <label for=""><strong> EXT Price ($)</strong></label>
                                                         <input type="text" class="form-control" id="sq-ext"
                                                             value=""
-                                                               disabled>
+                                                               disabled style="text-align:right;">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-8 col-sm-12">
@@ -210,7 +209,7 @@
                                                     <div class="form-group">
                                                         <label for=""><strong> Serging Charges ($)</strong></label>
                                                         <input class="form-control" type="text" name=""
-                                                               id="surging_charges" value="" disabled>
+                                                               id="surging_charges" value="" disabled style="text-align:right;">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -856,80 +855,193 @@
             item.Serging = $('#surging_check').is(':checked') ? 'Y' : 'N'
             $('#item_json').val(JSON.stringify(item));
             $.ajax({
-                method: 'POST',
-                url: '{{ route('frontend.cart.add') }}',
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'cart_item_id': item.ItemID,
-                    'cart_customer_id': $('#customer_id').val(),
-                    'cart_item_name': item.ItemName,
-                    'cart_item_quantity': 1,
-                    'cart_item_color': item.ItemColor,
-                    'cart_item_size': $('#size_price').val(),
-                    'cart_item_price': $("#sq-ext").val(),
-                    'item_surging_price': $('#surging_charges').val(),
-                    'cart_item_currency': '$',
-                    'cart_item_image': item.ImageNameArray[0],
-                    'cart_item_data': $('#item_json').val(),
-                    //'cart_item_data': $('#cart_item_oak').val(),
-                    'cart_item_broadloom': 1,
-                    'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}',
-                    'temp_sales_order_no': $('#TempSalesOrderNo').val(),
-                },
-                success: function(response) {
-                    if (response.success) {
-                        console.log("new ", $('#item_json').length);
-                        if ($('#item_json').length) {
-                            refreshItemJson(function() {
-                                toastr.success(response.message, {
-                                    hideDuration: 10000,
-                                    closeButton: true,
-                                });
-                                $('#add_to_cart').removeClass('btn-muted');
+                url: "{{ route('check-cart-item') }}",
+                type: "GET",
+                success: function (response) {
+                    if (response) {
+                        if (confirm('You have already items in your cart, You want to add broadloom item will remove previous items from cart, Are You sure?')) {
+                            $.ajax({
+                                url: "{{ route('delete-cart-items') }}",
+                                type: "GET",
+                                success: function (response) {
+                                    if (response) {
+                                        //  ADD TO CART API HIT
+                                        $.ajax({
+                                            method: 'POST',
+                                            url: '{{ route('frontend.cart.add') }}',
+                                            data: {
+                                                '_token': '{{ csrf_token() }}',
+                                                'cart_item_id': item.ItemID,
+                                                'cart_customer_id': $('#customer_id').val(),
+                                                'cart_item_name': item.ItemName,
+                                                'cart_item_quantity': 1,
+                                                'cart_item_color': item.ItemColor,
+                                                'cart_item_size': $('#size_price').val(),
+                                                'cart_item_price': $("#sq-ext").val(),
+                                                'item_surging_price': $('#surging_charges').val(),
+                                                'cart_item_currency': '$',
+                                                'cart_item_image': item.ImageNameArray[0],
+                                                'cart_item_data': $('#item_json').val(),
+                                                //'cart_item_data': $('#cart_item_oak').val(),
+                                                'cart_item_broadloom': 1,
+                                                'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}',
+                                                'temp_sales_order_no': $('#TempSalesOrderNo').val(),
+                                            },
+                                            success: function(response) {
+                                                if (response.success) {
+                                                    console.log("new ", $('#item_json').length);
+                                                    if ($('#item_json').length) {
+                                                        refreshItemJson(function() {
+                                                            toastr.success(response.message, {
+                                                                hideDuration: 10000,
+                                                                closeButton: true,
+                                                            });
+                                                            $('#add_to_cart').removeClass('btn-muted');
 
-                                $('#cut_piece_parent .broadloom-badge').remove();
-                                $('#roll_pieces').val('');
-                                $('#Tlength').val('');
-                                $('#TlengthInch').val('');
-                                $('#Twidth').val('');
-                                $('#TwidthInch').val('');
-                                $('#sq-ft').val('');
-                                $('#sq-yrd').val('');
-                                $('#sq-ext').val('');
-                                $('#surging_options').val('');
-                                $('#surging_check').prop('checked', false);
-                                $('#surging_charges').val('');
-                                $('#cust-inst').val('');
+                                                            $('#cut_piece_parent .broadloom-badge').remove();
+                                                            $('#roll_pieces').val('');
+                                                            $('#Tlength').val('');
+                                                            $('#TlengthInch').val('');
+                                                            $('#Twidth').val('');
+                                                            $('#TwidthInch').val('');
+                                                            $('#sq-ft').val('');
+                                                            $('#sq-yrd').val('');
+                                                            $('#sq-ext').val('');
+                                                            $('#surging_options').val('');
+                                                            $('#surging_check').prop('checked', false);
+                                                            $('#surging_charges').val('');
+                                                            $('#cust-inst').val('');
 
-                                // $('.quickCart-opener').trigger('click');
+                                                            $('#show-cut-piece-btn').addClass('d-none');
+                                                            $('#add_to_cart').addClass('d-none');
+                                                            $('#roll_pieces').removeAttr("disabled");
+                                                            $('#cut-pieces').empty();
+
+                                                            // $('.quickCart-opener').trigger('click');
+                                                        });
+                                                    } else {
+                                                        refreshUser('quick-cart', function() {
+                                                            refreshUser('profile', function() {
+                                                                $("#quick_cart").removeClass('d-none');
+                                                                toastr.success(response.message, {
+                                                                    hideDuration: 10000,
+                                                                    closeButton: true,
+                                                                });
+                                                                $('#add_to_cart').removeClass('btn-muted');
+                                                                // $('.quickCart-opener').trigger('click');
+                                                            });
+                                                        });
+                                                    }
+                                                } else {
+                                                    toastr.warning(response.message, {
+                                                        hideDuration: 10000,
+                                                        closeButton: true,
+                                                    });
+                                                    $('#add_to_cart').removeClass('btn-muted');
+                                                }
+                                            },
+                                            error: function(response) {
+                                                toastr.warning(response.message, {
+                                                    hideDuration: 10000,
+                                                    closeButton: true,
+                                                });
+                                                $('#add_to_cart').removeClass('btn-muted');
+                                            }
+                                        });
+                                    }else{
+                                        toastr.error('Someting went wrong', {
+                                            hideDuration: 10000,
+                                            closeButton: true,
+                                        });
+                                    }
+                                }
                             });
-                        } else {
-                            refreshUser('quick-cart', function() {
-                                refreshUser('profile', function() {
-                                    $("#quick_cart").removeClass('d-none');
-                                    toastr.success(response.message, {
+                        }
+                    }else{
+                        //  ADD TO CART API HIT
+                        $.ajax({
+                            method: 'POST',
+                            url: '{{ route('frontend.cart.add') }}',
+                            data: {
+                                '_token': '{{ csrf_token() }}',
+                                'cart_item_id': item.ItemID,
+                                'cart_customer_id': $('#customer_id').val(),
+                                'cart_item_name': item.ItemName,
+                                'cart_item_quantity': 1,
+                                'cart_item_color': item.ItemColor,
+                                'cart_item_size': $('#size_price').val(),
+                                'cart_item_price': $("#sq-ext").val(),
+                                'item_surging_price': $('#surging_charges').val(),
+                                'cart_item_currency': '$',
+                                'cart_item_image': item.ImageNameArray[0],
+                                'cart_item_data': $('#item_json').val(),
+                                //'cart_item_data': $('#cart_item_oak').val(),
+                                'cart_item_broadloom': 1,
+                                'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}',
+                                'temp_sales_order_no': $('#TempSalesOrderNo').val(),
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    console.log("new ", $('#item_json').length);
+                                    if ($('#item_json').length) {
+                                        refreshItemJson(function() {
+                                            toastr.success(response.message, {
+                                                hideDuration: 10000,
+                                                closeButton: true,
+                                            });
+                                            $('#add_to_cart').removeClass('btn-muted');
+
+                                            $('#cut_piece_parent .broadloom-badge').remove();
+                                            $('#roll_pieces').val('');
+                                            $('#Tlength').val('');
+                                            $('#TlengthInch').val('');
+                                            $('#Twidth').val('');
+                                            $('#TwidthInch').val('');
+                                            $('#sq-ft').val('');
+                                            $('#sq-yrd').val('');
+                                            $('#sq-ext').val('');
+                                            $('#surging_options').val('');
+                                            $('#surging_check').prop('checked', false);
+                                            $('#surging_charges').val('');
+                                            $('#cust-inst').val('');
+
+                                            $('#show-cut-piece-btn').addClass('d-none');
+                                            $('#add_to_cart').addClass('d-none');
+                                            $('#roll_pieces').removeAttr("disabled");
+                                            $('#cut-pieces').empty();
+
+                                            // $('.quickCart-opener').trigger('click');
+                                        });
+                                    } else {
+                                        refreshUser('quick-cart', function() {
+                                            refreshUser('profile', function() {
+                                                $("#quick_cart").removeClass('d-none');
+                                                toastr.success(response.message, {
+                                                    hideDuration: 10000,
+                                                    closeButton: true,
+                                                });
+                                                $('#add_to_cart').removeClass('btn-muted');
+                                                // $('.quickCart-opener').trigger('click');
+                                            });
+                                        });
+                                    }
+                                } else {
+                                    toastr.warning(response.message, {
                                         hideDuration: 10000,
                                         closeButton: true,
                                     });
                                     $('#add_to_cart').removeClass('btn-muted');
-                                    // $('.quickCart-opener').trigger('click');
+                                }
+                            },
+                            error: function(response) {
+                                toastr.warning(response.message, {
+                                    hideDuration: 10000,
+                                    closeButton: true,
                                 });
-                            });
-                        }
-                    } else {
-                        toastr.warning(response.message, {
-                            hideDuration: 10000,
-                            closeButton: true,
+                                $('#add_to_cart').removeClass('btn-muted');
+                            }
                         });
-                        $('#add_to_cart').removeClass('btn-muted');
                     }
-                },
-                error: function(response) {
-                    toastr.warning(response.message, {
-                        hideDuration: 10000,
-                        closeButton: true,
-                    });
-                    $('#add_to_cart').removeClass('btn-muted');
                 }
             });
             // } else {
@@ -942,7 +1054,8 @@
         }
 
         function removeCutPiece(id, cut_piece_id, roll_id, line_no, lenghtStatus) {
-           if(lenghtStatus == 'R'){
+           console.log('lenghtStatus removeCutPiece', lenghtStatus);
+           if(lenghtStatus != 'F'){
                 toastr.error('Remnant cannot be removed', {
                     hideDuration: 10000,
                     closeButton: true,
@@ -960,8 +1073,113 @@
                 },
                 type: 'POST',
                 success: function (response) {
-                    if (response.Success) {
+                    console.log('response removeCutPiece', response['OutPut']['Success']);
+                    console.log('response removeCutPiece', response['OutPut']['AddCutPieces']);
+                    if (response['OutPut']['Success']) {
                         $('#' + id).remove();
+                        console.log('id', id);
+                        console.log($('#' + id));
+                        $('#cut_piece_parent').empty();
+                        var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
+                        var sizes = [];
+                        var line_no = 1;
+                        let totalLen = 1;
+                        let totalWid = 1;
+                        let totalSqftPrice = 0;
+                        let totalMaxLen = 0;
+                        let lenInchCal = 0;
+                        let widInchCal = 0;
+                        let totalAddWid = 0;
+                        let lenghtWithInches = 0;
+                        let widthWithInches = 0;
+                        let mxlenf = 0;
+                        let mxlen = 0;
+
+                        $.each(response['OutPut']['AddCutPieces'], function (index, item) {
+                            console.log('add cut res', item);
+                            let lengthFeet = Math.floor(item.ATSLength / 12);
+                            let lengthInches = item.ATSLength % 12;
+                            let widthFeet = Math.floor(item.ATSWidth / 12);
+                            let widthInches = item.ATSWidth % 12;
+                            console.log('lengthFeet', lengthFeet);
+                            console.log('lengthInches', lengthInches);
+
+                            if(lengthFeet > mxlenf){
+                                mxlenf = lengthFeet;
+                                mxlen = item.ATSLength;
+                            }
+
+                            lenInchCal = parseFloat((lengthInches / 12).toFixed(3));
+                            widInchCal = parseFloat((widthInches / 12).toFixed(1))
+                            lenghtWithInches = parseFloat((lengthFeet +  lenInchCal).toFixed(3));
+                            widthWithInches  = parseFloat((widthFeet + widInchCal).toFixed(2));
+
+                            if (lenghtWithInches > totalMaxLen) {
+                                totalMaxLen = lenghtWithInches;
+                            }
+                            console.log('widthFeet', widthFeet);
+                            console.log('widthInches', widthInches);
+                            console.log('widInchCal', widInchCal);
+                            console.log('widthWithInches', widthWithInches);
+
+                            totalLen *= lengthFeet;
+                            totalWid *= widthFeet;
+                            totalAddWid += widthWithInches;
+
+                            var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
+                           // var item_id = item.ItemID.replace('-', '_');
+                            var item_id = $('#item_id').val();
+                            divContent +=
+                                '<div class="badge badge-default broadloom-badge" id="' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No +'" style="background-color:' +
+                                color + '">';
+                            var size = {};
+                            // size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
+                            //     widthInches + `"`;
+                            size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
+                                        lengthInches + `"`;
+                            divContent += size.size;
+                            divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
+                            let totalLengthInInches = lengthFeet * 12 + lengthInches;
+                            let totalWidthInInches = widthFeet * 12 + widthInches;
+
+                            // Calculate total area in square inches
+                            let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
+
+                            // Convert square inches to square feet
+                            let totalAreaInSquareFeet = totalAreaInSquareInches /
+                            144; // 1 square foot = 144 square inches
+
+                            // Convert square feet to square yards
+                            let totalAreaInSquareYards = totalAreaInSquareFeet /
+                            9; // 1 square yard = 9 square feet
+
+                            // Calculate the SQ-YRD Price ($) and EXT Price ($)
+                            let sqYrdPrice = $("#sq-ft").val() / 9; // Price per square yard
+                            let extPrice = totalAreaInSquareYards * sqYrdPrice;
+                            // size.price = extPrice.toFixed(2);
+
+                            if (item.LengthStatus == 'F') {
+                                console.log('in size');
+                                sizes.push(size);
+                            }
+                            line_no = line_no + 1;
+                        });
+
+                        totalSqftPrice = totalMaxLen.toFixed(1) * totalAddWid.toFixed(1);
+
+                        $("#ats-qty").val(totalSqftPrice);
+                        $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
+                        console.log('ats quaantity', $("#ats-qty").val());
+                        updatePrices();
+
+                        divContent += `</div>`;
+
+                        $('#cut_piece_parent').html(divContent);
+                        $('#size_price').val(JSON.stringify(sizes));
+                        item_object.CutPieces =  response['OutPut']['AddCutPieces'];
+                        $('#cut_pieces_json').val(JSON.stringify( response['OutPut']['AddCutPieces']));
+                        $('#item_json').val(JSON.stringify(item_object));
+
                         toastr.success('Cut Piece Removed', {
                             hideDuration: 10000,
                             closeButton: true,
@@ -1027,17 +1245,27 @@
                         let totalAddWid = 0;
                         let lenghtWithInches = 0;
                         let widthWithInches = 0;
+                        let mxlenf = 0;
+                        let mxlen = 0;
+
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
                             console.log('add cut res', item);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
                             let widthInches = item.ATSWidth % 12;
+                            console.log('lengthFeet', lengthFeet);
+                            console.log('lengthInches', lengthInches);
+
+                            if(lengthFeet > mxlenf){
+                                mxlenf = lengthFeet;
+                                mxlen = item.ATSLength;
+                            }
 
                             lenInchCal = parseFloat((lengthInches / 12).toFixed(3));
-                            widInchCal = parseFloat((widthInches / 12).toFixed(3))
+                            widInchCal = parseFloat((widthInches / 12).toFixed(1))
                             lenghtWithInches = parseFloat((lengthFeet +  lenInchCal).toFixed(3));
-                            widthWithInches  = parseFloat((widthFeet + widInchCal).toFixed(3));
+                            widthWithInches  = parseFloat((widthFeet + widInchCal).toFixed(2));
 
                             if (lenghtWithInches > totalMaxLen) {
                                 totalMaxLen = lenghtWithInches;
@@ -1050,7 +1278,7 @@
                             var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
                             var item_id = item.ItemID.replace('-', '_');
                             divContent +=
-                                '<div class="badge badge-default broadloom-badge" id="' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + line_no +'" style="background-color:' +
+                                '<div class="badge badge-default broadloom-badge" id="' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No +'" style="background-color:' +
                                 color + '">';
                             var size = {};
                             // size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
@@ -1058,7 +1286,7 @@
                             size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
                                         lengthInches + `"`;
                             divContent += size.size;
-                            divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + line_no + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
+                            divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
                             let totalLengthInInches = lengthFeet * 12 + lengthInches;
                             let totalWidthInInches = widthFeet * 12 + widthInches;
 
@@ -1085,13 +1313,10 @@
                             line_no = line_no + 1;
                         });
 
-                        totalSqftPrice = totalMaxLen * totalAddWid;
-                        console.log('total len', totalLen);
-                        console.log('total max len', totalMaxLen);
-                        console.log('total wid', totalWid);
-                        console.log('total add wid', totalAddWid);
-                        console.log('total sqft price', totalSqftPrice);
+                        totalSqftPrice = totalMaxLen.toFixed(1) * totalAddWid.toFixed(1);
+
                         $("#ats-qty").val(totalSqftPrice);
+                        $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
                         console.log('ats quaantity', $("#ats-qty").val());
                         updatePrices();
 
@@ -1107,6 +1332,7 @@
                             closeButton: true,
                         });
                         $('#show-cut-piece-btn').removeClass('d-none');
+                        $('#roll_pieces').prop('disabled', true);
                     $('#add_to_cart').removeClass('d-none');} else {
                         toastr.error(data.cut_piece.OutPut.Message, {
                             hideDuration: 10000,
@@ -1213,6 +1439,7 @@
             $('#cut_piece_btn').click(function () {
                 add_cut_pieces();
             });
+
         }
 
         $(document).ready(function() {
@@ -1282,7 +1509,7 @@
                 $('#TlengthInch').val(lengthinches);
                 $('#TwidthInch').val(widthinches);
                 $('.Tlength').val(lengthfeet);
-                $('#lenght-width').text(`${lengthfeet}'-${lengthinches}'/${widthfeet}'-${widthinches}'`);
+                $('#lenght-width').text(`${lengthfeet}'-${lengthinches}'/`);
                 $('.Twidth').attr('max', widthfeet);
                 $('.Tlength').attr('max', lengthfeet);
                 $('#roll_id').val(selectedOption.attr('value'));
@@ -1330,6 +1557,96 @@
             //         }
             //     }
             // });
+
+            function cut_pieces_display(cut_pieces_remainning){
+                var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
+                var sizes = [];
+                var line_no = 1;
+                let totalLen = 1;
+                let totalWid = 1;
+                let totalSqftPrice = 0;
+                let totalMaxLen = 0;
+                let lenInchCal = 0;
+                let widInchCal = 0;
+                let totalAddWid = 0;
+                let lenghtWithInches = 0;
+                let widthWithInches = 0;
+                let mxlenf = 0;
+                let mxlen = 0;
+
+                $.each(cut_pieces_remainning, function (index, item) {
+                    console.log('add cut res', item);
+                    let lengthFeet = Math.floor(item.ATSLength / 12);
+                    let lengthInches = item.ATSLength % 12;
+                    let widthFeet = Math.floor(item.ATSWidth / 12);
+                    let widthInches = item.ATSWidth % 12;
+                    console.log('lengthFeet', lengthFeet);
+                    console.log('lengthInches', lengthInches);
+
+                    if(lengthFeet > mxlenf){
+                        mxlenf = lengthFeet;
+                        mxlen = item.ATSLength;
+                    }
+
+                    lenInchCal = parseFloat((lengthInches / 12).toFixed(3));
+                    widInchCal = parseFloat((widthInches / 12).toFixed(1))
+                    lenghtWithInches = parseFloat((lengthFeet +  lenInchCal).toFixed(3));
+                    widthWithInches  = parseFloat((widthFeet + widInchCal).toFixed(2));
+
+                    if (lenghtWithInches > totalMaxLen) {
+                        totalMaxLen = lenghtWithInches;
+                    }
+                    console.log('widthFeet', widthFeet);
+                    console.log('widthInches', widthInches);
+                    console.log('widInchCal', widInchCal);
+                    console.log('widthWithInches', widthWithInches);
+
+                    totalLen *= lengthFeet;
+                    totalWid *= widthFeet;
+                    totalAddWid += widthWithInches;
+
+                    var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
+                    var item_id = item.ItemID.replace('-', '_');
+                    divContent +=
+                        '<div class="badge badge-default broadloom-badge" id="' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No +'" style="background-color:' +
+                        color + '">';
+                    var size = {};
+                    size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
+                                lengthInches + `"`;
+                    divContent += size.size;
+                    divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
+                    let totalLengthInInches = lengthFeet * 12 + lengthInches;
+                    let totalWidthInInches = widthFeet * 12 + widthInches;
+                    let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
+                    let totalAreaInSquareFeet = totalAreaInSquareInches /
+                    144;
+                    let totalAreaInSquareYards = totalAreaInSquareFeet /
+                    9;
+                    let sqYrdPrice = $("#sq-ft").val() / 9;
+                    let extPrice = totalAreaInSquareYards * sqYrdPrice;
+                    if (item.LengthStatus == 'F') {
+                        console.log('in size');
+                        sizes.push(size);
+                    }
+                    line_no = line_no + 1;
+                });
+                console.log('outside loop');
+
+                totalSqftPrice = totalMaxLen.toFixed(1) * totalAddWid.toFixed(1);
+
+                $("#ats-qty").val(totalSqftPrice);
+                $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
+                console.log('ats quaantity', $("#ats-qty").val());
+                updatePrices();
+
+                divContent += `</div>`;
+
+                $('#cut_piece_parent').html(divContent);
+                $('#size_price').val(JSON.stringify(sizes));
+                item_object.CutPieces = cut_pieces_remainning;
+                $('#cut_pieces_json').val(JSON.stringify(cut_pieces_remainning));
+                $('#item_json').val(JSON.stringify(item_object));
+            }
 
         });
     </script>
