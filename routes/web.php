@@ -96,7 +96,7 @@ Route::get( '/static/{type}', 'Frontend\StaticController@index' )->name( 'static
 
 //Admin Routes
 Route::redirect( '/admin', '/admin/themes' );
-Route::group( ['prefix' => 'admin', 'middleware' => ['auth']], function ()
+Route::group( ['prefix' => 'admin', 'middleware' => ['auth', 'check.admin']], function ()
 {
     Route::get( '/orders', [OrdersController::class, 'index'] )->name( 'admin.orders' );
     Route::post( '/orders', [OrdersController::class, 'process_order'] )->name( 'admin.process-orders' );
