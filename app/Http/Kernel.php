@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'dashboardPermissions' => \App\Http\Middleware\DashboardPermissions::class,
         'cwt'                  => \App\Http\Middleware\CWT::class,
         'check_bd_user'        => \App\Http\Middleware\CheckBroadLoomUser::class,
+        'check.admin'          => \App\Http\Middleware\VerifyAdminMiddleware::class,
     ];
 }
