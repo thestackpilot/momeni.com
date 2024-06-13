@@ -308,7 +308,7 @@ class CheckoutController extends FrontendController
                             $cut_pieces[$key]['LocationID'] = $item_data->location_id;
                             $cut_pieces[$key]['Serging'] = $item_data->Serging;
                             $cut_pieces[$key]['SergingCharges'] = !empty($item_data->SergingCharges) ? $item_data->SergingCharges : 0;
-                            $cut_pieces[$key]['SergingType'] = !empty($item_data->SergingType) ? $item_data->SergingType : "0";
+                            $cut_pieces[$key]['SergingType'] = (!empty($item_data->SergingType) || $item_data->SergingType != "N") ? "0" : $item_data->SergingType;
                             $cut_pieces[$key]['LineNo'] = ++$line;
                             $order_length += $cut_piece->ATSLength;
                         }

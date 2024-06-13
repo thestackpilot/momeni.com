@@ -40,16 +40,17 @@ class CartController extends FrontendController
                    'cart_item_price' => floatval($request->cart_item_price) + floatval($request->item_surging_price),
                 ]);
 
-                foreach ($size_array as $size_data) {
+                // foreach ($size_array as $size_data) {
 
-                    $request->merge([
-                        'cart_item_size' => $size_data['size'],
-                       // 'cart_item_price' => $size_data['price'] + $request->item_serging_price,
-                    ]);
+                //     $request->merge([
+                //         'cart_item_size' => $size_data['size'],
+                //        // 'cart_item_price' => $size_data['price'] + $request->item_serging_price,
+                //     ]);
 
-                    (new Cart())->save_or_update_full_cart_item($request);
-                }
-                // die();
+                //     (new Cart())->save_or_update_full_cart_item($request);
+                // }
+
+                (new Cart())->save_or_update_full_cart_item($request);
 
                 $logged_user_no = $request->logged_user_no ? $request->logged_user_no : '';
                 $temp_sales_order_no = $request->temp_sales_order_no ? $request->temp_sales_order_no : '';

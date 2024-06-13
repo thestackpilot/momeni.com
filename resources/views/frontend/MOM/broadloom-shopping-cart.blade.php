@@ -73,74 +73,77 @@
                                         </thead>
                                         <tbody>
                                         @if (count((array) $cart->items))
-                                            @php $displayedItems = []; @endphp
                                             @foreach ($cart->items as $item)
-                                                @if(!in_array($item->item_name, $displayedItems))
-                                                    @php
-                                                        if (isset($item->item_data) && $item->item_data) {
-                                                            $item_data = json_decode(unserialize($item -> item_data));
-                                                        }
-                                                        $displayedItems[] = $item->item_name;
-                                                    @endphp
-                                                    <tr>
-                                                        <th class="" scope="row">
-                                                            <div class="row">
-                                                                <div
-                                                                    class="col-1 justify-content-center align-content-center delete-row"
-                                                                    style="color: red;cursor: pointer;">x
-                                                                </div>
-                                                                <div class="col-3"><img
-                                                                        src={{ CommonController::getApiFullImage($item_data->ImageName) }}
-                                                                            alt="{{ $item_data->ItemID }}" height="80px" width="80px"
-                                                                            onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"
-                                                                        >
-                                                                </div>
-                                                                <div class="col-8" style="font-size: 12px">
-                                                                    <div class=" mt-2 font-weight--bold row">Design: <p
-                                                                            class="font-weight--normal mx-2">
-                                                                            {{ $item_data->ItemName }}</p>
-                                                                    </div>
-                                                                    {{-- <div class=" mt-2 row">SKU: <p
-                                                                            class="font-weight--normal mx-2">N/A</p>
-                                                                    </div> --}}
-                                                                    <div class=" mt-2 row">Roll Id: <p
-                                                                        class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
-                                                                    </div>
-                                                                    <div class=" mt-2 row">Sizes:
-                                                                        @foreach ($cart->items as $item_sizes)
-                                                                            @if($item_sizes->item_name == $item->item_name)
-                                                                                <br><p class="font-weight--normal mx-2">({{ $item->item_size }})</p><br>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </th>
-                                                        @if(!$item->broadloom_item)
-                                                        <td class="align-content-center">
-                                                            <div class="d-flex flex-row qty-styles mb-2">
-                                                                <a href="javascript:void(0);" class="qty-minus qty-action">
-                                                                    -
-                                                                </a>
-                                                                <input type="number" id="item_qty" name="quantity"
-                                                                    autocomplete="off"
-                                                                    onkeydown="if(this.key==='.'){this.preventDefault();}"
-                                                                    class="form-control" min="1" max="9999"
-                                                                    maxlength="4" step="1" required
-                                                                    value="{{ $item->item_quantity }}"/>
-                                                                <a href="javascript:void(0);" class="qty-add qty-action"> +
-                                                                </a>
-                                                                <input type="hidden" class="item_id" name="item_id"
-                                                                    value="{{ $item_data->ItemID }}">
-                                                            </div>
-                                                        </td>
-                                                        @endif
-                                                        <td class="align-content-center">
-                                                            {{ $item->item_currency }}{{ $item->item_price }}</td>
-                                                        <td class="align-content-center">{{ $item->item_currency }}<span
-                                                                id="item_total_price">{{ $item->item_total }}</span></td>
-                                                    </tr>
-                                                @endif
+                                            @php
+                                            if (isset($item->item_data) && $item->item_data) {
+                                                $item_data = json_decode(unserialize($item -> item_data));
+                                            }
+                                        @endphp
+                                        <tr>
+                                            <th class="" scope="row">
+                                                <div class="row">
+                                                    <div
+                                                        class="col-1 justify-content-center align-content-center delete-row"
+                                                        style="color: red;cursor: pointer;">x
+                                                    </div>
+                                                    <div class="col-3"><img
+                                                            src={{ CommonController::getApiFullImage($item_data->ImageName) }}
+                                                                alt="{{ $item_data->ItemID }}" height="80px" width="80px"
+                                                                onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"
+                                                            >
+                                                    </div>
+                                                    <div class="col-8" style="font-size: 12px">
+                                                        <div class=" mt-2 font-weight--bold row">Design: <p
+                                                                class="font-weight--normal mx-2">
+                                                                {{ $item_data->ItemName }}</p>
+                                                        </div>
+                                                        {{-- <div class=" mt-2 row">SKU: <p
+                                                                class="font-weight--normal mx-2">N/A</p>
+                                                        </div> --}}
+                                                        <div class=" mt-2 row">Roll Id: <p
+                                                            class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
+                                                        </div>
+                                                        <div class=" mt-2 row">Sizes:
+                                                        @php
+                                                            $sizes = json_decode( unserialize($item->item_data ), true );
+                                                        @endphp
+                                                        @foreach($sizes['CutPieces'] as $item_sizes)
+                                                        @php
+                                                            $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                            $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                            $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                            $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                        @endphp
+                                                        <br><p class="font-weight--normal mx-2">({{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }})</p><br>
+                                                        @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            @if(!$item->broadloom_item)
+                                            <td class="align-content-center">
+                                                <div class="d-flex flex-row qty-styles mb-2">
+                                                    <a href="javascript:void(0);" class="qty-minus qty-action">
+                                                        -
+                                                    </a>
+                                                    <input type="number" id="item_qty" name="quantity"
+                                                        autocomplete="off"
+                                                        onkeydown="if(this.key==='.'){this.preventDefault();}"
+                                                        class="form-control" min="1" max="9999"
+                                                        maxlength="4" step="1" required
+                                                        value="{{ $item->item_quantity }}"/>
+                                                    <a href="javascript:void(0);" class="qty-add qty-action"> +
+                                                    </a>
+                                                    <input type="hidden" class="item_id" name="item_id"
+                                                        value="{{ $item_data->ItemID }}">
+                                                </div>
+                                            </td>
+                                            @endif
+                                            <td class="align-content-center">
+                                                {{ $item->item_currency }}{{ $item->item_price }}</td>
+                                            <td class="align-content-center">{{ $item->item_currency }}<span
+                                                    id="item_total_price">{{ $item->item_total }}</span></td>
+                                        </tr>
                                             @endforeach
                                         @else
                                             <tr>
@@ -163,17 +166,8 @@
                                     <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
                                     <div class="row mt-3">
                                         <div class="col-md-6">SubTotal:</div>
-                                        @php $samNameItems = []; $bd_cart_price = 0; @endphp
-                                        @foreach($cart->items as $item)
-                                            @php
-                                                if(!in_array($item->item_name, $samNameItems)){
-                                                    $bd_cart_price += $item->item_price;
-                                                    $samNameItems[] = $item->item_name;
-                                                }
-                                            @endphp
-                                        @endforeach
                                         <div class="col-md-6 text-right">{{ $cart->cart_currency }}<span
-                                                id="item_subtotal_price">{{ $bd_cart_price }}</span></div>
+                                                id="item_subtotal_price">{{ $cart->cart_total }}</span></div>
                                     </div>
                                     <hr style="border-top-color: whitesmoke;">
                                     <div class="row">
@@ -394,10 +388,14 @@
                                         </div>
                                         <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
 
-                                        @php $displayedItems = []; @endphp
+                                        @php $total_price=0; @endphp
                                         @foreach ( $cart->items as $item)
-                                            @if(!in_array($item->item_name, $displayedItems))
-                                                @php $displayedItems[] = $item->item_name; @endphp
+                                        @php
+                                            if (isset($item->item_data) && $item->item_data) {
+                                                $item_data = json_decode(unserialize($item -> item_data));
+                                            }
+                                            $total_price += $item->item_price;
+                                        @endphp
                                                 <div class="row px-5">
                                                     <div class="col-md-9">
                                                         <div class="row">
@@ -409,13 +407,20 @@
                                                                 <div class="mx-3 mt-2 font-weight--bold row">Design: <p
                                                                         class="font-weight--normal mx-2">{{$item->item_name}}</p>
                                                                 </div>
-                                                                <div class="mx-3 mt-2 row">SKU: <p
-                                                                        class="font-weight--normal mx-2">N/A</p></div>
+                                                                <div class="mx-3 mt-2 row">Roll Id: <p
+                                                                        class="font-weight--normal mx-2">{{$item_data->RollID}}</p></div>
                                                                 <div class="mx-3 mt-2 row">Sizes:
-                                                                    @foreach ( $cart->items as $item_sizes)
-                                                                        @if($item_sizes->item_name == $item->item_name)
-                                                                            <p class="font-weight--normal mx-2">({{$item_sizes->item_size}})</p>
-                                                                        @endif
+                                                                    @php
+                                                                        $sizes = json_decode( unserialize($item->item_data ), true );
+                                                                    @endphp
+                                                                    @foreach($sizes['CutPieces'] as $item_sizes)
+                                                                    @php
+                                                                        $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                                        $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                                        $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                                        $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                                    @endphp
+                                                                    <br><p class="font-weight--normal mx-2">({{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }})</p><br>
                                                                     @endforeach
                                                                 </div>
                                                             </div>
@@ -425,20 +430,11 @@
                                                         class="col-md-3 text-right align-content-center">{{$item->item_currency}}{{$item->item_total}}</div>
                                                 </div>
                                                 <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                            @endif
                                         @endforeach
                                         <div class="row px-5">
                                             <div class="col-md-6 font-weight-bold">SubTotal</div>
-                                            @php $samNameItems = []; $bd_cart_price = 0; @endphp
-                                            @foreach($cart->items as $item)
-                                                @php
-                                                    if(!in_array($item->item_name, $samNameItems)){
-                                                        $bd_cart_price += $item->item_price;
-                                                        $samNameItems[] = $item->item_name;
-                                                    }
-                                                @endphp
-                                            @endforeach
-                                            <div class="col-md-6 font-weight-bold text-right section_2_subtotal">{{$item->item_currency}}{{$bd_cart_price}}</div>
+
+                                            <div class="col-md-6 font-weight-bold text-right section_2_subtotal">{{$item->item_currency}}{{$total_price}}</div>
                                         </div>
                                         <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                         <div class="row px-5">
@@ -550,15 +546,26 @@
                                             </div>
                                             <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p>
                                             </div>
-                                            <div class="mx-3 mt-2 row">Size: <p class="font-weight--normal mx-2">
-                                                    ${{$item->item_size}}</p>
+                                            <div class="mx-3 mt-2 row">Size:
+                                                @php
+                                                    $sizes = json_decode( unserialize($item->item_data ), true );
+                                                @endphp
+                                                @foreach($sizes['CutPieces'] as $item_sizes)
+                                                @php
+                                                    $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                    $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                    $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                    $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                @endphp
+                                                <p class="font-weight--normal mx-2">({{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }})</p>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
 
-                            @php $samNameItems = []; $bd_cart_price = 0; @endphp
+                            {{-- @php $samNameItems = []; $bd_cart_price = 0; @endphp
                             @foreach($cart->items as $item)
                                 @php
                                     if(!in_array($item->item_name, $samNameItems)){
@@ -566,18 +573,18 @@
                                         $samNameItems[] = $item->item_name;
                                     }
                                 @endphp
-                            @endforeach
+                            @endforeach --}}
 
-                            {{-- <div class="col-md-3 text-right align-content-center">${{$cart->cart_total}}</div> --}}
-                            <div class="col-md-3 text-right align-content-center">${{$bd_cart_price}}</div>
+                            <div class="col-md-3 text-right align-content-center">${{$cart->cart_total}}</div>
+                            {{-- <div class="col-md-3 text-right align-content-center">${{$bd_cart_price}}</div> --}}
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
                             <div class="col-md-4 align-content-center font-weight--bold">SubTotal</div>
-                            {{-- <div class="col-md-4 align-content-center text-right font-weight--bold">
-                                ${{$cart->cart_total}}</div> --}}
                             <div class="col-md-4 align-content-center text-right font-weight--bold">
-                                ${{$bd_cart_price}}</div>
+                                ${{$cart->cart_total}}</div>
+                            {{-- <div class="col-md-4 align-content-center text-right font-weight--bold">
+                                ${{$bd_cart_price}}</div> --}}
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
@@ -623,6 +630,8 @@
            // var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " "));
            var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
             var shippingCharges = parseFloat($(".section_2_shipping_charges").text().replace('$', ''));
+            console.log(subtotal);
+            console.log('total', total);
             var total = subtotal + shippingCharges;
             $(".section_2_cart_total").text("$" + total.toFixed(2));
 
