@@ -21,7 +21,6 @@ class VerifyAdminMiddleware
         if (Auth::check() && Auth::user()->is_customer) {
             return redirect()->route('frontend.home');
         }else{
-            dd('asdasd');
             return $next($request);
         }
     }
