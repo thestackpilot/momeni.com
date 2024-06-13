@@ -43,24 +43,44 @@ use App\Http\Controllers\CommonController;
                <div class="row">
                   @foreach($dataFilter['Designs'] as $k => $design)
                   @if((isset($type) && ($type == '' || $type != $dataFilter['MainCollectionID'])) && $k > 8) @break; @endif
-                  <div class="col-md-4">
-                     <!-- slider-for rug-callection -->
-                     <div class="">
-                        <a href="{{url('/').'/item/'.$dataFilter['MainCollectionID'].'/'.urlencode(urlencode($design['DesignID'])).'/'.urlencode(urlencode($design['ColorID']))}}">
-                           <img src="{{CommonController::getApiFullImage($design['ImageName'])}}" class="img-responsive" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
+
+                    @if($dataFilter['MainCollectionID'] == "Broadloom")
+                    <div class="col-md-4">
+                        <!-- slider-for rug-callection -->
+                        <div class="">
+                        <a href="{{ url('/') . '/item/BroadLoom' . '/' . urlencode(urlencode($design['DesignID'])) . '/' }}">
+                            <img src="{{CommonController::getApiFullImage($design['ImageName'])}}" class="img-responsive" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
                         </a>
-                     </div>
-                     <div class="product-content inn-p">
-                        <a href="{{url('/').'/item/'.$dataFilter['MainCollectionID'].'/'.urlencode(urlencode($design['DesignID'])).'/'.urlencode(urlencode($design['ColorID']))}}" style="display: inherit; min-height: auto;">
-                           <h6 class="prodect-title" title="{{join(', ', $design['Colors'])}}">{{join(', ', $design['Colors'])}}</h6>
-                           <h6 class="prodect-title" title="{{$design['Description']}}">{{$design['Description']}}</h6>
+                        </div>
+                        <div class="product-content inn-p">
+                        <a href="{{ url('/') . '/item/BroadLoom' . '/' . urlencode(urlencode($design['DesignID'])) . '/' }}" style="display: inherit; min-height: auto;">
+                            <h6 class="prodect-title" title="{{join(', ', $design['Colors'])}}">{{join(', ', $design['Colors'])}}</h6>
+                            <h6 class="prodect-title" title="{{$design['Description']}}">{{$design['Description']}}</h6>
                         </a>
-                     </div>
-                  </div>
+                        </div>
+                        </div>
+                    @endif
+
+                    @if($dataFilter['MainCollectionID'] != "Broadloom")
+                    <div class="col-md-4">
+                        <!-- slider-for rug-callection -->
+                        <div class="">
+                            <a href="{{url('/').'/item/'.$dataFilter['MainCollectionID'].'/'.urlencode(urlencode($design['DesignID'])).'/'.urlencode(urlencode($design['ColorID']))}}">
+                            <img src="{{CommonController::getApiFullImage($design['ImageName'])}}" class="img-responsive" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
+                            </a>
+                        </div>
+                        <div class="product-content inn-p">
+                            <a href="{{url('/').'/item/'.$dataFilter['MainCollectionID'].'/'.urlencode(urlencode($design['DesignID'])).'/'.urlencode(urlencode($design['ColorID']))}}" style="display: inherit; min-height: auto;">
+                            <h6 class="prodect-title" title="{{join(', ', $design['Colors'])}}">{{join(', ', $design['Colors'])}}</h6>
+                            <h6 class="prodect-title" title="{{$design['Description']}}">{{$design['Description']}}</h6>
+                            </a>
+                        </div>
+                    </div>
+                    @endif
                   @endforeach
                </div>
             </div>
-            @if(( isset($type) && ($type == '' || $type != $dataFilter['MainCollectionID'])) && $dataFilter && count($dataFilter['Designs']) > 8) 
+            @if(( isset($type) && ($type == '' || $type != $dataFilter['MainCollectionID'])) && $dataFilter && count($dataFilter['Designs']) > 8)
             <div class="button-box section-space--mt_20 section-space--mb_20 text-center">
                @if (isset($filter_page) && $filter_page)
                <a href="{{route('frontend.designs',[$dataFilter['MainCollectionID'], base64_encode('{"Filters": [{"FilterID":"'.str_replace(' ','_',trim($view_title)).'","Values":["1"]}]}'), $search_string ?? 0])}}"" class="btn btn--md btn--border_1 d-inline">Explore More <i class="icon-arrow-right"></i></a>
