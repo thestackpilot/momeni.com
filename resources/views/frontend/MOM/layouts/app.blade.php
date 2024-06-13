@@ -136,11 +136,11 @@ use App\Http\Controllers\CommonController;
         if (isLoggedIn) {
             $("#loginLi").hide();
             $("#profileLi").show();
-            $("#broadloomLi").show();
+            //$("#broadloomLi").show();
         } else {
             $("#loginLi").show();
             $("#profileLi").hide();
-            $("#broadloomLi").hide();
+            //$("#broadloomLi").hide();
         }
 
         $('.carousel').carousel(

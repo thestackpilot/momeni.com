@@ -839,11 +839,33 @@
             }
         }
 
+        function getDimensionsInInches(sizeStr) {
+            let [widthStr, lengthStr] = sizeStr.split(' x ');
+
+            let [widthFeet, widthInches] = widthStr.split("'");
+            let [lengthFeet, lengthInches] = lengthStr.split("'");
+
+            widthFeet = parseInt(widthFeet);
+            widthInches = parseInt(widthInches.replace('"', ''));
+            lengthFeet = parseInt(lengthFeet);
+            lengthInches = parseInt(lengthInches.replace('"', ''));
+
+            let totalWidthInches = (widthFeet * 12) + widthInches;
+            let totalLengthInches = (lengthFeet * 12) + lengthInches;
+
+            return {
+                width: totalWidthInches,
+                length: totalLengthInches,
+                originalSize: sizeStr
+            };
+        }
+
         function pushToCart() {
             $('#add_to_cart').addClass('btn-muted');
             $('#cart_item_quantity').val($('#item_qty').val());
             item = JSON.parse($('#item_json').val());
-            let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "N";
+            let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "0";
+            console.log('surging_type', surging_type);
             item.SQFTPrice = $('#sq-ft').val();
             item.SQFTArea = $('#totalsqft').val();
             item.CutPieceID = $('#cutpiece_id').val();
@@ -854,6 +876,25 @@
             item.cut_type = $('#cuttype').val();
             item.Serging = $('#surging_check').is(':checked') ? 'Y' : 'N'
             $('#item_json').val(JSON.stringify(item));
+
+            let jsonString =  $('#size_price').val();
+            let sizesArray = JSON.parse(jsonString);
+
+            let dimensionsInInches = sizesArray.map(item => getDimensionsInInches(item.size));
+            let maxLengthObj = dimensionsInInches.reduce((maxObj, currentObj) => {
+                return currentObj.length > maxObj.length ? currentObj : maxObj;
+            }, dimensionsInInches[0]);
+            let maxLengthFeet = Math.floor(maxLengthObj.length / 12);
+            let maxLengthInches = maxLengthObj.length % 12;
+
+            let maxWidthFeet = Math.floor(maxLengthObj.width / 12);
+            let maxWidthInches = maxLengthObj.width % 12;
+
+            console.log(`Max Length: ${maxLengthFeet}'${maxLengthInches}"`);
+            console.log(`Corresponding Width: ${maxWidthFeet}'${maxWidthInches}"`);
+
+            var max_len_size = `${maxWidthFeet}'${maxWidthInches}" x ${maxLengthFeet}'${maxLengthInches}"`;
+
             $.ajax({
                 url: "{{ route('check-cart-item') }}",
                 type: "GET",
@@ -876,7 +917,7 @@
                                                 'cart_item_name': item.ItemName,
                                                 'cart_item_quantity': 1,
                                                 'cart_item_color': item.ItemColor,
-                                                'cart_item_size': $('#size_price').val(),
+                                                'cart_item_size': max_len_size,//$('#size_price').val(),
                                                 'cart_item_price': $("#sq-ext").val(),
                                                 'item_surging_price': $('#surging_charges').val(),
                                                 'cart_item_currency': '$',
@@ -969,7 +1010,7 @@
                                 'cart_item_name': item.ItemName,
                                 'cart_item_quantity': 1,
                                 'cart_item_color': item.ItemColor,
-                                'cart_item_size': $('#size_price').val(),
+                                'cart_item_size': max_len_size,//$('#size_price').val(),
                                 'cart_item_price': $("#sq-ext").val(),
                                 'item_surging_price': $('#surging_charges').val(),
                                 'cart_item_currency': '$',
@@ -1078,9 +1119,10 @@
                     console.log('response removeCutPiece', response['OutPut']['AddCutPieces']);
                     if(cutpieceLen.length == 0){
                             $('#show-cut-piece-btn').addClass('d-none');
+                            $('#add_to_cart').addClass('d-none');
                     }
                     if (response['OutPut']['Success']) {
-                        $('#' + id).remove();
+                      //  $('#' + id).remove();
                         console.log('id', id);
                         console.log($('#' + id));
                         $('#cut_piece_parent').empty();
@@ -1100,13 +1142,12 @@
                         let mxlen = 0;
 
                         $.each(response['OutPut']['AddCutPieces'], function (index, item) {
-                            console.log('add cut res', item);
+                            // console.log('item.CPTempLine_No', item.CPTempLine_No);
+                            // console.log('add cut res', item);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
                             let widthInches = item.ATSWidth % 12;
-                            console.log('lengthFeet', lengthFeet);
-                            console.log('lengthInches', lengthInches);
 
                             if(lengthFeet > mxlenf){
                                 mxlenf = lengthFeet;
@@ -1121,10 +1162,6 @@
                             if (lenghtWithInches > totalMaxLen) {
                                 totalMaxLen = lenghtWithInches;
                             }
-                            console.log('widthFeet', widthFeet);
-                            console.log('widthInches', widthInches);
-                            console.log('widInchCal', widInchCal);
-                            console.log('widthWithInches', widthWithInches);
 
                             totalLen *= lengthFeet;
                             totalWid *= widthFeet;
@@ -1133,6 +1170,7 @@
                             var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
                            // var item_id = item.ItemID.replace('-', '_');
                             var item_id = $('#item_id').val();
+                            console.log('item.CPTempLine_No', item.CPTempLine_No);
                             divContent +=
                                 '<div class="badge badge-default broadloom-badge" id="' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No +'" style="background-color:' +
                                 color + '">';
@@ -1142,7 +1180,7 @@
                             size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
                                         lengthInches + `"`;
                             divContent += size.size;
-                            divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
+                            divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + item.CPTempLine_No + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
                             let totalLengthInInches = lengthFeet * 12 + lengthInches;
                             let totalWidthInInches = widthFeet * 12 + widthInches;
 
@@ -1173,7 +1211,6 @@
 
                         $("#ats-qty").val(totalSqftPrice);
                         $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
-                        console.log('ats quaantity', $("#ats-qty").val());
                         updatePrices();
 
                         divContent += `</div>`;
@@ -1290,7 +1327,7 @@
                             size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
                                         lengthInches + `"`;
                             divContent += size.size;
-                            divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
+                            divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + item.CPTempLine_No + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
                             let totalLengthInInches = lengthFeet * 12 + lengthInches;
                             let totalWidthInInches = widthFeet * 12 + widthInches;
 
@@ -1342,7 +1379,7 @@
                             hideDuration: 10000,
                             closeButton: true,
                         });
-                    $('#add_to_cart').addClass('d-none');
+                    var cutpieces = data['cut_piece']['OutPut']['AddCutPieces'];
                     }
 
                 },
@@ -1562,95 +1599,95 @@
             //     }
             // });
 
-            function cut_pieces_display(cut_pieces_remainning){
-                var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
-                var sizes = [];
-                var line_no = 1;
-                let totalLen = 1;
-                let totalWid = 1;
-                let totalSqftPrice = 0;
-                let totalMaxLen = 0;
-                let lenInchCal = 0;
-                let widInchCal = 0;
-                let totalAddWid = 0;
-                let lenghtWithInches = 0;
-                let widthWithInches = 0;
-                let mxlenf = 0;
-                let mxlen = 0;
+            // function cut_pieces_display(cut_pieces_remainning){
+            //     var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
+            //     var sizes = [];
+            //     var line_no = 1;
+            //     let totalLen = 1;
+            //     let totalWid = 1;
+            //     let totalSqftPrice = 0;
+            //     let totalMaxLen = 0;
+            //     let lenInchCal = 0;
+            //     let widInchCal = 0;
+            //     let totalAddWid = 0;
+            //     let lenghtWithInches = 0;
+            //     let widthWithInches = 0;
+            //     let mxlenf = 0;
+            //     let mxlen = 0;
 
-                $.each(cut_pieces_remainning, function (index, item) {
-                    console.log('add cut res', item);
-                    let lengthFeet = Math.floor(item.ATSLength / 12);
-                    let lengthInches = item.ATSLength % 12;
-                    let widthFeet = Math.floor(item.ATSWidth / 12);
-                    let widthInches = item.ATSWidth % 12;
-                    console.log('lengthFeet', lengthFeet);
-                    console.log('lengthInches', lengthInches);
+            //     $.each(cut_pieces_remainning, function (index, item) {
+            //         console.log('add cut res', item);
+            //         let lengthFeet = Math.floor(item.ATSLength / 12);
+            //         let lengthInches = item.ATSLength % 12;
+            //         let widthFeet = Math.floor(item.ATSWidth / 12);
+            //         let widthInches = item.ATSWidth % 12;
+            //         console.log('lengthFeet', lengthFeet);
+            //         console.log('lengthInches', lengthInches);
 
-                    if(lengthFeet > mxlenf){
-                        mxlenf = lengthFeet;
-                        mxlen = item.ATSLength;
-                    }
+            //         if(lengthFeet > mxlenf){
+            //             mxlenf = lengthFeet;
+            //             mxlen = item.ATSLength;
+            //         }
 
-                    lenInchCal = parseFloat((lengthInches / 12).toFixed(3));
-                    widInchCal = parseFloat((widthInches / 12).toFixed(1))
-                    lenghtWithInches = parseFloat((lengthFeet +  lenInchCal).toFixed(3));
-                    widthWithInches  = parseFloat((widthFeet + widInchCal).toFixed(2));
+            //         lenInchCal = parseFloat((lengthInches / 12).toFixed(3));
+            //         widInchCal = parseFloat((widthInches / 12).toFixed(1))
+            //         lenghtWithInches = parseFloat((lengthFeet +  lenInchCal).toFixed(3));
+            //         widthWithInches  = parseFloat((widthFeet + widInchCal).toFixed(2));
 
-                    if (lenghtWithInches > totalMaxLen) {
-                        totalMaxLen = lenghtWithInches;
-                    }
-                    console.log('widthFeet', widthFeet);
-                    console.log('widthInches', widthInches);
-                    console.log('widInchCal', widInchCal);
-                    console.log('widthWithInches', widthWithInches);
+            //         if (lenghtWithInches > totalMaxLen) {
+            //             totalMaxLen = lenghtWithInches;
+            //         }
+            //         console.log('widthFeet', widthFeet);
+            //         console.log('widthInches', widthInches);
+            //         console.log('widInchCal', widInchCal);
+            //         console.log('widthWithInches', widthWithInches);
 
-                    totalLen *= lengthFeet;
-                    totalWid *= widthFeet;
-                    totalAddWid += widthWithInches;
+            //         totalLen *= lengthFeet;
+            //         totalWid *= widthFeet;
+            //         totalAddWid += widthWithInches;
 
-                    var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
-                    var item_id = item.ItemID.replace('-', '_');
-                    divContent +=
-                        '<div class="badge badge-default broadloom-badge" id="' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No +'" style="background-color:' +
-                        color + '">';
-                    var size = {};
-                    size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
-                                lengthInches + `"`;
-                    divContent += size.size;
-                    divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
-                    let totalLengthInInches = lengthFeet * 12 + lengthInches;
-                    let totalWidthInInches = widthFeet * 12 + widthInches;
-                    let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
-                    let totalAreaInSquareFeet = totalAreaInSquareInches /
-                    144;
-                    let totalAreaInSquareYards = totalAreaInSquareFeet /
-                    9;
-                    let sqYrdPrice = $("#sq-ft").val() / 9;
-                    let extPrice = totalAreaInSquareYards * sqYrdPrice;
-                    if (item.LengthStatus == 'F') {
-                        console.log('in size');
-                        sizes.push(size);
-                    }
-                    line_no = line_no + 1;
-                });
-                console.log('outside loop');
+            //         var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
+            //         var item_id = item.ItemID.replace('-', '_');
+            //         divContent +=
+            //             '<div class="badge badge-default broadloom-badge" id="' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No +'" style="background-color:' +
+            //             color + '">';
+            //         var size = {};
+            //         size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
+            //                     lengthInches + `"`;
+            //         divContent += size.size;
+            //         divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + line_no + '`,  `' + item.LengthStatus +'`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
+            //         let totalLengthInInches = lengthFeet * 12 + lengthInches;
+            //         let totalWidthInInches = widthFeet * 12 + widthInches;
+            //         let totalAreaInSquareInches = totalLengthInInches * totalWidthInInches;
+            //         let totalAreaInSquareFeet = totalAreaInSquareInches /
+            //         144;
+            //         let totalAreaInSquareYards = totalAreaInSquareFeet /
+            //         9;
+            //         let sqYrdPrice = $("#sq-ft").val() / 9;
+            //         let extPrice = totalAreaInSquareYards * sqYrdPrice;
+            //         if (item.LengthStatus == 'F') {
+            //             console.log('in size');
+            //             sizes.push(size);
+            //         }
+            //         line_no = line_no + 1;
+            //     });
+            //     console.log('outside loop');
 
-                totalSqftPrice = totalMaxLen.toFixed(1) * totalAddWid.toFixed(1);
+            //     totalSqftPrice = totalMaxLen.toFixed(1) * totalAddWid.toFixed(1);
 
-                $("#ats-qty").val(totalSqftPrice);
-                $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
-                console.log('ats quaantity', $("#ats-qty").val());
-                updatePrices();
+            //     $("#ats-qty").val(totalSqftPrice);
+            //     $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
+            //     console.log('ats quaantity', $("#ats-qty").val());
+            //     updatePrices();
 
-                divContent += `</div>`;
+            //     divContent += `</div>`;
 
-                $('#cut_piece_parent').html(divContent);
-                $('#size_price').val(JSON.stringify(sizes));
-                item_object.CutPieces = cut_pieces_remainning;
-                $('#cut_pieces_json').val(JSON.stringify(cut_pieces_remainning));
-                $('#item_json').val(JSON.stringify(item_object));
-            }
+            //     $('#cut_piece_parent').html(divContent);
+            //     $('#size_price').val(JSON.stringify(sizes));
+            //     item_object.CutPieces = cut_pieces_remainning;
+            //     $('#cut_pieces_json').val(JSON.stringify(cut_pieces_remainning));
+            //     $('#item_json').val(JSON.stringify(item_object));
+            // }
 
         });
     </script>

@@ -783,6 +783,186 @@ class GenericReportsController extends DashboardController
         return view( 'dashboard.payment-options' );
     }
 
+    public function view_order_bl(Request $request){
+        if ( count( $request->all() ) > 0 )
+        {
+            if ( $request->has( 'draw' ) && $request->draw )
+            {
+                $page      = $request->start == 0 ? 1 : ( $request->start / $request->length ) + 1;
+                $page_size = $request->length;
+            }
+            else
+            {
+                $page      = 1;
+                $page_size = 25;
+            }
+
+
+            $view_orders = $this->ApiObj->View_BL_Order( $request->customer, $request->external_number, $request->from_date, $request->to_date, $request->sales_rep, $page, $page_size, $request->customer_po, $request->order_number );
+            $table       = array( 'thead' => [
+                'order_no'     => 'Order Number',
+                'customer_id'  => 'Customer ID',
+                'customer_po'  => 'Customer PO',
+                'total_Amount' => 'Total Amount',
+                'total_qty'    => 'Total Quantity',
+                'status'       => 'Status',
+                'order_date'   => 'Order Date',
+                'actions'      => 'Actions'
+            ], 'tbody' => [] );
+
+            if ( isset( $view_orders['Orders'] ) )
+            {
+
+                foreach ( $view_orders['Orders'] as $view_order )
+                {
+                    $table['tbody'][] = [
+                        'order_no'     => $view_order['Header']['OrderNo'],
+                        'customer_id'  => $view_order['Header']['CustomerID'],
+                        'customer_po'  => $view_order['Header']['CustomerPO'],
+                        'total_Amount' => ConstantsController::CURRENCY.number_format( $view_order['Header']['TotalAmount'], ConstantsController::ALLOWED_DECIMALS ),
+                        'total_qty'    => $view_order['Header']['TotalQty'],
+                        'status'       => $view_order['Header']['Status'],
+                        'tab'          => isset( $view_order['Header']['TabStatusDescription'] ) ? $view_order['Header']['TabStatusDescription'] : '',
+                        'order_date'   => isset( $view_order['Header']['OrderDate'] ) ? CommonController::get_date_format( $view_order['Header']['OrderDate'] ) : 'N/A',
+                        'actions'      => [['type' => 'modal', 'label' => 'View Details']],
+                        'details'      => [
+                            'heading' => $view_order['Header']['OrderNo'].' : '.$view_order['Header']['CustomerID'],
+                            'body'    => [
+                                'sections' => [
+                                    [
+                                        'title'   => 'General',
+                                        'content' => [
+                                            'OrderNo'       => $view_order['Header']['OrderNo'],
+                                            'Customer ID'   => $view_order['Header']['CustomerID'],
+                                            'Customer PO'   => $view_order['Header']['CustomerPO'],
+                                            'Status'        => $view_order['Header']['Status'],
+                                            'PaymentTerm'   => $view_order['Header']['PaymentTerm'],
+                                            'OrderDate'     => CommonController::get_date_format( $view_order['Header']['OrderDate'] ),
+                                            'TotalAmount'   => ConstantsController::CURRENCY.number_format( $view_order['Header']['TotalAmount'], ConstantsController::ALLOWED_DECIMALS ),
+                                            'TotalQuantity' => $view_order['Header']['TotalQty']
+                                        ]
+                                    ],
+                                    [
+                                        'title'   => 'Billing Details',
+                                        'content' => [
+                                            'FirstName' => $view_order['Header']['BillingFirstName'],
+                                            'LastName'  => $view_order['Header']['BillingLastName'],
+                                            'Phone'     => $view_order['Header']['BillingPhone1'],
+                                            'Email'     => $view_order['Header']['BillingEmail'],
+                                            'Address 1' => $view_order['Header']['BillingAddress1'],
+                                            'Address 2' => $view_order['Header']['BillingAddress2'],
+                                            'City'      => $view_order['Header']['BillingCity'],
+                                            'State'     => $view_order['Header']['BillingState'],
+                                            'ZipCode'   => $view_order['Header']['BillingZipCode'],
+                                            'Country'   => $view_order['Header']['BillingCountry']
+                                        ]
+                                    ],
+                                    [
+                                        'title'   => 'Shipping Details',
+                                        'content' => [
+                                            'FirstName'    => $view_order['Header']['ShippingFirstName'],
+                                            'LastName'     => $view_order['Header']['ShippingLastName'],
+                                            'Address 1'    => $view_order['Header']['ShippingAddress1'],
+                                            'Address 2'    => $view_order['Header']['ShippingAddress2'],
+                                            'State'        => $view_order['Header']['ShippingState'],
+                                            'ZipCode'      => $view_order['Header']['ShippingZipCode'],
+                                            'ShipViaCode'  => $view_order['Header']['ShipViaCode'],
+                                            'ShippingCost' => $view_order['Header']['ShippingCost'],
+                                            'ShippingDate' => CommonController::get_date_format( $view_order['Header']['ShippingDate'] )
+                                        ]
+                                    ],
+                                    [
+                                        'title'   => 'Detail',
+                                        'content' => isset( $view_order['Header']['TabStatusDescription'] ) ? [
+                                            'tabs' => [
+                                                'products' => $view_order['Detail'],
+                                                'tracks'   => isset( $view_order['OrderTrackingDetail'] ) ? $view_order['OrderTrackingDetail'] : [],
+                                                'invoices' => isset( $view_order['OrderInvoiceDetail'] ) ? $view_order['OrderInvoiceDetail'] : []
+                                            ]
+                                        ] : $view_order['Detail']
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ];
+                }
+
+                if ( $request->has( 'draw' ) && $request->draw )
+                {
+                    return response()->json(
+                        [
+                            'recordsFiltered' => $view_orders['TotalRows'],
+                            'recordsTotal'    => $view_orders['TotalRows'],
+                            'draw'            => $request->draw + 1,
+                            'data'            => $table['tbody']
+                        ]
+                    );
+                }
+
+            }
+
+            View::share( 'view_orders', $view_orders );
+            View::share( 'table', $table );
+        }
+
+        $filters = [
+            [
+                'title'       => 'Sales Rep',
+                'type'        => 'hidden',
+                'placeholder' => '',
+                'value'       => Auth::user()->is_sale_rep ? Auth::user()->customer_id : ''
+            ],
+            [
+                'title'       => 'From Date',
+                'type'        => 'date',
+                'attribues'   => ' data-required="true" ',
+                'placeholder' => '',
+                'value'       => $request->from_date ? $request->from_date : CommonController::get_date_format( '-1 month' )
+            ],
+            [
+                'title'       => 'To Date',
+                'type'        => 'date',
+                'attribues'   => ' data-required="true" ',
+                'placeholder' => '',
+                'value'       => $request->to_date ? $request->to_date : CommonController::get_date_format( date( 'Y-m-d' ) )
+            ],
+            [
+                'title'       => 'Customer',
+                'type'        => Auth::user()->is_customer ? 'hidden' : 'select',
+                'options'     => $this->get_customers_dropdown_options(),
+                'placeholder' => '',
+                'value'       => $request->has( 'customer' ) ? $request->customer : Auth::user()->customer_id
+            ],
+            [
+                'title'       => 'External Number',
+                'type'        => 'hidden',
+                'placeholder' => '',
+                'value'       => $request->external_number
+            ],
+            [
+                'title'       => 'Customer PO',
+                'type'        => 'text',
+                'attribues'   => ' data-required="false" ',
+                'placeholder' => '',
+                'value'       => $request->customer_po ? $request->customer_po : ''
+            ],
+            [
+                'title'       => 'Order Number',
+                'type'        => 'text',
+                'attribues'   => ' data-required="false" ',
+                'placeholder' => '',
+                'value'       => $request->order_number ? $request->order_number : ''
+            ],
+        ];
+
+        View::share( 'filters', $filters );
+        View::share( 'title', 'Orders' );
+        View::share( 'paginated', 'yes' );
+        View::share( 'tabular', isset( $this->active_theme_json->general->tabular_orders ) && $this->active_theme_json->general->tabular_orders ? 'yes' : 'no' );
+
+        return view( 'dashboard.genaric-bl-report' );
+    }
+
     public function view_order( Request $request )
     {
         if ( count( $request->all() ) > 0 )

@@ -17,7 +17,6 @@ class ShopController extends DashboardController
 
     public function express_order( Request $request )
     {
-
         if ( count( $request->all() ) > 0 )
         {
             $meta_array   = $this->convert_form_data_into_array( array( 'ItemID' => $request->ItemID, 'OrderQty' => $request->OrderQty, 'UnitPrice' => $request->UnitPrice ) );
@@ -153,7 +152,6 @@ class ShopController extends DashboardController
 
     public function place_order( Request $request )
     {
-
         if ( count( $request->all() ) > 0 )
         {
             $meta_array = $this->convert_form_data_into_array(
@@ -164,6 +162,25 @@ class ShopController extends DashboardController
             $details       = [];
 
             $item_prices = $this->ApiObj->Get_GetMultipleItemsPrices( $request->customer_id, join( ',', $request->ItemID ) );
+
+            $hasBroadloom = false;
+            $hasOther = false;
+            $isError = false;
+            foreach ($item_prices['ItemPrices'] as $key => $item) {
+                if ($item['ItemType'] == 'R') {
+                    $hasBroadloom = true;
+                } else {
+                    $hasOther = true;
+                }
+
+                if ($hasBroadloom && $hasOther) {
+                    $isError = true;
+                    break;
+                }
+            }
+            if($isError){
+                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'body' => '<b>Broadloom item and other item</b> order are not placed at same time'] );
+            }
 
             if ( $item_prices['Success'] )
             {

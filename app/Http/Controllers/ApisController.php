@@ -658,6 +658,12 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Get_Orders', 'Ge Order', $post_array, ['Orders', 'TotalRows'] );
     }
 
+    public function View_BL_Order( $CustomerID = '', $ExternalID = '', $DateFrom = '', $DateTo = '', $SalesRep = '', $PageIndex = 1, $PageSize = 25, $po_number = '', $order_number = '' )
+    {
+        $post_array = array( 'CustomerID' => $CustomerID, 'ExternalID' => $ExternalID, 'DateFrom' => $DateFrom, 'DateTo' => $DateTo, 'SalesRep' => $SalesRep, 'CustomerPO' => $po_number, 'SalesOrderNo' => $order_number, 'PageIndex' => $PageIndex, 'PageSize' => $PageSize );
+        return $this->Post_API_Signature( 'Get_BLOrders', 'Get_BLOrders', $post_array, ['Orders', 'TotalRows'] );
+    }
+
     public function Get_ShowCut( $TempSalesOrderNo = '', $LoggedUserNo = '' )
     {
         $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo, 'LoggedUserNo' => $LoggedUserNo  );

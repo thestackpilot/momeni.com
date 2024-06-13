@@ -31,11 +31,16 @@
             @endif
         </li>
             @if($pages -> all_pages -> sections -> main_top_menu -> menu_2_caption !== null)
-                <li class="parant" style="display: {{ !(Auth::check() && (Auth::user()->broadloom_user || Auth::user()->is_sale_rep)) ? 'inline-block' : 'none' }}" id="broadloomLi">
+                {{-- <li class="parant" style="display: {{ !(Auth::check() && (Auth::user()->broadloom_user || Auth::user()->is_sale_rep)) ? 'inline-block' : 'none' }}" id="broadloomLi">
                     <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_2_url}}" class="main-item">
                         {{$pages -> all_pages -> sections -> main_top_menu -> menu_2_caption}}
                     </a>
-                </li>
+                </li> --}}
+                <li class="parant" id="broadloomLi">
+                    <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_2_url}}" class="main-item">
+                        {{$pages -> all_pages -> sections -> main_top_menu -> menu_2_caption}}
+                    </a>
+                </li
             @endif
 
         @if($pages -> all_pages -> sections -> main_top_menu -> menu_3_caption !== null)
@@ -231,12 +236,8 @@
                             @endif
                         @endforeach
 
-                        @php $displayedItems = []; @endphp
                         @foreach ($cart->items as $item)
-                        @if ($item->broadloom_item && !in_array($item->item_name, $displayedItems))
-                        @php
-                            $displayedItems[] = $item->item_name;
-                        @endphp
+                        @if($item->broadloom_item)
                             <div
                                 class="d-flex flex-row justify-content-between align-items-center p-3 pt-3 border-bottom-thick"
                                 id="{{$item -> item_id}}__{{$item -> item_customer_id}}">
@@ -254,11 +255,23 @@
                                     <p class="specs m-0"><strong> Color: </strong>
                                         <span> {{$item -> item_color}} </span></p>
                                         <p class="specs m-0"><strong> Sizes: </strong>
-                                        @foreach($cart -> items as $item_sizes)
-                                        @if($item_sizes->item_name == $item->item_name)
-                                            <br class="my-1"><span> {{$item_sizes -> item_size}} </span>
-                                        @endif
+                                        @php
+                                            $sizes = json_decode( unserialize($item->item_data ), true );
+                                        @endphp
+                                        @if(isset($sizes['CutPieces']))
+                                        @foreach($sizes['CutPieces'] as $item_sizes)
+                                        @php
+                                            $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                            $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                            $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                            $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                        @endphp
+                                        <br class="my-1">
+                                        <span>
+                                            {{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }}
+                                        </span>
                                         @endforeach
+                                        @endif
                                     </p>
                                     <p class="price justify-content-end m-0">{{$item -> item_currency}}{{$item -> item_total}} </p>
                                     <hr>
@@ -270,48 +283,22 @@
                     </div>
                     <div class="col-md-12 px-5 py-1">
                         <hr>
-                        @if (!$item->broadloom_item)
-                            <p class="specs m-0 d-flex justify-content-between mb-2">
-                                <strong class="font-crimson"> Sub Total </strong>
-                                <span
-                                    class="font-ropa cart_sub_total"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
-                            </p>
-                        @endif
-                        @if ($item->broadloom_item)
-                            <p class="specs m-0 d-flex justify-content-between mb-2">
-                                <strong class="font-crimson"> Sub Total </strong>
-                                @php $samNameItems = []; $bd_cart_price = 0; @endphp
-                                @foreach($cart -> items as $item)
-                                    @php
-                                        if(!in_array($item->item_name, $samNameItems)){
-                                            $bd_cart_price += $item->item_price;
-                                            $samNameItems[] = $item->item_name;
-                                        }
-                                    @endphp
-                                @endforeach
-                                <span  class="font-ropa cart_sub_total"> {{$cart -> cart_currency}}{{$bd_cart_price}} </span>
-                            </p>
-                        @endif
+                        <p class="specs m-0 d-flex justify-content-between mb-2">
+                            <strong class="font-crimson"> Sub Total </strong>
+                            <span
+                                class="font-ropa cart_sub_total"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
+                        </p>
                         <input type="hidden" value="940">
                         <p class="specs m-0 d-flex justify-content-between mb-2">
                             <strong class="font-crimson"> Shipping</strong>
                             <span class="font-ropa shipping_price_value"> (will be calculated on checkout) </span>
                         </p>
                         <hr>
-                        @if (!$item->broadloom_item)
-                            <p class="specs m-0 d-flex justify-content-between total-amount">
-                                <strong class="font-crimson"> Total </strong>
-                                <span
-                                    class="font-ropa cart_total_price"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
-                            </p>
-                        @endif
-                        @if ($item->broadloom_item)
-                            <p class="specs m-0 d-flex justify-content-between total-amount">
-                                <strong class="font-crimson"> Total </strong>
-                                <span
-                                    class="font-ropa cart_total_price"> {{$cart -> cart_currency}}{{ $bd_cart_price }} </span>
-                            </p>
-                        @endif
+                        <p class="specs m-0 d-flex justify-content-between total-amount">
+                            <strong class="font-crimson"> Total </strong>
+                            <span
+                                class="font-ropa cart_total_price"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
+                        </p>
                         <a href="{{ $broadloom_item ? route('broadloom.shopping_cart') : route('frontend.checkout')}}"
                            class="btn btn--md btn--border_1 mt-3 quick-cart-btn d-block">View Cart & Checkout<i
                                 class="icon-arrow-right"></i></a>
