@@ -48,10 +48,10 @@ class ThemeController extends AdminController
     public function index()
     {
 
-        if ( isset( $_GET['secret'] ) && $_GET['secret'] == md5( ConstantsController::ADMIN_SECRET_STRING ) )
-        {
-            return view( 'admin.themes', ['themes' => $this->theme_model->getAllThemes()] );
-        }
+        // if ( isset( $_GET['secret'] ) && $_GET['secret'] == md5( ConstantsController::ADMIN_SECRET_STRING ) )
+        // {
+             return view( 'admin.themes', ['themes' => $this->theme_model->getAllThemes()] );
+        // }
 
         return redirect()->route( 'admin.basic_settings' );
     }
