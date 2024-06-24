@@ -88,7 +88,7 @@ function LoginUser()
                             $('#broadloomLi').show();
 
                             $('#login_by_popupp').remove(); // Remove the login button
-                    $('.mt-4').append('<a href="" class="add-to-cart-button btn btn-dark" id="add_cart">Place Order <i class="fa fa-long-arrow-right"></i></a>');
+                    $('.mt-4').append('<a href="" class="add-to-cart-button btn btn-dark" id="add_cart">Add Cut Pieces <i class="fa fa-long-arrow-right"></i></a>');
                         });
                     }
                     else

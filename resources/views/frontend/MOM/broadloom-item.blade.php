@@ -1053,7 +1053,7 @@ use App\Http\Controllers\CommonController;
                         type: "GET",
                         success: function (response) {
                             if (response) {
-                                if (confirm('Braodloom item is already in the cart, adding this item will remove the previous Broadloom item from your cart, are you sure you want to proceed ?')) {
+                                if (confirm('Rugs item is already in the cart, adding this item will remove the previous Rugs item from your cart, are you sure you want to proceed ?')) {
                                     $.ajax({
                                         url: "{{ route('delete-cart-items') }}",
                                         type: "GET",
