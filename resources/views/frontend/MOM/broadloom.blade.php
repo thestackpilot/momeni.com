@@ -1605,6 +1605,7 @@
             $('#roll_pieces').change(function () {
                 sessionStorage.removeItem('roll_ats_lenght');
                 input_lenght_ats = 0;
+                $('#sq-ext').val('');
                 // console.log($('#customer_id').val());
                 $.ajax({
                     method: 'POST',
