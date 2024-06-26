@@ -365,7 +365,7 @@
                         $('#item_json').html(new_html.find('#item_json').html());
 
                         item_object = JSON.parse($('#item_json').val());
-                        console.log(item_object);
+
                         $('#cart-parent').html(new_html.find('#cart-parent').html());
                         $('#quickCart').html(new_html.find('#quickCart').html());
                         $('#profile-parent').html(new_html.find('#profile-parent').html());
@@ -806,6 +806,7 @@
             item_object.Items.forEach(function(item, index) {
                 if ((item.ItemID == ItemID)) {
                     $('#cart_item_id').val(item.ItemID);
+                    console.log('start buying', CustomerID);
                     $('#cart_customer_id').val(CustomerID);
                     $('#cart_item_name').val(item.ItemName);
                     $('#cart_item_quantity').val($('#item_qty').val(0));
@@ -897,6 +898,7 @@
                 customerId: $('#customer_id').val(),
                 rollid: $("#roll_id").val()
             };
+            console.log('cart customer id', $('#customer_id').val());
 
             $.ajax({
                 url: '/broad-loom-full-size',
@@ -1377,6 +1379,7 @@
                         let lenInchCal = 0;
                         let widInchCal = 0;
                         let totalAddWid = 0;
+                        let totalAddLen = 0;
                         let lenghtWithInches = 0;
                         let widthWithInches = 0;
                         let mxlenf = 0;
@@ -1388,6 +1391,11 @@
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
                             let widthInches = item.ATSWidth % 12;
+
+                            console.log('lengthFeet', lengthFeet);
+                            console.log('lengthInches', lengthInches);
+                            console.log('widthFeet', widthFeet);
+                            console.log('widthInches', widthInches);
 
                             mxlenf = mxlenf + lengthFeet;
                             mxlen =  mxlen + lengthInches;
@@ -1404,7 +1412,10 @@
 
                             totalLen *= lengthFeet;
                             totalWid *= widthFeet;
+                            totalAddLen += lenghtWithInches;
                             totalAddWid += widthWithInches;
+
+
 
                             var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
                             var item_id = item.ItemID.replace('-', '_');
@@ -1445,7 +1456,8 @@
                         });
 
                         totalSqftPrice = (totalMaxLen * totalAddWid);
-
+                        var serging_cal_price =  ( (totalAddLen+totalAddWid) * 2) * charges;
+                        $('#surging_charges').val(serging_cal_price.toFixed(2));
                         $("#ats-qty").val(totalSqftPrice);
                         $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
                        // console.log('ats quaantity', $("#ats-qty").val());
@@ -1574,16 +1586,17 @@
 
         }
 
+        var charges = 0;
         $(document).ready(function() {
             item_object = JSON.parse($('#item_json').val());
 
             $('#add_to_cart').addClass('d-none');
             $('#surging_options').change(function () {
                 var selectedOption = $(this).find('option:selected');
-                var charges = selectedOption.attr('charges');
+                charges = selectedOption.attr('charges');
                 console.log('Charges:', charges);
                 // console.log('itemid:', $('#item_id').val());
-                $('#surging_charges').val(charges);
+               // $('#surging_charges').val(charges);
                 $('#charges').val(charges);
                 $('#sergingtypeno').val(selectedOption.attr('value'));
                 $('#desc').val(selectedOption.attr('desc'));
@@ -1591,6 +1604,7 @@
 
             $('#roll_pieces').change(function () {
                 sessionStorage.removeItem('roll_ats_lenght');
+                input_lenght_ats = 0;
                 // console.log($('#customer_id').val());
                 $.ajax({
                     method: 'POST',

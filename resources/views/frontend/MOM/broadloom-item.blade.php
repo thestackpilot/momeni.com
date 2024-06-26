@@ -677,7 +677,11 @@ use App\Http\Controllers\CommonController;
                         item_id: item.ItemID,
                         customer_id: customer_id
                     }, function(response) {
-                        startBuying(item.ItemID, item.UserCustomerInfo.Customers[0].CustomerID, response.data);
+                        console.log('one');
+                        let parts = $('#item_customer input.checkbox-tools').val().split(' :: ');
+                        let lastValue = parts[parts.length - 1];
+                        var customer = (lastValue != "undefined") ? lastValue : item.UserCustomerInfo.Customers[0].CustomerID
+                        startBuying(item.ItemID, customer, response.data);
                     });
 
                     if (item.UserCustomerInfo.CustomerSet) {
@@ -1043,7 +1047,7 @@ use App\Http\Controllers\CommonController;
             var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id','color_id']) }}";
             href = href.replace('cust_id', $('#cart_customer_id').val());
             href = href.replace('color_id', $('#color_id').val());
-            // $('#add_cart').attr('href', href);
+            console.log('href', href);
             window.location.replace(href)
         }
 
