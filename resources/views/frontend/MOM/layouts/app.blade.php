@@ -355,7 +355,7 @@ use App\Http\Controllers\CommonController;
         });
     }
 
-    function removeItemFromCart(itemId,token,customerId,hideQuantity,isMobile, isBroadloom = false)
+    function removeItemFromCart(itemId,token,customerId, broadloom, rollId, hideQuantity,isMobile, isBroadloom = false)
     {
         if (confirm("Are you sure to remove this Item?"))
         {
@@ -375,6 +375,8 @@ use App\Http\Controllers\CommonController;
             {
                 itemId:itemId,
                 customerId:customerId,
+                checkbditem:broadloom,
+                rollId:rollId,
                 _token:token
             };
 
@@ -394,6 +396,7 @@ use App\Http\Controllers\CommonController;
                     }
                     else
                     {
+                        console.log('if call');
                         if($('#item_json').length)
                         {
                             refreshItemJson(function ()
@@ -404,9 +407,17 @@ use App\Http\Controllers\CommonController;
                                 if (typeof hideQuantity !== "undefined" && hideQuantity)
                                     $(itemNode+" .cart-actions input").show();
                             });
+                            toastr.success(response.message,
+                            {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                            $('.quickcart-closer').click();
+                            location.reload();
                         }
                         else
                         {
+                            console.log('else call');
                             refreshUser('quick-cart', function ()
                             {
                                 refreshUser('profile', function ()
@@ -418,6 +429,13 @@ use App\Http\Controllers\CommonController;
                                         $(itemNode+" .cart-actions input").show();
                                 });
                             });
+                            toastr.success(response.message,
+                            {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                            $('.quickcart-closer').click();
+                            location.reload();
                         }
                     }
                 }

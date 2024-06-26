@@ -179,7 +179,7 @@ class ShopController extends DashboardController
                 }
             }
             if($isError){
-                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'body' => '<b>Broadloom item and other item</b> order are not placed at same time'] );
+                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'body' => '<b>Broadloom item and Rug item</b> orders are not placed at same time'] );
             }
 
             if ( $item_prices['Success'] )

@@ -67,6 +67,7 @@ Route::get( '/item/{id}/{designId}/{colorId?}', [ItemController::class, 'index']
 Route::get('/broad-loom/{id}/{cust_id}/{color_id}', [BroadloomController::class, 'index'])->name('broadloom.cart')->middleware('check_bd_user');
 Route::get('/broad-loom-checkout/', [BroadloomController::class, 'shopping_cart'])->name('broadloom.shopping_cart')->middleware('check_bd_user');
 //Route::get('/broad-loom-checkout', [BroadloomController::class, 'checkout'])->name('broadloom.checkout');
+Route::get('/broad-loom-full-size', [CartController::class, 'check_broadloom_full_size'])->name('broadloom.fullsize');
 Route::get('/broad-loom-order-complete', [BroadloomController::class, 'order_complete'])->name('broadloom.order_complete')->middleware('check_bd_user');
 Route::post('/cut-pieces', [BroadloomController::class, 'AddCutPiece'])->name('broadloom.cutPiece');
 Route::post('/remove-cut-pieces', [BroadloomController::class, 'RemoveCutPiece'])->name('broadloom.removeCutPiece');

@@ -193,7 +193,7 @@
                                     <div class="col-md-3 products-thumbnails position-relative align-self-baseline p-0">
                                         <a href="javascript:void(0)" class="d-block newStyle">
                                             <i class="position-absolute icon-cross removeProd"
-                                            onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}')"> </i>
+                                            onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}')"> </i>
                                             <img src="{{$item -> item_image}}"
                                                 onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'"
                                                 alt="{{$item -> item_name}}">
@@ -242,7 +242,7 @@
                                 <div class="col-md-3 products-thumbnails position-relative align-self-baseline p-0">
                                     <a href="javascript:void(0)" class="d-block newStyle">
                                         <i class="position-absolute icon-cross removeProd"
-                                        onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}')"> </i>
+                                        onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}')"> </i>
                                         <img src="{{$item -> item_image}}"
                                             onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'"
                                             alt="{{$item -> item_name}}">
@@ -279,36 +279,36 @@
                         @endforeach
                         <!-- <h2 class="text-muted text-center mt-5 mb-3 emptyCart"> Cart is empty! </h2> -->
                     </div>
-                    <div class="col-md-12 px-5 py-1">
-                        <hr>
-                        <p class="specs m-0 d-flex justify-content-between mb-2">
-                            <strong class="font-crimson"> Sub Total </strong>
-                            <span
-                                class="font-ropa cart_sub_total"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
-                        </p>
-                        <input type="hidden" value="940">
-                        <p class="specs m-0 d-flex justify-content-between mb-2">
-                            <strong class="font-crimson"> Shipping</strong>
-                            <span class="font-ropa shipping_price_value"> (will be calculated on checkout) </span>
-                        </p>
-                        <hr>
-                        <p class="specs m-0 d-flex justify-content-between total-amount">
-                            <strong class="font-crimson"> Total </strong>
-                            <span
-                                class="font-ropa cart_total_price"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
-                        </p>
-                        <a href="{{ $broadloom_item ? route('broadloom.shopping_cart') : route('frontend.checkout')}}"
-                           class="btn btn--md btn--border_1 mt-3 quick-cart-btn d-block">View Cart & Checkout<i
-                                class="icon-arrow-right"></i></a>
-                    </div>
+                        <div class="col-md-12 px-5 py-1">
+                            <hr>
+                            <p class="specs m-0 d-flex justify-content-between mb-2">
+                                <strong class="font-crimson"> Sub Total </strong>
+                                <span
+                                    class="font-ropa cart_sub_total"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
+                            </p>
+                            <input type="hidden" value="940">
+                            <p class="specs m-0 d-flex justify-content-between mb-2">
+                                <strong class="font-crimson"> Shipping</strong>
+                                <span class="font-ropa shipping_price_value"> (will be calculated on checkout) </span>
+                            </p>
+                            <hr>
+                            <p class="specs m-0 d-flex justify-content-between total-amount">
+                                <strong class="font-crimson"> Total </strong>
+                                <span
+                                    class="font-ropa cart_total_price"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
+                            </p>
+                            <a href="{{ $broadloom_item ? route('broadloom.shopping_cart') : route('frontend.checkout')}}"
+                            class="btn btn--md btn--border_1 mt-3 quick-cart-btn d-block">View Cart & Checkout<i
+                                    class="icon-arrow-right"></i></a>
+                        </div>
                 </div>
             @else
                 <div class="d-flex align-items-center col-md-12 d-flex justify-content-center" style="height: 100%;">
                     <i class="close-icon icon-cross position-absolute quickcart-closer"> </i>
                     <div class="col-md-12">
-                        <h3 class="d-flex footer-widget__title justify-content-center m-0 mb-2 specs">
-                            <strong class="font-crimson cart-is-empty"> Cart is Empty </strong>
-                        </h3>
+                            <h3 class="d-flex footer-widget__title justify-content-center m-0 mb-2 specs">
+                                <strong class="font-crimson cart-is-empty"> Cart is Empty </strong>
+                            </h3>
                     </div>
                 </div>
             @endif

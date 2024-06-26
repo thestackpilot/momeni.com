@@ -98,7 +98,7 @@ class CartController extends FrontendController
     {
         try
         {
-            ( new Cart() )->remove_cart_item( Auth::user()->id, $request->customerId, $request->itemId );
+            ( new Cart() )->remove_cart_item( Auth::user()->id, $request->customerId, $request->itemId, $request->checkbditem, $request->rollId );
 
             return response()->json( array( 'success' => 1, 'message' => "The item was removed from cart successfully" ), 200 );
         }
@@ -182,6 +182,20 @@ class CartController extends FrontendController
             prr( $e->getMessage() );
 
             return response()->json( array( 'success' => 0, 'message' => "There is an error in updating your cart. Please try again." ), 400 );
+        }
+    }
+
+    function check_broadloom_full_size(Request $request){
+        $res = Cart::where('item_id', $request->itemId)->where('customer_id', $request->customerId)->where('bd_roll_id', $request->rollid)->first();
+        if ($res) {
+            $response = [
+                'success' => true,
+                'bd_cutpiece_len' => $res->bd_cutpiece_len,
+                'bd_cutpiece_wid' => $res->bd_cutpiece_wid,
+            ];
+            return response()->json($response);
+        } else {
+            return response()->json(['success' => false, 'error' => 'Record not found']);
         }
     }
 
