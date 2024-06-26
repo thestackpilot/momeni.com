@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Client\ConnectionException;
 use App\Http\Controllers\Frontend\FilterController;
+use Auth;
 
 class ApisController extends RootController
 {
@@ -58,6 +59,14 @@ class ApisController extends RootController
         return array("ATSInfo" => $responseArray['OutPut']);
     }
 
+    public function Get_ViewDocumentsReport($SalesRepId = '', $CustomerId = '', $MenuTag = '', $DocumentNo = '')
+    {
+        $post_array    = array('SalesRepID' => $SalesRepId, 'CustomerID' => $CustomerId, 'MenuTag' => $MenuTag, 'DocumentNo' => $DocumentNo);
+        $responseArray = $this->Post_API_Signature('Get_ViewDocumentsReport', 'Get Document Report', $post_array);
+
+        return array("document" => $responseArray['OutPut']);
+    }
+
     public function Get_B2BOrderInquiryData( $FilterType, $Category = '', $SubCategory = '', $Collection = '', $Design = '', $Color = '', $Size = '' )
     {
         $post_array = [
@@ -77,6 +86,9 @@ class ApisController extends RootController
     {
         $post_array = [];
 
+        if (Auth::user()->role === 'customer') {
+            return $this->Post_API_Signature('Get_AllCustomerReports', 'Get All Reports', $post_array, ['Success', 'Message', 'ReportList'], 1, 1, 1);
+        }
         return $this->Post_API_Signature('Get_AllReports', 'Get All Reports', $post_array, ['Success', 'Message', 'ReportList'], 1, 1, 1);
     }
 
@@ -188,7 +200,7 @@ class ApisController extends RootController
     {
         $post_array = array( 'CustomerID' => $customerId, 'FromDate' => $FromDate, 'ToDate' => $ToDate, 'PayableInvoiceNo' => $PayableInvoiceNo, 'VendorID' => $VendorID, 'PageIndex' => $PageIndex, 'PageSize' => $PageSize );
 
-        return $this->Post_API_Signature( 'Get_DebitMemos', 'Get Debit Memos', $post_array, ['DebitMemos'] );
+        return $this->Post_API_Signature( 'Get_DebitMemos', 'Get Debit Memos', $post_array, ['DebitMemos', 'TotalRows'] );
     }
 
     public function Get_Designs( $mainCollectionId = 1, $Filters = '', $SearchText = '', $LifeStyleID = '', $CollectionID = '', $DesignID = '', $ColorID = '', $SizeID = '', $ShapeID = '', $MaterialID = '', $WeavingID = '', $PageSize = 30, $PageIndex = "1" )
@@ -259,7 +271,13 @@ class ApisController extends RootController
 
     public function Get_SalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '', $Collection = '', $Design = '')
     {
-        $post_array = array('SalesRepID' => $SalesRep, 'CustomerID' => $CustomerID, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
+        $sale_rep_id = Auth::user()->role === 'customer' ? '' : $SalesRep;
+        $customer_id = Auth::user()->role === 'customer' ? $SalesRep : '';
+        $post_array = array('SalesRepID' => $sale_rep_id, 'CustomerID' => $customer_id, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
+        
+        if (Auth::user()->role === 'customer') {
+            return $this->Post_API_Signature('ViewCustomerReport', 'Get Sales Report', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
+        }
 
         return $this->Post_API_Signature('Get_SalesReport', 'Get Sales Report', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
     }

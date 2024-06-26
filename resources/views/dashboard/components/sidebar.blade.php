@@ -5,7 +5,7 @@
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
 
-@endphp 
+@endphp
 
 <div class="sidebar admin-sidebar">
     <a href="#0" class="sidebar-close" style="text-align: center;" class="me-2">
@@ -15,7 +15,7 @@ use App\Http\Controllers\CommonController;
         @foreach($sidebar as $item)
         @if($item['permission'] && strcmp(ConstantsController::USER_ROLES['staff'], Auth::user()->role) === 0 && !in_array($item['permission'], Auth::user()->getPermissions())) {{''}}
         @elseif(Auth::user()->is_customer && $item['slug'] === 'dashboard.saleshistory')
-            {{''}}
+            <li> <a href="{{route($item['slug'])}}" class="{{ str_contains(url()->current(),route($item['slug']))  ?'active': $item['slug'] }}"> {{$item['label']}} </a></li>
         @elseif($item['slug'] !== "dashboard.paymentoptions" )
         <li> <a href="{{route($item['slug'])}}" class="{{ str_contains(url()->current(),route($item['slug']))  ?'active': $item['slug'] }}"> {{$item['label']}} </a></li>
         @endif

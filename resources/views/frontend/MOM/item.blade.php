@@ -806,6 +806,7 @@ console.log('customer_id1: ', customer_id);
                         SUK: (SUK && SUK.trim() !== '') ? SUK : '',
                         customer_id: customer_id
                     }, function(response) {
+                        console.log('ats res', response);
                         startBuying(item.ItemID, customer_id, response.data);
                     });
 
@@ -1113,7 +1114,8 @@ console.log('customer_id1: ', customer_id);
                     'cart_item_image': $('#cart_item_image').val(),
                     'cart_item_data': $('#item_json').html(),
                     'cart_item_oak': $('#cart_item_oak').val(),
-                    'cart_item_eta': $('#cart_item_eta').val()
+                    'cart_item_eta': $('#cart_item_eta').val(),
+                    'cart_item_sku': "{{ $SUK }}"
                 },
                 success: function(response) {
                     if (response.success) {

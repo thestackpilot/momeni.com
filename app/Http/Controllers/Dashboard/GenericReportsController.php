@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use View;
 use App\Models\Cart;
 use Illuminate\Http\Request;
@@ -483,8 +484,18 @@ class GenericReportsController extends DashboardController
 
         if ( count( $request->all() ) > 0 && isset( $request->submit ) )
         {
+            if ( $request->has( 'draw' ) && $request->draw )
+            {
+                $page      = $request->start == 0 ? 1 : ( $request->start / $request->length ) + 1;
+                $page_size = $request->length;
+            }
+            else
+            {
+                $page      = 1;
+                $page_size = 25;
+            }
             // echo "<pre>" . print_r($request->all(), 1). "</pre>";
-            $memos = $this->ApiObj->Get_DebitMemos( $request->customer, $request->from_date, $request->to_date, $request->invoice_number, $request->vendor );
+            $memos = $this->ApiObj->Get_DebitMemos( $request->customer, $request->from_date, $request->to_date, $request->invoice_number, $request->vendor, $page, $page_size );
             $table = array( 'thead' => [
                 'memo_number'    => 'Memo Number',
                 // 'customer_id'    => 'Customer ID',
@@ -536,6 +547,18 @@ class GenericReportsController extends DashboardController
                             ]
                         ]
                     ];
+                }
+
+                if ( $request->has( 'draw' ) && $request->draw )
+                {
+                    die( json_encode(
+                        [
+                            'recordsFiltered' => $memos['TotalRows'],
+                            'recordsTotal'    => $memos['TotalRows'],
+                            'draw'            => $request->draw + 1,
+                            'data'            => $table['tbody']
+                        ]
+                    ) );
                 }
 
             }
@@ -942,7 +965,6 @@ class GenericReportsController extends DashboardController
 
     public function view_order( Request $request )
     {
-
         if ( count( $request->all() ) > 0 )
         {
 
@@ -967,7 +989,8 @@ class GenericReportsController extends DashboardController
                 'total_qty'    => 'Total Quantity',
                 'status'       => 'Status',
                 'order_date'   => 'Order Date',
-                'actions'      => 'Actions'
+                'actions'      => 'Actions',
+                'other_actions' => 'Reports',
             ], 'tbody' => [] );
 
             if ( isset( $view_orders['Orders'] ) )
@@ -985,6 +1008,10 @@ class GenericReportsController extends DashboardController
                         'tab'          => isset( $view_order['Header']['TabStatusDescription'] ) ? $view_order['Header']['TabStatusDescription'] : '',
                         'order_date'   => isset( $view_order['Header']['OrderDate'] ) ? CommonController::get_date_format( $view_order['Header']['OrderDate'] ) : 'N/A',
                         'actions'      => [['type' => 'modal', 'label' => 'View Details']],
+                        'other_actions' => [['type' => 'modal', 'label' => 'View Report']],
+                        'other_actions_details' => [
+                            'OrderNo'   => $view_order['Header']['OrderNo'],
+                        ],
                         'details'      => [
                             'heading' => $view_order['Header']['OrderNo'].' : '.$view_order['Header']['CustomerID'],
                             'body'    => [
@@ -1283,7 +1310,6 @@ class GenericReportsController extends DashboardController
 
     //Sales history
     public function sales_history(Request $request){
-
         if ( count( $request->all() ) > 0 )
         {
             $from_date = $request->has('from_date') ? $request->from_date : Carbon::now()->format('Y-m-d');
@@ -1394,6 +1420,26 @@ class GenericReportsController extends DashboardController
         View::share( 'reports_title', $reports_title );
 
         return view( 'dashboard.sales-history' );
+    }
+
+    public function order_report(Request $request)
+    {
+        try {
+            $SalesRepId = $request->has('SalesRepId') ? $request->SalesRepId : '';
+            $CustomerId = $request->has('CustomerId') ? $request->CustomerId : '';
+            $MenuTag = $request->has('MenuTag') ? $request->MenuTag : 'View Order';
+            $DocumentNo = $request->has('DocumentNo') ? $request->DocumentNo : 0000;
+
+            $report = $this->ApiObj->Get_ViewDocumentsReport($SalesRepId, $CustomerId, $MenuTag, $DocumentNo);
+            if( $report['document']['Success'] )
+            {
+                View::share( 'ReportData', $report['document']['ReportData'] );
+                return $report['document']['ReportData'];
+            }
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json(['error' => 'An error occurred. Please try again later.']);
+        }
     }
 
     public function download_excel(Request $request)
