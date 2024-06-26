@@ -92,7 +92,7 @@
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Tlength"
-                                                                           id="Tlength" placeholder="" style="text-align:right;">
+                                                                           id="Tlength" placeholder="" style="text-align:right;" min="0">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text"><strong> Ft</strong></div>
                                                                     </div>
@@ -131,7 +131,7 @@
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Twidth"
-                                                                           id="Twidth" placeholder="" style="text-align:right;">
+                                                                           id="Twidth" placeholder="" style="text-align:right;" min="0">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text"><strong>Ft</strong></div>
                                                                     </div>
