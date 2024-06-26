@@ -123,6 +123,12 @@
             color: grey;
         }
 
+        p.sizes_12 {
+            font-size: 25px !important;
+            margin-bottom: 8px !important;
+            color: grey;
+        }
+
     </style>
 
     <script>
@@ -153,7 +159,7 @@
                     <tr>
                         <td class="left-td">
                             @php
-                                $margin = -17;
+                             /*   $margin = -17;
                                 $total_barcodes = count($barcodes);
 
                                 if ($total_barcodes <= 6 && $total_barcodes > 2) {
@@ -166,18 +172,49 @@
 
                                 if ($total_barcodes <= 10 && $total_barcodes > 8) {
                                     $margin = 2;
+                                } */
+                                $margin = 0;
+                                $total_barcodes = count($barcodes);
+
+                                if ($total_barcodes <= 6 && $total_barcodes > 2) {
+                                    $margin = -5;
+                                }
+
+                                if ($total_barcodes <= 8 && $total_barcodes > 6) {
+                                    $margin = 2;
+                                }
+
+                                if ($total_barcodes <= 10 && $total_barcodes > 8) {
+                                    $margin = 1;
+                                }
+
+                                if ($total_barcodes <= 12 && $total_barcodes > 10) {
+                                    $margin = 2;
                                 }
                             @endphp
                             <div class="left-wrapper" style="margin-top: {{ $margin }}rem">
-                                <p class="sizes">SIZES AVAILABLE</p>
-                                <div class="barcodes">
+                                @if ($total_barcodes <= 12 && $total_barcodes > 10)
+                                    <p class="sizes_12">SIZES AVAILABLE</p>
+                                @else
+                                    <p class="sizes">SIZES AVAILABLE</p>
+                                @endif                                <div class="barcodes">
                                     @foreach($barcodes as $k => $barcode)
                                         <div class="barcode">
-                                            <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 19) . '..' : $barcode['label'] }}</p>
+                                            @if ($total_barcodes <= 12 && $total_barcodes > 10)
+                                                <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 12) . '..' : $barcode['label'] }}</p>
+                                            @else
+                                                <p>{{ strlen($barcode['label']) > 20 ? substr($barcode['label'], 0, 19) . '..' : $barcode['label'] }}</p>
+                                            @endif
                                             <div style="margin-top: 3px;">
-                                                <img
+                                                @if ($total_barcodes <= 12 && $total_barcodes > 10)
+                                                    <img
+                                                    src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
+                                                    width="125px" height="30px">
+                                                @else
+                                                    <img
                                                     src="data:image/png;base64,{!!DNS1D::getBarcodePNG($barcode['code'], 'UPCA', 1, 30, array(0,0,0), false)!!}"
                                                     width="170px" height="45px">
+                                                @endif
                                             </div>
                                             <p style="margin-top: -4px; font-size: 12px; color: #000; font-weight: 700; margin-bottom: 3px;"> {{ $barcode['code']  }}</p>
                                         </div>
