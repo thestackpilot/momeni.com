@@ -13,7 +13,8 @@ class Cart extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'customer_id', 'item_id', 'item_name', 'item_quantity', 'item_price', 'item_color', 'item_size', 'item_currency', 'item_image', 'item_eta', 'item_data', 'oak_item', 'oak_sku', 'item_broadloom', 'bd_roll_id', 'bd_cutpiece_len', 'bd_cutpiece_wid'];
+    protected $fillable = ['user_id', 'customer_id', 'item_id', 'item_name', 'item_quantity', 'item_price', 'item_color', 'item_size', 'item_currency', 'item_image', 'item_eta', 'item_data', 'oak_item', 'item_broadloom', 'bd_roll_id', 'bd_cutpiece_len', 'bd_cutpiece_wid', 'oak_sku'];
+
     //check if the user has an active cart item
     public function get_active_cart_customer()
     {
@@ -120,8 +121,9 @@ class Cart extends Model
                 "item_only_max_quantity" => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['OnlyMaxQuantity'] : false,
                 "oak_item"              => $cart_item->oak_item,
                 "broadloom_item"        => $cart_item->item_broadloom,
-                "oak_sku"               =>  $cart_item->oak_sku
-                "bd_roll_id"            => $cart_item->bd_roll_id
+                "oak_sku"               =>  $cart_item->oak_sku,
+                "bd_roll_id"            => $cart_item->bd_roll_id,
+                "oak_sku"               =>  $cart_item->oak_sku,
 //                "ATSQ"                   => isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0
             );
             $cart_count += $cart_item->item_quantity;

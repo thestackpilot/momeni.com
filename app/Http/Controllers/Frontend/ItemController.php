@@ -399,7 +399,7 @@ class ItemController extends FrontendController
 
     public function delete_cart_items()
     {
-        $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, true);
+        $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', true);
         return 1;
     }
 }

@@ -211,7 +211,9 @@
                                         </p>@if($item->oak_item)
                                 <p class="specs m-0"> <strong> SKU: </strong> <span> {{$item -> oak_sku}} </span> </p>
                                 @endif
-                                        <p class="price justify-content-end m-0">{{$item -> item_currency}}{{$item -> item_total}} </p>
+                                        @if($item->oak_item)
+                                <p class="specs m-0"> <strong> SKU: </strong> <span> {{$item -> oak_sku}} </span> </p>
+                                @endif<p class="price justify-content-end m-0">{{$item -> item_currency}}{{$item -> item_total}} </p>
                                         <hr>
                                         @if(!$item->broadloom_item)
                                             <div

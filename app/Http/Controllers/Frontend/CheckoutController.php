@@ -294,6 +294,7 @@ class CheckoutController extends FrontendController
                     $order_length = 0;
                     $line = 0;
                     $totalSQFT = 0;
+
                     foreach ($item_data->CutPieces as $key => $cut_piece) {
                         if ($cut_piece->LengthStatus !== "R") {
 
@@ -326,7 +327,7 @@ class CheckoutController extends FrontendController
                         'CutPieceID' => $item_data->CutPieceID,
                         'RollID' => $item_data->RollID,
                         'SergingCharges' => !empty($item_data->SergingCharges) ? $item_data->SergingCharges : 0,
-                        'SergingType' => !empty($item_data->SergingType) ? $item_data->SergingType : "N",
+                        'SergingType' => (!empty($item_data->SergingType) || $item_data->SergingType != "N") ? "0" : $item_data->SergingType,
                         'Line_No' => $count,
                         "Discount" => 0,
                         "WHSID" => null,
@@ -336,7 +337,7 @@ class CheckoutController extends FrontendController
                         'OrderLength' => $order_length,
                         'CutPieces' => $cut_pieces,
                         'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : '',
-                    ];
+                    'SKU'       => $item['oak_sku']];
 
                     $cartItems[] = [
                         'Image' => str_replace(' ', '%20', $item['item_image']),
@@ -418,7 +419,7 @@ class CheckoutController extends FrontendController
                     ]
                 );
 
-                $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, true);
+                $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', true);
                 $successMsg = $result['Message'];
                 preg_match("/\[[^\]]*\]/", $successMsg, $matches);
                 $matched_string = $matches[0];
