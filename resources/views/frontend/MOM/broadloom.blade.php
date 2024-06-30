@@ -1376,17 +1376,24 @@
                         let totalWid = 1;
                         let totalSqftPrice = 0;
                         let totalMaxLen = 0;
+                        let totalMaxLenSerg = 0;
                         let lenInchCal = 0;
                         let widInchCal = 0;
+                        let lenInchSergCal = 0;
+                        let widInchSergCal = 0;
+                        let totalAddWidSerg = 0;
                         let totalAddWid = 0;
                         let totalAddLen = 0;
+                        let totalAddLenSerg = 0;
                         let lenghtWithInches = 0;
                         let widthWithInches = 0;
+                        let lenghtWithInchesSerg = 0;
+                        let widthWithInchesSerg = 0;
                         let mxlenf = 0;
                         let mxlen = 0;
                         //console.log('add cut', data['cut_piece']['OutPut']['AddCutPieces']);
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
-                            //console.log('add cut res', item);
+                            console.log('add cut res', data['cut_piece']['OutPut']['AddCutPieces']);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
@@ -1400,22 +1407,29 @@
                             mxlenf = mxlenf + lengthFeet;
                             mxlen =  mxlen + lengthInches;
 
-
                             lenInchCal = (lengthInches * 0.0833333);
-                            widInchCal = (widthInches * 0.0833333);
+                            widInchSergCal = (widthInches * 0.0833333);
                             lenghtWithInches = parseFloat((lengthFeet +  lenInchCal));
                             widthWithInches  = parseFloat((widthFeet + widInchCal));
-
                             if (lenghtWithInches > totalMaxLen) {
                                 totalMaxLen = lenghtWithInches;
+                            }
+
+                            // SERGING CHARGES CALCULATION
+                            if(item.LengthStatus == "F"){
+                                lenInchSergCal = (lengthInches * 0.0833333);
+                                widInchSergCal = (widthInches * 0.0833333);
+                                lenghtWithInchesSerg = parseFloat((lengthFeet +  lenInchCal));
+                                widthWithInchesSerg  = parseFloat((widthFeet + widInchCal));
+
+                                totalAddLenSerg += lenghtWithInchesSerg;
+                                totalAddWidSerg += widthWithInchesSerg;
                             }
 
                             totalLen *= lengthFeet;
                             totalWid *= widthFeet;
                             totalAddLen += lenghtWithInches;
                             totalAddWid += widthWithInches;
-
-
 
                             var color = item.LengthStatus == 'F' ? 'Blue' : '#660000';
                             var item_id = item.ItemID.replace('-', '_');
@@ -1456,7 +1470,7 @@
                         });
 
                         totalSqftPrice = (totalMaxLen * totalAddWid);
-                        var serging_cal_price =  ( (totalAddLen+totalAddWid) * 2) * charges;
+                        var serging_cal_price =  ( (totalAddLenSerg+totalAddWidSerg) * 2) * charges;
                         $('#surging_charges').val(serging_cal_price.toFixed(2));
                         $("#ats-qty").val(totalSqftPrice);
                         $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
