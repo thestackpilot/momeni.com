@@ -9,7 +9,6 @@
 
 @section('title', 'Item Detail Page')
 @extends('frontend.' . $active_theme->theme_abrv . '.layouts.app')
-
 @section('content')
     <div class="wrapper">
         @include('frontend.' . $active_theme->theme_abrv . '.components.header')
@@ -48,6 +47,7 @@
                         <div class="row mt-4 mb-5">
                             <div class="col-md-9 col-sm-12" style="background-color: grey:">
                                 <div class="table-responsive">
+                                    @if((count((array) $cart->items)))
                                     <table id="" class="table for-data-table">
                                         <input type="hidden" name="item" id="item_ids" value="[]">
                                         <input type="hidden" name="quantity" id="quantities" value="[]">
@@ -84,7 +84,8 @@
                                                 <div class="row">
                                                     <div
                                                         class="col-1 justify-content-center align-content-center delete-row"
-                                                        style="color: red;cursor: pointer;">x
+                                                        style="color: red;cursor: pointer;"
+                                                        onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}')">x
                                                     </div>
                                                     <div class="col-3"><img
                                                             src={{ CommonController::getApiFullImage($item_data->ImageName) }}
@@ -152,8 +153,18 @@
                                         @endif
                                         </tbody>
                                     </table>
+                                    @else
+                                    <div class="d-flex flex-row p-5 align-items-center">
+                                        <div class="col-md-12">
+                                           <h2 class="text-muted text-center mt-5 mb-3 emptyCart"> Cart is empty! </h2>
+                                        </div>
+                                     </div>
+                                     <div class="bottom-0 col p-4 row mt-5">
+                                        <a href="{{ url('/') }}" class="btn btn--border_1 col mt-3">BACK TO SHOP</a>
+                                     </div>
+                                    @endif
                                     <div class="mt-4 d-flex justify-content-end mx-5">
-                                        <button href="#" class=" btn btn-dark align-content-center" id="update_cart"
+                                        <button href="#" class=" btn btn-dark align-content-center d-none" id="update_cart"
                                                 disabled="disabled">
                                             Update Cart
                                         </button>
@@ -161,6 +172,7 @@
 
                                 </div>
                             </div>
+                            @if((count((array) $cart->items)))
                             <div class="col-md-3 col-sm-12 border">
                                 <div class="d-flex justify-content-around align-items-left flex-column">
                                     <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
@@ -185,6 +197,7 @@
                                         </button>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -195,13 +208,15 @@
                         <div class="row">
                             <div class="col-md-6 col-sm-12 my-5">
                                 <div class="mb-5">
+                                    @if(isset($shipping_addresses['ShipToAddresses']))
                                     <form class="needs-validation" id="customer_info" method="POST">
                                         @csrf
                                         <div class="row">
-                                            <div class="col-md-7 mb-2">
+                                            <div class="col-md-10 mb-2">
                                                 <div class="d-flex">
                                                 <input type="radio" name="shipping-address" class="existing-address customer-addr-select" id="existing-address" value="existing-address" />
                                                 <select class="p-0 m-0" class="select-address" id="select-address" style="height:40px !important; line-height: 20px !important; padding: 0.375rem 1rem !important;">
+
                                                     @foreach($shipping_addresses['ShipToAddresses'] as $address)
                                                         <option value="{{$address['AddressID']}}~~~{{json_encode($address)}}">
                                                             {{$address['AddressID']}} : {!!$address['FirstName'] ? $address['FirstName'] . ( $address['LastName'] ? " {$address['LastName']}" : '' ) : ''!!}
@@ -216,12 +231,20 @@
                                                 </p>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 mb-2">
+                                            {{-- <div class="col-md-3 mb-2">
                                                <div class="d-flex">
                                                 <input type="radio" name="shipping-address" class="existing-address" id="other-address" value="other"/>
                                                 <label for="other" class="mt-2">Dropship</label>
                                                </div>
-                                            </div>
+                                            </div> --}}
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3 mb-2">
+                                                <div class="d-flex">
+                                                 <input type="radio" name="shipping-address" class="existing-address" id="other-address" value="other"/>
+                                                 <label for="other" class="mt-2">Dropship</label>
+                                                </div>
+                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-5 mb-2">
@@ -375,9 +398,11 @@
                                             </div>
                                         </div>
                                     </form>
+                                    @endif
                                 </div>
                             </div>
                             {{-- --}}
+                            @if(isset($cart->items))
                             <div class="col-md-6 col-sm-12 my-5">
                                 <div style="background-color: whitesmoke;">
                                     <div class="d-flex justify-content-around align-items-left flex-column">
@@ -431,11 +456,13 @@
                                                 </div>
                                                 <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                         @endforeach
+                                        @if(isset($item))
                                         <div class="row px-5">
                                             <div class="col-md-6 font-weight-bold">SubTotal</div>
 
                                             <div class="col-md-6 font-weight-bold text-right section_2_subtotal">{{$item->item_currency}}{{$total_price}}</div>
                                         </div>
+                                        @endif
                                         <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                         <div class="row px-5">
                                             <div class="col-md-9">Shipping Charges</div>
@@ -467,6 +494,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -616,7 +644,7 @@
 @section('styles')
 <style>
     .muted-bd-fields{
-        opacity: 0.4;
+        /* opacity: 0.4; */
         pointer-events: none;
         cursor: not-allowed;
     }
@@ -641,7 +669,8 @@
 
             function updateTotalPrice() {
                 var quantity = parseInt($('#item_qty').val());
-                var itemPrice = parseFloat("{{ $item->item_price }}"); // Assuming item_price is a numeric value
+                var itemPrice = @if(isset($item) && is_numeric($item->item_price)) parseFloat("{{ $item->item_price }}") @else '' @endif;
+                // Assuming item_price is a numeric value
                 var total = quantity * itemPrice;
                 $('#item_total_price').text(total); // Adjust decimal places as needed
                 $('#item_subtotal_price').text(total); // Adjust decimal places as needed
@@ -925,6 +954,7 @@
             $('input[name="Address1"]').val(valSet.Address1);
             $('input[name="City"]').val(valSet.City);
             $('input[name="Zip"]').val(valSet.Zip);
+
         });
 
     </script>

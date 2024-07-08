@@ -73,6 +73,11 @@
                                                             <option value="" width="" length="">Select
                                                                 Option</option>
                                                             @foreach ($roll_pieces['OutPut']['RollsAndCutPieces'] as $row)
+                                                            @php
+                                                                $lenght_f = (int) floor($row['ATSLength'] / 12);
+                                                                $lenght_i = (int)($row['ATSLength'] % 12);
+                                                                $available_l = $lenght_f . "'" . " - " . $lenght_i . "'";
+                                                            @endphp
                                                                 <option value="{{$row['RollID']}}"
                                                                         width="{{$row['TotalWidth']}}"
                                                                         length="{{$row['ATSLength']}}"
@@ -80,7 +85,7 @@
                                                                         cutpieceID="{{$row['CutPieceID']}}"
                                                                         cutType="{{$row['CutType']}}"
                                                                         location="{{$row['LocationID']}}">
-                                                                        {{$row['RollID']}} @if(isset($row['CutPieceID']) && !empty($row['CutPieceID'])) ( {{$row['CutPieceID']}} ) @endif</option>
+                                                                        {{$row['RollID']}} @if(isset($row['CutPieceID']) && !empty($row['CutPieceID'])) ( {{$row['CutPieceID']}} ) @endif - ( {{$available_l}} )</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
