@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Frontend\ItemController;
 use App\Http\Controllers\PaytraceController;
@@ -166,10 +167,18 @@ class BroadloomController extends FrontendController
         $remnant = $request->input('Remnant');
         $available = $request->input('AvailableForSale');
         $isremship = $request->input('IsremnantShipable');
-        $serging = $request->input('serging');
+        $serging = 'N';
         $line = $request->input('LineNo');
         $userremarks = $request->input('UserRemarks');
         $logged_user_no = $request->logged_user_no;
+
+        if (!empty($sergingTypeNo)) {
+            $serging = 'Y';
+            $width = number_format($totalWidth % 12, ConstantsController::ALLOWED_DECIMALS);
+            $length = number_format($atslength, ConstantsController::ALLOWED_DECIMALS);
+            $area = ($width + $length) * 2;
+            $charges = $area * $charges;
+        }
 
         $res = $this->ApiObj->Get_AddCutPiece($tempsalesorderno, $cutpieceId, $rollId, $itemId, $atslength, $totalWidth, $totalSqft, $cutType, $description, $charges, $sergingTypeNo, $locationId, $waste, $remnant, $available, $isremship, $serging, $line, $userremarks, $logged_user_no);
         return [
