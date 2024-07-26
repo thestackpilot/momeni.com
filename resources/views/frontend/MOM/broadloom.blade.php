@@ -1523,7 +1523,7 @@
                         // item_object.CutPieces = data['cut_piece']['OutPut']['AddCutPieces'];
                         item_object.CutPieces = added_cut_pieces;
                         // $('#cut_pieces_json').val(JSON.stringify(data['cut_piece']['OutPut']['AddCutPieces']));
-                        $('#cut_pieces_json').val(JSON.stringify(added_cut_pieces);
+                        $('#cut_pieces_json').val(JSON.stringify(added_cut_pieces));
                         $('#item_json').val(JSON.stringify(item_object));
                         toastr.success(data.cut_piece.OutPut.Message, {
                             hideDuration: 10000,
