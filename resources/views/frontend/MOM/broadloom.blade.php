@@ -1230,9 +1230,6 @@
                             $('#roll_pieces').prop("disabled", false);
                         }
                         if (response['OutPut']['Success']) {
-                            //  $('#' + id).remove();
-                            console.log('id', id);
-                            console.log($('#' + id));
                             $('#cut_piece_parent').empty();
                             var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
                             var sizes = [];
@@ -1343,6 +1340,7 @@
         }
 
         let input_lenght_ats = 0;
+        let added_cut_pieces = [];
 
         function add_cut_pieces() {
             let actual_length = parseInt($("#Tlength").val());
@@ -1388,12 +1386,7 @@
                     'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}'
                 },
                 success: function (data) {
-                    // console.log('add cut api res');
-                    // console.log(data);
                     if (data.cut_piece.OutPut.Success) {
-                        $('#surging_check').prop('checked', false);
-                        $('#surging_options').val('0');
-                        $('#surging_charges').val('');
                         $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
                         var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
                         var sizes = [];
@@ -1419,14 +1412,48 @@
                         let mxlen = 0;
 
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
+                            let exists = added_cut_pieces.some(piece =>
+                                piece.CPTempLine_No === item.CPTempLine_No &&
+                                piece.ATSLength === item.ATSLength &&
+                                piece.ATSWidth === item.ATSWidth
+                            );
+
+                            if (!exists) {
+                                // Default properties
+                                item.SergingCharges = null;
+                                item.SergingType = null;
+                                item.Serging = 'N';
+
+                                // Apply surging logic only for the new item being added
+                                if ($('#surging_check').is(':checked') && $('#surging_options').val()) {
+                                    let lengthFeet = Math.floor(item.ATSLength / 12);
+                                    let lengthInches = item.ATSLength % 12;
+                                    let widthFeet = Math.floor(item.ATSWidth / 12);
+                                    let widthInches = item.ATSWidth % 12;
+
+                                    let lengthForSurging = lengthFeet + (lengthInches / 12).toFixed(2);
+                                    let widthForSurging = widthFeet + (widthInches / 12).toFixed(2);
+                                    let area = (parseFloat(lengthForSurging) + parseFloat(widthForSurging)) * 2;
+
+                                    item.SergingCharges = ($('#surging_charges').val() * area).toFixed(2);
+                                    item.SergingType = $('#surging_options').val();
+                                    item.Serging = 'Y';
+                                }
+
+                                added_cut_pieces.push(item);
+                            }
+                        });
+
+                        added_cut_pieces.forEach(item => {
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
                             let widthInches = item.ATSWidth % 12;
 
+                            let surging = '';
+
                             mxlenf = mxlenf + lengthFeet;
                             mxlen = mxlen + lengthInches;
-
 
                             lenInchCal = (lengthInches * 0.0833333);
                             widInchCal = (widthInches * 0.0833333);
@@ -1451,7 +1478,7 @@
                             // size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
                             //     widthInches + `"`;
                             size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
-                                lengthInches + `"`;
+                                lengthInches + `"` + surging;
                             divContent += size.size;
                             divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + item.CPTempLine_No + '`,  `' + item.LengthStatus + '`,  `' + lengthFeet + '`,  `' + widthFeet + '`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
                             let totalLengthInInches = lengthFeet * 12 + lengthInches;
@@ -1474,11 +1501,14 @@
                             // size.price = extPrice.toFixed(2);
 
                             if (item.LengthStatus == 'F') {
-                                console.log('in size');
                                 sizes.push(size);
                             }
                             line_no = line_no + 1;
-                        });
+                        })
+
+                        $('#surging_check').prop('checked', false);
+                        $('#surging_options').val('0');
+                        $('#surging_charges').val('');
 
                         totalSqftPrice = (totalMaxLen * totalAddWid);
                         $("#ats-qty").val(totalSqftPrice);
@@ -1489,8 +1519,11 @@
 
                         $('#cut_piece_parent').html(divContent);
                         $('#size_price').val(JSON.stringify(sizes));
-                        item_object.CutPieces = data['cut_piece']['OutPut']['AddCutPieces'];
-                        $('#cut_pieces_json').val(JSON.stringify(data['cut_piece']['OutPut']['AddCutPieces']));
+
+                        // item_object.CutPieces = data['cut_piece']['OutPut']['AddCutPieces'];
+                        item_object.CutPieces = added_cut_pieces;
+                        // $('#cut_pieces_json').val(JSON.stringify(data['cut_piece']['OutPut']['AddCutPieces']));
+                        $('#cut_pieces_json').val(JSON.stringify(added_cut_pieces);
                         $('#item_json').val(JSON.stringify(item_object));
                         toastr.success(data.cut_piece.OutPut.Message, {
                             hideDuration: 10000,
