@@ -53,11 +53,11 @@
                                         <input type="hidden" name="quantity" id="quantities" value="[]">
                                         {{-- <input type="hidden" name="customer" id="customer_id" value=""> --}}
                                         {{-- @dd($cart) --}}
-                                        @foreach ($cart->items as $row)
-                                            @php
-                                                $cust = $row->item_customer_id;
-                                            @endphp
-                                        @endforeach
+                                            @foreach ($cart->items as $row)
+                                                @php
+                                                    $cust = $row->item_customer_id;
+                                                @endphp
+                                            @endforeach
                                         <input type="hidden" name="customer" id="customer_id" value="{{ $cust }}">
                                         <thead>
                                         <tr>
@@ -73,12 +73,12 @@
                                         </thead>
                                         <tbody>
                                         @if (count((array) $cart->items))
-                                            @foreach ($cart->items as $item)
+                                        @foreach ($cart->items as $item)
                                             @php
                                             if (isset($item->item_data) && $item->item_data) {
                                                 $item_data = json_decode(unserialize($item -> item_data));
                                             }
-                                        @endphp
+                                            @endphp
                                         <tr>
                                             <th class="" scope="row">
                                                 <div class="row">
@@ -145,7 +145,7 @@
                                             <td class="align-content-center">{{ $item->item_currency }}<span
                                                     id="item_total_price">{{ $item->item_total }}</span></td>
                                         </tr>
-                                            @endforeach
+                                        @endforeach
                                         @else
                                             <tr>
                                                 No Item in Cart
@@ -663,9 +663,9 @@
             var total = subtotal + shippingCharges;
             $(".section_2_cart_total").text("$" + total.toFixed(2));
 
-            $('.delete-row').click(function () {
-                $(this).closest('tr').remove();
-            });
+            // $('.delete-row').click(function () {
+            //     $(this).closest('tr').remove();
+            // });
 
             function updateTotalPrice() {
                 var quantity = parseInt($('#item_qty').val());

@@ -166,6 +166,7 @@ class ShopController extends DashboardController
             $hasBroadloom = false;
             $hasOther = false;
             $isError = false;
+            $isBDitem = false;
             foreach ($item_prices['ItemPrices'] as $key => $item) {
                 if ($item['ItemType'] == 'R') {
                     $hasBroadloom = true;
@@ -177,9 +178,17 @@ class ShopController extends DashboardController
                     $isError = true;
                     break;
                 }
+
+                if($hasBroadloom){
+                    $isBDitem = true;
+                    break;
+                }
             }
             if($isError){
                 return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'body' => '<b>Broadloom item and Rug item</b> orders are not placed at same time'] );
+            }
+            if($isBDitem){
+                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'body' => '<b>Broadloom item</b> orders are not placed from dashboard'] );
             }
 
             if ( $item_prices['Success'] )
