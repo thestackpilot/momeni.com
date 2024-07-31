@@ -86,7 +86,7 @@ class ApisController extends RootController
     {
         $post_array = [];
 
-        if (Auth::user()->role === 'customer') {
+        if (Auth::user()->is_customer) {
             return $this->Post_API_Signature('Get_AllCustomerReports', 'Get All Reports', $post_array, ['Success', 'Message', 'ReportList'], 1, 1, 1);
         }
         return $this->Post_API_Signature('Get_AllReports', 'Get All Reports', $post_array, ['Success', 'Message', 'ReportList'], 1, 1, 1);
