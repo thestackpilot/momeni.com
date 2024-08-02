@@ -983,6 +983,7 @@
             $('#item_json').val(JSON.stringify(item));
             let jsonString = $('#size_price').val();
             let sizesArray = JSON.parse(jsonString);
+            let customer_instruction = $('#cust-inst').val();
 
             let dimensionsInInches = sizesArray.map(item => getDimensionsInInches(item.size));
             let maxLengthObj = dimensionsInInches.reduce((maxObj, currentObj) => {
@@ -1002,6 +1003,8 @@
                 bd_cutpiece_len += dimensionsInInches[i].length;
                 bd_cutpiece_wid += dimensionsInInches[i].width;
             }
+
+            console.log(' $(cust-inst).val()',  );
 
             $.ajax({
                 url: "{{ route('check-cart-item') }}",
@@ -1038,6 +1041,7 @@
                                                 'bd_roll_id': $("#roll_id").val(),
                                                 'bd_cutpiece_len': bd_cutpiece_len,
                                                 'bd_cutpiece_wid': bd_cutpiece_wid,
+                                                'user_remarks': customer_instruction,
                                             },
                                             success: function (response) {
                                                 if (response.success) {
@@ -1068,6 +1072,18 @@
                                                             $('#add_to_cart').addClass('d-none');
                                                             $('#roll_pieces').removeAttr("disabled");
                                                             $('#cut-pieces').empty();
+                                                            $.ajax({
+                                                                url: "{{ route('broadloom.removeAllCutPiece') }}",
+                                                                data: {
+                                                                    _token: "{{ csrf_token() }}",
+                                                                    TempSalesOrderNo: null,
+                                                                    logged_user_no: '{{ isset(Auth::user()->spars_logged_user_no)? Auth::user()->spars_logged_user_no : '' }}',
+                                                                },
+                                                                type: 'POST',
+                                                                success: function (response) {
+                                                                    console.log('all cut response on change', response);
+                                                                }
+                                                            })
 
                                                             // $('.quickCart-opener').trigger('click');
                                                         });
@@ -1134,6 +1150,7 @@
                                 'bd_roll_id': $("#roll_id").val(),
                                 'bd_cutpiece_len': bd_cutpiece_len,
                                 'bd_cutpiece_wid': bd_cutpiece_wid,
+                                'user_remarks': customer_instruction,
                             },
                             success: function (response) {
                                 if (response.success) {
@@ -1222,8 +1239,7 @@
                     type: 'POST',
                     success: function (response) {
                         var cutpieceLen = response['OutPut']['AddCutPieces'];
-                        // console.log('response removeCutPiece', cutpieceLen.length);
-                        // console.log('response removeCutPiece', response['OutPut']['AddCutPieces']);
+                        console.log('response removeCutPiece', response['OutPut']['AddCutPieces']);
                         if (cutpieceLen.length == 0) {
                             $('#show-cut-piece-btn').addClass('d-none');
                             $('#add_to_cart').addClass('d-none');
@@ -1411,6 +1427,7 @@
                         let mxlenf = 0;
                         let mxlen = 0;
 
+                        console.log('add cut piece', data['cut_piece']['OutPut']['AddCutPieces']);
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
                             let exists = added_cut_pieces.some(piece =>
                                 piece.CPTempLine_No === item.CPTempLine_No &&
@@ -1419,6 +1436,7 @@
                             );
 
                             if (!exists) {
+                                console.log('add cut piece check exists');
                                 // Default properties
                                 item.SergingCharges = null;
                                 item.SergingType = null;
@@ -1445,6 +1463,7 @@
                         });
 
                         added_cut_pieces.forEach(item => {
+                            console.log('added_cut_pieces item', item);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
@@ -1730,8 +1749,8 @@
                 $('#lenght-width').text(`${lengthfeet}'-${lengthinches}''/`);
                 $('.Twidth').attr('max', widthfeet);
                 $('.Tlength').attr('max', lengthfeet);
-                $('#TlengthInch').attr('max', lengthinches);
-                $('#TwidthInch').attr('max', widthinches);
+                // $('#TlengthInch').attr('max', lengthinches);
+                // $('#TwidthInch').attr('max', widthinches);
                 $('#roll_id').val(selectedOption.attr('value'));
                 $('#cutpiece_id').val(selectedOption.attr('cutpieceID'));
                 $('#atslength').val(selectedOption.attr('length'));
