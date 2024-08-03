@@ -132,7 +132,7 @@
                                                                     <input type="number"
                                                                            class="form-control TlengthInch"
                                                                            id="TlengthInch" placeholder=""
-                                                                           style="text-align:right;" min="0">
+                                                                           style="text-align:right;" min="0" max="11">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">
                                                                             <strong>In</strong></div>
@@ -176,7 +176,7 @@
                                                                     </select> --}}
                                                                     <input type="number" class="form-control TwidthInch"
                                                                            id="TwidthInch" placeholder=""
-                                                                           style="text-align:right;" min="0">
+                                                                           style="text-align:right;" min="0" max="11">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">
                                                                             <strong>In</strong></div>
