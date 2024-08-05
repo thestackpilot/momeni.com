@@ -102,6 +102,10 @@ class ShowCutPiece {
         /* getter ends */
     }
 
+    CalculateATSLength(data) {
+        return data.reduce((acc, obj) => acc + parseFloat(obj.ATSLength), 0);
+    }
+
     cutPiecesInitilize(coordinates, payload) {
         this.setCoordinates(coordinates);
         $('#cut-pieces').html('');
@@ -113,6 +117,11 @@ class ShowCutPiece {
             success: (response) => {
                 if (response.Success) {
                     this.setRectangleData(response);
+                    let length = this.CalculateATSLength(response.ShowCuts);
+
+                    if (length > 600) {
+                        this.setFrameOrientation('H');
+                    }
                     let orientation = this.getFrameOrientation();
                     this.GetFrameDimensions(orientation);
 
@@ -229,7 +238,9 @@ class ShowCutPiece {
             rectangles.push(rect);
         });
 
-        size = { width: (size.width + this.getVerticalTextWidth()) + 'px', height: size.height + 'px' };
+        let width = size.width + this.getVerticalTextWidth() > 600 ? 600 : size.width + this.getVerticalTextWidth();
+
+        size = { width: width + 'px', height: size.height + 'px' };
         this.setSize(size);
         this.setRectangles(rectangles);
     }
@@ -276,7 +287,9 @@ class ShowCutPiece {
             rectangles.push(rect);
         });
 
-        size = { width: (size.width + this.getVerticalTextWidth()) + 'px', height: size.height + 'px' };
+        let width = size.width + this.getVerticalTextWidth() > 600 ? 600 : size.width + this.getVerticalTextWidth();
+
+        size = { width: width + 'px', height: size.height + 'px' };
         this.setSize(size);
         this.setRectangles(rectangles);
     }
@@ -288,7 +301,6 @@ class ShowCutPiece {
         var width = this.getTotalFrameWidth();
 
         if (orientation === 'V') {
-
             if (height > 133) {
                 ratio = parseFloat(parseFloat(400 / height).toFixed(2));
             } else {
@@ -321,7 +333,7 @@ class ShowCutPiece {
                 }
             }
         }
-        
+
         this.setRatio(ratio);
     }
 
@@ -341,8 +353,8 @@ class ShowCutPiece {
             '</div>' +
 
             '<div class="row h-100">' +
-            '<div class="col-lg-1 text-center remove-padding" id="_VerticalText" style="background-color:lightgray; writing-mode: vertical-rl; width: ' + VerticalTextWidth + 'px; height:' + size.height + '"><span style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;">' + this.getFormattedItemSize(totalFrameHeight, 'Inch') + ' (' + labelV + ')</span></div>' +
-            '<div class="col-lg-1 remove-padding" id="child_' + Rectangle + '"></div>' +
+            '<div class="text-center remove-padding" id="_VerticalText" style="position: relative; background-color:lightgray; writing-mode: vertical-rl; width: ' + VerticalTextWidth + 'px; height:' + size.height + '"><span style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;">' + this.getFormattedItemSize(totalFrameHeight, 'Inch') + ' (' + labelV + ')</span></div>' +
+            '<div class="remove-padding" id="child_' + Rectangle + '" style="position: relative"></div>' +
             '</div>' +
             '</div>' +
             '</div>';
