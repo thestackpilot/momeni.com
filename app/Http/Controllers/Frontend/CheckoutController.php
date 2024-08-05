@@ -286,7 +286,8 @@ class CheckoutController extends FrontendController
                 $count = 0;
                 foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
                     $count++;
-                    $item_data = json_decode(unserialize($item['item_data']));
+//                    $item_data = json_decode(unserialize($item['item_data']));
+                    $item_data = json_decode($item['item_data']);
                     $cut_pieces = [];
                     $order_length = 0;
                     $line = 0;
@@ -307,9 +308,9 @@ class CheckoutController extends FrontendController
                             $cut_pieces[$key]['ActualSQFT'] = $sqft;  // $cut_piece->ATSWidth * $cut_piece->ATSLength;
                             $cut_pieces[$key]['CutType'] = $item_data->cut_type;
                             $cut_pieces[$key]['LocationID'] = $item_data->location_id;
-                            $cut_pieces[$key]['Serging'] = $item_data->Serging;
-                            $cut_pieces[$key]['SergingCharges'] = !empty($item_data->SergingCharges) ? $item_data->SergingCharges : 0;
-                            $cut_pieces[$key]['SergingType'] = (!empty($item_data->SergingType) || $item_data->SergingType != "N") ? "0" : $item_data->SergingType;
+                            $cut_pieces[$key]['Serging'] = !empty($cut_piece->SergingType) ? "Y" : "N";
+                            $cut_pieces[$key]['SergingCharges'] = !empty($cut_piece->SergingCharges) ? $cut_piece->SergingCharges : 0;
+                            $cut_pieces[$key]['SergingType'] = empty($cut_piece->SergingType) ? "0" : $cut_piece->SergingType;
                             $cut_pieces[$key]['LineNo'] = ++$line;
                             $order_length += $cut_piece->ATSLength;
                         }
