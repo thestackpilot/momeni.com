@@ -1219,6 +1219,12 @@
         }
 
         function removeCutPiece(id, cut_piece_id, roll_id, line_no, lenghtStatus, lengthfeet, widthfeet) {
+            console.log(cut_piece_id);
+            console.log(roll_id);
+            console.log(line_no);
+            console.log(lenghtStatus);
+            console.log(lengthfeet);
+            console.log(widthfeet);
             input_lenght_ats -= lengthfeet;
             if (lenghtStatus != 'F') {
                 toastr.error('Remnant cannot be removed', {
@@ -1239,7 +1245,6 @@
                     type: 'POST',
                     success: function (response) {
                         var cutpieceLen = response['OutPut']['AddCutPieces'];
-                        console.log('response removeCutPiece', response['OutPut']['AddCutPieces']);
                         if (cutpieceLen.length == 0) {
                             $('#show-cut-piece-btn').addClass('d-none');
                             $('#add_to_cart').addClass('d-none');
@@ -1375,11 +1380,7 @@
                 });
                 return true;
             }
-
-            $.ajax({
-                url: "{{ route('broadloom.cutPiece') }}",
-                method: 'POST',
-                data: {
+            $data= {
                     '_token': '{{ csrf_token() }}',
                     'roll_id': $("#roll_id").val(),
                     'tempsalesorderno': $("#TempSalesOrderNo").val(),
@@ -1400,9 +1401,15 @@
                     'UserRemarks': "Setting Data",
                     'sergingtypeno': $("#sergingtypeno").val(),
                     'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}'
-                },
+                };
+            console.log($data);
+            $.ajax({
+                url: "{{ route('broadloom.cutPiece') }}",
+                method: 'POST',
+                data: $data,
                 success: function (data) {
                     if (data.cut_piece.OutPut.Success) {
+                        console.log(data['cut_piece']['OutPut']['AddCutPieces']);
                         $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
                         var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
                         var sizes = [];

@@ -177,7 +177,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => '/var/www/momeni.com/public_html/storage/framework/cache/data',
+        'path' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -286,7 +286,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'momeni',
+        'database' => 'vcs_momeni',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
@@ -296,9 +296,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'momeni',
+        'database' => 'vcs_momeni',
         'username' => 'root',
-        'password' => 'Jess@54788',
+        'password' => 'N5tzLp2xdG',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -316,9 +316,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'momeni',
+        'database' => 'vcs_momeni',
         'username' => 'root',
-        'password' => 'Jess@54788',
+        'password' => 'N5tzLp2xdG',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -331,9 +331,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'momeni',
+        'database' => 'vcs_momeni',
         'username' => 'root',
-        'password' => 'Jess@54788',
+        'password' => 'N5tzLp2xdG',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -377,13 +377,13 @@
       array (
         'Montserrat' => 
         array (
-          'normal' => '/var/www/momeni.com/public_html/public/fonts/static/Montserrat-Regular.ttf',
+          'normal' => '/var/www/vcs.ashtexsolutions.com/momeni/public/fonts/static/Montserrat-Regular.ttf',
         ),
       ),
-      'font_dir' => '/var/www/momeni.com/public_html/public/fonts/static',
-      'font_cache' => '/var/www/momeni.com/public_html/public/fonts/static',
+      'font_dir' => '/var/www/vcs.ashtexsolutions.com/momeni/public/fonts/static',
+      'font_cache' => '/var/www/vcs.ashtexsolutions.com/momeni/public/fonts/static',
       'temp_dir' => '/tmp',
-      'chroot' => '/var/www/momeni.com/public_html',
+      'chroot' => '/var/www/vcs.ashtexsolutions.com/momeni',
       'enable_font_subsetting' => false,
       'pdf_backend' => 'CPDF',
       'default_media_type' => 'screen',
@@ -406,12 +406,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/momeni.com/public_html/storage/app',
+        'root' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/momeni.com/public_html/storage/app/storage',
+        'root' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/app/storage',
         'url' => '/storage',
         'visibility' => 'public',
       ),
@@ -428,7 +428,7 @@
     ),
     'links' => 
     array (
-      '/var/www/momeni.com/public_html/public/storage' => '/var/www/momeni.com/public_html/storage/app/storage',
+      '/var/www/vcs.ashtexsolutions.com/momeni/public/storage' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/app/storage',
     ),
   ),
   'hashing' => 
@@ -462,13 +462,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => '/var/www/momeni.com/public_html/storage/logs/laravel.log',
+        'path' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => '/var/www/momeni.com/public_html/storage/logs/laravel.log',
+        'path' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -518,7 +518,7 @@
       ),
       'emergency' => 
       array (
-        'path' => '/var/www/momeni.com/public_html/storage/logs/laravel.log',
+        'path' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/logs/laravel.log',
       ),
     ),
   ),
@@ -530,11 +530,11 @@
       'smtp' => 
       array (
         'transport' => 'smtp',
-        'host' => 'smtp.mailtrap.io',
-        'port' => '2525',
-        'encryption' => NULL,
-        'username' => NULL,
-        'password' => NULL,
+        'host' => 'smtp.gmail.com',
+        'port' => '587',
+        'encryption' => 'tls',
+        'username' => 'testing.demo.as@gmail.com',
+        'password' => 'rkkjiivtesygqwpo',
         'timeout' => NULL,
         'auth_mode' => NULL,
       ),
@@ -567,7 +567,7 @@
     ),
     'from' => 
     array (
-      'address' => NULL,
+      'address' => 'mygoogle@gmail.com',
       'name' => 'Momeni',
     ),
     'markdown' => 
@@ -575,7 +575,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => '/var/www/momeni.com/public_html/resources/views/vendor/mail',
+        0 => '/var/www/vcs.ashtexsolutions.com/momeni/resources/views/vendor/mail',
       ),
     ),
   ),
@@ -654,7 +654,7 @@
     'lifetime' => '240',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => '/var/www/momeni.com/public_html/storage/framework/sessions',
+    'files' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -674,9 +674,9 @@
   array (
     'paths' => 
     array (
-      0 => '/var/www/momeni.com/public_html/resources/views',
+      0 => '/var/www/vcs.ashtexsolutions.com/momeni/resources/views',
     ),
-    'compiled' => '/var/www/momeni.com/public_html/storage/framework/views',
+    'compiled' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/framework/views',
   ),
   'flare' => 
   array (
@@ -825,7 +825,7 @@
     ),
     'temporary_files' => 
     array (
-      'local_path' => '/var/www/momeni.com/public_html/storage/framework/cache/laravel-excel',
+      'local_path' => '/var/www/vcs.ashtexsolutions.com/momeni/storage/framework/cache/laravel-excel',
       'local_permissions' => 
       array (
       ),

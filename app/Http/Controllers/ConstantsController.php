@@ -100,8 +100,8 @@ class ConstantsController extends RootController
             // this should be moved to admin settings
             'integrator_id'                      => '888000002887', // '888000002887',
             'grant_type'                         => 'password',
-            'user'                               => 'sumit@lrresources.com', // 'adil@ashtexsolutions.com',
-            'pass'                               => 'Ay$062022', // 'BDTeam!@#321'
+          //  'user'                               => 'sumit@lrresources.com', // 'adil@ashtexsolutions.com',
+          //  'pass'                               => 'Ay$062022', // 'BDTeam!@#321'
         ]
     ];
 
