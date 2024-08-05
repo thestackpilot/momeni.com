@@ -572,7 +572,8 @@
                                             <div class="mx-3 mt-2 font-weight--bold row">Design:
                                                 <p class="font-weight--normal mx-2">{{$item->item_name}}</p>
                                             </div>
-                                            <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p>
+                                            {{-- <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p> --}}
+                                            <div class="mx-3 mt-2 row">Roll Id: <p class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
                                             </div>
                                             <div class="mx-3 mt-2 row">Size:
                                                 @php

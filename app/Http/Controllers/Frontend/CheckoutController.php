@@ -332,12 +332,12 @@ class CheckoutController extends FrontendController
                         "Discount" => 0,
                         "WHSID" => null,
                         "Remarks" => null,
-                        "UserRemarks" => null,
+                        "UserRemarks" => $item['user_remarks'],
                         "ETA_Date" => "\/Date(-62135596800000)\/",
                         'OrderLength' => $order_length,
                         'CutPieces' => $cut_pieces,
                         'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : '',
-                    'SKU'       => $item['oak_sku']];
+                        'SKU'       => $item['oak_sku']];
 
                     $cartItems[] = [
                         'Image' => str_replace(' ', '%20', $item['item_image']),
