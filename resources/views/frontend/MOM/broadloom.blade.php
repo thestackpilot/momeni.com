@@ -1127,6 +1127,7 @@
                         }
                     } else {
                         //  ADD TO CART API HIT
+                        console.log($('#item_json').val())
                         $.ajax({
                             method: 'POST',
                             url: '{{ route('frontend.cart.add') }}',
@@ -1429,40 +1430,6 @@
 
                         console.log('add cut piece', data['cut_piece']['OutPut']['AddCutPieces']);
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
-                            let exists = added_cut_pieces.some(piece =>
-                                piece.CPTempLine_No === item.CPTempLine_No &&
-                                piece.ATSLength === item.ATSLength &&
-                                piece.ATSWidth === item.ATSWidth
-                            );
-
-                            if (!exists) {
-                                console.log('add cut piece check exists');
-                                // Default properties
-                                item.SergingCharges = null;
-                                item.SergingType = null;
-                                item.Serging = 'N';
-
-                                // Apply surging logic only for the new item being added
-                                if ($('#surging_check').is(':checked') && $('#surging_options').val()) {
-                                    let lengthFeet = Math.floor(item.ATSLength / 12);
-                                    let lengthInches = item.ATSLength % 12;
-                                    let widthFeet = Math.floor(item.ATSWidth / 12);
-                                    let widthInches = item.ATSWidth % 12;
-
-                                    let lengthForSurging = lengthFeet + (lengthInches / 12).toFixed(2);
-                                    let widthForSurging = widthFeet + (widthInches / 12).toFixed(2);
-                                    let area = (parseFloat(lengthForSurging) + parseFloat(widthForSurging)) * 2;
-
-                                    item.SergingCharges = ($('#surging_charges').val() * area).toFixed(2);
-                                    item.SergingType = $('#surging_options').val();
-                                    item.Serging = 'Y';
-                                }
-
-                                added_cut_pieces.push(item);
-                            }
-                        });
-
-                        added_cut_pieces.forEach(item => {
                             console.log('added_cut_pieces item', item);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
@@ -1523,6 +1490,10 @@
                                 sizes.push(size);
                             }
                             line_no = line_no + 1;
+                        });
+
+                        added_cut_pieces.forEach(item => {
+
                         })
 
                         $('#surging_check').prop('checked', false);
