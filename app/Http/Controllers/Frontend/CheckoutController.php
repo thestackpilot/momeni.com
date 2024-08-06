@@ -289,8 +289,8 @@ class CheckoutController extends FrontendController
                 $count = 0;
                 foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
                     $count++;
-//                    $item_data = json_decode(unserialize($item['item_data']));
-                    $item_data = json_decode($item['item_data']);
+                    $item_data = json_decode(unserialize($item['item_data']));
+//                    $item_data = json_decode($item['item_data']);
                     $cut_pieces = [];
                     $order_length = 0;
                     $line = 0;
