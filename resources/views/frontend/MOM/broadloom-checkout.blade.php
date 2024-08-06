@@ -7,7 +7,7 @@
 
 @endphp
 
-@section('title', 'Item Detail Page')
+@section('title', 'Broadloom Checkout')
 @extends('frontend.' . $active_theme->theme_abrv . '.layouts.app')
 
 @section('content')
@@ -168,7 +168,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
