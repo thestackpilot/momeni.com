@@ -317,7 +317,7 @@ class CheckoutController extends FrontendController
                             $cut_pieces[$key]['SergingType'] = empty($cut_piece->SergingType) ? "0" : $cut_piece->SergingType;
                             $cut_pieces[$key]['LineNo'] = ++$line;
                             $order_length += $cut_piece->ATSLength;
-                            $total_serging_charges += $cut_pieces[$key]['SergingCharges'] * $sqft;
+                            $total_serging_charges += $cut_pieces[$key]['SergingCharges'] * ((round($cut_piece->ATSWidth / 12, 2) + round($cut_piece->ATSLength / 12, 2)) * 2);
                         }
                     }
 
