@@ -349,7 +349,7 @@ class ShowCutPiece {
         var html = '<div class="popup" id="parent_PopupContainer">' +
             '<div class="container remove-padding h-100 popuptext" id="boradloom_cutpieces" style="width:' + size.width + '">' +
             '<div class="row justify-content-md-center" style="background-color:lightgray;position: relative;">' +
-            '<div class="col-lg-12 text-center">' + this.getFormattedItemSize(totalFrameWidth, 'Inch') + ' (' + labelH + ')</div>' +
+            '<div class="col-lg-12 text-center" style="display: grid; justify-content: center;">' + this.getFormattedItemSize(totalFrameWidth, 'Inch') + ' (' + labelH + ')</div>' +
             '</div>' +
 
             '<div class="row h-100">' +
