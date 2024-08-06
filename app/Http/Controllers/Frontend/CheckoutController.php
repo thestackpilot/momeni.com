@@ -289,12 +289,13 @@ class CheckoutController extends FrontendController
                 $count = 0;
                 foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
                     $count++;
-                    $item_data = json_decode(unserialize($item['item_data']));
-//                    $item_data = json_decode($item['item_data']);
+//                    $item_data = json_decode(unserialize($item['item_data']));
+                    $item_data = json_decode($item['item_data']);
                     $cut_pieces = [];
                     $order_length = 0;
                     $line = 0;
                     $totalSQFT = 0;
+                    $total_serging_charges = 0;
 
                     foreach ($item_data->CutPieces as $key => $cut_piece) {
                         if ($cut_piece->LengthStatus !== "R") {
@@ -316,6 +317,7 @@ class CheckoutController extends FrontendController
                             $cut_pieces[$key]['SergingType'] = empty($cut_piece->SergingType) ? "0" : $cut_piece->SergingType;
                             $cut_pieces[$key]['LineNo'] = ++$line;
                             $order_length += $cut_piece->ATSLength;
+                            $total_serging_charges += $cut_pieces[$key]['SergingCharges'] * $sqft;
                         }
                     }
 
@@ -327,8 +329,8 @@ class CheckoutController extends FrontendController
                         'SQFTArea' => $totalSQFT,//round( $item_data->SQFTArea / 12), // $item_data->SQFTArea
                         'CutPieceID' => $item_data->CutPieceID,
                         'RollID' => $item_data->RollID,
-                        'SergingCharges' => !empty($item_data->SergingCharges) ? $item_data->SergingCharges : 0,
-                        'SergingType' => (!empty($item_data->SergingType) || $item_data->SergingType != "N") ? "0" : $item_data->SergingType,
+                        'SergingCharges' => $total_serging_charges,
+                        'SergingType' => null,
                         'Line_No' => $count,
                         "Discount" => 0,
                         "WHSID" => null,
