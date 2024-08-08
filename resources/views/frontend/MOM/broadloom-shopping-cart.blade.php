@@ -48,123 +48,144 @@
                             <div class="col-md-9 col-sm-12" style="background-color: grey:">
                                 <div class="table-responsive">
                                     @if((count((array) $cart->items)))
-                                    <table id="" class="table for-data-table">
-                                        <input type="hidden" name="item" id="item_ids" value="[]">
-                                        <input type="hidden" name="quantity" id="quantities" value="[]">
-                                        {{-- <input type="hidden" name="customer" id="customer_id" value=""> --}}
-                                        {{-- @dd($cart) --}}
+                                        <table id="" class="table for-data-table">
+                                            <input type="hidden" name="item" id="item_ids" value="[]">
+                                            <input type="hidden" name="quantity" id="quantities" value="[]">
+                                            {{-- <input type="hidden" name="customer" id="customer_id" value=""> --}}
+                                            {{-- @dd($cart) --}}
                                             @foreach ($cart->items as $row)
                                                 @php
                                                     $cust = $row->item_customer_id;
                                                 @endphp
                                             @endforeach
-                                        <input type="hidden" name="customer" id="customer_id" value="{{ $cust }}">
-                                        <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            @foreach ($cart->items as $item)
-                                                @if(!$item->broadloom_item)
-                                                <th>Quantity</th>
-                                                @endif
-                                            @endforeach
-                                            <th>Price</th>
-                                            <th>SubTotal</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @if (count((array) $cart->items))
-                                        @foreach ($cart->items as $item)
-                                            @php
-                                            if (isset($item->item_data) && $item->item_data) {
-                                                $item_data = json_decode(unserialize($item -> item_data));
-                                            }
-                                            @endphp
-                                        <tr>
-                                            <th class="" scope="row">
-                                                <div class="row">
-                                                    <div
-                                                        class="col-1 justify-content-center align-content-center delete-row"
-                                                        style="color: red;cursor: pointer;"
-                                                        onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}')">x
-                                                    </div>
-                                                    <div class="col-3"><img
-                                                            src={{ CommonController::getApiFullImage($item_data->ImageName) }}
-                                                                alt="{{ $item_data->ItemID }}" height="80px" width="80px"
-                                                                onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"
-                                                            >
-                                                    </div>
-                                                    <div class="col-8" style="font-size: 12px">
-                                                        <div class=" mt-2 font-weight--bold row">Design: <p
-                                                                class="font-weight--normal mx-2">
-                                                                {{ $item_data->ItemName }}</p>
-                                                        </div>
-                                                        {{-- <div class=" mt-2 row">SKU: <p
-                                                                class="font-weight--normal mx-2">N/A</p>
-                                                        </div> --}}
-                                                        <div class=" mt-2 row">Roll Id: <p
-                                                            class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
-                                                        </div>
-                                                        <div class=" mt-2 row">Sizes:
-                                                        @php
-                                                            $sizes = json_decode( unserialize($item->item_data ), true );
-                                                        @endphp
-                                                        @foreach($sizes['CutPieces'] as $item_sizes)
-                                                        @php
-                                                            $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
-                                                            $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
-                                                            $lenght_inch =  $item_sizes['ATSLength'] % 12;
-                                                            $width_inch =   $item_sizes['ATSWidth'] % 12;
-                                                        @endphp
-                                                        <br><p class="font-weight--normal mx-2">({{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }})</p><br>
-                                                        @endforeach
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            @if(!$item->broadloom_item)
-                                            <td class="align-content-center">
-                                                <div class="d-flex flex-row qty-styles mb-2">
-                                                    <a href="javascript:void(0);" class="qty-minus qty-action">
-                                                        -
-                                                    </a>
-                                                    <input type="number" id="item_qty" name="quantity"
-                                                        autocomplete="off"
-                                                        onkeydown="if(this.key==='.'){this.preventDefault();}"
-                                                        class="form-control" min="1" max="9999"
-                                                        maxlength="4" step="1" required
-                                                        value="{{ $item->item_quantity }}"/>
-                                                    <a href="javascript:void(0);" class="qty-add qty-action"> +
-                                                    </a>
-                                                    <input type="hidden" class="item_id" name="item_id"
-                                                        value="{{ $item_data->ItemID }}">
-                                                </div>
-                                            </td>
-                                            @endif
-                                            <td class="align-content-center">
-                                                {{ $item->item_currency }}{{ $item->item_price }}</td>
-                                            <td class="align-content-center">{{ $item->item_currency }}<span
-                                                    id="item_total_price">{{ $item->item_total }}</span></td>
-                                        </tr>
-                                        @endforeach
-                                        @else
+                                            <input type="hidden" name="customer" id="customer_id" value="{{ $cust }}">
+                                            <thead>
                                             <tr>
-                                                No Item in Cart
+                                                <th>Product</th>
+                                                @foreach ($cart->items as $item)
+                                                    @if(!$item->broadloom_item)
+                                                        <th>Quantity</th>
+                                                    @endif
+                                                @endforeach
+                                                <th>Price</th>
+                                                <th>SubTotal</th>
                                             </tr>
-                                        @endif
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                            @if (count((array) $cart->items))
+                                                @foreach ($cart->items as $item)
+                                                    @php
+                                                        if (isset($item->item_data) && $item->item_data) {
+                                                            $item_data = json_decode(unserialize($item -> item_data));
+                                                            //$item_data = json_decode($item -> item_data);
+                                                        }
+                                                    @endphp
+                                                    <tr>
+                                                        <th class="" scope="row">
+                                                            <div class="row">
+                                                                <div
+                                                                    class="col-1 justify-content-center align-content-center delete-row"
+                                                                    style="color: red;cursor: pointer;"
+                                                                    onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}')">
+                                                                    x
+                                                                </div>
+                                                                <div class="col-3"><img
+                                                                        src={{ CommonController::getApiFullImage($item_data->ImageName) }}
+                                                                alt="{{ $item_data->ItemID }}" height="80px"
+                                                                        width="80px"
+                                                                        onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"
+                                                                    >
+                                                                </div>
+                                                                <div class="col-8" style="font-size: 12px">
+                                                                    <div class=" mt-2 font-weight--bold row">Design: <p
+                                                                            class="font-weight--normal mx-2">
+                                                                            {{ $item_data->ItemName }}</p>
+                                                                    </div>
+                                                                    {{-- <div class=" mt-2 row">SKU: <p
+                                                                            class="font-weight--normal mx-2">N/A</p>
+                                                                    </div> --}}
+                                                                    <div class=" mt-2 row">Roll Id: <p
+                                                                            class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
+                                                                    </div>
+                                                                    <div class=" mt-2 row"
+                                                                         style="display:flex; align-items: center">
+                                                                        Sizes:
+                                                                        @php
+                                                                            $sizes = json_decode( unserialize($item->item_data ), true );
+                                                                            //$sizes = json_decode($item->item_data, true );
+                                                                        @endphp
+                                                                        @foreach($sizes['CutPieces'] as $item_sizes)
+                                                                            @php
+                                                                                $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                                                $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                                                $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                                                $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                                            @endphp
+                                                                            <div
+                                                                                class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                                                style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                                                {{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }}
+                                                                                @if(!empty($item_sizes['SergingType']))
+                                                                                    <span
+                                                                                        class="tooltiptext">
+                                                                                        <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
+                                                                                    </span>
+                                                                                @endif
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </th>
+                                                        @if(!$item->broadloom_item)
+                                                            <td class="align-content-center">
+                                                                <div class="d-flex flex-row qty-styles mb-2">
+                                                                    <a href="javascript:void(0);"
+                                                                       class="qty-minus qty-action">
+                                                                        -
+                                                                    </a>
+                                                                    <input type="number" id="item_qty" name="quantity"
+                                                                           autocomplete="off"
+                                                                           onkeydown="if(this.key==='.'){this.preventDefault();}"
+                                                                           class="form-control" min="1" max="9999"
+                                                                           maxlength="4" step="1" required
+                                                                           value="{{ $item->item_quantity }}"/>
+                                                                    <a href="javascript:void(0);"
+                                                                       class="qty-add qty-action"> +
+                                                                    </a>
+                                                                    <input type="hidden" class="item_id" name="item_id"
+                                                                           value="{{ $item_data->ItemID }}">
+                                                                </div>
+                                                            </td>
+                                                        @endif
+                                                        <td class="align-content-center">
+                                                            {{ $item->item_currency }}{{ $item->item_price }}</td>
+                                                        <td class="align-content-center">{{ $item->item_currency }}<span
+                                                                id="item_total_price">{{ $item->item_total }}</span>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    No Item in Cart
+                                                </tr>
+                                            @endif
+                                            </tbody>
+                                        </table>
                                     @else
-                                    <div class="d-flex flex-row p-5 align-items-center">
-                                        <div class="col-md-12">
-                                           <h2 class="text-muted text-center mt-5 mb-3 emptyCart"> Cart is empty! </h2>
+                                        <div class="d-flex flex-row p-5 align-items-center">
+                                            <div class="col-md-12">
+                                                <h2 class="text-muted text-center mt-5 mb-3 emptyCart"> Cart is
+                                                    empty! </h2>
+                                            </div>
                                         </div>
-                                     </div>
-                                     <div class="bottom-0 col p-4 row mt-5">
-                                        <a href="{{ url('/') }}" class="btn btn--border_1 col mt-3">BACK TO SHOP</a>
-                                     </div>
+                                        <div class="bottom-0 col p-4 row mt-5">
+                                            <a href="{{ url('/') }}" class="btn btn--border_1 col mt-3">BACK TO SHOP</a>
+                                        </div>
                                     @endif
                                     <div class="mt-4 d-flex justify-content-end mx-5">
-                                        <button href="#" class=" btn btn-dark align-content-center d-none" id="update_cart"
+                                        <button href="#" class=" btn btn-dark align-content-center d-none"
+                                                id="update_cart"
                                                 disabled="disabled">
                                             Update Cart
                                         </button>
@@ -173,30 +194,30 @@
                                 </div>
                             </div>
                             @if((count((array) $cart->items)))
-                            <div class="col-md-3 col-sm-12 border">
-                                <div class="d-flex justify-content-around align-items-left flex-column">
-                                    <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
-                                    <div class="row mt-3">
-                                        <div class="col-md-6">SubTotal:</div>
-                                        <div class="col-md-6 text-right">{{ $cart->cart_currency }}<span
-                                                id="item_subtotal_price">{{ $cart->cart_total }}</span></div>
+                                <div class="col-md-3 col-sm-12 border">
+                                    <div class="d-flex justify-content-around align-items-left flex-column">
+                                        <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
+                                        <div class="row mt-3">
+                                            <div class="col-md-6">SubTotal:</div>
+                                            <div class="col-md-6 text-right">{{ $cart->cart_currency }}<span
+                                                    id="item_subtotal_price">{{ $cart->cart_total }}</span></div>
+                                        </div>
+                                        <hr style="border-top-color: whitesmoke;">
+                                        <div class="row">
+                                            <div class="col-md-9">Shipping Charges:</div>
+                                            <div class="col-md-3 text-right shipping_charges">$0</div>
+                                        </div>
+                                        <hr style="border-top-color: whitesmoke;">
+                                        <div class="row mt-3">
+                                            <div class="col-md-6 font-weight-bold">Total:</div>
+                                            <div class="col-md-6 font-weight-bold text-right cart_total"></div>
+                                        </div>
+                                        <btn class="add-to-cart-button text-left btn btn-dark col-md-12 mt-3 mb-3"
+                                             id="proceed_to_checkout">
+                                            Proceed to Checkout <i class="px-4 fa fa-long-arrow-right"></i>
+                                            </button>
                                     </div>
-                                    <hr style="border-top-color: whitesmoke;">
-                                    <div class="row">
-                                        <div class="col-md-9">Shipping Charges:</div>
-                                        <div class="col-md-3 text-right shipping_charges">$0</div>
-                                    </div>
-                                    <hr style="border-top-color: whitesmoke;">
-                                    <div class="row mt-3">
-                                        <div class="col-md-6 font-weight-bold">Total:</div>
-                                        <div class="col-md-6 font-weight-bold text-right cart_total"></div>
-                                    </div>
-                                    <btn class="add-to-cart-button text-left btn btn-dark col-md-12 mt-3 mb-3"
-                                         id="proceed_to_checkout">
-                                        Proceed to Checkout <i class="px-4 fa fa-long-arrow-right"></i>
-                                        </button>
                                 </div>
-                            </div>
                             @endif
                         </div>
                     </div>
@@ -209,179 +230,226 @@
                             <div class="col-md-6 col-sm-12 my-5">
                                 <div class="mb-5">
                                     @if(isset($shipping_addresses['ShipToAddresses']))
-                                    <form class="needs-validation" id="customer_info" method="POST">
-                                        @csrf
-                                        <div class="row">
-                                            <div class="col-md-10 mb-2">
-                                                <div class="d-flex">
-                                                <input type="radio" name="shipping-address" class="existing-address customer-addr-select" id="existing-address" value="existing-address" />
-                                                <select class="p-0 m-0" class="select-address" id="select-address" style="height:40px !important; line-height: 20px !important; padding: 0.375rem 1rem !important;">
+                                        <form class="needs-validation" id="customer_info" method="POST">
+                                            @csrf
+                                            <div class="row">
+                                                <div class="col-md-10 mb-2">
+                                                    <div class="d-flex">
+                                                        <input type="radio" name="shipping-address"
+                                                               class="existing-address customer-addr-select"
+                                                               id="existing-address" value="existing-address"/>
+                                                        <select class="p-0 m-0" class="select-address"
+                                                                id="select-address"
+                                                                style="height:40px !important; line-height: 20px !important; padding: 0.375rem 1rem !important;">
 
-                                                    @foreach($shipping_addresses['ShipToAddresses'] as $address)
-                                                        <option value="{{$address['AddressID']}}~~~{{json_encode($address)}}">
-                                                            {{$address['AddressID']}} : {!!$address['FirstName'] ? $address['FirstName'] . ( $address['LastName'] ? " {$address['LastName']}" : '' ) : ''!!}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <p style="display: none !important;" class="card-text address-card d-none {{$address['AddressID']}}" id="{{$address['AddressID']}}">
-                                                    <input type="hidden" class="hidden-inp" name="shipping-address-data" value="{{json_encode($address)}}" />
-                                                </p>
-                                                <p style="display: none !important">
-                                                    <input type="hidden" id="hidden-address_id" name="AddressID" value="{{$shipping_addresses['ShipToAddresses'][0]['AddressID']}}" />
-                                                </p>
-                                                </div>
-                                            </div>
-                                            {{-- <div class="col-md-3 mb-2">
-                                               <div class="d-flex">
-                                                <input type="radio" name="shipping-address" class="existing-address" id="other-address" value="other"/>
-                                                <label for="other" class="mt-2">Dropship</label>
-                                               </div>
-                                            </div> --}}
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-3 mb-2">
-                                                <div class="d-flex">
-                                                 <input type="radio" name="shipping-address" class="existing-address" id="other-address" value="other"/>
-                                                 <label for="other" class="mt-2">Dropship</label>
-                                                </div>
-                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0" style="font-size: 14px">First Name
-                                                    <span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control disable-toggle" type="text" id="" name="FirstName"
-                                                       placeholder=""
-                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['FirstName']}}"
-                                                       required>
-                                            </div>
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0" style="font-size: 14px">Last
-                                                    Name<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control disable-toggle" type="text" id="" name="LastName"
-                                                       placeholder=""
-                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['LastName']}}"
-                                                       required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0"
-                                                       style="font-size: 14px">Email<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control disable-toggle" type="email" id="" name="Email"
-                                                       placeholder=""
-                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Email']}}"
-                                                       required>
-                                            </div>
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0"
-                                                       style="font-size: 14px">Phone<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control disable-toggle" type="number" id="" name="Phone"
-                                                       placeholder=""
-                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Phone1']}}"
-                                                       required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-10 mb-2">
-                                                <label for="" class="form-label mb-0" style="font-size: 14px">Street
-                                                    Address<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control disable-toggle new-address" type="text" id="" name="Address1"
-                                                       placeholder=""
-                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Address1']}}"
-                                                       required>
-                                            </div>
-                                            <div class="col-md-10 mb-2">
-                                                <input class="form-control disable-toggle" type="text" id="bd-address2" name="Address2"
-                                                       placeholder=""
-                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Address2']}}"
-                                                       >
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0" style="font-size: 14px">Town/
-                                                    City<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control disable-toggle" type="text" id="" name="City"
-                                                       placeholder=""
-                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['City']}}"
-                                                       required>
-                                            </div>
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0"
-                                                       style="font-size: 14px">State<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                {{-- <input class="form-control disable-toggle" type="text" id="state" name="State"
-                                                       placeholder=""
-                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['State']}}"
-                                                       required> --}}
-                                                       @if(isset($cust_state))
-                                                        <select name="State" id="state_dropdown" class="form-control bg-white checkout-dropdown">
+                                                            @foreach($shipping_addresses['ShipToAddresses'] as $address)
+                                                                <option
+                                                                    value="{{$address['AddressID']}}~~~{{json_encode($address)}}">
+                                                                    {{$address['AddressID']}}
+                                                                    : {!!$address['FirstName'] ? $address['FirstName'] . ( $address['LastName'] ? " {$address['LastName']}" : '' ) : ''!!}
+                                                                </option>
+                                                            @endforeach
                                                         </select>
-                                                        @elseif(!isset($cust_state) && isset($cust_state))
-                                                            <input type="text" data-required="true" class="form-control bg-white" name="State" maxlength="50" aria-describedby="State" value="{{$cust_state}}">
-                                                        @else
-                                                            <input type="text" data-required="true" class="form-control bg-white" name="State" maxlength="50" aria-describedby="State" placeholder="State*">
-                                                        @endif
+                                                        <p style="display: none !important;"
+                                                           class="card-text address-card d-none {{$address['AddressID']}}"
+                                                           id="{{$address['AddressID']}}">
+                                                            <input type="hidden" class="hidden-inp"
+                                                                   name="shipping-address-data"
+                                                                   value="{{json_encode($address)}}"/>
+                                                        </p>
+                                                        <p style="display: none !important">
+                                                            <input type="hidden" id="hidden-address_id" name="AddressID"
+                                                                   value="{{$shipping_addresses['ShipToAddresses'][0]['AddressID']}}"/>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                {{-- <div class="col-md-3 mb-2">
+                                                   <div class="d-flex">
+                                                    <input type="radio" name="shipping-address" class="existing-address" id="other-address" value="other"/>
+                                                    <label for="other" class="mt-2">Dropship</label>
+                                                   </div>
+                                                </div> --}}
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0" style="font-size: 14px">Zip
-                                                    Code<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control disable-toggle" type="text" id="" name="Zip"
-                                                       placeholder=""
-                                                       value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}"
-                                                       required>
+                                            <div class="row">
+                                                <div class="col-md-3 mb-2">
+                                                    <div class="d-flex">
+                                                        <input type="radio" name="shipping-address"
+                                                               class="existing-address" id="other-address"
+                                                               value="other"/>
+                                                        <label for="other" class="mt-2">Dropship</label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0" style="font-size: 14px">Country
-                                                    <span class="text-danger" style="font-size: 18px">*</span>
-                                                </label>
-                                                @if (isset($countries))
-                                                    <select name="country" id="countries" class="form-control bg-white">
-                                                        <option value="0">Select a Country</option>
+                                            <div class="row">
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">First
+                                                        Name
+                                                        <span class="text-danger"
+                                                              style="font-size: 18px">*</span></label>
+                                                    <input class="form-control disable-toggle" type="text" id=""
+                                                           name="FirstName"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['FirstName']}}"
+                                                           required>
+                                                </div>
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Last
+                                                        Name<span class="text-danger"
+                                                                  style="font-size: 18px">*</span></label>
+                                                    <input class="form-control disable-toggle" type="text" id=""
+                                                           name="LastName"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['LastName']}}"
+                                                           required>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0"
+                                                           style="font-size: 14px">Email<span class="text-danger"
+                                                                                              style="font-size: 18px">*</span></label>
+                                                    <input class="form-control disable-toggle" type="email" id=""
+                                                           name="Email"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['Email']}}"
+                                                           required>
+                                                </div>
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0"
+                                                           style="font-size: 14px">Phone<span class="text-danger"
+                                                                                              style="font-size: 18px">*</span></label>
+                                                    <input class="form-control disable-toggle" type="number" id=""
+                                                           name="Phone"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['Phone1']}}"
+                                                           required>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-10 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Street
+                                                        Address<span class="text-danger"
+                                                                     style="font-size: 18px">*</span></label>
+                                                    <input class="form-control disable-toggle new-address" type="text"
+                                                           id="" name="Address1"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['Address1']}}"
+                                                           required>
+                                                </div>
+                                                <div class="col-md-10 mb-2">
+                                                    <input class="form-control disable-toggle" type="text"
+                                                           id="bd-address2" name="Address2"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['Address2']}}"
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Town/
+                                                        City<span class="text-danger"
+                                                                  style="font-size: 18px">*</span></label>
+                                                    <input class="form-control disable-toggle" type="text" id=""
+                                                           name="City"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['City']}}"
+                                                           required>
+                                                </div>
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0"
+                                                           style="font-size: 14px">State<span class="text-danger"
+                                                                                              style="font-size: 18px">*</span></label>
+                                                    {{-- <input class="form-control disable-toggle" type="text" id="state" name="State"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['State']}}"
+                                                           required> --}}
+                                                    @if(isset($cust_state))
+                                                        <select name="State" id="state_dropdown"
+                                                                class="form-control bg-white checkout-dropdown">
+                                                        </select>
+                                                    @elseif(!isset($cust_state) && isset($cust_state))
+                                                        <input type="text" data-required="true"
+                                                               class="form-control bg-white" name="State" maxlength="50"
+                                                               aria-describedby="State" value="{{$cust_state}}">
+                                                    @else
+                                                        <input type="text" data-required="true"
+                                                               class="form-control bg-white" name="State" maxlength="50"
+                                                               aria-describedby="State" placeholder="State*">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Zip
+                                                        Code<span class="text-danger"
+                                                                  style="font-size: 18px">*</span></label>
+                                                    <input class="form-control disable-toggle" type="text" id=""
+                                                           name="Zip"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}"
+                                                           required>
+                                                </div>
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Country
+                                                        <span class="text-danger" style="font-size: 18px">*</span>
+                                                    </label>
+                                                    @if (isset($countries))
+                                                        <select name="country" id="countries"
+                                                                class="form-control bg-white">
+                                                            <option value="0">Select a Country</option>
                                                             @foreach ($countries['Countries'] as $row)
                                                                 @php
                                                                     $selected = '';
                                                                     if (isset($cust_country) && $cust_country == $row['Description']) {
                                                                         $selected = 'selected';
                                                                     }
-                                                                    @endphp
-                                                                    <option value="{{ $row['CountryNo'] }}"
+                                                                @endphp
+                                                                <option value="{{ $row['CountryNo'] }}"
                                                                         origincode="{{ $row['OriginCode'] }}" {{$selected}}>
-                                                                        {{ $row['Description'] }}</option>
+                                                                    {{ $row['Description'] }}</option>
                                                             @endforeach
-                                                    </select>
+                                                        </select>
                                                     @elseif (!isset($countries) && isset($cust_country))
-                                                    <input type="text" data-required="true" name="country" maxlength="30" class="form-control bg-white" aria-describedby="Country" value="{{$cust_country}}">
+                                                        <input type="text" data-required="true" name="country"
+                                                               maxlength="30" class="form-control bg-white"
+                                                               aria-describedby="Country" value="{{$cust_country}}">
                                                     @else
-                                                    <input type="text" data-required="true" name="country" maxlength="30" class="form-control bg-white" aria-describedby="Country" placeholder="Country*">
-                                                @endif
+                                                        <input type="text" data-required="true" name="country"
+                                                               maxlength="30" class="form-control bg-white"
+                                                               aria-describedby="Country" placeholder="Country*">
+                                                    @endif
+                                                </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight--bold " style="font-size: 18px">Additional Information</p>
-                                        <div class="row">
-                                            <div class="col-md-5 mb-2 align-content-center">
-                                                <input class="form-check-input" type="checkbox" id=""
-                                                       name="ship_complete" >
-                                                <label class="form-check-label" for="" style="font-size: 14px">Ship
-                                                    Complete</label>
+                                            <p class="font-weight--bold " style="font-size: 18px">Additional
+                                                Information</p>
+                                            <div class="row">
+                                                <div class="col-md-5 mb-2 align-content-center">
+                                                    <input class="form-check-input" type="checkbox" id=""
+                                                           name="ship_complete">
+                                                    <label class="form-check-label" for="" style="font-size: 14px">Ship
+                                                        Complete</label>
+                                                </div>
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">P.O or
+                                                        Reference Number<span class="text-danger"
+                                                                              style="font-size: 18px">*</span></label>
+                                                    <input class="form-control" type="text" id=""
+                                                           name="reference_number"
+                                                           placeholder="" value="" required>
+                                                </div>
                                             </div>
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0" style="font-size: 14px">P.O or
-                                                    Reference Number<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-control" type="text" id="" name="reference_number"
-                                                       placeholder="" value="" required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-5 mb-2">
-                                                <label for="" class="form-label mb-0" style="font-size: 14px">Shipping
-                                                    Date<span class="text-danger" style="font-size: 18px">*</span></label>
-                                                <input class="form-controlmb-2 datepicker" type="text" id="datepicker" data-date-format="dd-mm-yyyy" name="ship_date"
-                                                       placeholder="" value="" required>
-                                            <label for="" class="form-label mb-1" style="font-size: 14px">Shipping Method</label>
-                                                    <select name="shipping_method"class="form-control">
+                                            <div class="row">
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Shipping
+                                                        Date<span class="text-danger"
+                                                                  style="font-size: 18px">*</span></label>
+                                                    <input class="form-controlmb-2 datepicker" type="text"
+                                                           id="datepicker" data-date-format="dd-mm-yyyy"
+                                                           name="ship_date"
+                                                           placeholder="" value="" required>
+                                                    <label for="" class="form-label mb-1" style="font-size: 14px">Shipping
+                                                        Method</label>
+                                                    <select name="shipping_method" class="form-control">
                                                         @if($shipping_options)
                                                             @foreach($shipping_options as $shipping_option)
                                                                 <option
@@ -391,61 +459,80 @@
                                                             <option value="3RDP">Standard ShipVia</option>
                                                         @endif
                                                     </select>
-                                                </div><div class="col-md-5 mb-2">
-                                                        <label for="" class="mb-0" style="font-size: 14px">Order Notes (optional)</label>
-                                                        <textarea class="form-control" id="" name="shipping_instructions" style="height: 8rem;" placeholder=""></textarea>
-                                                        <input type="hidden" name="item_broadloom" id="item_broadloom" value="{{$cart->item_broadloom}}">
+                                                </div>
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="mb-0" style="font-size: 14px">Order Notes
+                                                        (optional)</label>
+                                                    <textarea class="form-control" id="" name="shipping_instructions"
+                                                              style="height: 8rem;" placeholder=""></textarea>
+                                                    <input type="hidden" name="item_broadloom" id="item_broadloom"
+                                                           value="{{$cart->item_broadloom}}">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
                                     @endif
                                 </div>
                             </div>
                             {{-- --}}
                             @if(isset($cart->items))
-                            <div class="col-md-6 col-sm-12 my-5">
-                                <div style="background-color: whitesmoke;">
-                                    <div class="d-flex justify-content-around align-items-left flex-column">
-                                        <p class="mt-2 mb-2 text-center fa-2x">Your Order</p>
-                                        <div class="row mt-3 px-5">
-                                            <div class="col-md-6">Product</div>
-                                            <div class="col-md-6 text-right">SubTotal</div>
-                                        </div>
-                                        <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                <div class="col-md-6 col-sm-12 my-5">
+                                    <div style="background-color: whitesmoke;">
+                                        <div class="d-flex justify-content-around align-items-left flex-column">
+                                            <p class="mt-2 mb-2 text-center fa-2x">Your Order</p>
+                                            <div class="row mt-3 px-5">
+                                                <div class="col-md-6">Product</div>
+                                                <div class="col-md-6 text-right">SubTotal</div>
+                                            </div>
+                                            <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
 
-                                        @php $total_price=0; @endphp
-                                        @foreach ( $cart->items as $item)
-                                        @php
-                                            if (isset($item->item_data) && $item->item_data) {
-                                                $item_data = json_decode(unserialize($item -> item_data));
-                                            }
-                                            $total_price += $item->item_price;
-                                        @endphp
+                                            @php $total_price=0; @endphp
+                                            @foreach ( $cart->items as $item)
+                                                @php
+                                                    if (isset($item->item_data) && $item->item_data) {
+                                                        $item_data = json_decode(unserialize($item -> item_data));
+                                                        //$item_data = json_decode($item -> item_data);
+                                                    }
+                                                    $total_price += $item->item_price;
+                                                @endphp
                                                 <div class="row px-5">
                                                     <div class="col-md-9">
                                                         <div class="row">
                                                             <div class="col-3"><img
                                                                     src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
-                                                                    alt="{{$item_data->ItemID}}" height="50px" width="80px"
-                                                                    onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"></div>
+                                                                    alt="{{$item_data->ItemID}}" height="50px"
+                                                                    width="80px"
+                                                                    onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
+                                                            </div>
                                                             <div class="col-9" style="font-size: 12px">
                                                                 <div class="mx-3 mt-2 font-weight--bold row">Design: <p
                                                                         class="font-weight--normal mx-2">{{$item->item_name}}</p>
                                                                 </div>
                                                                 <div class="mx-3 mt-2 row">Roll Id: <p
-                                                                        class="font-weight--normal mx-2">{{$item_data->RollID}}</p></div>
+                                                                        class="font-weight--normal mx-2">{{$item_data->RollID}}</p>
+                                                                </div>
                                                                 <div class="mx-3 mt-2 row">Sizes:
                                                                     @php
                                                                         $sizes = json_decode( unserialize($item->item_data ), true );
+                                                                        //$sizes = json_decode($item->item_data, true );
                                                                     @endphp
                                                                     @foreach($sizes['CutPieces'] as $item_sizes)
-                                                                    @php
-                                                                        $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
-                                                                        $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
-                                                                        $lenght_inch =  $item_sizes['ATSLength'] % 12;
-                                                                        $width_inch =   $item_sizes['ATSWidth'] % 12;
-                                                                    @endphp
-                                                                    <br><p class="font-weight--normal mx-2">({{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }})</p><br>
+                                                                        @php
+                                                                            $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                                            $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                                            $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                                            $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                                        @endphp
+                                                                        <div
+                                                                            class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                                            style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                                            {{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }}
+                                                                            @if(!empty($item_sizes['SergingType']))
+                                                                                <span
+                                                                                    class="tooltiptext">
+                                                                                        <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
+                                                                                    </span>
+                                                                            @endif
+                                                                        </div>
                                                                     @endforeach
                                                                 </div>
                                                             </div>
@@ -455,45 +542,47 @@
                                                         class="col-md-3 text-right align-content-center">{{$item->item_currency}}{{$item->item_total}}</div>
                                                 </div>
                                                 <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                        @endforeach
-                                        @if(isset($item))
-                                        <div class="row px-5">
-                                            <div class="col-md-6 font-weight-bold">SubTotal</div>
+                                            @endforeach
+                                            @if(isset($item))
+                                                <div class="row px-5">
+                                                    <div class="col-md-6 font-weight-bold">SubTotal</div>
 
-                                            <div class="col-md-6 font-weight-bold text-right section_2_subtotal">{{$item->item_currency}}{{$total_price}}</div>
-                                        </div>
-                                        @endif
-                                        <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                        <div class="row px-5">
-                                            <div class="col-md-9">Shipping Charges</div>
-                                            <div class="col-md-3 text-right section_2_shipping_charges">$0</div>
-                                        </div>
-                                        <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                        <div class="row my-4 px-5">
-                                            <div class="col-md-9 font-weight--bold">Total</div>
-                                            <div
-                                                class="col-md-3 font-weight--bold text-right section_2_cart_total"></div>
-                                        </div>
-                                        <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                        <div class="row my-4 px-5 justify-content-center">
-                                            <div class="col-md-12">
-                                                <p class="text-center">Your personal data will be used to process your
-                                                    order, support your experience throughout this website, and for
-                                                    other purposes described in our privacy policy.</p>
-                                                <div class="text-center">
-                                                    <button
-                                                        class="add-to-cart-button btn btn-dark align-content-center text-left"
-                                                        id="place_order">
-                                                        Place Order &nbsp; &nbsp; &nbsp;<i
-                                                            class="fa fa-long-arrow-right pl-5"></i>
-                                                    </button>
+                                                    <div
+                                                        class="col-md-6 font-weight-bold text-right section_2_subtotal">{{$item->item_currency}}{{$total_price}}</div>
+                                                </div>
+                                            @endif
+                                            <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                            <div class="row px-5">
+                                                <div class="col-md-9">Shipping Charges</div>
+                                                <div class="col-md-3 text-right section_2_shipping_charges">$0</div>
+                                            </div>
+                                            <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                            <div class="row my-4 px-5">
+                                                <div class="col-md-9 font-weight--bold">Total</div>
+                                                <div
+                                                    class="col-md-3 font-weight--bold text-right section_2_cart_total"></div>
+                                            </div>
+                                            <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                            <div class="row my-4 px-5 justify-content-center">
+                                                <div class="col-md-12">
+                                                    <p class="text-center">Your personal data will be used to process
+                                                        your
+                                                        order, support your experience throughout this website, and for
+                                                        other purposes described in our privacy policy.</p>
+                                                    <div class="text-center">
+                                                        <button
+                                                            class="add-to-cart-button btn btn-dark align-content-center text-left"
+                                                            id="place_order">
+                                                            Place Order &nbsp; &nbsp; &nbsp;<i
+                                                                class="fa fa-long-arrow-right pl-5"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             @endif
                         </div>
                     </div>
@@ -566,27 +655,40 @@
                                     <div class="row">
                                         <div class="col-3"><img
                                                 src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
-                                                alt="{{$item_data->ItemID}}" height="80px" width="80px" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
+                                                alt="{{$item_data->ItemID}}" height="80px" width="80px"
+                                                onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
                                         </div>
                                         <div class="col-9" style="font-size: 12px">
                                             <div class="mx-3 mt-2 font-weight--bold row">Design:
                                                 <p class="font-weight--normal mx-2">{{$item->item_name}}</p>
                                             </div>
                                             {{-- <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p> --}}
-                                            <div class="mx-3 mt-2 row">Roll Id: <p class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
+                                            <div class="mx-3 mt-2 row">Roll Id: <p
+                                                    class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
                                             </div>
                                             <div class="mx-3 mt-2 row">Size:
                                                 @php
                                                     $sizes = json_decode( unserialize($item->item_data ), true );
+                                                    //$sizes = json_decode($item->item_data, true );
                                                 @endphp
                                                 @foreach($sizes['CutPieces'] as $item_sizes)
-                                                @php
-                                                    $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
-                                                    $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
-                                                    $lenght_inch =  $item_sizes['ATSLength'] % 12;
-                                                    $width_inch =   $item_sizes['ATSWidth'] % 12;
-                                                @endphp
-                                                <p class="font-weight--normal mx-2">({{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }})</p>
+                                                    @php
+                                                        $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                        $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                        $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                        $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                    @endphp
+                                                    <div
+                                                        class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                        style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                        {{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }}
+                                                        @if(!empty($item_sizes['SergingType']))
+                                                            <span
+                                                                class="tooltiptext">
+                                                                                        <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
+                                                                                    </span>
+                                                        @endif
+                                                    </div>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -643,21 +745,21 @@
 @endsection
 
 @section('styles')
-<style>
-    .muted-bd-fields{
-        /* opacity: 0.4; */
-        pointer-events: none;
-        cursor: not-allowed;
-    }
-</style>
+    <style>
+        .muted-bd-fields {
+            /* opacity: 0.4; */
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+    </style>
 @endsection
 
 @section('scripts')
     <script>
         $(document).ready(function () {
 
-           // var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " "));
-           var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
+            // var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " "));
+            var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
             var shippingCharges = parseFloat($(".section_2_shipping_charges").text().replace('$', ''));
             console.log(subtotal);
             console.log('total', total);
@@ -670,7 +772,8 @@
 
             function updateTotalPrice() {
                 var quantity = parseInt($('#item_qty').val());
-                var itemPrice = @if(isset($item) && is_numeric($item->item_price)) parseFloat("{{ $item->item_price }}") @else '' @endif;
+                var itemPrice = @if(isset($item) && is_numeric($item->item_price)) parseFloat("{{ $item->item_price }}")
+                @else '' @endif;
                 // Assuming item_price is a numeric value
                 var total = quantity * itemPrice;
                 $('#item_total_price').text(total); // Adjust decimal places as needed
@@ -735,7 +838,7 @@
             }
 
             function updateTotal() {
-            //    var subtotal = parseFloat($("#item_subtotal_price").text());
+                //    var subtotal = parseFloat($("#item_subtotal_price").text());
                 var subtotal = parseFloat($("#item_subtotal_price").text().replace('$', " ").replace(',', ""));
                 var shippingCharges = parseFloat($(".shipping_charges").text().replace('$', ''));
                 var total = subtotal + shippingCharges;
@@ -784,59 +887,59 @@
 
             $('#place_order').click(function () {
                 var form = $('#customer_info')[0];
-                if((form.checkValidity())){
+                if ((form.checkValidity())) {
 
                     var formData = $('#customer_info').serialize();
                     console.log('form data', formData);
                     $.ajax({
-                       url: '{{route("frontend.checkout.place_order")}}',
-                    type: "POST",
-                    data: formData,
-                    success: function (response) {
-                        if (response.success) {
-                            $('#orderno').text('');
-                            var spanText = response.msg.match(/\[\s*(\d+)\s*\]/);
-                            var newOrderNo = spanText ? spanText[1] : '';
-                            $('#orderno').text(newOrderNo);
+                        url: '{{route("frontend.checkout.place_order")}}',
+                        type: "POST",
+                        data: formData,
+                        success: function (response) {
+                            if (response.success) {
+                                $('#orderno').text('');
+                                var spanText = response.msg.match(/\[\s*(\d+)\s*\]/);
+                                var newOrderNo = spanText ? spanText[1] : '';
+                                $('#orderno').text(newOrderNo);
 
-                            $('.stepper-heading').text('Order Complete');
-                            $('.section-3').addClass('active');
-                            $('#section1').attr('style', 'display:none;');
-                            $('#section2').attr('style', 'display:none;');
-                            $('#section3').attr('style', 'display:block;');
-                            $('.badge.badge-pill.badge-primary.position-absolute.cartCount').text('0');
+                                $('.stepper-heading').text('Order Complete');
+                                $('.section-3').addClass('active');
+                                $('#section1').attr('style', 'display:none;');
+                                $('#section2').attr('style', 'display:none;');
+                                $('#section3').attr('style', 'display:block;');
+                                $('.badge.badge-pill.badge-primary.position-absolute.cartCount').text('0');
 
-                            $.ajax({
-                                url: "{{ route('delete-cart-items') }}",
-                                type: "GET",
-                                success: function (deleteResponse) {
-                                    if (deleteResponse) {
-                                        toastr.success('The order has been successfully processed, and the cart is now empty.', {
-                                            hideDuration: 10000,
-                                            closeButton: true,
-                                        });
-                                    } else {
-                                        toastr.error('Someting went wrong while empty the cart after place order.', {
-                                            hideDuration: 10000,
-                                            closeButton: true,
-                                        });
+                                $.ajax({
+                                    url: "{{ route('delete-cart-items') }}",
+                                    type: "GET",
+                                    success: function (deleteResponse) {
+                                        if (deleteResponse) {
+                                            toastr.success('The order has been successfully processed, and the cart is now empty.', {
+                                                hideDuration: 10000,
+                                                closeButton: true,
+                                            });
+                                        } else {
+                                            toastr.error('Someting went wrong while empty the cart after place order.', {
+                                                hideDuration: 10000,
+                                                closeButton: true,
+                                            });
+                                        }
                                     }
-                                }
-                            })
-                        } else {
-                            toastr.error(response.msg, {
-                                hideDuration: 10000,
-                                closeButton: true,
-                            });
+                                })
+                            } else {
+                                toastr.error(response.msg, {
+                                    hideDuration: 10000,
+                                    closeButton: true,
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Form submission error:', error);
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Form submission error:', error);
-                    }
-                });
-            }else{
-                alert("Please fill all the required fields");
-            }
+                    });
+                } else {
+                    alert("Please fill all the required fields");
+                }
             });
             $('.datepicker').datepicker({
                 format: "yyyy-mm-dd",
@@ -850,7 +953,7 @@
                 toggleActive: true
             });
 
-            $(document).on('click', 'input[name="shipping-address"]', function() {
+            $(document).on('click', 'input[name="shipping-address"]', function () {
                 var addressValue = $(this).val();
                 if (addressValue == 'existing-address') {
                     $(".disable-toggle").addClass("muted-bd-fields");
@@ -865,17 +968,17 @@
             });
 
 
-            $('#select-address').on('change', function() {
+            $('#select-address').on('change', function () {
                 var selectaddress = $('#select-address').val();
                 var parts = selectaddress.split('~~~');
                 var firstPart = parts[0];
                 var secondPart = parts[1];
                 $('.hidden-address_id').val('');
-                if(firstPart != undefined){
+                if (firstPart != undefined) {
                     $('#hidden-address_id').val(firstPart);
                 }
                 $('.hidden-inp').val('');
-                if(secondPart != undefined){
+                if (secondPart != undefined) {
                     $('.hidden-inp').val(secondPart);
                 }
 
@@ -886,14 +989,14 @@
             });
 
             @if(isset($cust_country))
-                var custCountry = "{{$cust_country}}";
-                var selectedValue = $('#countries').find('option').filter(function() {
-                    return $(this).text().trim() === custCountry.trim();
-                }).val();
-                states(selectedValue)
+            var custCountry = "{{$cust_country}}";
+            var selectedValue = $('#countries').find('option').filter(function () {
+                return $(this).text().trim() === custCountry.trim();
+            }).val();
+            states(selectedValue)
             @endif
 
-            $('#countries').change(function(){
+            $('#countries').change(function () {
                 var selectedCountry = $(this).val();
                 if (selectedCountry) {
                     states(selectedCountry);
@@ -902,52 +1005,52 @@
 
             function states(countryno) {
                 $.ajax({
-                            url: "{{route('checkout.states')}}",
-                            method: 'POST',
-                            headers: {'X-CSRF-TOKEN' : '{{ csrf_token() }}'},
-                            data: { country: countryno },
-                            success: function(response) {
-                                if(response.Success){
-                                    $('#state_dropdown').empty();
-                                    $('#state_dropdown').append('<option value="">Select a state*</option>');
-                                    $.each(response.States, function(index, value) {
-                                        // console.log('state val', value);
-                                        var option = $('<option>', {
-                                            value: value.StateID.toString(),
-                                            text: value.StateName
-                                        });
-                                        if (value.StateCode == $('#customer_state').val()) {
-                                            option.prop('selected', true);
-                                        }
-                                        $('#state_dropdown').append(option);
-                                    });
-                                }else{
-                                    $('#state').val('');
-                                    $('#state_dropdown').empty();
-                                    $('#state_dropdown').append('<option value="">No States Available</option>');
+                    url: "{{route('checkout.states')}}",
+                    method: 'POST',
+                    headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                    data: {country: countryno},
+                    success: function (response) {
+                        if (response.Success) {
+                            $('#state_dropdown').empty();
+                            $('#state_dropdown').append('<option value="">Select a state*</option>');
+                            $.each(response.States, function (index, value) {
+                                // console.log('state val', value);
+                                var option = $('<option>', {
+                                    value: value.StateID.toString(),
+                                    text: value.StateName
+                                });
+                                if (value.StateCode == $('#customer_state').val()) {
+                                    option.prop('selected', true);
                                 }
-                            },
-                            error: function(xhr, status, error) {
-                                alert(error);
-                            }
+                                $('#state_dropdown').append(option);
+                            });
+                        } else {
+                            $('#state').val('');
+                            $('#state_dropdown').empty();
+                            $('#state_dropdown').append('<option value="">No States Available</option>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert(error);
+                    }
                 });
             }
 
         });
 
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             var selectaddress = $('#select-address').val();
             var parts = selectaddress.split('~~~');
             var firstPart = parts[0];
             var secondPart = parts[1];
 
             $('.hidden-address_id').val('');
-            if(firstPart != undefined){
+            if (firstPart != undefined) {
                 $('#hidden-address_id').val(firstPart);
             }
             $('.hidden-inp').val('');
-            if(secondPart != undefined){
+            if (secondPart != undefined) {
                 $('.hidden-inp').val(secondPart);
             }
 
