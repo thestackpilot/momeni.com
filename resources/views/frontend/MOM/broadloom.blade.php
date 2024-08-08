@@ -896,7 +896,6 @@
             $('#cart_item_quantity').val($('#item_qty').val());
             item = JSON.parse($('#item_json').val());
             let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "0";
-            console.log('surging_type', surging_type);
             item.SQFTPrice = $('#sq-ft').val();
             item.SQFTArea = $('#totalsqft').val();
             item.CutPieceID = $('#cutpiece_id').val();
@@ -926,14 +925,12 @@
                 customerId: $('#customer_id').val(),
                 rollid: $("#roll_id").val()
             };
-            console.log('cart customer id', $('#customer_id').val());
 
             $.ajax({
                 url: '/broad-loom-full-size',
                 method: 'GET',
                 data: payload,
                 success: function (response) {
-                    console.log('response size check', response);
                     if (response.success) {
                         if ((parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)) > ATS_ROLL_LENGHT || (parseInt(response.bd_cutpiece_wid) + parseInt(bd_cutpiece_wid)) > ATS_ROLL_WIDTH) {
                             toastr.error('Roll selected lenght is greater than actual total lenght', {
@@ -967,10 +964,8 @@
         }
 
         function add_to_cart() {
-            console.log('add_to_cart call');
             item = JSON.parse($('#item_json').val());
             let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "0";
-            console.log('surging_type', surging_type);
             item.SQFTPrice = $('#sq-ft').val();
             item.SQFTArea = $('#totalsqft').val();
             item.CutPieceID = $('#cutpiece_id').val();
@@ -1003,8 +998,6 @@
                 bd_cutpiece_len += dimensionsInInches[i].length;
                 bd_cutpiece_wid += dimensionsInInches[i].width;
             }
-
-            console.log(' $(cust-inst).val()',  );
 
             $.ajax({
                 url: "{{ route('check-cart-item') }}",
@@ -1131,8 +1124,11 @@
                         $.ajax({
                             method: 'POST',
                             url: '{{ route('frontend.cart.add') }}',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            },
                             data: {
-                                '_token': '{{ csrf_token() }}',
+                                {{--'_token': '{{ csrf_token() }}',--}}
                                 'cart_item_id': item.ItemID,
                                 'cart_customer_id': $('#customer_id').val(),
                                 'cart_item_name': item.ItemName,
@@ -1143,7 +1139,7 @@
                                 'item_surging_price': $('#surging_charges').val(),
                                 'cart_item_currency': '$',
                                 'cart_item_image': item.ImageNameArray[0],
-                                'cart_item_data': $('#item_json').val(),
+                                // 'cart_item_data': $('#item_json').val(),
                                 //'cart_item_data': $('#cart_item_oak').val(),
                                 'cart_item_broadloom': 1,
                                 'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}',
@@ -1435,15 +1431,18 @@
                         let mxlenf = 0;
                         let mxlen = 0;
 
-                        console.log('add cut piece', data['cut_piece']['OutPut']['AddCutPieces']);
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
-                            console.log('added_cut_pieces item', item);
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
                             let widthInches = item.ATSWidth % 12;
 
+                            console.log(item)
+
                             let surging = '';
+                            if (item.SergingType != "0") {
+                                surging = ' Serging';
+                            }
 
                             mxlenf = mxlenf + lengthFeet;
                             mxlen = mxlen + lengthInches;
@@ -1506,6 +1505,7 @@
                         $('#surging_check').prop('checked', false);
                         $('#surging_options').val('0');
                         $('#surging_charges').val('');
+                        $("#sergingtypeno").val('');
 
                         totalSqftPrice = (totalMaxLen * totalAddWid);
                         $("#ats-qty").val(totalSqftPrice);
