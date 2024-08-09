@@ -1124,11 +1124,8 @@
                         $.ajax({
                             method: 'POST',
                             url: '{{ route('frontend.cart.add') }}',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            },
                             data: {
-                                {{--'_token': '{{ csrf_token() }}',--}}
+                                '_token': '{{ csrf_token() }}',
                                 'cart_item_id': item.ItemID,
                                 'cart_customer_id': $('#customer_id').val(),
                                 'cart_item_name': item.ItemName,
@@ -1139,7 +1136,7 @@
                                 'item_surging_price': $('#surging_charges').val(),
                                 'cart_item_currency': '$',
                                 'cart_item_image': item.ImageNameArray[0],
-                                // 'cart_item_data': $('#item_json').val(),
+                                'cart_item_data': $('#item_json').val(),
                                 //'cart_item_data': $('#cart_item_oak').val(),
                                 'cart_item_broadloom': 1,
                                 'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}',
