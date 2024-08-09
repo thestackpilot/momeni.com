@@ -65,6 +65,7 @@ class OrdersController extends AdminController
 
         $validated_data = $request->validate( [
             'order'  => 'required',
+            'order-data'  => 'required',
             'submit' => 'required'
         ] );
 
@@ -76,8 +77,10 @@ class OrdersController extends AdminController
                 'success' => 0,
                 'msg'     => 'Sorry something went wrong...'
             ];
-
+            $validated_data['order-data'] = json_decode($validated_data['order-data'], true);
             $order_data = unserialize( $order->order_data );
+            $order_data[0]  = $validated_data['order-data']['General'];;
+            $order_data[1]  = $validated_data['order-data']['Items'];
             $headers    = $order_data[0];
             $itemDetail = $order_data[1];
 
@@ -102,6 +105,7 @@ class OrdersController extends AdminController
                 ['hash' => $order->hash],
                 [
                     'order_response' => json_encode( $result ),
+                    'order_data'     => serialize( $order_data ),
                     'order_status'   => ConstantsController::ORDER_STATUS['processed']
                 ]
             );
