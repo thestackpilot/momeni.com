@@ -102,7 +102,7 @@ use App\Http\Controllers\CommonController;
                                             @php
                                             $order_data = unserialize($order->order_data);
                                             $data = ['General' => $order_data[0], 'Items' => $order_data[1]];
-                                            echo '<textarea style="width: 300px;" class="form-control" rows="5" readonly disabled="disabled">'.print_r(json_encode($data), 1).'</textarea>';
+                                            echo '<textarea style="width: 300px;" class="form-control" rows="5" >'.print_r(json_encode($data), 1).'</textarea>';
                                             @endphp
                                         </td>
                                         <td>{{ CommonController::get_date_format($order->created_at) }}</td>
@@ -150,5 +150,9 @@ use App\Http\Controllers\CommonController;
                 $(this).html(JSON.stringify(JSON.parse($(this).html()), undefined, 4));
             });
         });
+        $('button[type="submit"]').off('click').on('click' , function(e){
+                var data = $(this).closest("tr").find('textarea').val();
+                $(this).closest("tr").find('input[name="order-data"]').val(data);
+            });
     </script>
     @endsection
