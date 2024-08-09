@@ -44,7 +44,7 @@ use App\Http\Controllers\CommonController;
                                         <th class="border-0">Reference #</th>
                                         <th class="border-0">Order Status</th>
                                         <th class="border-0">Payment Status</th>
-                                        <th class="border-0">Order Resposne</th>
+                                        <th class="border-0">Order Response</th>
                                         <th class="border-0">Order Data</th>
                                         <th class="border-0">Created At</th>
                                         <th class="border-0">Action</th>
