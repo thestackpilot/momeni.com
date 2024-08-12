@@ -497,8 +497,8 @@
                                             @foreach ( $cart->items as $item)
                                                 @php
                                                     if (isset($item->item_data) && $item->item_data) {
-                                                        //$item_data = json_decode(unserialize($item -> item_data));
-                                                        $item_data = json_decode($item -> item_data);
+                                                        $item_data = json_decode(unserialize($item -> item_data));
+                                                        //$item_data = json_decode($item -> item_data);
                                                     }
                                                     $total_price += $item->item_price;
                                                 @endphp
@@ -520,8 +520,8 @@
                                                                 </div>
                                                                 <div class="mx-3 mt-2 row">Sizes:
                                                                     @php
-                                                                        //$sizes = json_decode( unserialize($item->item_data ), true );
-                                                                        $sizes = json_decode($item->item_data, true );
+                                                                        $sizes = json_decode( unserialize($item->item_data ), true );
+                                                                        //$sizes = json_decode($item->item_data, true );
                                                                     @endphp
                                                                     @foreach($sizes['CutPieces'] as $item_sizes)
                                                                         @php
@@ -676,8 +676,8 @@
                                             </div>
                                             <div class="mx-3 mt-2 row">Size:
                                                 @php
-                                                    //$sizes = json_decode( unserialize($item->item_data ), true );
-                                                    $sizes = json_decode($item->item_data, true );
+                                                    $sizes = json_decode( unserialize($item->item_data ), true );
+                                                    //$sizes = json_decode($item->item_data, true );
                                                 @endphp
                                                 @foreach($sizes['CutPieces'] as $item_sizes)
                                                     @php
