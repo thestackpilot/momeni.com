@@ -256,30 +256,39 @@
                                         <h3 class="font-ropa m-0">{{$item -> item_name}}</h3>
                                         <p class="specs m-0"><strong> Color: </strong>
                                             <span> {{$item -> item_color}} </span></p>
-                                        <div class="specs">
-                                            <strong>Sizes: </strong>
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <strong>Sizes: </strong>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="specs">
 
-                                            @php
-                                                $sizes = json_decode( unserialize($item->item_data ), true );
-                                                //$sizes = json_decode($item->item_data, true);
-                                            @endphp
-                                            @if(isset($sizes['CutPieces']))
-                                                @foreach($sizes['CutPieces'] as $item_sizes)
                                                     @php
-                                                        $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
-                                                        $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
-                                                        $lenght_inch =  $item_sizes['ATSLength'] % 12;
-                                                        $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                        $sizes = json_decode( unserialize($item->item_data ), true );
+                                                        //$sizes = json_decode($item->item_data, true);
                                                     @endphp
-                                                    <div class="badge badge-default broadloom-badge side-bar-broadloom-badge" style="background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                    @if(isset($sizes['CutPieces']))
+                                                        @foreach($sizes['CutPieces'] as $item_sizes)
+                                                            @php
+                                                                $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                                $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                                $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                                $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                            @endphp
+                                                            <div
+                                                                class="badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                                style="background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
                                                         <span>
                                                             {{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }}
                                                         </span>
-                                                    </div>
-                                                @endforeach
-                                            @endif
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
-                                        <p class="price justify-content-end m-0 menu-price">Price: <span>{{$item -> item_currency}}{{$item -> item_total}}</span></p>
+                                        <p class="price justify-content-end m-0 menu-price">Price:
+                                            <span>{{$item -> item_currency}}{{$item -> item_total}}</span></p>
                                         <hr>
                                     </div>
                                 </div>
