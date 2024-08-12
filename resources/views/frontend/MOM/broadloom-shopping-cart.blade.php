@@ -68,7 +68,8 @@
                                                     @endif
                                                 @endforeach
                                                 <th>Price</th>
-                                                <th>SubTotal</th>
+                                                <th>Serging Charges</th>
+                                                <th>Sub Total</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -79,6 +80,7 @@
                                                             $item_data = json_decode(unserialize($item -> item_data));
                                                             //$item_data = json_decode($item -> item_data);
                                                         }
+                                                        $serging_charges = 0;
                                                     @endphp
                                                     <tr>
                                                         <th class="" scope="row">
@@ -120,6 +122,7 @@
                                                                                 $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
                                                                                 $lenght_inch =  $item_sizes['ATSLength'] % 12;
                                                                                 $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                                                $serging_charges += $item_sizes['SergingCharges'];
                                                                             @endphp
                                                                             <div
                                                                                 class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
@@ -160,6 +163,8 @@
                                                         @endif
                                                         <td class="align-content-center">
                                                             {{ $item->item_currency }}{{ $item->item_price }}</td>
+                                                        <td class="align-content-center">
+                                                            {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</td>
                                                         <td class="align-content-center">{{ $item->item_currency }}<span
                                                                 id="item_total_price">{{ $item->item_total }}</span>
                                                         </td>
