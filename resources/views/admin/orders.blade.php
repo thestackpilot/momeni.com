@@ -110,6 +110,7 @@ use App\Http\Controllers\CommonController;
                                             <form action="{{route('admin.process-orders')}}" method="POST">
                                                 @csrf
                                                 <input type="hidden" value="{{$order->hash}}" name="order" />
+                                                <input type="hidden" value="" name="order-data" />
                                                 <button type="submit" value="submit" name="submit" class="btn btn-primary">Process</button>
                                             </form>
                                         </td>
