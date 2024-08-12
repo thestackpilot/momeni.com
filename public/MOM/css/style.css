@@ -10443,8 +10443,17 @@ h5.card-title {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    width: 100px;
+    width: 150px;
 }
+
+.menu-price {
+    font-weight: 600 !important;
+}
+
+.menu-price span {
+    color: #660000;
+}
+
 .cart_total_price , .cart_sub_total {
     text-align: right;
 }
