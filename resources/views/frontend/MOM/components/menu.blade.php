@@ -279,7 +279,7 @@
                                                 @endforeach
                                             @endif
                                         </div>
-                                        <p class="price justify-content-end m-0">{{$item -> item_currency}}{{$item -> item_total}} </p>
+                                        <p class="price justify-content-end m-0 menu-price">Price: <span>{{$item -> item_currency}}{{$item -> item_total}}</span></p>
                                         <hr>
                                     </div>
                                 </div>
