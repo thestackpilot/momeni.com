@@ -1359,21 +1359,45 @@
 
         function add_cut_pieces() {
             let actual_length = parseInt($("#Tlength").val());
-            let actual_width = parseInt($("#Twidth").val())
+            let actual_width = parseInt($("#Twidth").val());
+            var length_inch = parseInt($("#TlengthInch").val());
+            var width_inch = parseInt($("#TwidthInch").val());
             let length = actual_length * 12 + parseInt($("#TlengthInch").val());
             let width = actual_width * 12 + parseInt($("#TwidthInch").val());
             let sqtft = parseFloat(actual_length + "." + $("#TlengthInch").val()) * parseFloat(actual_width + "." + $("#TwidthInch").val());
 
+            console.log('actual_length', actual_length);
+            console.log('actual_width', actual_width);
+            console.log('inch l', parseInt($("#TlengthInch").val()));
+            console.log('inch w', parseInt($("#TwidthInch").val()));
+
+            if (isNaN(actual_length) || isNaN(actual_width) || isNaN(length_inch) || isNaN(width_inch) ||
+                    $("#Tlength").val().trim() === '' || $("#Twidth").val().trim() === '' ||
+                    $("#TlengthInch").val().trim() === '' || $("#TwidthInch").val().trim() === '') {
+                    toastr.error('Lenght/Width  (feet/inches)  are required', {
+                        hideDuration: 10000,
+                        closeButton: true,
+                    });
+                    return true;
+            }
+
             let roll_ats_lenght = sessionStorage.getItem('roll_ats_lenght');
+            console.log('actual_length', actual_length);
+            console.log('input_lenght_ats before', input_lenght_ats);
             input_lenght_ats += actual_length;
+            console.log('input_lenght_ats after', input_lenght_ats);
+            console.log('roll_ats_lenght', roll_ats_lenght);
             if (input_lenght_ats > roll_ats_lenght) {
                 input_lenght_ats -= actual_length;
+                console.log('actual_length in', actual_length);
+                console.log('input_lenght_ats before in', input_lenght_ats);
                 toastr.error('Roll ATS not available', {
                     hideDuration: 10000,
                     closeButton: true,
                 });
                 return true;
             }
+
             $data= {
                     '_token': '{{ csrf_token() }}',
                     'roll_id': $("#roll_id").val(),
@@ -1531,6 +1555,7 @@
                             closeButton: true,
                         });
                         var cutpieces = data['cut_piece']['OutPut']['AddCutPieces'];
+                        input_lenght_ats  = 0;
                     }
 
                 },
@@ -1615,7 +1640,7 @@
                 if ($(this).val() < originalHeightInFeet) {
                     $("#TlengthInch").attr("max", 11);
                 } else {
-                    $("#TlengthInch").attr("max", originalHeightInInches).val(originalHeightInInches);
+                  //  $("#TlengthInch").attr("max", originalHeightInInches).val(originalHeightInInches);
                 }
                 updatePrices();
             });
@@ -1624,7 +1649,7 @@
                 if ($(this).val() < originalWidthInFeet) {
                     $("#TwidthInch").attr("max", 11);
                 } else {
-                    $("#TwidthInch").attr("max", originalWidthInInches).val(originalWidthInInches);
+                  //  $("#TwidthInch").attr("max", originalWidthInInches).val(originalWidthInInches);
                 }
                 updatePrices();
             });

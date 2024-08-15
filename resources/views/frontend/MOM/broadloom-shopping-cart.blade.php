@@ -74,6 +74,7 @@
                                             </thead>
                                             <tbody>
                                             @if (count((array) $cart->items))
+                                                @php $sergingTotal = 0; @endphp
                                                 @foreach ($cart->items as $item)
                                                     @php
                                                         if (isset($item->item_data) && $item->item_data) {
@@ -130,11 +131,12 @@
                                                                             <div
                                                                                 class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
                                                                                 style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                                                {{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }}
+                                                                                {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
                                                                                 @if(!empty($item_sizes['SergingType']))
                                                                                     <span
                                                                                         class="tooltiptext">
-                                                                                        <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
+                                                                                        {{-- <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
+                                                                                        <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
                                                                                     </span>
                                                                                 @endif
                                                                             </div>
@@ -167,12 +169,14 @@
                                                         <td class="align-content-center">
                                                             {{ $item->item_currency }}{{ $item->item_price }}</td>
                                                         <td class="align-content-center">
+                                                            @php $sergingTotal += number_format($serging_charges, 2); @endphp
                                                             {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</td>
                                                         <td class="align-content-center">{{ $item->item_currency }}<span
                                                                 id="item_total_price">{{ $item->item_total }}</span>
                                                         </td>
                                                     </tr>
                                                 @endforeach
+                                                <input type="hidden" id="sergingTotal" value="{{ number_format($sergingTotal, 2) }}">
                                             @else
                                                 <tr>
                                                     No Item in Cart
@@ -524,24 +528,30 @@
                                                                         //$sizes = json_decode($item->item_data, true );
                                                                     @endphp
                                                                     @foreach($sizes['CutPieces'] as $item_sizes)
-                                                                        @php
-                                                                            $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
-                                                                            $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
-                                                                            $lenght_inch =  $item_sizes['ATSLength'] % 12;
-                                                                            $width_inch =   $item_sizes['ATSWidth'] % 12;
-                                                                        @endphp
-                                                                        <div
-                                                                            class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
-                                                                            style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                                            {{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }}
-                                                                            @if(!empty($item_sizes['SergingType']))
-                                                                                <span
-                                                                                    class="tooltiptext">
-                                                                                        <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
-                                                                                    </span>
-                                                                            @endif
-                                                                        </div>
-                                                                    @endforeach
+                                                                    @php
+                                                                        $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                                        $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                                        $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                                        $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                                        if (!empty($item_sizes['SergingType'])) {
+                                                                            $serging_charges = 0;
+                                                                            $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
+                                                                            $serging_charges += $cut_piece_serging_charges;
+                                                                        }
+                                                                    @endphp
+                                                                    <div
+                                                                        class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                                        style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                                        {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
+                                                                        @if(!empty($item_sizes['SergingType']))
+                                                                            <span
+                                                                                class="tooltiptext">
+                                                                                {{-- <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
+                                                                                <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                            </span>
+                                                                        @endif
+                                                                    </div>
+                                                                @endforeach
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -661,9 +671,14 @@
                             <div class="col-md-5">
                                 @foreach ( $cart->items as $item)
                                     <div class="row">
-                                        <div class="col-3"><img
+                                        <div class="col-3">
+                                            {{-- <img
                                                 src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
                                                 alt="{{$item_data->ItemID}}" height="80px" width="80px"
+                                                onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"> --}}
+                                            <img
+                                                src="{{ CommonController::getApiFullImage($item->item_image) }}"
+                                                alt="{{$item->item_id}}" height="80px" width="80px"
                                                 onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
                                         </div>
                                         <div class="col-9" style="font-size: 12px">
@@ -672,7 +687,7 @@
                                             </div>
                                             {{-- <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p> --}}
                                             <div class="mx-3 mt-2 row">Roll Id: <p
-                                                    class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
+                                                    class="font-weight--normal mx-2">{{ $item->bd_roll_id }}</p>
                                             </div>
                                             <div class="mx-3 mt-2 row">Size:
                                                 @php
@@ -689,7 +704,7 @@
                                                     <div
                                                         class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
                                                         style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                        {{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }}
+                                                        {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
                                                         @if(!empty($item_sizes['SergingType']))
                                                             <span
                                                                 class="tooltiptext">
@@ -769,9 +784,8 @@
             // var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " "));
             var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
             var shippingCharges = parseFloat($(".section_2_shipping_charges").text().replace('$', ''));
-            console.log(subtotal);
-            console.log('total', total);
-            var total = subtotal + shippingCharges;
+            var sergingTotal = parseFloat($("#sergingTotal").val());
+            var total = subtotal + sergingTotal + shippingCharges;
             $(".section_2_cart_total").text("$" + total.toFixed(2));
 
             // $('.delete-row').click(function () {
@@ -849,7 +863,9 @@
                 //    var subtotal = parseFloat($("#item_subtotal_price").text());
                 var subtotal = parseFloat($("#item_subtotal_price").text().replace('$', " ").replace(',', ""));
                 var shippingCharges = parseFloat($(".shipping_charges").text().replace('$', ''));
-                var total = subtotal + shippingCharges;
+                var sergingTotal = parseFloat($("#sergingTotal").val());
+
+                var total = subtotal + sergingTotal + shippingCharges;
                 $(".cart_total").text("$" + total.toFixed(2));
             }
 
