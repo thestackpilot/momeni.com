@@ -281,7 +281,7 @@
                                                                 class="badge badge-default broadloom-badge side-bar-broadloom-badge"
                                                                 style="background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
                                                         <span>
-                                                            {{ $lenght_feet . "'" . $lenght_inch . "'" . " x " . $width_feet  . "'" . $width_inch . "'" }}
+                                                            {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
                                                         </span>
                                                             </div>
                                                         @endforeach
