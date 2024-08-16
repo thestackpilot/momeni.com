@@ -124,7 +124,8 @@
                                                                                 $lenght_inch =  $item_sizes['ATSLength'] % 12;
                                                                                 $width_inch =   $item_sizes['ATSWidth'] % 12;
                                                                                 if (!empty($item_sizes['SergingType'])) {
-                                                                                    $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
+                                                                                    // $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
+                                                                                    $cut_piece_serging_charges = ((($lenght_feet * 12 + $lenght_inch) + ($width_feet * 12 + $width_inch)) * 2 / 12) * $item_sizes['SergingCharges'];
                                                                                     $serging_charges += $cut_piece_serging_charges;
                                                                                 }
                                                                             @endphp
