@@ -8,7 +8,7 @@ class ConstantsController extends RootController
 
     const ADMIN_SECRET_STRING = "OPEN SESAME, I'M ADMIN";
 
-    const ADMIN_EMAIL = ["Aliuf@momeni.com","imran.majeed@sparsus.com"];
+    const ADMIN_EMAIL = ["Aliuf@momeni.com","imran.majeed@sparsus.com","info@momeni.com"];
 
     const WEB_HOOK_EMAIL = ['imran.majeed@sparsus.com'];
 
