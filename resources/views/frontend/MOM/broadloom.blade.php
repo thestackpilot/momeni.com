@@ -44,7 +44,6 @@
 
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
-                    @dump($item)
                     <div style="font-size: 28px;"><strong>{{$item['ItemName']}}</strong></div>
                     <div class="card">
                         <div class="card-body">
