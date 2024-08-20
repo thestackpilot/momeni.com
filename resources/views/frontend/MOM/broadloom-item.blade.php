@@ -201,7 +201,7 @@ use App\Http\Controllers\CommonController;
                                     @auth
                                         @if(Auth::user()->broadloom_user || Auth::user()->is_sale_rep)
                                             <a href="javascript:void(0)" class="add-to-cart-button align-content-center btn btn-dark d-none"  id="add_cart">
-                                                Add Cut Pieces <i class="fa fa-long-arrow-right"></i>
+                                                Let's Start <i class="fa fa-long-arrow-right"></i>
                                             </a>
                                         @endif
                                     @endauth
