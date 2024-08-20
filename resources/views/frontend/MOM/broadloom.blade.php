@@ -895,6 +895,7 @@
             $('#add_to_cart').addClass('btn-muted');
             $('#cart_item_quantity').val($('#item_qty').val());
             item = JSON.parse($('#item_json').val());
+            console.log('PUHS TO CART item', item);
             let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "0";
             item.SQFTPrice = $('#sq-ft').val();
             item.SQFTArea = $('#totalsqft').val();
@@ -1416,11 +1417,12 @@
                     'AvailableForSale': "",
                     'IsremnantShipable': "",
                     'LineNo': "1",
-                    'UserRemarks': "Setting Data",
+                    'UserRemarks': /*"Setting Data"*/ $("#cust-inst").val(),
                     'sergingtypeno': $("#sergingtypeno").val(),
                     'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}'
                 };
-            console.log($data);
+            console.log('add cut piece data', $data);
+            $("#cust-inst").val('');
             $.ajax({
                 url: "{{ route('broadloom.cutPiece') }}",
                 method: 'POST',
