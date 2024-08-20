@@ -722,6 +722,10 @@ use App\Http\Controllers\CommonController;
         show_components(['#item_customer_parent']);
         hide_components(['#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
         $('#item_customer').html('');
+        console.log(' item.UserCustomerInfo.Customers',  item.UserCustomerInfo.Customers);
+
+
+
         item.UserCustomerInfo.Customers.forEach(function(Customer, index) {
             if(Customer.BroadloomCustomer == 'Y'){
                 console.log('check only broad cust allow: ', Customer.BroadloomCustomer);
@@ -730,6 +734,11 @@ use App\Http\Controllers\CommonController;
                     $('#disabled_customer_select').removeClass('d-none');
                     if (Customer.CustomerID == item.UserCustomerInfo.CustomerSet) {
                         customerID = Customer.CustomerID;
+                        if((Customer.CompanyName && Customer.CompanyName.includes('&amp;'))){
+                            Customer.CompanyName = Customer.CompanyName.replace(/&amp;/g, '&');
+                        }else{
+                            Customer.companyName;
+                        }
                         $('#item_customer').append($('<input>', {
                             value: item.ItemID + ' :: ' + Customer.CustomerID,
                             text: Customer.CompanyName,
@@ -749,6 +758,11 @@ use App\Http\Controllers\CommonController;
                 } else {
                     $('#active_customer_select').removeClass('d-none');
                     $('#disabled_customer_select').addClass('d-none');
+                    if((Customer.CompanyName && Customer.CompanyName.includes('&amp;'))){
+                        Customer.CompanyName = Customer.CompanyName.replace(/&amp;/g, '&');
+                    }else{
+                        Customer.companyName;
+                    }
                     $('#item_customer').append($('<input>', {
                         value: item.ItemID + ' :: ' + Customer.CustomerID,
                         text: Customer.CompanyName,
