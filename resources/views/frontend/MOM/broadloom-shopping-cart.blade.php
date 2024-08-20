@@ -115,6 +115,7 @@
                                                                         Sizes:
                                                                         @php
                                                                             $sizes = json_decode( unserialize($item->item_data ), true );
+                                                                            $sum_surging_charges = 0;
                                                                             //$sizes = json_decode($item->item_data, true );
                                                                         @endphp
                                                                         @foreach($sizes['CutPieces'] as $item_sizes)
@@ -127,11 +128,12 @@
                                                                                     // $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
                                                                                     $cut_piece_serging_charges = ((($lenght_feet * 12 + $lenght_inch) + ($width_feet * 12 + $width_inch)) * 2 / 12) * $item_sizes['SergingCharges'];
                                                                                     $serging_charges += $cut_piece_serging_charges;
+                                                                                    $sum_surging_charges += $serging_charges;
                                                                                 }
                                                                             @endphp
                                                                             <div
                                                                                 class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
-                                                                                style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                                                style="margin: 2px 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
                                                                                 {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
                                                                                 @if(!empty($item_sizes['SergingType']))
                                                                                     <span
@@ -170,10 +172,10 @@
                                                         <td class="align-content-center">
                                                             {{ $item->item_currency }}{{ $item->item_price }}</td>
                                                         <td class="align-content-center">
-                                                            @php $sergingTotal += number_format($serging_charges, 2); @endphp
-                                                            {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</td>
+                                                            @php $sergingTotal += number_format($sum_surging_charges, 2); @endphp
+                                                            {{ $item->item_currency }}{{ number_format($sum_surging_charges, 2) }}</td>
                                                         <td class="align-content-center">{{ $item->item_currency }}<span
-                                                                id="item_total_price">{{ $item->item_total }}</span>
+                                                                id="item_total_price">{{ number_format($sum_surging_charges + $item->item_total, 2)  }}</span>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -212,8 +214,7 @@
                                         <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
                                         <div class="row mt-3">
                                             <div class="col-md-6">SubTotal:</div>
-                                            <div class="col-md-6 text-right">{{ $cart->cart_currency }}<span
-                                                    id="item_subtotal_price">{{ $cart->cart_total }}</span></div>
+                                            <div class="col-md-6 text-right"><span id="item_subtotal_price" class="cart_total">{{ $cart->cart_currency }}{{ $cart->cart_total }}</span></div>
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row">
@@ -452,11 +453,11 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-5 mb-2">
+                                                <div class="col-md-6 mb-2">
                                                     <label for="" class="form-label mb-0" style="font-size: 14px">Shipping
                                                         Date<span class="text-danger"
                                                                   style="font-size: 18px">*</span></label>
-                                                    <input class="form-controlmb-2 datepicker" type="text"
+                                                    <input class="form-controlmb-2 datepicker order-ship-date" type="text"
                                                            id="datepicker" data-date-format="dd-mm-yyyy"
                                                            name="ship_date"
                                                            placeholder="" value="" required>
@@ -473,11 +474,11 @@
                                                         @endif
                                                     </select>
                                                 </div>
-                                                <div class="col-md-5 mb-2">
+                                                <div class="col-md-4 mb-2">
                                                     <label for="" class="mb-0" style="font-size: 14px">Order Notes
                                                         (optional)</label>
                                                     <textarea class="form-control" id="" name="shipping_instructions"
-                                                              style="height: 8rem;" placeholder=""></textarea>
+                                                              style="height: 7rem;" placeholder=""></textarea>
                                                     <input type="hidden" name="item_broadloom" id="item_broadloom"
                                                            value="{{$cart->item_broadloom}}">
                                                 </div>
@@ -516,43 +517,47 @@
                                                                     width="80px"
                                                                     onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
                                                             </div>
-                                                            <div class="col-9" style="font-size: 12px">
+                                                            <div class="col-9" style="font-size: 12px;">
                                                                 <div class="mx-3 mt-2 font-weight--bold row">Design: <p
                                                                         class="font-weight--normal mx-2">{{$item->item_name}}</p>
                                                                 </div>
                                                                 <div class="mx-3 mt-2 row">Roll Id: <p
                                                                         class="font-weight--normal mx-2">{{$item_data->RollID}}</p>
                                                                 </div>
-                                                                <div class="mx-3 mt-2 row">Sizes:
-                                                                    @php
-                                                                        $sizes = json_decode( unserialize($item->item_data ), true );
-                                                                        //$sizes = json_decode($item->item_data, true );
-                                                                    @endphp
-                                                                    @foreach($sizes['CutPieces'] as $item_sizes)
-                                                                    @php
-                                                                        $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
-                                                                        $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
-                                                                        $lenght_inch =  $item_sizes['ATSLength'] % 12;
-                                                                        $width_inch =   $item_sizes['ATSWidth'] % 12;
-                                                                        if (!empty($item_sizes['SergingType'])) {
-                                                                            $serging_charges = 0;
-                                                                            $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
-                                                                            $serging_charges += $cut_piece_serging_charges;
-                                                                        }
-                                                                    @endphp
-                                                                    <div
-                                                                        class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
-                                                                        style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                                        {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
-                                                                        @if(!empty($item_sizes['SergingType']))
-                                                                            <span
-                                                                                class="tooltiptext">
-                                                                                {{-- <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
-                                                                                <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
-                                                                            </span>
-                                                                        @endif
+                                                                <div class="mx-3 mt-2 row">
+                                                                    <div class="row">
+                                                                        <div class="col-md-2">Sizes:</div>
+                                                                        <div class="col-md-10">
+                                                                            @php
+                                                                            $sizes = json_decode( unserialize($item->item_data ), true );
+                                                                            @endphp
+                                                                            @foreach($sizes['CutPieces'] as $item_sizes)
+                                                                                @php
+                                                                                    $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                                                    $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                                                    $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                                                    $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                                                    if (!empty($item_sizes['SergingType'])) {
+                                                                                        $serging_charges = 0;
+                                                                                        $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
+                                                                                        $serging_charges += $cut_piece_serging_charges;
+                                                                                    }
+                                                                                @endphp
+                                                                                <div
+                                                                                    class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                                                    style="margin: 2px 1px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                                                    {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
+                                                                                    @if(!empty($item_sizes['SergingType']))
+                                                                                        <span
+                                                                                            class="tooltiptext">
+                                                                                            {{-- <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
+                                                                                            <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                        </span>
+                                                                                    @endif
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
                                                                     </div>
-                                                                @endforeach
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -664,7 +669,7 @@
                                 PRODUCT
                             </div>
                             <div class="col-sm-4 text-right fa">
-                                SUBTOTAL
+                                PRICE
                             </div>
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
@@ -736,7 +741,7 @@
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
                             <div class="col-md-4 align-content-center font-weight--bold">SubTotal</div>
-                            <div class="col-md-4 align-content-center text-right font-weight--bold">
+                            <div class="col-md-4 align-content-center text-right font-weight--bold order-detail-subtotal">
                                 ${{$cart->cart_total}}</div>
                             {{-- <div class="col-md-4 align-content-center text-right font-weight--bold">
                                 ${{$bd_cart_price}}</div> --}}
@@ -782,11 +787,21 @@
     <script>
         $(document).ready(function () {
 
+            // SET ORDER SHIP DATE
+            var today = new Date();
+            var day = ("0" + today.getDate()).slice(-2);
+            var month = ("0" + (today.getMonth() + 1)).slice(-2);
+            var year = today.getFullYear();
+            var formattedDate = day + '-' + month + '-' + year;
+            $('.order-ship-date').val(formattedDate);
+
             // var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " "));
             var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
             var shippingCharges = parseFloat($(".section_2_shipping_charges").text().replace('$', ''));
             var sergingTotal = parseFloat($("#sergingTotal").val());
             var total = subtotal + sergingTotal + shippingCharges;
+            var subtotalprice = subtotal +sergingTotal;
+            $(".section_2_subtotal").text("$" + subtotalprice.toFixed(2));
             $(".section_2_cart_total").text("$" + total.toFixed(2));
 
             // $('.delete-row').click(function () {
@@ -865,8 +880,10 @@
                 var subtotal = parseFloat($("#item_subtotal_price").text().replace('$', " ").replace(',', ""));
                 var shippingCharges = parseFloat($(".shipping_charges").text().replace('$', ''));
                 var sergingTotal = parseFloat($("#sergingTotal").val());
-
+                var orderDeatilSubTotal = subtotal + sergingTotal;
                 var total = subtotal + sergingTotal + shippingCharges;
+
+                $('.order-detail-subtotal').text("$" + orderDeatilSubTotal.toFixed(2));
                 $(".cart_total").text("$" + total.toFixed(2));
             }
 
@@ -983,10 +1000,14 @@
                 if (addressValue == 'existing-address') {
                     $(".disable-toggle").addClass("muted-bd-fields");
                     $(".disable-toggle").removeAttr("required");
+                    $('#select-address').trigger('change');
                 } else {
                     $(".disable-toggle").removeClass("muted-bd-fields");
                     $(".hidden-inp").val("");
                     $('#hidden-address_id').val("");
+                    $(".disable-toggle").val("");
+                    $("#countries").val(0);
+                    $("#state_dropdown").val('');
                     $(".disable-toggle").attr("required", true);
                     $("#bd-address2").removeAttr("required")
                 }

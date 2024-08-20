@@ -44,6 +44,7 @@
 
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
+                    @dump($item)
                     <div style="font-size: 28px;"><strong>{{$item['ItemName']}}</strong></div>
                     <div class="card">
                         <div class="card-body">
@@ -230,7 +231,7 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for=""><strong> Serging Charges ($)</strong></label>
+                                                        <label for=""><strong> Serging Rate ($)</strong></label>
                                                         <input class="form-control" type="text" name=""
                                                                id="surging_charges" value="" disabled
                                                                style="text-align:right;">
@@ -282,6 +283,8 @@
                                         </button>
                                         <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn">
                                             Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        <button class="show-piece-btn broadloom-btns d-none" id="hide-cut-piece-btn">
+                                            Hide Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">Add to
                                             Cart <i class="fa fa-long-arrow-right"></i></button>
                                     </div>
@@ -895,6 +898,7 @@
             $('#add_to_cart').addClass('btn-muted');
             $('#cart_item_quantity').val($('#item_qty').val());
             item = JSON.parse($('#item_json').val());
+            console.log('PUHS TO CART item', item);
             let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "0";
             item.SQFTPrice = $('#sq-ft').val();
             item.SQFTArea = $('#totalsqft').val();
@@ -1416,11 +1420,12 @@
                     'AvailableForSale': "",
                     'IsremnantShipable': "",
                     'LineNo': "1",
-                    'UserRemarks': "Setting Data",
+                    'UserRemarks': /*"Setting Data"*/ $("#cust-inst").val(),
                     'sergingtypeno': $("#sergingtypeno").val(),
                     'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}'
                 };
-            console.log($data);
+            console.log('add cut piece data', $data);
+            $("#cust-inst").val('');
             $.ajax({
                 url: "{{ route('broadloom.cutPiece') }}",
                 method: 'POST',
@@ -1545,7 +1550,9 @@
                             hideDuration: 10000,
                             closeButton: true,
                         });
-                        $('#show-cut-piece-btn').removeClass('d-none');
+                        $('#hide-cut-piece-btn').removeClass('d-none');
+                        $('#show-cut-piece-btn').click();
+                        $(".cut-pieces-wrapper").show();
                         $('#roll_pieces').prop('disabled', true);
                         $('#add_to_cart').removeClass('d-none');
                     } else {
@@ -1565,6 +1572,13 @@
             });
         }
 
+        // HIDE CUT PIECE BUTTON
+        $("#hide-cut-piece-btn").click(function (){
+            $(".cut-pieces-wrapper").hide();
+            $(this).addClass('d-none');
+            $("#show-cut-piece-btn").removeClass('d-none');
+        })
+
         const showCutPieceObj = new ShowCutPiece();
         $("#show-cut-piece-btn").click(function (event) {
             let screen_coordinates = {
@@ -1577,6 +1591,10 @@
             }
 
             showCutPieceObj.cutPiecesInitilize(screen_coordinates, payload)
+
+            $(this).addClass('d-none');
+            $(".cut-pieces-wrapper").show();
+            $("#hide-cut-piece-btn").removeClass('d-none');
         });
 
         //updated

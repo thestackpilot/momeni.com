@@ -303,21 +303,25 @@ class CheckoutController extends FrontendController
                             $sqft =  round(($cut_piece->ATSWidth / 12) * ($cut_piece->ATSLength / 12), 2);
                             $totalSQFT += $sqft;
 
-                            $cut_pieces[$key]['TempSalesOrderNo'] = $cut_piece->TempSalesOrderNo;
-                            $cut_pieces[$key]['ItemID'] = $cut_piece->ItemID;
-                            $cut_pieces[$key]['RollID'] = $cut_piece->RollID;
-                            $cut_pieces[$key]['CutPieceID'] = $cut_piece->CutPieceID;
-                            $cut_pieces[$key]['ActualLength'] = $cut_piece->ATSLength;
-                            $cut_pieces[$key]['ActualWidth'] = $cut_piece->ATSWidth;
-                            $cut_pieces[$key]['ActualSQFT'] = $sqft;  // $cut_piece->ATSWidth * $cut_piece->ATSLength;
-                            $cut_pieces[$key]['CutType'] = $item_data->cut_type;
-                            $cut_pieces[$key]['LocationID'] = $item_data->location_id;
-                            $cut_pieces[$key]['Serging'] = !empty($cut_piece->SergingType) ? "Y" : "N";
-                            $cut_pieces[$key]['SergingCharges'] = !empty($cut_piece->SergingCharges) ? $cut_piece->SergingCharges : 0;
-                            $cut_pieces[$key]['SergingType'] = empty($cut_piece->SergingType) ? "0" : $cut_piece->SergingType;
-                            $cut_pieces[$key]['LineNo'] = ++$line;
+                            $temp = [];
+                            $temp['TempSalesOrderNo'] = $cut_piece->TempSalesOrderNo;
+                            $temp['ItemID'] = $cut_piece->ItemID;
+                            $temp['RollID'] = $cut_piece->RollID;
+                            $temp['CutPieceID'] = $cut_piece->CutPieceID;
+                            $temp['ActualLength'] = $cut_piece->ATSLength;
+                            $temp['ActualWidth'] = $cut_piece->ATSWidth;
+                            $temp['ActualSQFT'] = $sqft;  // $cut_piece->ATSWidth * $cut_piece->ATSLength;
+                            $temp['CutType'] = $item_data->cut_type;
+                            $temp['LocationID'] = $item_data->location_id;
+                            $temp['Serging'] = !empty($cut_piece->SergingType) ? "Y" : "N";
+                            $temp['SergingCharges'] = !empty($cut_piece->SergingCharges) ? $cut_piece->SergingCharges : 0;
+                            $temp['SergingType'] = empty($cut_piece->SergingType) ? "0" : $cut_piece->SergingType;
+                            $temp['LineNo'] = ++$line;
+                            $temp['UserRemarks'] = $cut_piece->UserRemarks;
+
                             $order_length += $cut_piece->ATSLength;
-                            $total_serging_charges += $cut_pieces[$key]['SergingCharges'] * ((round($cut_piece->ATSWidth / 12, 2) + round($cut_piece->ATSLength / 12, 2)) * 2);
+                            $total_serging_charges += $temp['SergingCharges'] * ((round($cut_piece->ATSWidth / 12, 2) + round($cut_piece->ATSLength / 12, 2)) * 2);
+                            $cut_pieces[] = $temp;
                         }
                     }
 
@@ -390,7 +394,7 @@ class CheckoutController extends FrontendController
             if (!$payment_response['success']) {
                 return response()->json($payment_response);
             }
-            // dd($headers, $itemDetail);
+           // dd($headers, $itemDetail);
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] == 1) {
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,
