@@ -1265,6 +1265,7 @@
                             let mxlen = 0;
 
                             $.each(response['OutPut']['AddCutPieces'], function (index, item) {
+                                console.log('rm cut piece res', response['OutPut']['AddCutPieces']);
                                 // console.log('item.CPTempLine_No', item.CPTempLine_No);
                                 // console.log('add cut res', item);
                                 let lengthFeet = Math.floor(item.ATSLength / 12);
@@ -1275,6 +1276,10 @@
                                 mxlenf = mxlenf + lengthFeet;
                                 mxlen = mxlen + lengthInches;
 
+                                let surging = '';
+                                if (item.SergingType != "0") {
+                                    surging = ' Serging';
+                                }
 
                                 lenInchCal = (lengthInches * 0.0833333);
                                 widInchCal = (widthInches * 0.0833333);
@@ -1299,7 +1304,7 @@
                                 // size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
                                 //     widthInches + `"`;
                                 size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
-                                    lengthInches + `"`;
+                                    lengthInches + `"` + surging;
                                 divContent += size.size;
                                 divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + item.CPTempLine_No + '`,  `' + item.LengthStatus + '`,  `' + lengthFeet + '`,  `' + widthFeet + '`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
                                 let totalLengthInInches = lengthFeet * 12 + lengthInches;
