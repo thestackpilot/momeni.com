@@ -225,7 +225,7 @@
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row">
                                             <div class="col-md-9">Shipping Charges:</div>
-                                            <div class="col-md-3 text-right shipping_charges">$0</div>
+                                            <div class="col-md-3 text-right shipping_charges">$0.00</div>
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row mt-3">
@@ -459,14 +459,16 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-6 mb-2">
-                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Shipping
+                                                <div class="col-md-10 mb-2">
+                                                    <label for="" class="form-label mb-1" style="font-size: 14px">Shipping
                                                         Date<span class="text-danger"
-                                                                  style="font-size: 18px">*</span></label>
-                                                    <input class="form-controlmb-2 datepicker order-ship-date" type="text"
+                                                        style="font-size: 18px">*</span></label>
+                                                    <input class="form-control mb-2 datepicker order-ship-date" type="text"
                                                            id="datepicker" data-date-format="dd-mm-yyyy"
                                                            name="ship_date"
                                                            placeholder="" value="" required>
+                                                </div>
+                                                <div class="col-md-10 mb-2">
                                                     <label for="" class="form-label mb-1" style="font-size: 14px">Shipping
                                                         Method</label>
                                                     <select name="shipping_method" class="form-control">
@@ -480,7 +482,7 @@
                                                         @endif
                                                     </select>
                                                 </div>
-                                                <div class="col-md-4 mb-2">
+                                                <div class="col-md-10 mb-2">
                                                     <label for="" class="mb-0" style="font-size: 14px">Order Notes
                                                         (optional)</label>
                                                     <textarea class="form-control" id="" name="shipping_instructions"
@@ -584,7 +586,7 @@
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row px-5">
                                                 <div class="col-md-9">Shipping Charges</div>
-                                                <div class="col-md-3 text-right section_2_shipping_charges">$0</div>
+                                                <div class="col-md-3 text-right section_2_shipping_charges">$0.00</div>
                                             </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row my-4 px-5">
@@ -755,7 +757,7 @@
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
                             <div class="col-md-4 align-content-center">Shipping Charges</div>
-                            <div class="col-md-4 align-content-center text-right">$0</div>
+                            <div class="col-md-4 align-content-center text-right">$0.00</div>
                             <div class="col-md-9 mb-3">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
@@ -1025,6 +1027,9 @@
                 var parts = selectaddress.split('~~~');
                 var firstPart = parts[0];
                 var secondPart = parts[1];
+                console.log('firstPart', firstPart);
+                console.log('secondPart',secondPart);
+
                 $('.hidden-address_id').val('');
                 if (firstPart != undefined) {
                     $('#hidden-address_id').val(firstPart);
@@ -1035,7 +1040,9 @@
                 }
 
                 let valSet = JSON.parse($('.hidden-inp').val());
+                $('input[name="FirstName"]').val(valSet.FirstName);
                 $('input[name="Address1"]').val(valSet.Address1);
+                $('input[name="Address2"]').val(valSet.Address2);
                 $('input[name="City"]').val(valSet.City);
                 $('input[name="Zip"]').val(valSet.Zip);
             });

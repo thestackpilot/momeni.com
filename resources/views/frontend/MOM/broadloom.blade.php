@@ -1065,6 +1065,7 @@
                                                             $('#cust-inst').val('');
 
                                                             $('#show-cut-piece-btn').addClass('d-none');
+                                                            $('#hide-cut-piece-btn').addClass('d-none');
                                                             $('#add_to_cart').addClass('d-none');
                                                             $('#roll_pieces').removeAttr("disabled");
                                                             $('#cut-pieces').empty();
@@ -1175,6 +1176,7 @@
                                             $('#cust-inst').val('');
 
                                             $('#show-cut-piece-btn').addClass('d-none');
+                                            $('#hide-cut-piece-btn').addClass('d-none');
                                             $('#add_to_cart').addClass('d-none');
                                             $('#roll_pieces').removeAttr("disabled");
                                             $('#cut-pieces').empty();
@@ -1351,6 +1353,11 @@
                                 hideDuration: 10000,
                                 closeButton: true,
                             });
+
+                            $('#show-cut-piece-btn').click();
+                            setTimeout(() => {
+                                $("#hide-cut-piece-btn").removeClass('d-none').prop('disabled', false);
+                            }, 1000);
                         } else {
                             toastr.error('Remnant cannot be removed', {
                                 hideDuration: 10000,
