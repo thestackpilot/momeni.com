@@ -314,8 +314,7 @@
                                                 </div>
                                                 <div class="col-md-5 mb-2">
                                                     <label for="" class="form-label mb-0" style="font-size: 14px">Last
-                                                        Name<span class="text-danger"
-                                                                  style="font-size: 18px">*</span></label>
+                                                        Name</label>
                                                     <input class="form-control disable-toggle" type="text" id=""
                                                            name="LastName"
                                                            placeholder=""
@@ -326,8 +325,7 @@
                                             <div class="row">
                                                 <div class="col-md-5 mb-2">
                                                     <label for="" class="form-label mb-0"
-                                                           style="font-size: 14px">Email<span class="text-danger"
-                                                                                              style="font-size: 18px">*</span></label>
+                                                           style="font-size: 14px">Email</label>
                                                     <input class="form-control disable-toggle" type="email" id=""
                                                            name="Email"
                                                            placeholder=""
@@ -336,8 +334,7 @@
                                                 </div>
                                                 <div class="col-md-5 mb-2">
                                                     <label for="" class="form-label mb-0"
-                                                           style="font-size: 14px">Phone<span class="text-danger"
-                                                                                              style="font-size: 18px">*</span></label>
+                                                           style="font-size: 14px">Phone</label>
                                                     <input class="form-control disable-toggle" type="number" id=""
                                                            name="Phone"
                                                            placeholder=""
@@ -937,8 +934,18 @@
 
             $('#place_order').click(function () {
                 var form = $('#customer_info')[0];
-                if ((form.checkValidity())) {
 
+                var firstName = $('input[name="FirstName"]')[0];
+                var streetaddress = $('input[name="Address1"]')[0];
+                var country = $('#countries')[0];
+                var city = $('input[name="City"]')[0];
+                var state = $("#state_dropdown")[0];
+                var zipCode = $('input[name="Zip"]')[0];
+                var refNo = $('input[name="reference_number"]')[0];
+                var shipDate = $('input[name="ship_date"]')[0];
+
+                // form.checkValidity()
+                if (firstName.checkValidity() && streetaddress.checkValidity()  && country.checkValidity()  && city.checkValidity()  && zipCode.checkValidity() && refNo.checkValidity() && shipDate.checkValidity()) {
                     var formData = $('#customer_info').serialize();
                     console.log('form data', formData);
                     $.ajax({
