@@ -175,7 +175,10 @@
                                                         <td class="align-content-center">
                                                             {{ $item->item_currency }}{{ $item->item_price }}</td>
                                                         <td class="align-content-center">
-                                                            @php $sergingTotal += number_format($sum_surging_charges, 2); @endphp
+                                                            @php
+                                                                $sergingTotal += $sum_surging_charges;
+                                                                number_format($sergingTotal, 2);
+                                                            @endphp
                                                             {{ $item->item_currency }}{{ number_format($sum_surging_charges, 2) }}</td>
                                                         <td class="align-content-center">{{ $item->item_currency }}<span
                                                                 id="item_total_price">{{ number_format($sum_surging_charges + $item->item_total, 2)  }}</span>
