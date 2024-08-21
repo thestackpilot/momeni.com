@@ -280,7 +280,7 @@
                                         <button class="add-piece-btn broadloom-btns add-cut-piece-btn"
                                                 id="cut_piece_btn">Add Cut Piece <i class="fa fa-long-arrow-right"></i>
                                         </button>
-                                        <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn">
+                                        <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn" disabled>
                                             Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="show-piece-btn broadloom-btns d-none" id="hide-cut-piece-btn">
                                             Hide Cut Piece <i class="fa fa-long-arrow-right"></i></button>
@@ -1549,8 +1549,10 @@
                             hideDuration: 10000,
                             closeButton: true,
                         });
-                        $('#hide-cut-piece-btn').removeClass('d-none');
                         $('#show-cut-piece-btn').click();
+                        setTimeout(() => {
+                            $("#hide-cut-piece-btn").removeClass('d-none').prop('disabled', false);
+                        }, 1000);
                         $(".cut-pieces-wrapper").show();
                         $('#roll_pieces').prop('disabled', true);
                         $('#add_to_cart').removeClass('d-none');
@@ -1574,8 +1576,10 @@
         // HIDE CUT PIECE BUTTON
         $("#hide-cut-piece-btn").click(function (){
             $(".cut-pieces-wrapper").hide();
-            $(this).addClass('d-none');
-            $("#show-cut-piece-btn").removeClass('d-none');
+            $(this).addClass('d-none').prop('disabled', true);
+            setTimeout(() => {
+                $("#show-cut-piece-btn").removeClass('d-none').prop('disabled', false);
+            }, 1000);
         })
 
         const showCutPieceObj = new ShowCutPiece();
@@ -1591,9 +1595,11 @@
 
             showCutPieceObj.cutPiecesInitilize(screen_coordinates, payload)
 
-            $(this).addClass('d-none');
+            $(this).addClass('d-none').prop('disabled', true);
             $(".cut-pieces-wrapper").show();
-            $("#hide-cut-piece-btn").removeClass('d-none');
+            setTimeout(() => {
+                $("#hide-cut-piece-btn").removeClass('d-none').prop('disabled', false);
+            }, 1000);
         });
 
         //updated

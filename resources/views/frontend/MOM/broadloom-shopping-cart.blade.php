@@ -68,7 +68,7 @@
                                                     @endif
                                                 @endforeach
                                                 <th>Price</th>
-                                                <th>Serging Charges</th>
+                                                <th>Serging Rate</th>
                                                 <th>Sub Total</th>
                                             </tr>
                                             </thead>
@@ -138,8 +138,8 @@
                                                                                 @if(!empty($item_sizes['SergingType']))
                                                                                     <span
                                                                                         class="tooltiptext">
-                                                                                        {{-- <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
-                                                                                        <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                        {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
+                                                                                        <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
                                                                                     </span>
                                                                                 @endif
                                                                             </div>
@@ -495,7 +495,7 @@
                                             <p class="mt-2 mb-2 text-center fa-2x">Your Order</p>
                                             <div class="row mt-3 px-5">
                                                 <div class="col-md-6">Product</div>
-                                                <div class="col-md-6 text-right">SubTotal</div>
+                                                <div class="col-md-6 text-right">Price</div>
                                             </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
 
@@ -550,8 +550,8 @@
                                                                                     @if(!empty($item_sizes['SergingType']))
                                                                                         <span
                                                                                             class="tooltiptext">
-                                                                                            {{-- <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
-                                                                                            <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                            {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
+                                                                                            <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
                                                                                         </span>
                                                                                     @endif
                                                                                 </div>
@@ -714,7 +714,7 @@
                                                         @if(!empty($item_sizes['SergingType']))
                                                             <span
                                                                 class="tooltiptext">
-                                                                                        <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
+                                                                                        <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
                                                                                     </span>
                                                         @endif
                                                     </div>
