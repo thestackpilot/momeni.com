@@ -110,40 +110,43 @@
                                                                     <div class=" mt-2 row">Roll Id: <p
                                                                             class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
                                                                     </div>
-                                                                    <div class=" mt-2 row"
-                                                                         style="display:flex; align-items: center">
-                                                                        Sizes:
-                                                                        @php
-                                                                            $sizes = json_decode( unserialize($item->item_data ), true );
-                                                                            $sum_surging_charges = 0;
-                                                                            //$sizes = json_decode($item->item_data, true );
-                                                                        @endphp
-                                                                        @foreach($sizes['CutPieces'] as $item_sizes)
-                                                                            @php
-                                                                                $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
-                                                                                $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
-                                                                                $lenght_inch =  $item_sizes['ATSLength'] % 12;
-                                                                                $width_inch =   $item_sizes['ATSWidth'] % 12;
-                                                                                if (!empty($item_sizes['SergingType'])) {
-                                                                                    // $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
-                                                                                    $cut_piece_serging_charges = ((($lenght_feet * 12 + $lenght_inch) + ($width_feet * 12 + $width_inch)) * 2 / 12) * $item_sizes['SergingCharges'];
-                                                                                    $serging_charges += $cut_piece_serging_charges;
-                                                                                    $sum_surging_charges += $serging_charges;
-                                                                                }
-                                                                            @endphp
-                                                                            <div
-                                                                                class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
-                                                                                style="margin: 2px 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                                                {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
-                                                                                @if(!empty($item_sizes['SergingType']))
-                                                                                    <span
-                                                                                        class="tooltiptext">
-                                                                                        {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
-                                                                                        <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
-                                                                                    </span>
-                                                                                @endif
+                                                                    <div class=" mt-2 row" style="display:flex; align-items: center">
+                                                                        <div class="row">
+                                                                            <div class="col-md-2"> Sizes:</div>
+                                                                            <div class="col-md-10" style="margin: 0px 0px 0px -10px">
+                                                                                @php
+                                                                                $sizes = json_decode( unserialize($item->item_data ), true );
+                                                                                $sum_surging_charges = 0;
+                                                                                //$sizes = json_decode($item->item_data, true );
+                                                                                @endphp
+                                                                                @foreach($sizes['CutPieces'] as $item_sizes)
+                                                                                    @php
+                                                                                        $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                                                        $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                                                        $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                                                        $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                                                        if (!empty($item_sizes['SergingType'])) {
+                                                                                            // $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
+                                                                                            $cut_piece_serging_charges = ((($lenght_feet * 12 + $lenght_inch) + ($width_feet * 12 + $width_inch)) * 2 / 12) * $item_sizes['SergingCharges'];
+                                                                                            $serging_charges += $cut_piece_serging_charges;
+                                                                                            $sum_surging_charges += $serging_charges;
+                                                                                        }
+                                                                                    @endphp
+                                                                                    <div
+                                                                                        class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                                                        style="margin: 2px 0px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                                                        {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
+                                                                                        @if(!empty($item_sizes['SergingType']))
+                                                                                            <span
+                                                                                                class="tooltiptext">
+                                                                                                {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
+                                                                                                <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                @endforeach
                                                                             </div>
-                                                                        @endforeach
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
