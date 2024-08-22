@@ -245,6 +245,16 @@
                                                                style="text-align:right;">
                                                     </div>
                                                 </div>
+                                                <div class="col-md-12 col-sm-12">
+                                                    <label for="">
+                                                        <input type="checkbox" name="" id="cfa_check">
+                                                        <strong> CFA </strong>
+                                                    </label>
+                                                    <label for="" class="mx-4">
+                                                        <input type="checkbox" name="" id="remnant_check">
+                                                        <strong> Is Remnant Shippable </strong>
+                                                    </label>
+                                                </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for=""><strong>Customer Instructions</strong> </label>
@@ -1011,6 +1021,9 @@
                 bd_cutpiece_wid += dimensionsInInches[i].width;
             }
 
+            var cfa_check = $("#cfa_check").is(":checked") ? 1 : 0;
+            var remnant_check = $("#remnant_check").is(":checked") ? 1 : 0;
+
             $.ajax({
                 url: "{{ route('check-cart-item') }}",
                 type: "GET",
@@ -1047,6 +1060,8 @@
                                                 'bd_cutpiece_len': bd_cutpiece_len,
                                                 'bd_cutpiece_wid': bd_cutpiece_wid,
                                                 'user_remarks': customer_instruction,
+                                                'cfa': cfa_check,
+                                                'remnant_shipable': remnant_check,
                                             },
                                             success: function (response) {
                                                 if (response.success) {
@@ -1072,6 +1087,8 @@
                                                             $('#surging_check').prop('checked', false);
                                                             $('#surging_charges').val('');
                                                             $('#cust-inst').val('');
+                                                            $("#cfa_check").prop("checked", false);
+                                                            $("#remnant_check").prop("checked", false);
 
                                                             $('#show-cut-piece-btn').addClass('d-none');
                                                             $('#hide-cut-piece-btn').addClass('d-none');
@@ -1158,6 +1175,8 @@
                                 'bd_cutpiece_len': bd_cutpiece_len,
                                 'bd_cutpiece_wid': bd_cutpiece_wid,
                                 'user_remarks': customer_instruction,
+                                'cfa': cfa_check,
+                                'remnant_shipable': remnant_check,
                             },
                             success: function (response) {
                                 if (response.success) {
@@ -1183,6 +1202,8 @@
                                             $('#surging_check').prop('checked', false);
                                             $('#surging_charges').val('');
                                             $('#cust-inst').val('');
+                                            $("#cfa_check").prop("checked", false);
+                                            $("#remnant_check").prop("checked", false);
 
                                             $('#show-cut-piece-btn').addClass('d-none');
                                             $('#hide-cut-piece-btn').addClass('d-none');
