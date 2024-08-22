@@ -110,7 +110,10 @@
                                                                         <div class="input-group-text"><strong>
                                                                                 Ft</strong></div>
                                                                     </div>
+                                                                    <span id="Tlength-max-error" class="text-red d-none" style="font-size:0.6rem; font-weight:800;"></span>
                                                                 </div>
+                                                                <input type="hidden" class="form-control Tlength-ats-max"
+                                                                           id="Tlength-ats-max">
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="input-group">
@@ -138,6 +141,7 @@
                                                                             <strong>In</strong></div>
                                                                     </div>
                                                                 </div>
+                                                                <input type="hidden" class="form-control TlengthInch-ats-max" id="TlengthInch-ats-max" value="">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -155,7 +159,10 @@
                                                                         <div class="input-group-text">
                                                                             <strong>Ft</strong></div>
                                                                     </div>
+                                                                    <span id="Twidth-max-error" class="text-red" style="font-size:0.6rem; font-weight:800;"></span>
                                                                 </div>
+                                                                <input type="hidden" class="form-control Twidth-ats-max"
+                                                                           id="Twidth-ats-max">
                                                             </div>
                                                             <div class="col-6">
                                                                 <div class="input-group">
@@ -182,6 +189,8 @@
                                                                             <strong>In</strong></div>
                                                                     </div>
                                                                 </div>
+                                                                <input type="hidden" class="form-control TwidthInch-ats-max"
+                                                                           id="TwidthInch-ats-max">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -281,7 +290,7 @@
                                                 id="cut_piece_btn">Add Cut Piece <i class="fa fa-long-arrow-right"></i>
                                         </button>
                                         <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn" disabled>
-                                            Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                            Cut Layout <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="show-piece-btn broadloom-btns d-none" id="hide-cut-piece-btn">
                                             Hide Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">Add to
@@ -1354,10 +1363,15 @@
                                 closeButton: true,
                             });
 
-                            $('#show-cut-piece-btn').click();
-                            setTimeout(() => {
-                                $("#hide-cut-piece-btn").removeClass('d-none').prop('disabled', false);
-                            }, 1000);
+                            if(response['OutPut']['AddCutPieces'].length > 0){
+                                $('#show-cut-piece-btn').click();
+                                setTimeout(() => {
+                                    $("#hide-cut-piece-btn").removeClass('d-none').prop('disabled', false);
+                                }, 1000);
+                            }else{
+                                $("#hide-cut-piece-btn").addClass('d-none').prop('disabled', false);
+                                $(".cut-pieces-wrapper").hide();
+                            }
                         } else {
                             toastr.error('Remnant cannot be removed', {
                                 hideDuration: 10000,
@@ -1373,6 +1387,13 @@
         let added_cut_pieces = [];
 
         function add_cut_pieces() {
+            if(!$("#Tlength-max-error").hasClass("d-none") || !$("#Twidth-max-error").hasClass("d-none")){
+                toastr.error('Lenght/Width must not be greater than ATS ROLL', {
+                    hideDuration: 10000,
+                    closeButton: true,
+                });
+                return true;
+            }
             let actual_length = parseInt($("#Tlength").val());
             let actual_width = parseInt($("#Twidth").val());
             var length_inch = parseInt($("#TlengthInch").val());
@@ -1672,6 +1693,20 @@
                 });
 
             $(".Tlength").on("input", function () {
+                var max_len = parseFloat($("#Tlength-ats-max").val());
+                var max_inch = $("#TlengthInch-ats-max").val();
+                var current_val = parseFloat($(this).val());
+
+                if(current_val > max_len){
+                    $("#Tlength-max-error").removeClass("d-none").text(`Value cannot be greater than ${max_len}'${max_inch}"`);
+                    $(this).css('border-color', 'red');
+                    $(this).next('.input-group-prepend').find('.input-group-text').css({'border-color': 'red', 'background-color': 'red', 'color': 'white'});
+                }else{
+                    $("#Tlength-max-error").addClass("d-none").text("");
+                    $(this).css('border-color', '');
+                    $(this).next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
+                }
+
                 if ($(this).val() < originalHeightInFeet) {
                     $("#TlengthInch").attr("max", 11);
                 } else {
@@ -1681,6 +1716,19 @@
             });
 
             $(".Twidth").on("input", function () {
+                var max_width = parseFloat($("#Twidth-ats-max").val());
+                var max_width_inch = $("#TwidthInch-ats-max").val();
+                var current_val = parseFloat($(this).val());
+                if(current_val > max_width){
+                    $("#Twidth-max-error").removeClass("d-none").text(`Value cannot be greater than ${max_width}'${max_width_inch}"`);
+                    $(this).css('border-color', 'red');
+                    $(this).next('.input-group-prepend').find('.input-group-text').css({'border-color': 'red', 'background-color': 'red', 'color': 'white'});
+                }else{
+                    $("#Twidth-max-error").addClass("d-none").text("");
+                    $(this).css('border-color', '');
+                    $(this).next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
+                }
+
                 if ($(this).val() < originalWidthInFeet) {
                     $("#TwidthInch").attr("max", 11);
                 } else {
@@ -1780,10 +1828,23 @@
                 $('#TwidthInch').val(widthinches);
                 $('.Tlength').val(lengthfeet);
                 $('#lenght-width').text(`${lengthfeet}'-${lengthinches}''/`);
-                $('.Twidth').attr('max', widthfeet);
-                $('.Tlength').attr('max', lengthfeet);
+                //$('.Twidth').attr('max', widthfeet);
+                // $('.Tlength').attr('max', lengthfeet);
                 // $('#TlengthInch').attr('max', lengthinches);
                 // $('#TwidthInch').attr('max', widthinches);
+
+                $("#Tlength-max-error").addClass("d-none").text("");
+                $(".Tlength").css('border-color', '');
+                $(".Tlength").next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
+                $("#Twidth-max-error").addClass("d-none").text("");
+                $(".Twidth").css('border-color', '');
+                $(".Twidth").next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
+
+                $('#Tlength-ats-max').val(lengthfeet);
+                $('#TlengthInch-ats-max').val(lengthinches);
+                $('#Twidth-ats-max').val(widthfeet);
+                $('#TwidthInch-ats-max').val(widthinches);
+
                 $('#roll_id').val(selectedOption.attr('value'));
                 $('#cutpiece_id').val(selectedOption.attr('cutpieceID'));
                 $('#atslength').val(selectedOption.attr('length'));
