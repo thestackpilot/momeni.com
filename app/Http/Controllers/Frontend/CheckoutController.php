@@ -342,6 +342,8 @@ class CheckoutController extends FrontendController
                         "UserRemarks" => $item['user_remarks'],
                         "ETA_Date" => "\/Date(-62135596800000)\/",
                         'OrderLength' => $order_length,
+                        "CFA" => $item['cfa'] == 1 ? "Y" : "N",
+                        "IsRemnantShipable" => $item['remnant_shipable'] == 1 ? "Y" : "N",
                         'CutPieces' => $cut_pieces,
                         'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : '',
                         'SKU'       => $item['oak_sku']];
@@ -394,7 +396,7 @@ class CheckoutController extends FrontendController
             if (!$payment_response['success']) {
                 return response()->json($payment_response);
             }
-           // dd($headers, $itemDetail);
+            // dd($headers, $itemDetail);
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] == 1) {
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,
