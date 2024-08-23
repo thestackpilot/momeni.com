@@ -288,7 +288,7 @@
                                     </div>
                                     <div class="col-md-6 col-sm-12">
                                         <div class="cut-pieces-wrapper">
-                                            <div style="font-size: 22px;"><strong>Show Cut</strong></div>
+                                            <div style="font-size: 22px;"><strong>Cut Layout</strong></div>
                                             <div class="cut-pieces" id="cut-pieces">
                                             </div>
                                         </div>
@@ -300,7 +300,7 @@
                                                 id="cut_piece_btn">Add Cut Piece <i class="fa fa-long-arrow-right"></i>
                                         </button>
                                         <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn" disabled>
-                                            Cut Layout <i class="fa fa-long-arrow-right"></i></button>
+                                           Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="show-piece-btn broadloom-btns d-none" id="hide-cut-piece-btn">
                                             Hide Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">Add to
