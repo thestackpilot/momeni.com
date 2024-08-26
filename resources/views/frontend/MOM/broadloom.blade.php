@@ -40,6 +40,8 @@
             <input type="hidden" id="cart_item_currency" name="cart_item_currency" value="">
             <input type="hidden" id="cart_item_image" name="cart_item_image" value="">
             <input type="hidden" id="cart_item_eta" name="cart_item_eta" value="">
+            <input type="hidden" id="unit-price" name="unit-price" value="">
+            <input type="hidden" id="unit-price-cal" name="unit-price-cal" value="">
             {{-- <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}"> --}}
 
             <div class="site-wrapper-reveal">
@@ -1062,6 +1064,7 @@
                                                 'user_remarks': customer_instruction,
                                                 'cfa': cfa_check,
                                                 'remnant_shipable': remnant_check,
+                                                'unit_price': $("#unit-price-cal").val(),
                                             },
                                             success: function (response) {
                                                 if (response.success) {
@@ -1177,6 +1180,7 @@
                                 'user_remarks': customer_instruction,
                                 'cfa': cfa_check,
                                 'remnant_shipable': remnant_check,
+                                'unit_price': $("#unit-price-cal").val(),
                             },
                             success: function (response) {
                                 if (response.success) {
@@ -1295,6 +1299,8 @@
                             let widthWithInches = 0;
                             let mxlenf = 0;
                             let mxlen = 0;
+                            let unitpriceCal = 0;
+                            $('#unit-price-cal').val('');
 
                             $.each(response['OutPut']['AddCutPieces'], function (index, item) {
                                 console.log('rm cut piece res', response['OutPut']['AddCutPieces']);
@@ -1309,9 +1315,11 @@
                                 mxlen = mxlen + lengthInches;
 
                                 let surging = '';
-                                if (item.SergingType != "0") {
+                                if (item.SergingType != "0" && item.LengthStatus != "R") {
                                     surging = ' Serging';
+                                    unitpriceCal += parseFloat($('#unit-price').val());
                                 }
+                                console.log('unitpriceCal', unitpriceCal);
 
                                 lenInchCal = (lengthInches * 0.0833333);
                                 widInchCal = (widthInches * 0.0833333);
@@ -1378,6 +1386,8 @@
                             item_object.CutPieces = response['OutPut']['AddCutPieces'];
                             $('#cut_pieces_json').val(JSON.stringify(response['OutPut']['AddCutPieces']));
                             $('#item_json').val(JSON.stringify(item_object));
+                            unitpriceCal = unitpriceCal.toFixed(2);
+                            $('#unit-price-cal').val(unitpriceCal);
 
                             toastr.success('Cut Piece Removed', {
                                 hideDuration: 10000,
@@ -1509,6 +1519,7 @@
                         let widthWithInchesSerg = 0;
                         let mxlenf = 0;
                         let mxlen = 0;
+                        let unitpriceCal = 0;
 
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
                             let lengthFeet = Math.floor(item.ATSLength / 12);
@@ -1521,7 +1532,10 @@
                             let surging = '';
                             if (item.SergingType != "0") {
                                 surging = ' Serging';
+                                console.log('in serging add');
+                                unitpriceCal += parseFloat($('#unit-price').val());
                             }
+                            console.log('unitpriceCal', unitpriceCal);
 
                             mxlenf = mxlenf + lengthFeet;
                             mxlen = mxlen + lengthInches;
@@ -1610,6 +1624,8 @@
                         $(".cut-pieces-wrapper").show();
                         $('#roll_pieces').prop('disabled', true);
                         $('#add_to_cart').removeClass('d-none');
+                        unitpriceCal = unitpriceCal.toFixed(2);
+                        $('#unit-price-cal').val(unitpriceCal);
                     } else {
                         console.log('data.cut_piece.OutPut.Message', data.cut_piece.OutPut.Message);
                         toastr.error(data.cut_piece.OutPut.Message, {
@@ -1893,5 +1909,21 @@
                 }
             })
         });
+
+        function GetCutingService(){
+            $.ajax({
+                url: '{{ route('broadloom.GetCutingService') }}',
+                method: 'GET',
+                success: function(response) {
+                    var unitprice = parseFloat(response.OutPut.UnitPrice).toFixed(2);
+                    $("#unit-price").val(unitprice);
+                },
+                error: function(error) {
+                    console.error('Error occurred in GetCutingService call : ', error);
+                }
+            });
+        }
+        GetCutingService()
+
     </script>
 @endsection
