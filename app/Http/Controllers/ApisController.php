@@ -274,7 +274,7 @@ class ApisController extends RootController
         $sale_rep_id = Auth::user()->is_customer ? '' : $SalesRep;
         $customer_id = Auth::user()->is_customer ? $SalesRep : '';
         $post_array = array('SalesRepID' => $sale_rep_id, 'CustomerID' => $customer_id, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
-        
+
         if (Auth::user()->is_customer) {
             return $this->Post_API_Signature('ViewCustomerReport', 'Get Sales Report', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
         }
@@ -668,6 +668,12 @@ class ApisController extends RootController
     {
         $post_array = array( 'TempSalesOrderNo' => $TempSalesOrderNo, 'LoggedUserNo' => $LoggedUserNo  );
         return $this->Post_API_Signature( 'Get_ShowCut', 'Cut Pieces', $post_array, ['ShowCuts'] );
+    }
+
+    public function GetCutingService()
+    {
+        $post_array = [];
+        return $this->Post_API_Signature('GetCutingService', 'Get Cuting Service', $post_array, [] );
     }
 
     public function RemoveCutPiece( $TempSalesOrderNo = '', $CutPieceID = '', $RollID = '', $LineNo = '', $LoggedUserNo = '' )

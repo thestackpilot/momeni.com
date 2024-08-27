@@ -68,13 +68,14 @@
                                                     @endif
                                                 @endforeach
                                                 <th>Price</th>
-                                                <th>Serging Rate</th>
+                                                <th>Serging</th>
+                                                <th>Cutting</th>
                                                 <th>Sub Total</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             @if (count((array) $cart->items))
-                                                @php $sergingTotal = 0; @endphp
+                                                @php $priceTotal = 0; $sergingTotal = 0;  $cuttingTotal = 0; @endphp
                                                 @foreach ($cart->items as $item)
                                                     @php
                                                         if (isset($item->item_data) && $item->item_data) {
@@ -126,7 +127,8 @@
                                                                                         $lenght_inch =  $item_sizes['ATSLength'] % 12;
                                                                                         $width_inch =   $item_sizes['ATSWidth'] % 12;
                                                                                         if (!empty($item_sizes['SergingType'])) {
-                                                                                            // $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
+                                                                                            $serging_charges = 0;
+                                                                                           // $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
                                                                                             $cut_piece_serging_charges = ((($lenght_feet * 12 + $lenght_inch) + ($width_feet * 12 + $width_inch)) * 2 / 12) * $item_sizes['SergingCharges'];
                                                                                             $serging_charges += $cut_piece_serging_charges;
                                                                                             $sum_surging_charges += $serging_charges;
@@ -173,13 +175,25 @@
                                                             </td>
                                                         @endif
                                                         <td class="align-content-center">
+                                                            @php
+                                                                $priceTotal += $item->item_price;
+                                                                number_format($priceTotal, 2);
+                                                            @endphp
                                                             {{ $item->item_currency }}{{ $item->item_price }}</td>
                                                         <td class="align-content-center">
                                                             @php
                                                                 $sergingTotal += $sum_surging_charges;
                                                                 number_format($sergingTotal, 2);
                                                             @endphp
-                                                            {{ $item->item_currency }}{{ number_format($sum_surging_charges, 2) }}</td>
+                                                            {{ $item->item_currency }}{{ number_format($sum_surging_charges, 2) }}
+                                                        </td>
+                                                        <td class="align-content-center">
+                                                            @php
+                                                            $cuttingTotal += $item->unit_price;
+                                                            number_format($cuttingTotal, 2);
+                                                            @endphp
+                                                            {{ $item->item_currency }}{{ number_format($item->unit_price, 2) }}
+                                                        </td>
                                                         <td class="align-content-center">{{ $item->item_currency }}<span
                                                                 id="item_total_price">{{ number_format($sum_surging_charges + $item->item_total, 2)  }}</span>
                                                         </td>
@@ -219,18 +233,28 @@
                                     <div class="d-flex justify-content-around align-items-left flex-column">
                                         <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
                                         <div class="row mt-3">
-                                            <div class="col-md-6">SubTotal:</div>
-                                            <div class="col-md-6 text-right"><span id="item_subtotal_price" class="cart_total">{{ $cart->cart_currency }}{{ $cart->cart_total }}</span></div>
+                                            <div class="col-md-7">Merchandise Total:</div>
+                                            <div class="col-md-5 text-right"><span id="item_subtotal_price" class="cart_total">{{ $cart->cart_currency }}{{ number_format($priceTotal, 2) }}</span></div>
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row">
-                                            <div class="col-md-9">Shipping Charges:</div>
-                                            <div class="col-md-3 text-right shipping_charges">$0.00</div>
+                                            <div class="col-md-7">Serging Charges:</div>
+                                            <div class="col-md-5 text-right serging_charges">{{ $cart->cart_currency }}{{ number_format($sergingTotal, 2) }}</div>
+                                        </div>
+                                        <hr style="border-top-color: whitesmoke;">
+                                        <div class="row">
+                                            <div class="col-md-7">Cutting Charges:</div>
+                                            <div class="col-md-5 text-right cutting_charges">{{ $cart->cart_currency }}{{ number_format($cuttingTotal, 2) }}</div>
+                                        </div>
+                                        <hr style="border-top-color: whitesmoke;">
+                                        <div class="row">
+                                            <div class="col-md-7">Shipping Charges:</div>
+                                            <div class="col-md-5 text-right shipping_charges">$0.00</div>
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row mt-3">
                                             <div class="col-md-6 font-weight-bold">Total:</div>
-                                            <div class="col-md-6 font-weight-bold text-right cart_total"></div>
+                                            <div class="col-md-6 font-weight-bold text-right cart_total_final"></div>
                                         </div>
                                         <btn class="add-to-cart-button text-left btn btn-dark col-md-12 mt-3 mb-3"
                                              id="proceed_to_checkout">
@@ -500,7 +524,7 @@
                                             <p class="mt-2 mb-2 text-center fa-2x">Your Order</p>
                                             <div class="row mt-3 px-5">
                                                 <div class="col-md-6">Product</div>
-                                                <div class="col-md-6 text-right">Price</div>
+                                                <div class="col-md-6 text-right">SubTotal</div>
                                             </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
 
@@ -512,6 +536,7 @@
                                                         //$item_data = json_decode($item -> item_data);
                                                     }
                                                     $total_price += $item->item_price;
+                                                    $sum_surging_charges=0; $sergingTotal=0;
                                                 @endphp
                                                 <div class="row px-5">
                                                     <div class="col-md-9">
@@ -544,8 +569,10 @@
                                                                                     $width_inch =   $item_sizes['ATSWidth'] % 12;
                                                                                     if (!empty($item_sizes['SergingType'])) {
                                                                                         $serging_charges = 0;
-                                                                                        $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
+                                                                                       // $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
+                                                                                        $cut_piece_serging_charges = ((($lenght_feet * 12 + $lenght_inch) + ($width_feet * 12 + $width_inch)) * 2 / 12) * $item_sizes['SergingCharges'];
                                                                                         $serging_charges += $cut_piece_serging_charges;
+                                                                                        $sum_surging_charges += $serging_charges;
                                                                                     }
                                                                                 @endphp
                                                                                 <div
@@ -568,18 +595,28 @@
                                                         </div>
                                                     </div>
                                                     <div
-                                                        class="col-md-3 text-right align-content-center">{{$item->item_currency}}{{$item->item_total}}</div>
+                                                        class="col-md-3 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $sum_surging_charges, 2)}}</div>
                                                 </div>
                                                 <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             @endforeach
                                             @if(isset($item))
                                                 <div class="row px-5">
-                                                    <div class="col-md-6 font-weight-bold">SubTotal</div>
+                                                    <div class="col-md-6 font-weight-bold">Merchandise Total</div>
 
                                                     <div
                                                         class="col-md-6 font-weight-bold text-right section_2_subtotal">{{$item->item_currency}}{{$total_price}}</div>
                                                 </div>
                                             @endif
+                                            <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                            <div class="row px-5">
+                                                <div class="col-md-9">Serging Charges</div>
+                                                <div class="col-md-3 text-right section_2_serging_charges">$0.00</div>
+                                            </div>
+                                            <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                            <div class="row px-5">
+                                                <div class="col-md-9">Cutting Charges</div>
+                                                <div class="col-md-3 text-right section_2_cutting_charges">$0.00</div>
+                                            </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row px-5">
                                                 <div class="col-md-9">Shipping Charges</div>
@@ -674,7 +711,7 @@
                                 PRODUCT
                             </div>
                             <div class="col-sm-4 text-right fa">
-                                PRICE
+                                SUBTOTAL
                             </div>
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
@@ -745,7 +782,7 @@
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
-                            <div class="col-md-4 align-content-center font-weight--bold">SubTotal</div>
+                            <div class="col-md-4 align-content-center font-weight--bold">Merchandise Total</div>
                             <div class="col-md-4 align-content-center text-right font-weight--bold order-detail-subtotal">
                                 ${{$cart->cart_total}}</div>
                             {{-- <div class="col-md-4 align-content-center text-right font-weight--bold">
@@ -753,14 +790,19 @@
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
-                            <div class="col-md-4 align-content-center">Shipping Charges</div>
-                            <div class="col-md-4 align-content-center text-right">$0.00</div>
+                            <div class="col-md-4 align-content-center">Serging Charges</div>
+                            <div class="col-md-4 align-content-center text-right order-detail-serging">$0.00</div>
+                            <div class="col-md-9 mb-3">
+                                <hr class="mx-4" style="border-top-color: whitesmoke;">
+                            </div>
+                            <div class="col-md-4 align-content-center">Cutting Charges</div>
+                            <div class="col-md-4 align-content-center text-right order-detail-cutting">$0.00</div>
                             <div class="col-md-9 mb-3">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
                             <div class="col-md-4 align-content-center font-weight--bold" style="font-size: 20px">Total
                             </div>
-                            <div class="col-md-4 align-content-center text-right font-weight--bold mb-5 cart_total"
+                            <div class="col-md-4 align-content-center text-right font-weight--bold mb-5 cart_total_final"
                                  style="font-size: 20px"></div>
                             <div class="col-sm-8 my-5 row justify-content-center">
                                 <a href="/" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5"
@@ -804,9 +846,13 @@
             var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
             var shippingCharges = parseFloat($(".section_2_shipping_charges").text().replace('$', ''));
             var sergingTotal = parseFloat($("#sergingTotal").val());
-            var total = subtotal + sergingTotal + shippingCharges;
-            var subtotalprice = subtotal +sergingTotal;
-            $(".section_2_subtotal").text("$" + subtotalprice.toFixed(2));
+            var serging_charges = parseFloat($(".serging_charges").text().replace('$', " ").replace(',', ""));
+            var cutting_charges = parseFloat($(".cutting_charges").text().replace('$', " ").replace(',', ""));
+            var total = subtotal + serging_charges + shippingCharges;
+
+            $(".section_2_subtotal").text("$" + subtotal.toFixed(2));
+            $(".section_2_serging_charges").text("$" + serging_charges.toFixed(2));
+            $(".section_2_cutting_charges").text("$" + cutting_charges.toFixed(2));
             $(".section_2_cart_total").text("$" + total.toFixed(2));
 
             // $('.delete-row').click(function () {
@@ -881,15 +927,25 @@
             }
 
             function updateTotal() {
-                //    var subtotal = parseFloat($("#item_subtotal_price").text());
+                //var subtotal = parseFloat($("#item_subtotal_price").text());
                 var subtotal = parseFloat($("#item_subtotal_price").text().replace('$', " ").replace(',', ""));
                 var shippingCharges = parseFloat($(".shipping_charges").text().replace('$', ''));
-                var sergingTotal = parseFloat($("#sergingTotal").val());
-                var orderDeatilSubTotal = subtotal + sergingTotal;
+                var sergingTotal = parseFloat($(".serging_charges").text().replace('$', " ").replace(',', ""));
+                var sergingCharges = parseFloat($(".section_2_serging_charges").text().replace('$', " ").replace(',', ""));
+                var cuttingCharges = parseFloat($(".section_2_cutting_charges").text().replace('$', " ").replace(',', ""));
+                // var orderDeatilSubTotal = subtotal + sergingTotal;
+                var orderDeatilSubTotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
+
                 var total = subtotal + sergingTotal + shippingCharges;
 
+
+
+
                 $('.order-detail-subtotal').text("$" + orderDeatilSubTotal.toFixed(2));
-                $(".cart_total").text("$" + total.toFixed(2));
+                $('.order-detail-serging').text("$" + sergingCharges.toFixed(2));
+                $('.order-detail-cutting').text("$" + cuttingCharges.toFixed(2));
+                $(".cart_total").text("$" + subtotal.toFixed(2));
+                $(".cart_total_final").text("$" + total.toFixed(2));
             }
 
             updateTotal();

@@ -72,6 +72,7 @@ Route::get('/broad-loom-order-complete', [BroadloomController::class, 'order_com
 Route::post('/cut-pieces', [BroadloomController::class, 'AddCutPiece'])->name('broadloom.cutPiece');
 Route::post('/remove-cut-pieces', [BroadloomController::class, 'RemoveCutPiece'])->name('broadloom.removeCutPiece');
 Route::post('/remove-all-cut-pieces', [BroadloomController::class, 'RemoveAllCutPiece'])->name('broadloom.removeAllCutPiece');
+Route::get('/get-cutting-service', [BroadloomController::class, 'GetCutingService'])->name('broadloom.GetCutingService');
 Route::post( '/item/ats', [ItemController::class, 'get_item_ats'] )->name( 'frontend.item.ats' );
 Route::post( '/item/design_ats', [ItemController::class, 'get_design_ats'] )->name( 'frontend.item.design_ats' );
 Route::get('/get-cut-pieces', [BroadloomController::class, 'get_cut_pieces'])->name('get-cut-pieces');
