@@ -711,7 +711,7 @@
                                 PRODUCT
                             </div>
                             <div class="col-sm-4 text-right fa">
-                                PRICE
+                                SUBTOTAL
                             </div>
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
@@ -782,7 +782,7 @@
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
-                            <div class="col-md-4 align-content-center font-weight--bold">SubTotal</div>
+                            <div class="col-md-4 align-content-center font-weight--bold">Merchandise Total</div>
                             <div class="col-md-4 align-content-center text-right font-weight--bold order-detail-subtotal">
                                 ${{$cart->cart_total}}</div>
                             {{-- <div class="col-md-4 align-content-center text-right font-weight--bold">
@@ -790,14 +790,19 @@
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
-                            <div class="col-md-4 align-content-center">Shipping Charges</div>
-                            <div class="col-md-4 align-content-center text-right">$0.00</div>
+                            <div class="col-md-4 align-content-center">Serging Charges</div>
+                            <div class="col-md-4 align-content-center text-right order-detail-serging">$0.00</div>
+                            <div class="col-md-9 mb-3">
+                                <hr class="mx-4" style="border-top-color: whitesmoke;">
+                            </div>
+                            <div class="col-md-4 align-content-center">Cutting Charges</div>
+                            <div class="col-md-4 align-content-center text-right order-detail-cutting">$0.00</div>
                             <div class="col-md-9 mb-3">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
                             <div class="col-md-4 align-content-center font-weight--bold" style="font-size: 20px">Total
                             </div>
-                            <div class="col-md-4 align-content-center text-right font-weight--bold mb-5 cart_total"
+                            <div class="col-md-4 align-content-center text-right font-weight--bold mb-5 cart_total_final"
                                  style="font-size: 20px"></div>
                             <div class="col-sm-8 my-5 row justify-content-center">
                                 <a href="/" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5"
@@ -926,13 +931,19 @@
                 var subtotal = parseFloat($("#item_subtotal_price").text().replace('$', " ").replace(',', ""));
                 var shippingCharges = parseFloat($(".shipping_charges").text().replace('$', ''));
                 var sergingTotal = parseFloat($(".serging_charges").text().replace('$', " ").replace(',', ""));
-                var orderDeatilSubTotal = subtotal + sergingTotal;
+                var sergingCharges = parseFloat($(".section_2_serging_charges").text().replace('$', " ").replace(',', ""));
+                var cuttingCharges = parseFloat($(".section_2_cutting_charges").text().replace('$', " ").replace(',', ""));
+                // var orderDeatilSubTotal = subtotal + sergingTotal;
+                var orderDeatilSubTotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
+
                 var total = subtotal + sergingTotal + shippingCharges;
 
-                console.log('subtotal', subtotal);
-                console.log('sergingTotal', sergingTotal);
+
+
 
                 $('.order-detail-subtotal').text("$" + orderDeatilSubTotal.toFixed(2));
+                $('.order-detail-serging').text("$" + sergingCharges.toFixed(2));
+                $('.order-detail-cutting').text("$" + cuttingCharges.toFixed(2));
                 $(".cart_total").text("$" + subtotal.toFixed(2));
                 $(".cart_total_final").text("$" + total.toFixed(2));
             }
