@@ -46,7 +46,7 @@
 
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
-                    <div style="font-size: 28px;"><strong>{{$item['ItemName']}}</strong></div>
+                    <div style="font-size: 28px;" id="show-bd-name"><strong>{{$item['ItemName']}}</strong></div>
                     <div class="card">
                         <div class="card-body">
                             <div class="container">
@@ -1925,5 +1925,7 @@
         }
         GetCutingService()
 
+        var roll_cutpiece_id = $('#roll_pieces');
+        roll_cutpiece_id.find('option').length <= 1 ?  $('#show-bd-name').hide() :  $('#show-bd-name').show();
     </script>
 @endsection
