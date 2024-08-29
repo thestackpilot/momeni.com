@@ -247,16 +247,6 @@
                                                                style="text-align:right;">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12 col-sm-12">
-                                                    <label for="">
-                                                        <input type="checkbox" name="" id="cfa_check">
-                                                        <strong> CFA </strong>
-                                                    </label>
-                                                    <label for="" class="mx-4">
-                                                        <input type="checkbox" name="" id="remnant_check">
-                                                        <strong> Is Remnant Shippable </strong>
-                                                    </label>
-                                                </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for=""><strong>Customer Instructions</strong> </label>
@@ -297,16 +287,32 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-12 mt-5 text-center">
-                                        <button class="add-piece-btn broadloom-btns add-cut-piece-btn"
-                                                id="cut_piece_btn">Add Cut Piece <i class="fa fa-long-arrow-right"></i>
-                                        </button>
-                                        <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn" disabled>
-                                           Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
-                                        <button class="show-piece-btn broadloom-btns d-none" id="hide-cut-piece-btn">
-                                            Hide Cut Piece <i class="fa fa-long-arrow-right"></i></button>
-                                        <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">Add to
-                                            Cart <i class="fa fa-long-arrow-right"></i></button>
+                                    <div class="col-6 mt-5 text-center d-flex justify-content-start align-items-center">
+                                        <div>
+                                            <button class="add-piece-btn broadloom-btns add-cut-piece-btn" id="cut_piece_btn">
+                                                Add Cut Piece <i class="fa fa-long-arrow-right"></i>
+                                            </button>
+                                            <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn" disabled>
+                                                Show Cut Piece <i class="fa fa-long-arrow-right"></i>
+                                            </button>
+                                            <button class="show-piece-btn broadloom-btns d-none" id="hide-cut-piece-btn">
+                                                Hide Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mt-5 text-center d-flex justify-content-end align-items-center">
+                                        <div class="d-flex flex-row align-items-center">
+                                            <label for="" class="mx-2">
+                                                <input type="checkbox" name="" id="cfa_check">
+                                                <strong> CFA Required </strong>
+                                            </label>
+                                            <label for="" class="mx-2">
+                                                <input type="checkbox" name="" id="remnant_check">
+                                                <strong> Remnant Required </strong>
+                                            </label>
+                                            <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart" style="margin-right: 10px;">
+                                                Add to Cart <i class="fa fa-long-arrow-right"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
