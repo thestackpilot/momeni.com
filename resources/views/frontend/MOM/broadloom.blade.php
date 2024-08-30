@@ -1093,7 +1093,8 @@
                                                             $('#sq-yrd').val('');
                                                             $('#sq-ext').val('');
                                                             $('#surging_options').val('');
-                                                            $('#surging_check').prop('checked', false);
+                                                            $('#surging_options').prop('disabled', true);
+                                                            $('#surging_check').prop('checked', true);
                                                             $('#surging_charges').val('');
                                                             $('#cust-inst').val('');
                                                             $("#cfa_check").prop("checked", false);
@@ -1214,7 +1215,7 @@
                                             $('#cust-inst').val('');
                                             $("#cfa_check").prop("checked", false);
                                             $("#remnant_check").prop("checked", false);
-
+                                            $('#surging_options').prop('disabled', true);
                                             $('#show-cut-piece-btn').addClass('d-none');
                                             $('#hide-cut-piece-btn').addClass('d-none');
                                             $('#add_to_cart').addClass('d-none');
@@ -1602,7 +1603,8 @@
                         })
 
                         $('#surging_check').prop('checked', false);
-                        $('#surging_options').val('0');
+                        $('#surging_options').prop('disabled', true);
+                        $('#surging_options').val('0')
                         $('#surging_charges').val('');
                         $("#sergingtypeno").val('');
 
