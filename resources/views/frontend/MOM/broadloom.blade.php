@@ -46,7 +46,7 @@
 
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
-                    <div style="font-size: 28px;"><strong>{{$item['ItemName']}}</strong></div>
+                    <div style="font-size: 28px;" id="show-bd-name"><strong>{{$item['ItemName']}}</strong></div>
                     <div class="card">
                         <div class="card-body">
                             <div class="container">
@@ -247,16 +247,6 @@
                                                                style="text-align:right;">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12 col-sm-12">
-                                                    <label for="">
-                                                        <input type="checkbox" name="" id="cfa_check">
-                                                        <strong> CFA </strong>
-                                                    </label>
-                                                    <label for="" class="mx-4">
-                                                        <input type="checkbox" name="" id="remnant_check">
-                                                        <strong> Is Remnant Shippable </strong>
-                                                    </label>
-                                                </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for=""><strong>Customer Instructions</strong> </label>
@@ -297,16 +287,32 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-12 mt-5 text-center">
-                                        <button class="add-piece-btn broadloom-btns add-cut-piece-btn"
-                                                id="cut_piece_btn">Add Cut Piece <i class="fa fa-long-arrow-right"></i>
-                                        </button>
-                                        <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn" disabled>
-                                           Show Cut Piece <i class="fa fa-long-arrow-right"></i></button>
-                                        <button class="show-piece-btn broadloom-btns d-none" id="hide-cut-piece-btn">
-                                            Hide Cut Piece <i class="fa fa-long-arrow-right"></i></button>
-                                        <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">Add to
-                                            Cart <i class="fa fa-long-arrow-right"></i></button>
+                                    <div class="col-6 mt-5 text-center d-flex justify-content-start align-items-center">
+                                        <div>
+                                            <button class="add-piece-btn broadloom-btns add-cut-piece-btn" id="cut_piece_btn">
+                                                Add Cut Piece <i class="fa fa-long-arrow-right"></i>
+                                            </button>
+                                            <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn" disabled>
+                                                Show Cut Piece <i class="fa fa-long-arrow-right"></i>
+                                            </button>
+                                            <button class="show-piece-btn broadloom-btns d-none" id="hide-cut-piece-btn">
+                                                Hide Cut Piece <i class="fa fa-long-arrow-right"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mt-5 text-center d-flex justify-content-end align-items-center">
+                                        <div class="d-flex flex-row align-items-center">
+                                            <label for="" class="mx-2">
+                                                <input type="checkbox" name="" id="cfa_check">
+                                                <strong> CFA Required </strong>
+                                            </label>
+                                            <label for="" class="mx-2">
+                                                <input type="checkbox" name="" id="remnant_check">
+                                                <strong> Remnant Required </strong>
+                                            </label>
+                                            <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart" style="margin-right: 10px;">
+                                                Add to Cart <i class="fa fa-long-arrow-right"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1087,7 +1093,8 @@
                                                             $('#sq-yrd').val('');
                                                             $('#sq-ext').val('');
                                                             $('#surging_options').val('');
-                                                            $('#surging_check').prop('checked', false);
+                                                            $('#surging_options').prop('disabled', true);
+                                                            $('#surging_check').prop('checked', true);
                                                             $('#surging_charges').val('');
                                                             $('#cust-inst').val('');
                                                             $("#cfa_check").prop("checked", false);
@@ -1208,7 +1215,7 @@
                                             $('#cust-inst').val('');
                                             $("#cfa_check").prop("checked", false);
                                             $("#remnant_check").prop("checked", false);
-
+                                            $('#surging_options').prop('disabled', true);
                                             $('#show-cut-piece-btn').addClass('d-none');
                                             $('#hide-cut-piece-btn').addClass('d-none');
                                             $('#add_to_cart').addClass('d-none');
@@ -1596,7 +1603,8 @@
                         })
 
                         $('#surging_check').prop('checked', false);
-                        $('#surging_options').val('0');
+                        $('#surging_options').prop('disabled', true);
+                        $('#surging_options').val('0')
                         $('#surging_charges').val('');
                         $("#sergingtypeno").val('');
 
@@ -1925,5 +1933,7 @@
         }
         GetCutingService()
 
+        var roll_cutpiece_id = $('#roll_pieces');
+        roll_cutpiece_id.find('option').length <= 1 ?  $('#show-bd-name').hide() :  $('#show-bd-name').show();
     </script>
 @endsection

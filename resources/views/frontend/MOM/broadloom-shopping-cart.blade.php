@@ -1,3 +1,4 @@
+
 @php
     // $active_theme object is available containing the theme developer json loaded.
     // This is for the theme developers who want to load further view assets
@@ -75,7 +76,7 @@
                                             </thead>
                                             <tbody>
                                             @if (count((array) $cart->items))
-                                                @php $priceTotal = 0; $sergingTotal = 0;  $cuttingTotal = 0; @endphp
+                                                @php  $subPriceTotal = 0;  $priceTotal = 0; $sergingTotal = 0;  $cuttingTotal = 0; @endphp
                                                 @foreach ($cart->items as $item)
                                                     @php
                                                         if (isset($item->item_data) && $item->item_data) {
@@ -195,11 +196,17 @@
                                                             {{ $item->item_currency }}{{ number_format($item->unit_price, 2) }}
                                                         </td>
                                                         <td class="align-content-center">{{ $item->item_currency }}<span
-                                                                id="item_total_price">{{ number_format($sum_surging_charges + $item->item_total, 2)  }}</span>
+                                                                id="item_total_price">{{ number_format($sum_surging_charges + $item->unit_price + $item->item_total, 2)  }}
+                                                            @php
+                                                                $subPriceTotal += $sum_surging_charges + $item->unit_price + $item->item_total
+                                                            @endphp
+                                                        </span>
                                                         </td>
                                                     </tr>
                                                 @endforeach
                                                 <input type="hidden" id="sergingTotal" value="{{ number_format($sergingTotal, 2) }}">
+                                                <input type="hidden" id="sergingTotal" value="{{ number_format($sergingTotal, 2) }}">
+                                                <input type="hidden" name="inside-hidden-subtotal" id="inside-hidden-subtotal" value="{{ number_format( $subPriceTotal, 2)}}">
                                             @else
                                                 <tr>
                                                     No Item in Cart
@@ -229,6 +236,7 @@
                                 </div>
                             </div>
                             @if((count((array) $cart->items)))
+
                                 <div class="col-md-3 col-sm-12 border">
                                     <div class="d-flex justify-content-around align-items-left flex-column">
                                         <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
@@ -595,7 +603,7 @@
                                                         </div>
                                                     </div>
                                                     <div
-                                                        class="col-md-3 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $sum_surging_charges, 2)}}</div>
+                                                        class="col-md-3 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->unit_price + $sum_surging_charges, 2)}}</div>
                                                 </div>
                                                 <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             @endforeach
@@ -777,7 +785,7 @@
                                 @endphp
                             @endforeach --}}
 
-                            <div class="col-md-3 text-right align-content-center">${{$cart->cart_total}}</div>
+                            <div class="col-md-3 text-right align-content-center" id="lastpage-subtotal">${{$cart->cart_total}}</div>
                             {{-- <div class="col-md-3 text-right align-content-center">${{$bd_cart_price}}</div> --}}
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
@@ -848,7 +856,7 @@
             var sergingTotal = parseFloat($("#sergingTotal").val());
             var serging_charges = parseFloat($(".serging_charges").text().replace('$', " ").replace(',', ""));
             var cutting_charges = parseFloat($(".cutting_charges").text().replace('$', " ").replace(',', ""));
-            var total = subtotal + serging_charges + shippingCharges;
+            var total = subtotal + serging_charges + cutting_charges + shippingCharges;
 
             $(".section_2_subtotal").text("$" + subtotal.toFixed(2));
             $(".section_2_serging_charges").text("$" + serging_charges.toFixed(2));
@@ -933,10 +941,10 @@
                 var sergingTotal = parseFloat($(".serging_charges").text().replace('$', " ").replace(',', ""));
                 var sergingCharges = parseFloat($(".section_2_serging_charges").text().replace('$', " ").replace(',', ""));
                 var cuttingCharges = parseFloat($(".section_2_cutting_charges").text().replace('$', " ").replace(',', ""));
-                // var orderDeatilSubTotal = subtotal + sergingTotal;
+                // var orderDeatilSubTotal = subtotal + sergingTotal
                 var orderDeatilSubTotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
-
-                var total = subtotal + sergingTotal + shippingCharges;
+                //subtotal = parseFloat($("#inside-hidden-subtotal").val().replace('$', " ").replace(',', ""));
+                var total = subtotal + sergingTotal + cuttingCharges + shippingCharges;
 
 
 
@@ -999,6 +1007,8 @@
                 var zipCode = $('input[name="Zip"]')[0];
                 var refNo = $('input[name="reference_number"]')[0];
                 var shipDate = $('input[name="ship_date"]')[0];
+                $('#lastpage-subtotal').text("$" + $('#inside-hidden-subtotal').val());
+
 
                 // form.checkValidity()
                 if (firstName.checkValidity() && streetaddress.checkValidity()  && country.checkValidity()  && city.checkValidity()  && zipCode.checkValidity() && refNo.checkValidity() && shipDate.checkValidity()) {
