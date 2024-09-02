@@ -523,9 +523,10 @@ use App\Http\Controllers\CommonController;
         hide_components(['#item_size_parent', '#item_customer_parent', '#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
         $('#item_color').html('');
         var urlParamsColorId  = new URLSearchParams(window.location.search).get('colorId');
+        console.log(item_object.Items)
 
         item_object.Items.forEach(function(item, index) {
-            // if (item.ItemName.trim() == ItemName.trim()) {
+            // if (item.ItemName.trim() === ItemName.trim()) {
                 if (!$('#item_color input[name=color]:contains(' + item.ItemColor + ')').length) {
                     $('#item_color').append($('<input>', {
                         value: item.ItemID,
