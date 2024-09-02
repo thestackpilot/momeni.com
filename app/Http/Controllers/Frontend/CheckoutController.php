@@ -486,7 +486,7 @@ class CheckoutController extends FrontendController
                 );
 
                 if ((isset($result['Exception']) && $result['Exception']) || (isset($result['ObjectID']) && $result['ObjectID'] >= 900)) {
-                    $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, true);
+                    $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', true);
                     $response['success'] = 1;
                     $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash;
 
