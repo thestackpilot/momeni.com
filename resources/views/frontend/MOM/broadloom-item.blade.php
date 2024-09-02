@@ -589,7 +589,7 @@ use App\Http\Controllers\CommonController;
         $('#item_size').html('');
         item_object.Items.forEach(function(item, index) {
             // if ((item.ItemName.trim() == ItemName.trim()) && (item.ItemColor.trim() == ItemColor.trim())) {
-                if (!$('#item_size input[name=size]:contains(' + item.ItemSize + ')').length) {
+                if (!$('#item_size input[name=size]:contains(' + item.ItemSize + ')').length && (item.ItemColor.trim() == ItemColor.trim())) {
                     $('#item_size').append($('<input>', {
                         value: item.ItemID,
                         text: item.ItemSize,
