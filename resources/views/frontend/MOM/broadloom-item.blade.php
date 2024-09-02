@@ -589,7 +589,7 @@ use App\Http\Controllers\CommonController;
         hide_components(['#item_cover_parent', '#item_customer_parent', '#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
         $('#item_size').html('');
         item_object.Items.forEach(function(item, index) {
-            if ((item.ItemName.trim() == ItemName.trim()) && (item.ItemColor.trim() == ItemColor.trim())) {
+            // if ((item.ItemName.trim() == ItemName.trim()) && (item.ItemColor.trim() == ItemColor.trim())) {
                 if (!$('#item_size input[name=size]:contains(' + item.ItemSize + ')').length) {
                     $('#item_size').append($('<input>', {
                         value: item.ItemID,
@@ -606,7 +606,7 @@ use App\Http\Controllers\CommonController;
                         for: 'size_' + item.ItemID
                     }));
                 }
-            }
+            // }
         });
         bindClicks();
 
