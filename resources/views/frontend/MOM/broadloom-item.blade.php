@@ -556,7 +556,7 @@ use App\Http\Controllers\CommonController;
         });
 
         bindClicks();
-
+        
         if(urlParamsColorId != undefined){
             var color = '';
             var forVal = '';
@@ -569,6 +569,7 @@ use App\Http\Controllers\CommonController;
             }).get();
             color = `{{isset($color) && $color ? $color : ''}}`;
             color_node = '#item_color label:has([title="' + color + '"])';
+            $(color_node).click();
             setTimeout(function() {
                 var label = $(color_node);
                 $(`${color_node}, #${forVal}`).click();
