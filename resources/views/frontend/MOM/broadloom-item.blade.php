@@ -525,7 +525,7 @@ use App\Http\Controllers\CommonController;
         var urlParamsColorId  = new URLSearchParams(window.location.search).get('colorId');
 
         item_object.Items.forEach(function(item, index) {
-            if (item.ItemName.trim() == ItemName.trim()) {
+            // if (item.ItemName.trim() == ItemName.trim()) {
                 if (!$('#item_color input[name=color]:contains(' + item.ItemColor + ')').length) {
                     $('#item_color').append($('<input>', {
                         value: item.ItemID,
@@ -551,7 +551,7 @@ use App\Http\Controllers\CommonController;
                         })
                     ));
                 }
-            }
+            // }
         });
 
         bindClicks();
@@ -566,7 +566,9 @@ use App\Http\Controllers\CommonController;
                     forVal = $(this).attr('for');
                 };
             }).get();
+            color = `{{isset($color) && $color ? $color : ''}}`;
             color_node = '#item_color label:has([title="' + color + '"])';
+            $(color_node).click();
             setTimeout(function() {
                 var label = $(color_node);
                 $(`${color_node}, #${forVal}`).click();
