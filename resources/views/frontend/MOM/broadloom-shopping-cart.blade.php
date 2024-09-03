@@ -1026,8 +1026,8 @@
                         success: function (response) {
                             if (response.success) {
                                 $('#orderno').text('');
-                                var spanText = response.msg.match(/:\s*([a-zA-Z0-9]+)/);
-                                var newOrderNo = spanText ? spanText[0] : '';
+                                var spanText = response.msg.match(/\s+(\d+)/);
+                                var newOrderNo = spanText ? spanText[1] : '';
                                 $('#orderno').text(newOrderNo);
                                 console.log(response.msg);
                                 console.log(spanText);
