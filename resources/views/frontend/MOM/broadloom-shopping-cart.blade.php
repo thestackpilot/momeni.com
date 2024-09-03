@@ -415,7 +415,7 @@
                                                            required> --}}
                                                     @if(isset($cust_state))
                                                         <select name="State" id="state_dropdown"
-                                                                class="form-control bg-white checkout-dropdown">
+                                                                class="form-control bg-white reter checkout-dropdown">
                                                         </select>
                                                     @elseif(!isset($cust_state) && isset($cust_state))
                                                         <input type="text" data-required="true"
@@ -454,9 +454,9 @@
                                                                         $selected = 'selected';
                                                                     }
                                                                 @endphp
-                                                                <option value="{{ $row['CountryNo'] }}"
-                                                                        origincode="{{ $row['OriginCode'] }}" {{$selected}}>
-                                                                    {{ $row['Description'] }}</option>
+                                                                <option value="{{ $row['OriginCode'] }}"
+                                                                    origincode="{{ $row['CountryNo'] }}" {{$selected}}>
+                                                                {{ $row['Description'] }}</option>
                                                             @endforeach
                                                         </select>
                                                     @elseif (!isset($countries) && isset($cust_country))
@@ -1087,10 +1087,15 @@
             });
 
             $(document).on('click', 'input[name="shipping-address"]', function () {
+                console.log('clicked');
                 var addressValue = $(this).val();
+                console.log(addressValue);
                 if (addressValue == 'existing-address') {
+                    $("#countries").val(0);
+                    $("#state_dropdown").val('');
                     $(".disable-toggle").addClass("muted-bd-fields");
                     $(".disable-toggle").removeAttr("required");
+                    $("input").val('');
                     $('#select-address').trigger('change');
                 } else {
                     $(".disable-toggle").removeClass("muted-bd-fields");
@@ -1128,6 +1133,14 @@
                 $('input[name="Address2"]').val(valSet.Address2);
                 $('input[name="City"]').val(valSet.City);
                 $('input[name="Zip"]').val(valSet.Zip);
+                // $('select[name="State"]').val(valSet.State);
+                // console.log(valSet.Country);
+                $('#countries').find('option').each(function() {
+                    if ($(this).text() === valSet.Country) {
+                        $(this).prop('selected', true);
+                        return false; // Exit the loop once the correct option is found
+                    }
+                });
             });
 
             @if(isset($cust_country))
@@ -1139,7 +1152,11 @@
             @endif
 
             $('#countries').change(function () {
-                var selectedCountry = $(this).val();
+                let selectedOption = $(this).find('option:selected');
+                // Get the origincode attribute from the selected option
+                let selectedCountry = selectedOption.attr('origincode');
+                console.log(selectedCountry);
+
                 if (selectedCountry) {
                     states(selectedCountry);
                 }
@@ -1153,12 +1170,12 @@
                     data: {country: countryno},
                     success: function (response) {
                         if (response.Success) {
+                            console.log("if");
                             $('#state_dropdown').empty();
                             $('#state_dropdown').append('<option value="">Select a state*</option>');
                             $.each(response.States, function (index, value) {
-                                // console.log('state val', value);
                                 var option = $('<option>', {
-                                    value: value.StateID.toString(),
+                                    value: value.StateCode.toString(),
                                     text: value.StateName
                                 });
                                 if (value.StateCode == $('#customer_state').val()) {
@@ -1167,6 +1184,7 @@
                                 $('#state_dropdown').append(option);
                             });
                         } else {
+                            console.log("if");
                             $('#state').val('');
                             $('#state_dropdown').empty();
                             $('#state_dropdown').append('<option value="">No States Available</option>');
@@ -1200,7 +1218,7 @@
             $('input[name="Address1"]').val(valSet.Address1);
             $('input[name="City"]').val(valSet.City);
             $('input[name="Zip"]').val(valSet.Zip);
-
+            $('#countries').change();
         });
 
     </script>
