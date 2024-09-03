@@ -1092,7 +1092,8 @@
                     $("#state_dropdown").val('');
                     $(".disable-toggle").addClass("muted-bd-fields");
                     $(".disable-toggle").removeAttr("required");
-                    $("input").val('');
+                    $("input").not("[type='radio']").val('');
+
                     $('#select-address').trigger('change');
                 } else {
                     $(".disable-toggle").removeClass("muted-bd-fields");
@@ -1130,14 +1131,18 @@
                 $('input[name="Address2"]').val(valSet.Address2);
                 $('input[name="City"]').val(valSet.City);
                 $('input[name="Zip"]').val(valSet.Zip);
-                // $('select[name="State"]').val(valSet.State);
+                $('#customer_state').val(valSet.State);
+                $('#customer_country').val(valSet.Country);
                 // console.log(valSet.Country);
                 $('#countries').find('option').each(function() {
-                    if ($(this).text() === valSet.Country) {
+                    console.log($(this).text());
+                    if ($.trim($(this).text()) === $.trim(valSet.Country)) {
                         $(this).prop('selected', true);
-                        return false; // Exit the loop once the correct option is found
+                        return false;
+                       console.log($(this).val());// Exit the loop once the correct option is found
                     }
                 });
+                $('#countries').change();
             });
 
             @if(isset($cust_country))
@@ -1175,6 +1180,7 @@
                                     value: value.StateCode.toString(),
                                     text: value.StateName
                                 });
+                                console.log($('#customer_state').val());
                                 if (value.StateCode == $('#customer_state').val()) {
                                     option.prop('selected', true);
                                 }
