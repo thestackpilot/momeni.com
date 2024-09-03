@@ -112,11 +112,9 @@
                                                                     <div class=" mt-2 row">Roll Id: <p
                                                                             class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
                                                                     </div>
-                                                                    <div class=" mt-2 row" style="display:flex; align-items: center; content: '';display: table;clear: both;">
-                                                                        <div class="row">
-                                                                            <div class="col-md-2 col-lg-3"> Sizes:</div>
-                                                                            <div class="col-md-10 col-lg-9" style="display: flex !important;flex-wrap: wrap; align-items: center;margin-left: auto;
-                                                                            margin-right: 0;">
+                                                                    <div class=" mt-2 row" style="display:flex; align-items: center;">
+                                                                            <div class="col-md-2 col-lg-2 p-0"> Sizes:</div>
+                                                                            <div class="col-md-10 col-lg-10 p-0" style="align-items: center;">
                                                                                 @php
                                                                                 $sizes = json_decode( unserialize($item->item_data ), true );
                                                                                 $sum_surging_charges = 0;
@@ -150,7 +148,6 @@
                                                                                     </div>
                                                                                 @endforeach
                                                                             </div>
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>

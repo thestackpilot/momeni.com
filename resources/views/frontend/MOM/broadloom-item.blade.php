@@ -271,7 +271,7 @@ use App\Http\Controllers\CommonController;
                     @foreach($related_designs['Designs'] as $design)
                     <div class="single-product-item text-center">
                         <div class="products-images">
-                            <a href="{{ $design['LinkUrl'] }}" class="product-thumbnail">
+                            <a href="{{ $design['LinkUrl'] }}?colorId={{$design['ColorDescription']}}" class="product-thumbnail">
                                 <img src="{{CommonController::getApiFullImage($design['ImageName'])}}" class="img-fluid" alt="{{ $design['Description']}}" title="{{ $design['CollectionID']}} - {{ $design['DesignID']}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'">
                             </a>
                         </div>
