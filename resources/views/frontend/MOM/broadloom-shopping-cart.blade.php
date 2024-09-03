@@ -1,3 +1,4 @@
+
 @php
     // $active_theme object is available containing the theme developer json loaded.
     // This is for the theme developers who want to load further view assets
@@ -100,7 +101,7 @@
                                                                         onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"
                                                                     >
                                                                 </div>
-                                                                <div class="col-8" style="font-size: 12px">
+                                                                <div class="col-lg-8 col-md-12 col-sm-12 ps-5" style="font-size: 12px">
                                                                     <div class=" mt-2 font-weight--bold row">Design: <p
                                                                             class="font-weight--normal mx-2">
                                                                             {{ $item_data->ItemName }}</p>
@@ -111,16 +112,17 @@
                                                                     <div class=" mt-2 row">Roll Id: <p
                                                                             class="font-weight--normal mx-2">{{ $item_data->RollID }}</p>
                                                                     </div>
-                                                                    <div class=" mt-2 row" style="display:flex; align-items: center">
+                                                                    <div class=" mt-2 row" style="display:flex; align-items: center; content: '';display: table;clear: both;">
                                                                         <div class="row">
-                                                                            <div class="col-md-2"> Sizes:</div>
-                                                                            <div class="col-md-10" style="margin: 0px 0px 0px -10px">
+                                                                            <div class="col-md-2 col-lg-3"> Sizes:</div>
+                                                                            <div class="col-md-10 col-lg-9" style="display: flex !important;flex-wrap: wrap; align-items: center;margin-left: auto;
+                                                                            margin-right: 0;">
                                                                                 @php
                                                                                 $sizes = json_decode( unserialize($item->item_data ), true );
                                                                                 $sum_surging_charges = 0;
                                                                                 //$sizes = json_decode($item->item_data, true );
                                                                                 @endphp
-                                                                                @foreach($sizes['CutPieces'] as $item_sizes)
+                                                                                @foreach($sizes['CutPieces'] as $key=>$item_sizes)
                                                                                     @php
                                                                                         $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
                                                                                         $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
@@ -136,7 +138,7 @@
                                                                                     @endphp
                                                                                     <div
                                                                                         class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
-                                                                                        style="margin: 2px 0px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                                                        style="margin:2px 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
                                                                                         {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
                                                                                         @if(!empty($item_sizes['SergingType']))
                                                                                             <span
@@ -676,7 +678,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col p-0">
                                         <strong id="orderno">4818</strong>
                                     </div>
                                 </div>
@@ -689,7 +691,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col p-0">
                                         <strong>{{ date('j F, Y') }}</strong>
                                     </div>
                                 </div>
@@ -702,7 +704,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col p-0">
                                         <strong class="cart_total">${{$cart->cart_total}}</strong>
                                     </div>
                                 </div>
@@ -744,11 +746,15 @@
                                             <div class="mx-3 mt-2 row">Roll Id: <p
                                                     class="font-weight--normal mx-2">{{ $item->bd_roll_id }}</p>
                                             </div>
-                                            <div class="mx-3 mt-2 row">Size:
+                                            <div class="mx-0 mt-2 row">
+                                                <div class="col-2">Size:
+                                                </div>
                                                 @php
                                                     $sizes = json_decode( unserialize($item->item_data ), true );
                                                     //$sizes = json_decode($item->item_data, true );
                                                 @endphp
+                                                <div class="col-md-12 col-lg-8 col-sm-12">
+
                                                 @foreach($sizes['CutPieces'] as $item_sizes)
                                                     @php
                                                         $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
@@ -758,7 +764,7 @@
                                                     @endphp
                                                     <div
                                                         class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
-                                                        style="margin: 0 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                        style="margin: 2px 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
                                                         {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
                                                         @if(!empty($item_sizes['SergingType']))
                                                             <span
@@ -767,7 +773,10 @@
                                                                                     </span>
                                                         @endif
                                                     </div>
+
                                                 @endforeach
+                                            </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -1020,10 +1029,12 @@
                         success: function (response) {
                             if (response.success) {
                                 $('#orderno').text('');
-                                var spanText = response.msg.match(/\[\s*(\d+)\s*\]/);
-                                var newOrderNo = spanText ? spanText[1] : '';
+                                var spanText = response.msg.match(/:\s*([a-zA-Z0-9]+)/);
+                                var newOrderNo = spanText ? spanText[0] : '';
                                 $('#orderno').text(newOrderNo);
-
+                                console.log(response.msg);
+                                console.log(spanText);
+                                console.log(newOrderNo);
                                 $('.stepper-heading').text('Order Complete');
                                 $('.section-3').addClass('active');
                                 $('#section1').attr('style', 'display:none;');
