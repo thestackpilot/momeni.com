@@ -316,8 +316,9 @@
                             <span
                                 class="font-ropa cart_total_price"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
                         </p>
-                        <a href="{{ $broadloom_item ? route('broadloom.shopping_cart') : route('frontend.checkout')}}"
-                           class="btn btn--md btn--border_1 mt-3 quick-cart-btn d-block">View Cart & Checkout<i
+                        {{-- {{ $broadloom_item ? route('broadloom.shopping_cart') : route('frontend.checkout')}} --}}
+                        <a href=""
+                           class="btn btn--md btn--border_1 mt-3 quick-cart-btn quick_btn d-block">View Cart & Checkout<i
                                 class="icon-arrow-right"></i></a>
                     </div>
                 </div>
@@ -351,3 +352,27 @@
     </div>
 </div>
 <div class="cartoverlay"></div>
+<script>
+    $(document).ready(function () {
+        $('.quick_btn').on('click', function(event){
+            event.preventDefault();
+            $(this).attr('href', '');
+            $.ajax({
+                url: "{{ route('verify-cart-items') }}",
+                type: 'GET',
+                success: function(response) {
+                    console.log('verify-cart-items response', response);
+
+                    if(response.broadloom){
+                        window.location.href = "{{ route('broadloom.shopping_cart') }}";
+                    }else{
+                        window.location.href = "{{ route('frontend.checkout') }}";
+                    }
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>

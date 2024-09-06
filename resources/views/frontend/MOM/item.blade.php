@@ -1190,6 +1190,7 @@ console.log('customer_id1: ', customer_id);
                                 $('#add_to_cart').removeClass('btn-muted');
                                 // $('.quickCart-opener').trigger('click');
                             });
+                            window.location.reload();
                         } else {
                             console.log("else");
                             refreshUser('quick-cart', function() {

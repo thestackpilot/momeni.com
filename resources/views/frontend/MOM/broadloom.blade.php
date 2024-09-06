@@ -1117,6 +1117,7 @@
                                                                     console.log('all cut response on change', response);
                                                                 }
                                                             })
+                                                            window.location.reload();
 
                                                             // $('.quickCart-opener').trigger('click');
                                                         });
@@ -1221,7 +1222,7 @@
                                             $('#add_to_cart').addClass('d-none');
                                             $('#roll_pieces').removeAttr("disabled");
                                             $('#cut-pieces').empty();
-
+                                            window.location.reload();
                                             // $('.quickCart-opener').trigger('click');
                                         });
                                     } else {
@@ -1350,12 +1351,12 @@
                                 var size = {};
                                 // size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
                                 //     widthInches + `"`;
-                                item.LengthStatus == "B" ? 
+                                item.LengthStatus == "B" ?
                                     size.size = lengthFeet + `'` + lengthInches + `" x ` + widthFeet + `'` +
                                     widthInches + `"` :
                                     size.size = widthFeet + `'` + widthInches + `" x ` + lengthFeet + `'` +
                                     lengthInches + `"` + surging;
-                               
+
                                 divContent += size.size;
                                 divContent += '<a  href="javascript:void(0)" onclick="removeCutPiece(`' + item_id + '_' + item.CutPieceID + '_' + item.RollID + '_' + item.CPTempLine_No + '`, `' + item.CutPieceID + '`, `' + item.RollID + '`, `' + item.CPTempLine_No + '`,  `' + item.LengthStatus + '`,  `' + lengthFeet + '`,  `' + widthFeet + '`)" style="background: ' + color + '"><i class="fa fa-times"></i></a></div>';
                                 let totalLengthInInches = lengthFeet * 12 + lengthInches;
@@ -1795,7 +1796,9 @@
                     $('#surging_options').prop('disabled', false);
                 } else {
                     $('#surging_options').prop('disabled', true);
-                    $('#surging_options').val($('#surging_options').val());
+                    // $('#surging_options').val($('#surging_options').val());
+                    $('#sergingtypeno').val('');
+                    $('#surging_options').val(0);
                     $('#surging_charges').val("");
                 }
             });

@@ -402,4 +402,24 @@ class ItemController extends FrontendController
         $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', true);
         return 1;
     }
+
+    public function check_item_in_cart(){
+        $user_id = Auth::user()->id;
+        $customers = array( Auth::user()->customer_id );
+        if ( strlen( Auth::user()->sales_rep_customers ) )
+        {
+            foreach ( json_decode( Auth::user()->sales_rep_customers )->Customers as $customer )
+            {
+                $customers[] = $customer->CustomerID;
+            }
+        }
+        $cart_items = Cart::where( 'user_id', $user_id )
+        ->whereIn( 'customer_id', $customers )->first();
+
+        if ($cart_items->item_broadloom == 1) {
+            return response()->json(['broadloom' => 1]);
+        } else {
+            return response()->json(['broadloom' => 0]);
+        }
+    }
 }

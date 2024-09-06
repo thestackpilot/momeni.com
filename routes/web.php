@@ -79,6 +79,7 @@ Route::get('/get-cut-pieces', [BroadloomController::class, 'get_cut_pieces'])->n
 Route::post( '/item/design_ats', [ItemController::class, 'get_design_ats'] )->name( 'frontend.item.design_ats' );
 Route::get('/check-cart-item/{broadloom_item_flag?}', [ItemController::class, 'check_cart_items'])->name('check-cart-item');
 Route::get('/delete-cart-items', [ItemController::class, 'delete_cart_items'])->name('delete-cart-items');
+Route::get('/cart-items-verify', [ItemController::class, 'check_item_in_cart'])->name('verify-cart-items');
 
 //Search Routes
 Route::get( '/search/{string}/{type?}', [SearchController::class, 'index'] )->name( 'frontend.search' );
