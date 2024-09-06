@@ -257,6 +257,8 @@ class ShowCutPiece {
         var orientation = this.getFrameOrientation();
 
         this.CalculateRatio();
+        this.CalculateRatio();
+
         var ratio = this.getRatio();
 
         this.GetFrameDimensions(orientation);
