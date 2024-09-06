@@ -255,10 +255,11 @@ class ShowCutPiece {
         var rect;
         var data = this.getRectangleData();
         var orientation = this.getFrameOrientation();
+        this.CalculateRatio();
+
         var ratio = this.getRatio();
 
         this.GetFrameDimensions(orientation);
-        this.CalculateRatio();
 
         data.ShowCuts.forEach((object) => {
             rect = {};
