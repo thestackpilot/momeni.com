@@ -46,7 +46,7 @@
 
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
-                    <div style="font-size: 28px;" id="show-bd-name"><strong>{{$item['ItemName']}}</strong></div>
+                    <div style="font-size: 28px;" id="show-bd-name"><strong>{{$item['ItemName']}} {{substr($item['ColorID'], 0, 3)}}</strong></div>
                     <div class="card">
                         <div class="card-body">
                             <div class="container">
@@ -142,6 +142,7 @@
                                                                         <div class="input-group-text">
                                                                             <strong>In</strong></div>
                                                                     </div>
+                                                                    <span id="Tlengthinch-max-error" class="text-red d-none" style="font-size:0.6rem; font-weight:800;"></span>
                                                                 </div>
                                                                 <input type="hidden" class="form-control TlengthInch-ats-max" id="TlengthInch-ats-max" value="">
                                                             </div>
@@ -190,6 +191,7 @@
                                                                         <div class="input-group-text">
                                                                             <strong>In</strong></div>
                                                                     </div>
+                                                                    <span id="Twidthinch-max-error" class="text-red d-none" style="font-size:0.6rem; font-weight:800;"></span>
                                                                 </div>
                                                                 <input type="hidden" class="form-control TwidthInch-ats-max"
                                                                            id="TwidthInch-ats-max">
@@ -961,8 +963,22 @@
                 method: 'GET',
                 data: payload,
                 success: function (response) {
+                    console.log('check full size resposne', response);
+
                     if (response.success) {
-                        if ((parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)) > ATS_ROLL_LENGHT || (parseInt(response.bd_cutpiece_wid) + parseInt(bd_cutpiece_wid)) > ATS_ROLL_WIDTH) {
+                        console.log('db check len add', (parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)));
+                        console.log('ATS_ROLL_LENGHT', ATS_ROLL_LENGHT);
+                        console.log('db check width add', (parseInt(response.bd_cutpiece_wid) + parseInt(bd_cutpiece_wid)));
+                        console.log('ATS_ROLL_WIDTH', ATS_ROLL_WIDTH);
+                        // if ((parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)) > ATS_ROLL_LENGHT || (parseInt(response.bd_cutpiece_wid) + parseInt(bd_cutpiece_wid)) > ATS_ROLL_WIDTH) {
+                        //     toastr.error('Roll selected lenght is greater than actual total lenght', {
+                        //         hideDuration: 10000,
+                        //         closeButton: true,
+                        //     });
+                        //     $('#add_to_cart').removeClass('btn-muted');
+                        //     return false;
+                        // }
+                        if ((parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)) > ATS_ROLL_LENGHT) {
                             toastr.error('Roll selected lenght is greater than actual total lenght', {
                                 hideDuration: 10000,
                                 closeButton: true,
@@ -1430,7 +1446,7 @@
         let added_cut_pieces = [];
 
         function add_cut_pieces() {
-            if(!$("#Tlength-max-error").hasClass("d-none") || !$("#Twidth-max-error").hasClass("d-none")){
+            if(!$("#Tlength-max-error").hasClass("d-none") || !$("#Tlengthinch-max-error").hasClass("d-none") || !$("#Twidth-max-error").hasClass("d-none") || !$("#Twidthinch-max-error").hasClass("d-none")){
                 toastr.error('Lenght/Width must not be greater than ATS ROLL', {
                     hideDuration: 10000,
                     closeButton: true,
@@ -1747,6 +1763,9 @@
                 var max_inch = $("#TlengthInch-ats-max").val();
                 var current_val = parseFloat($(this).val());
 
+                var lengthinch = $('#TlengthInch').val();
+                var max_len_inch = parseFloat($("#TlengthInch-ats-max").val());
+
                 if(current_val > max_len){
                     $("#Tlength-max-error").removeClass("d-none").text(`Value cannot be greater than ${max_len}'${max_inch}"`);
                     $(this).css('border-color', 'red');
@@ -1755,6 +1774,16 @@
                     $("#Tlength-max-error").addClass("d-none").text("");
                     $(this).css('border-color', '');
                     $(this).next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
+                }
+
+                if((current_val == max_len || current_val > max_len) && lengthinch > max_len_inch){
+                    $("#Tlengthinch-max-error").removeClass("d-none").text(`Value cannot be greater than ${max_len}'${max_len_inch}"`);
+                    $('#TlengthInch').css('border-color', 'red');
+                    $('#TlengthInch').next('.input-group-prepend').find('.input-group-text').css({'border-color': 'red', 'background-color': 'red', 'color': 'white'});
+                }else{
+                    $("#Tlengthinch-max-error").addClass("d-none").text("");
+                    $('#TlengthInch').css('border-color', '');
+                    $('#TlengthInch').next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
                 }
 
                 if ($(this).val() < originalHeightInFeet) {
@@ -1769,6 +1798,10 @@
                 var max_width = parseFloat($("#Twidth-ats-max").val());
                 var max_width_inch = $("#TwidthInch-ats-max").val();
                 var current_val = parseFloat($(this).val());
+
+                var widthinch = $('#TwidthInch').val();
+                var max_width_inch = parseFloat($("#TwidthInch-ats-max").val());
+
                 if(current_val > max_width){
                     $("#Twidth-max-error").removeClass("d-none").text(`Value cannot be greater than ${max_width}'${max_width_inch}"`);
                     $(this).css('border-color', 'red');
@@ -1777,6 +1810,16 @@
                     $("#Twidth-max-error").addClass("d-none").text("");
                     $(this).css('border-color', '');
                     $(this).next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
+                }
+
+                if((current_val == max_width || current_val > max_width) && widthinch > max_width_inch){
+                    $("#Twidthinch-max-error").removeClass("d-none").text(`Value cannot be greater than ${max_width}'${max_width_inch}"`);
+                    $('#TwidthInch').css('border-color', 'red');
+                    $('#TwidthInch').next('.input-group-prepend').find('.input-group-text').css({'border-color': 'red', 'background-color': 'red', 'color': 'white'});
+                }else{
+                    $("#Twidthinch-max-error").addClass("d-none").text("");
+                    $('#TwidthInch').css('border-color', '');
+                    $('#TwidthInch').next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
                 }
 
                 if ($(this).val() < originalWidthInFeet) {
@@ -1788,6 +1831,39 @@
             });
 
             $("#TlengthInch, #TwidthInch").on("change", function () {
+                var length = parseFloat($(".Tlength").val());
+                var max_len = parseFloat($("#Tlength-ats-max").val());
+                var lengthinch = $('#TlengthInch').val();
+                var max_len_inch = parseFloat($("#TlengthInch-ats-max").val());
+
+                var width = parseFloat($(".Twidth").val());
+                var max_width = parseFloat($("#Twidth-ats-max").val());
+                var widthinch = $('#TwidthInch').val();
+                var max_width_inch = parseFloat($("#TwidthInch-ats-max").val());
+
+                // console.log('length', length, max_len, lengthinch, max_len_inch);
+                // console.log('width', width, max_width, widthinch, max_width_inch);
+
+                if((length == max_len || length > max_len) && lengthinch > max_len_inch){
+                    $("#Tlengthinch-max-error").removeClass("d-none").text(`Value cannot be greater than ${max_len}'${max_len_inch}"`);
+                    $('#TlengthInch').css('border-color', 'red');
+                    $('#TlengthInch').next('.input-group-prepend').find('.input-group-text').css({'border-color': 'red', 'background-color': 'red', 'color': 'white'});
+                }else{
+                    $("#Tlengthinch-max-error").addClass("d-none").text("");
+                    $('#TlengthInch').css('border-color', '');
+                    $('#TlengthInch').next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
+                }
+
+                if((width == max_width || width > max_width) && widthinch > max_width_inch){
+                    $("#Twidthinch-max-error").removeClass("d-none").text(`Value cannot be greater than ${max_width}'${max_width_inch}"`);
+                    $('#TwidthInch').css('border-color', 'red');
+                    $('#TwidthInch').next('.input-group-prepend').find('.input-group-text').css({'border-color': 'red', 'background-color': 'red', 'color': 'white'});
+                }else{
+                    $("#Twidthinch-max-error").addClass("d-none").text("");
+                    $('#TwidthInch').css('border-color', '');
+                    $('#TwidthInch').next('.input-group-prepend').find('.input-group-text').css({'border-color': '', 'background-color': '', 'color': ''});
+                }
+
                 updatePrices();
             });
 

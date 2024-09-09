@@ -852,7 +852,7 @@
             var day = ("0" + today.getDate()).slice(-2);
             var month = ("0" + (today.getMonth() + 1)).slice(-2);
             var year = today.getFullYear();
-            var formattedDate = day + '-' + month + '-' + year;
+            var formattedDate = year + '-' + month + '-' + day;
             $('.order-ship-date').val(formattedDate);
 
             // var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " "));
@@ -1001,6 +1001,11 @@
                 $('#section2').attr('style', 'display:block;');
             });
 
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $('#place_order').click(function () {
                 var form = $('#customer_info')[0];
 
@@ -1086,8 +1091,10 @@
             $(document).on('click', 'input[name="shipping-address"]', function () {
                 console.log('clicked');
                 var addressValue = $(this).val();
-                console.log(addressValue);
+                console.log('addressValue', addressValue);
                 if (addressValue == 'existing-address') {
+                    var referenceNumberValue = $('input[name="reference_number"]').val();
+                    var shipValue = $('.order-ship-date').val();
                     $("#countries").val(0);
                     $("#state_dropdown").val('');
                     $(".disable-toggle").addClass("muted-bd-fields");
@@ -1095,6 +1102,8 @@
                     $("input").not("[type='radio']").val('');
 
                     $('#select-address').trigger('change');
+                    $('input[name="reference_number"]').val(referenceNumberValue);
+                    $('.order-ship-date').val(shipValue);
                 } else {
                     $(".disable-toggle").removeClass("muted-bd-fields");
                     $(".hidden-inp").val("");
