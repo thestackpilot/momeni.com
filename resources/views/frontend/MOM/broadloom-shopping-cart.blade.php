@@ -104,7 +104,7 @@
                                                                 <div class="col-lg-8 col-md-12 col-sm-12 ps-5" style="font-size: 12px">
                                                                     <div class=" mt-2 font-weight--bold row">Design: <p
                                                                             class="font-weight--normal mx-2">
-                                                                            {{ $item_data->ItemName }}</p>
+                                                                            {{ $item_data->ItemName }} {{substr($item_data->ColorID, 0, 3)}}</p>
                                                                     </div>
                                                                     {{-- <div class=" mt-2 row">SKU: <p
                                                                             class="font-weight--normal mx-2">N/A</p>
@@ -553,9 +553,13 @@
                                                                     width="80px"
                                                                     onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
                                                             </div>
+                                                            @php
+                                                                $decodedData = json_decode(unserialize($item->item_data), true);
+                                                                $colorID = substr($decodedData['ColorID'], 0, 3);
+                                                            @endphp
                                                             <div class="col-9" style="font-size: 12px;">
                                                                 <div class="mx-3 mt-2 font-weight--bold row">Design: <p
-                                                                        class="font-weight--normal mx-2">{{$item->item_name}}</p>
+                                                                        class="font-weight--normal mx-2">{{$item->item_name}} {{$colorID}}</p>
                                                                 </div>
                                                                 <div class="mx-3 mt-2 row">Roll Id: <p
                                                                         class="font-weight--normal mx-2">{{$item_data->RollID}}</p>
@@ -735,9 +739,13 @@
                                                 alt="{{$item->item_id}}" height="80px" width="80px"
                                                 onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
                                         </div>
+                                        @php
+                                            $decodedData = json_decode(unserialize($item->item_data), true);
+                                            $colorID = substr($decodedData['ColorID'], 0, 3);
+                                        @endphp
                                         <div class="col-9" style="font-size: 12px">
                                             <div class="mx-3 mt-2 font-weight--bold row">Design:
-                                                <p class="font-weight--normal mx-2">{{$item->item_name}}</p>
+                                                <p class="font-weight--normal mx-2">{{$item->item_name}} {{$colorID}}</p>
                                             </div>
                                             {{-- <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p> --}}
                                             <div class="mx-3 mt-2 row">Roll Id: <p
