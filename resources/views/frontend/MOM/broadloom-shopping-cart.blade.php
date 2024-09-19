@@ -706,7 +706,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col p-0">
-                                        <strong class="cart_total">${{$cart->cart_total}}</strong>
+                                        {{-- <strong class="cart_total">${{$cart->cart_total}}</strong> --}}
+                                        <strong class="order_placed_total">${{$cart->cart_total}}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -875,6 +876,7 @@
             $(".section_2_serging_charges").text("$" + serging_charges.toFixed(2));
             $(".section_2_cutting_charges").text("$" + cutting_charges.toFixed(2));
             $(".section_2_cart_total").text("$" + total.toFixed(2));
+            $(".order_placed_total").text("$" + total.toFixed(2));
 
             // $('.delete-row').click(function () {
             //     $(this).closest('tr').remove();

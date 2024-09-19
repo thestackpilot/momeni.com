@@ -188,6 +188,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
     var filter_type = '';
     var filter_value = '';
     var filter_array = null;
+    var badge_count = false;
     var main_url = localStorage.getItem('main_url');
     var not_redirect = "{{ \Illuminate\Support\Facades\Route::current()->getName() }}"
     if (not_redirect !== 'frontend.designs') {
@@ -225,9 +226,9 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
         return '';
     }
 
+
     function filterManager(discontinued_filter, Filterarr, discontinued, redirect_back = 0)
     {
-
         if ($('#pageLoader').length)
         {
             $('#pageLoader').removeClass('d-none');
@@ -266,7 +267,6 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
             {
                 Filters.push('{"FilterID":"Size","Values":[' + sizes + ']}')
             }
-
 
             if (Filters.length != 0)
             {
@@ -359,7 +359,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                             }
                         }).
                         done(function(response)
-                        {
+                        {  
                             var base_url = window.location.origin;
                             window.history.pushState('', '', collection_url);
                             var new_html = $($.parseHTML(response));
@@ -386,7 +386,17 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
 
         }
         else
-        {
+        {   
+            var fullUrl = window.location.href;
+            var baseUrl = window.location.origin;
+            var path = window.location.pathname;
+            var segments = path.split('/');
+            var designIndex = segments.indexOf('designs') + 1;  
+            var designValue = (designIndex !== -1) ? segments[designIndex] : null;
+            if(designValue == "BroadLoom" && badge_count){        
+               url = baseUrl + '/designs/BroadLoom/eyJGaWx0ZXJzIjogW3siRmlsdGVySUQiOiAiIiwiVmFsdWVzIjogWyIiXX1dfQ==/0';
+            }
+            
             xhr = $.ajax(
             {
                 method: 'GET',
@@ -402,7 +412,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                     localStorage.removeItem('main_url')
                     return;
                 }
-                console.log("ajax");
+                // console.log("ajax res", response);
                 var base_url = window.location.origin;
                 window.history.pushState('', '', url);
                 var new_html = $($.parseHTML(response));
@@ -426,6 +436,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
         $('.remove-filer-cross').on('click', function()
         {
             var sel_filter = $(this).find('.remove-filter-value').val().toString().trim().split(':');
+            badge_count = $('.filter-content .badge').length == 1 ? true : false
             removeFilter(sel_filter[0].trim(), sel_filter[1].trim(), sel_filter[0].trim() == 'Discontinued', sel_filter[1].trim() == 1 ? 0 : 1);
         });
     }
@@ -451,10 +462,12 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
 	if (discontinued)
     {
         $('#flexCheckChecked-discontinued').prop('checked', false);
-        console.log(dvalue);
+        console.log(dvalue);        
         filterManager(null, null, dvalue);
         console.log('check');
-    }   else filterManager();
+    }   else {
+        filterManager(); 
+     }
     }
 
     var xhr = null;

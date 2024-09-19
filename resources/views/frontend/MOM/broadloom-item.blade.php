@@ -66,7 +66,7 @@ use App\Http\Controllers\CommonController;
                                 <input type="hidden" id="cart_item_image" name="cart_item_image" value="">
                                 <input type="hidden" id="cart_item_eta" name="cart_item_eta" value="">
                                 <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}">
-                                <h3 class="price" id="product-heading"><b>{{$items['Items'][0]['ItemName']}} {{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
+                                <h3 class="price" id="product-heading" style="text-wrap: wrap;"><b>{{$items['Items'][0]['ItemName']}} {{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
 
                                 <div class="col-12 row">
                                 @foreach ($items['Items'][0]['UDFFields'] as  $des_val)
@@ -556,7 +556,7 @@ use App\Http\Controllers\CommonController;
         });
 
         bindClicks();
-        
+
         if(urlParamsColorId != undefined){
             var color = '';
             var forVal = '';

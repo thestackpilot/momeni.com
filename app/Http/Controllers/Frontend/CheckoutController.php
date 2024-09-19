@@ -298,7 +298,8 @@ class CheckoutController extends FrontendController
                     $total_serging_charges = 0;
 
                     foreach ($item_data->CutPieces as $key => $cut_piece) {
-                        if ($cut_piece->LengthStatus !== "R") {
+                        // if ($cut_piece->LengthStatus !== "R") {
+                        if ($cut_piece->LengthStatus == "F") {
 
                             $sqft =  round(($cut_piece->ATSWidth / 12) * ($cut_piece->ATSLength / 12), 2);
                             $totalSQFT += $sqft;
@@ -330,7 +331,8 @@ class CheckoutController extends FrontendController
                         'OrderQty' => $item['item_quantity'],
                         'UnitPrice' => $item['item_price'],
                         'SQFTPrice' => $item_data->SQFTPrice,
-                        'SQFTArea' => $totalSQFT,//round( $item_data->SQFTArea / 12), // $item_data->SQFTArea
+                        // 'SQFTArea' => $totalSQFT,
+                        'SQFTArea'   => $item['sqft_area'],
                         'CutPieceID' => $item_data->CutPieceID,
                         'RollID' => $item_data->RollID,
                         'SergingCharges' => $total_serging_charges,

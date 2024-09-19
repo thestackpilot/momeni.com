@@ -1087,6 +1087,7 @@
                                                 'cfa': cfa_check,
                                                 'remnant_shipable': remnant_check,
                                                 'unit_price': $("#unit-price-cal").val(),
+                                                'sqft_area': $("#ats-qty").val(),
                                             },
                                             success: function (response) {
                                                 if (response.success) {
@@ -1205,6 +1206,7 @@
                                 'cfa': cfa_check,
                                 'remnant_shipable': remnant_check,
                                 'unit_price': $("#unit-price-cal").val(),
+                                'sqft_area': $("#ats-qty").val(),
                             },
                             success: function (response) {
                                 if (response.success) {
@@ -1402,8 +1404,9 @@
                             });
 
                             totalSqftPrice = (totalMaxLen * totalAddWid);
+                            
 
-                            $("#ats-qty").val(totalSqftPrice);
+                            $("#ats-qty").val(totalSqftPrice.toFixed(2));
                             $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
                             updatePrices();
 
@@ -1630,7 +1633,8 @@
                         $("#sergingtypeno").val('');
 
                         totalSqftPrice = (totalMaxLen * totalAddWid);
-                        $("#ats-qty").val(totalSqftPrice);
+                        
+                        $("#ats-qty").val(totalSqftPrice.toFixed(2));
                         $('#max-width').text(`${mxlenf}'-${mxlen % 12}''`);
                         updatePrices();
 
@@ -1914,7 +1918,7 @@
                         'item_id': $("#item_id").val(),
                         'customer_id': $('#customer_id').val()
                     },
-                    success: function (response) {
+                    success: function (response) {                        
                         $("#sq-ft").val(response.data['Price']);
                         updatePrices();
                         $.ajax({
