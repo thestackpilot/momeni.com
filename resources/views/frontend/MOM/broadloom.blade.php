@@ -1403,8 +1403,19 @@
                                 line_no = line_no + 1;
                             });
 
-                            totalSqftPrice = (totalMaxLen * totalAddWid);
-                            
+                          //  totalSqftPrice = (totalMaxLen * totalAddWid);
+                            if( response?.OutPut?.AddCutPieces?.[0]?.TotalUsedLength ){
+                                var totalUsedLength = response['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
+                                var finallength = (totalUsedLength / 12);
+                                var widthMaxRollFeet = parseFloat($('#Twidth-ats-max').val());
+                                var widthMaxRollInch = $('#TwidthInch-ats-max').val();
+                                var widthInchesToFeet = parseFloat($('#TwidthInch-ats-max').val());
+                                var finalWidth =  widthMaxRollFeet + widthInchesToFeet;
+                                totalSqftPrice = finallength * finalWidth;
+                            }else{
+                                totalSqftPrice = 0;
+                            }
+
 
                             $("#ats-qty").val(totalSqftPrice.toFixed(2));
                             $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
@@ -1526,6 +1537,8 @@
                 data: $data,
                 success: function (data) {
                     if (data.cut_piece.OutPut.Success) {
+                        console.log('response cut pieces');
+
                         console.log(data['cut_piece']['OutPut']['AddCutPieces']);
                         $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
                         var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
@@ -1557,8 +1570,6 @@
                             let lengthInches = item.ATSLength % 12;
                             let widthFeet = Math.floor(item.ATSWidth / 12);
                             let widthInches = item.ATSWidth % 12;
-
-                            console.log(item)
 
                             let surging = '';
                             if (item.SergingType != "0") {
@@ -1631,9 +1642,20 @@
                         $('#surging_options').val('0')
                         $('#surging_charges').val('');
                         $("#sergingtypeno").val('');
+                        //totalSqftPrice = (totalMaxLen * totalAddWid);
 
-                        totalSqftPrice = (totalMaxLen * totalAddWid);
-                        
+                        if(data?.cut_piece?.OutPut?.AddCutPieces?.[0]?.TotalUsedLength){
+                            var totalUsedLength  = data['cut_piece']['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
+                            var finallength = (totalUsedLength / 12);
+                            var widthMaxRollFeet = parseFloat($('#Twidth-ats-max').val());
+                            var widthMaxRollInch = $('#TwidthInch-ats-max').val();
+                            var widthInchesToFeet = parseFloat($('#TwidthInch-ats-max').val());
+                            var finalWidth =  widthMaxRollFeet + widthInchesToFeet;
+                            totalSqftPrice = finallength * finalWidth;
+                        }else{
+                            totalSqftPrice = 0;
+                        }
+
                         $("#ats-qty").val(totalSqftPrice.toFixed(2));
                         $('#max-width').text(`${mxlenf}'-${mxlen % 12}''`);
                         updatePrices();
@@ -1918,7 +1940,7 @@
                         'item_id': $("#item_id").val(),
                         'customer_id': $('#customer_id').val()
                     },
-                    success: function (response) {                        
+                    success: function (response) {
                         $("#sq-ft").val(response.data['Price']);
                         updatePrices();
                         $.ajax({
