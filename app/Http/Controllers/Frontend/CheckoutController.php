@@ -482,7 +482,7 @@ class CheckoutController extends FrontendController
                     prr("Order Acknowledgment Email Exception :: " . $e->getMessage());
                 }
                 // }
-            } else {
+            } elseif (!$result['Success']) {
                 $order_payment = $this->order_payment_model->updateOrCreate(
                     ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                     [
