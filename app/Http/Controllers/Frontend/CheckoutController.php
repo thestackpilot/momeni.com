@@ -399,6 +399,8 @@ class CheckoutController extends FrontendController
                 return response()->json($payment_response);
             }
             //dd($headers, $itemDetail);
+            prr(" :: Check BL Order Data :: ");
+            prr( $itemDetail );
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] == 1) {
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,
