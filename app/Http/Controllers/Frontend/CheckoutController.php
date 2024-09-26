@@ -315,7 +315,8 @@ class CheckoutController extends FrontendController
                             $temp['CutType'] = $item_data->cut_type;
                             $temp['LocationID'] = $item_data->location_id;
                             $temp['Serging'] = !empty($cut_piece->SergingType) ? "Y" : "N";
-                            $temp['SergingCharges'] = !empty($cut_piece->SergingCharges) ? $cut_piece->SergingCharges : 0;
+                          //  $temp['SergingCharges'] = !empty($cut_piece->SergingCharges) ? $cut_piece->SergingCharges : 0;
+                            $temp['SergingCharges'] = (!empty($cut_piece->SergingCharges) && $temp['Serging'] == "Y") ? $cut_piece->SergingCharges : 0;
                             $temp['SergingType'] = empty($cut_piece->SergingType) ? "0" : $cut_piece->SergingType;
                             $temp['LineNo'] = ++$line;
                             $temp['UserRemarks'] = $cut_piece->UserRemarks;
@@ -398,7 +399,7 @@ class CheckoutController extends FrontendController
             if (!$payment_response['success']) {
                 return response()->json($payment_response);
             }
-            //dd($headers, $itemDetail);
+          //  dd($headers, $itemDetail);
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] == 1) {
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,
