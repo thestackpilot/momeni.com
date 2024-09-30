@@ -1099,7 +1099,6 @@
             });
 
             $(document).on('click', 'input[name="shipping-address"]', function () {
-                console.log('clicked');
                 var addressValue = $(this).val();
                 console.log('addressValue', addressValue);
                 if (addressValue == 'existing-address') {
@@ -1114,6 +1113,7 @@
                     $('#select-address').trigger('change');
                     $('input[name="reference_number"]').val(referenceNumberValue);
                     $('.order-ship-date').val(shipValue);
+                    $('#select-address').prop("disabled", false);
                 } else {
                     $(".disable-toggle").removeClass("muted-bd-fields");
                     $(".hidden-inp").val("");
@@ -1123,6 +1123,7 @@
                     $("#state_dropdown").val('');
                     $(".disable-toggle").attr("required", true);
                     $("#bd-address2").removeAttr("required")
+                    $('#select-address').prop("disabled", true);
                 }
             });
 
