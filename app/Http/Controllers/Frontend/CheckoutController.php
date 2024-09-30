@@ -457,23 +457,25 @@ class CheckoutController extends FrontendController
                 try {
 
                     if (!empty($cart_data['shipping']['Email'])) {
-//                            SendMail::dispatch( [
-//                                'data'     => $cart_data,
-//                                'slug'     => "Order Confirmed",
-//                                'email'    => ['ahmadqalbi1991@gmail.com', 'techbugs06@gmail.com'],
-////                                'email'    => $cart_data['shipping']['Email'],
-//                                'template' => 'email.order-confirmation',
-//                                // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
-//                            ] );
+                           $cart_data_email = $cart_data['shipping']['Email'];
+                           SendMail::dispatch( [
+                               'data'     => $cart_data,
+                               'slug'     => "Order Confirmed",
+                               'email'    => [$cart_data_email, 'techbugs06@gmail.com'],
+                               'template' => 'email.order-confirmation',
+                                //'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+                           ] );
+                           prr($cart_data['shipping']['Email']);
+                           prr(" :: Shipping Email Sent :: ");
                     }
 
-//                        SendMail::dispatch( [
-//                            'data'     => $cart_data,
-//                            'slug'     => "Order Confirmed",
-//                            'email'    => ConstantsController::ORDER_NOTIFICATION,
-//                            'template' => 'email.order-confirmation',
-//                            // 'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
-//                        ] );
+                       SendMail::dispatch( [
+                           'data'     => $cart_data,
+                           'slug'     => "Order Confirmed Official",
+                           'email'    => ConstantsController::ORDER_NOTIFICATION,
+                           'template' => 'email.order-confirmation',
+                           'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+                       ] );
 
                     prr(" :: Order Acknowledgment Email Sent :: ");
                 } catch (\Exception $e) {
@@ -499,12 +501,13 @@ class CheckoutController extends FrontendController
                             'order-detail' => serialize([$headers, $itemDetail])
                         ];
 
-//                        SendMail::dispatch( [
-//                            'data'     => $order_data,
-//                            'slug'     => 'Web Hook Order',
-//                            'email'    => ConstantsController::WEB_HOOK_EMAIL,
-//                            'template' => 'email.web_hook_email'
-//                        ] );
+                       SendMail::dispatch( [
+                           'data'     => $order_data,
+                           'slug'     => 'Web Hook Order',
+                           'email'    => ConstantsController::WEB_HOOK_EMAIL,
+                           'template' => 'email.web_hook_email'
+                       ] );
+                       prr(" :: WEB_HOOK Email Sent :: ");
                     } catch (\Exception $e) {
                         prr("Mail Exception: " . $e->getMessage());
                     }
