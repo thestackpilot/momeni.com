@@ -22,7 +22,7 @@ class BroadloomController extends FrontendController
     }
 
 
-    public function index($id, $cust_id, $color_id)
+    public function index($id, $cust_id, $color_id, $item_name = '')
     {
         $itemController = new ItemController();
 
@@ -46,7 +46,8 @@ class BroadloomController extends FrontendController
             'roll_pieces' => $roll_pieces,
             'customer_id' => $cust_id,
             'item' => $item,
-            'item_json' => json_encode($item)
+            'item_json' => json_encode($item),
+            'correct_item_name' =>  $item_name
         ]);
     }
 

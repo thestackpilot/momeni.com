@@ -1061,7 +1061,8 @@ use App\Http\Controllers\CommonController;
         });
 
         function generateBroadloomUrl() {
-            var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id','color_id']) }}";
+           // var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id', 'color_id' ]) }}";
+            var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id', 'color_id', 'item_name' => $items['Items'][0]['ItemName'] ?? '']) }}";
             href = href.replace('cust_id', $('#cart_customer_id').val());
             href = href.replace('color_id', $('#color_id').val());
             console.log('href', href);
