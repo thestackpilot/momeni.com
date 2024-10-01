@@ -54,9 +54,10 @@ function get_table( $table, $tab = '' ) {
                 else if ($key == 'other_actions') {
                     $table_body .= '<td>';
                     foreach($row['other_actions'] as $other_actions) {
+                        $reportbuttonClass = ($other_actions['module'] == 'Bl Order') ? 'bl-report' : 'other-details';
                         if($other_actions['type'] == 'modal') {
                             $table_body .= '
-                            <button class="btn btn-sm btn-primary other-details" type="button">'.$other_actions['label'].'</button>
+                            <button class="btn btn-sm btn-primary '.$reportbuttonClass.'" type="button">'.$other_actions['label'].'</button>
                             <span class="other-row-details" style="display: none !important;">'.json_encode($row['other_actions_details']).'</span>
                             ';
                         }
@@ -280,6 +281,8 @@ function get_table( $table, $tab = '' ) {
                             // "data": $('form.dafault-form').serialize(),
                             "dataSrc": function(json) {
                                 var data = [];
+                                console.log('json',json);
+
                                 for (var i = 0; i < json.data.length; i++) {
                                     if (
                                         '{{$tabular ?? ""}}' == 'yes' &&
@@ -296,8 +299,9 @@ function get_table( $table, $tab = '' ) {
                                         `;
 
                                     if (typeof json.data[i]['other_actions'] !== 'undefined' && json.data[i]['other_actions'][0]['type'] == 'modal')
+                                        var reportbuttonClass = (json.data[i]['other_actions'][0]['module'] == 'Bl Order') ? 'bl-report' : 'other-details';
                                         json.data[i]['other_actions'] = `
-                                            <button class="btn btn-sm btn-primary other-details" type="button">${json.data[i]['other_actions'][0]['label']}</button>
+                                            <button class="btn btn-sm btn-primary ${reportbuttonClass}" type="button">${json.data[i]['other_actions'][0]['label']}</button>
                                             <span class="other-row-details" style="display: none !important;">${JSON.stringify(json.data[i]['other_actions_details'])}</span>
                                         `;
 
@@ -422,6 +426,54 @@ function get_table( $table, $tab = '' ) {
                       //  console.error("Error fetching", error);
                     }
                 });
+        });
+
+        $(document).on('click', '.bl-report', function(){
+            $('#loader-container').css('display', 'block');
+            const url = "{{ route('dashboard.orderreport') }}";
+            var data = JSON.parse($('span.other-row-details', $(this).parent()).html());
+            let SalesRepId = '';
+            let CustomerId = '';
+            let MenuTag = 'ViewBLOrder';
+            let DocumentNo =  data.OrderNo;
+            const fullUrl = `${url}?SalesRepId=${SalesRepId}&CustomerId=${CustomerId}&MenuTag=${MenuTag}&DocumentNo=${DocumentNo}`;
+
+            $.ajax({
+                url: fullUrl,
+                type: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                success: function(response) {
+                    $('#loader-container').css('display', 'none');
+                    console.log('Response', response);
+                    $(".other-detail-modal").modal("show");
+                    var modalBody = $(".modal-body");
+                    $(".other-detail-modal-body").empty();
+                    var obj = document.createElement('object');
+                    obj.style.width = '100%';
+                    obj.style.height = '842pt';
+                    obj.type = 'application/pdf';
+                    obj.data = 'data:application/pdf;base64,' + response;
+                    document.body.appendChild(obj);
+                    //   console.log(obj);
+                    $(".other-detail-modal-body").append(obj);
+
+                    var link = document.createElement('a');
+                    link.innerHTML = 'Download Report';
+                    link.className = 'btn btn-primary my-3 py-3';
+                    link.download = 'Report.pdf';
+                    link.href = 'data:application/octet-stream;base64,' + response;
+                    document.body.appendChild(link);
+                    //$(".other-detail-modal-body").append(link);
+                },
+                error: function( error) {
+                    $('#loader-container').css('display', 'none');
+                    //  console.error("Error fetching", error);
+                }
+            });
         });
 
     });

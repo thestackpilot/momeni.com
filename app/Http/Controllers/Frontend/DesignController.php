@@ -132,7 +132,6 @@ class DesignController extends FrontendController
 
     public function index( $id, $filter, $type, $with_title = false )
     {
-
         if ( base64_decode( $filter ) == ConstantsController::NO_FILTER_FLAG )
         {
 
@@ -180,6 +179,14 @@ class DesignController extends FrontendController
             'with_title'              => $with_title,
             'custom_title_descripton' => $with_title ? $this->check_title_description( $filter ) : []
         ] );
+    }
+
+    public function dashboard_broadloom(){
+        $id = "BroadLoom";
+        $filter = "eyJGaWx0ZXJzIjogW3siRmlsdGVySUQiOiAiIiwiVmFsdWVzIjogWyIiXX1dfQ==";
+        $type = "0";
+        $with_title = false;
+        return $this->index($id, $filter, $type, $with_title);
     }
 
 }
