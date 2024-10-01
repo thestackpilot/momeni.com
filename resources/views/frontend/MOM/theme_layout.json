@@ -72,7 +72,7 @@
             "permission": "manage-financials"
         },
         "normalorder": {
-            "label": "Place Order",
+            "label": "Place Rug Order",
             "slug": "dashboard.placeorder",
             "permission": "manage-orders"
         },
