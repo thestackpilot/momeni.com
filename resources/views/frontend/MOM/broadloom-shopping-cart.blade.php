@@ -103,8 +103,10 @@
                                                                 </div>
                                                                 <div class="col-lg-8 col-md-12 col-sm-12 ps-5" style="font-size: 12px">
                                                                     <div class=" mt-2 font-weight--bold row">Design: <p
-                                                                            class="font-weight--normal mx-2">
-                                                                            {{ $item_data->ItemName }} {{substr($item_data->ColorID, 0, 3)}}</p>
+                                                                            class="font-weight--normal">
+                                                                            {{ $item_data->ItemName }} {{substr($item_data->ColorID, 0, 3)}}
+                                                                            <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
+                                                                            <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span> </p>
                                                                     </div>
                                                                     {{-- <div class=" mt-2 row">SKU: <p
                                                                             class="font-weight--normal mx-2">N/A</p>
@@ -545,7 +547,7 @@
                                                     $sum_surging_charges=0; $sergingTotal=0;
                                                 @endphp
                                                 <div class="row px-5">
-                                                    <div class="col-md-9">
+                                                    <div class="col-md-10">
                                                         <div class="row">
                                                             <div class="col-3"><img
                                                                     src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
@@ -559,7 +561,10 @@
                                                             @endphp
                                                             <div class="col-9" style="font-size: 12px;">
                                                                 <div class="mx-3 mt-2 font-weight--bold row">Design: <p
-                                                                        class="font-weight--normal mx-2">{{$item->item_name}} {{$colorID}}</p>
+                                                                        class="font-weight--normal mx-2">{{$item->item_name}} {{$colorID}}
+                                                                        <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
+                                                                        <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span>
+                                                                    </p>
                                                                 </div>
                                                                 <div class="mx-3 mt-2 row">Roll Id: <p
                                                                         class="font-weight--normal mx-2">{{$item_data->RollID}}</p>
@@ -605,7 +610,7 @@
                                                         </div>
                                                     </div>
                                                     <div
-                                                        class="col-md-3 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->unit_price + $sum_surging_charges, 2)}}</div>
+                                                        class="col-md-2 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->unit_price + $sum_surging_charges, 2)}}</div>
                                                 </div>
                                                 <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             @endforeach
@@ -745,8 +750,10 @@
                                             $colorID = substr($decodedData['ColorID'], 0, 3);
                                         @endphp
                                         <div class="col-9" style="font-size: 12px">
-                                            <div class="mx-3 mt-2 font-weight--bold row">Design:
-                                                <p class="font-weight--normal mx-2">{{$item->item_name}} {{$colorID}}</p>
+                                            <div class="mt-2 font-weight--bold row">Design:
+                                                <p class="font-weight--normal mx-2">{{$item->item_name}} {{$colorID}}
+                                                    <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
+                                                    <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span> </p>
                                             </div>
                                             {{-- <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p> --}}
                                             <div class="mx-3 mt-2 row">Roll Id: <p
