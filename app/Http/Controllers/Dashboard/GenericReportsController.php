@@ -797,7 +797,6 @@ class GenericReportsController extends DashboardController
                 $page_size = 25;
             }
 
-
             $view_orders = $this->ApiObj->View_BL_Order( $request->customer, $request->external_number, $request->from_date, $request->to_date, $request->sales_rep, $page, $page_size, $request->customer_po, $request->order_number );
             $table       = array( 'thead' => [
                 'order_no'     => 'Order Number',
@@ -807,7 +806,8 @@ class GenericReportsController extends DashboardController
                 'total_qty'    => 'Total Quantity',
                 'status'       => 'Status',
                 'order_date'   => 'Order Date',
-                'actions'      => 'Actions'
+                'actions'      => 'Actions',
+                'other_actions' => 'Reports'
             ], 'tbody' => [] );
 
             if ( isset( $view_orders['Orders'] ) )
@@ -883,7 +883,11 @@ class GenericReportsController extends DashboardController
                                     ]
                                 ]
                             ]
-                        ]
+                        ],
+                        'other_actions' => [['type' => 'modal', 'label' => 'View Report', 'module' => 'Bl Order']],
+                        'other_actions_details' => [
+                            'OrderNo'   => $view_order['Header']['OrderNo'],
+                        ],
                     ];
                 }
 
@@ -1008,7 +1012,7 @@ class GenericReportsController extends DashboardController
                         'tab'          => isset( $view_order['Header']['TabStatusDescription'] ) ? $view_order['Header']['TabStatusDescription'] : '',
                         'order_date'   => isset( $view_order['Header']['OrderDate'] ) ? CommonController::get_date_format( $view_order['Header']['OrderDate'] ) : 'N/A',
                         'actions'      => [['type' => 'modal', 'label' => 'View Details']],
-                        'other_actions' => [['type' => 'modal', 'label' => 'View Report']],
+                        'other_actions' => [['type' => 'modal', 'label' => 'View Report', 'module' => 'Other']],
                         'other_actions_details' => [
                             'OrderNo'   => $view_order['Header']['OrderNo'],
                         ],

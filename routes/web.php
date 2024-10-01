@@ -42,6 +42,7 @@ Route::get( '/logout', 'Auth\LoginController@logout' )->name( 'auth.logout' );
 
 Route::post( '/register', [RegisterController::class, 'register'] )->name( 'auth.register' );
 
+Route::get( '/design/broadloom/items', [DesignController::class, 'dashboard_broadloom'] )->name( 'frontend.dashbord-broadloom' );
 //Home Routes
 Route::get( '/', [HomeController::class, 'index'] )->name( 'frontend.home' );
 //Category Routes
