@@ -403,8 +403,6 @@ class CheckoutController extends FrontendController
             prr(" :: Place Order API CALL DATA :: ");
             prr($headers, $itemDetail);
             //dd($headers, $itemDetail);
-            prr(" :: Check BL Order Data :: ");
-            prr( $itemDetail );
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] == 1) {
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,
