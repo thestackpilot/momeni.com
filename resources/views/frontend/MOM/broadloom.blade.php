@@ -46,7 +46,11 @@
 
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
-                    <div style="font-size: 28px;" id="show-bd-name"><strong>{{$item['ItemName']}} {{substr($item['ColorID'], 0, 3)}}</strong></div>
+                    @if($correct_item_name)
+                        <div style="font-size: 28px;" class="show-bd-name"><strong>{{ ltrim($correct_item_name) }}</strong></div>
+                    @else
+                        <div style="font-size: 28px;" class="show-bd-name"><strong>{{$item['ItemName']}} {{substr($item['ColorID'], 0, 3)}}</strong></div>
+                    @endif
                     <div class="card">
                         <div class="card-body">
                             <div class="container">
@@ -2043,6 +2047,6 @@
         GetCutingService()
 
         var roll_cutpiece_id = $('#roll_pieces');
-        roll_cutpiece_id.find('option').length <= 1 ?  $('#show-bd-name').hide() :  $('#show-bd-name').show();
+        roll_cutpiece_id.find('option').length <= 1 ?  $('.show-bd-name').hide() :  $('.show-bd-name').show();
     </script>
 @endsection

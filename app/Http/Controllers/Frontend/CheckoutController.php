@@ -399,6 +399,9 @@ class CheckoutController extends FrontendController
             if (!$payment_response['success']) {
                 return response()->json($payment_response);
             }
+          //  dd($headers, $itemDetail);
+            prr(" :: Place Order API CALL DATA :: ");
+            prr($headers, $itemDetail);
             //dd($headers, $itemDetail);
             prr(" :: Check BL Order Data :: ");
             prr( $itemDetail );
@@ -413,6 +416,8 @@ class CheckoutController extends FrontendController
                     $itemDetail
                 );
             }
+            prr(" :: Place Order API CALL RESULT :: ");
+            prr($result);
             // dd($result);
 
             $order_payment = $this->order_payment_model->updateOrCreate(
