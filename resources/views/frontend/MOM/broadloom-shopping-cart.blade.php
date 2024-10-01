@@ -856,6 +856,13 @@
             pointer-events: none;
             cursor: not-allowed;
         }
+        .cfa-rem{
+            border: 1px solid #660000;
+            color: #660000;
+            padding: 2px;
+            border-radius: 5px;
+            margin: 0px 1px;
+        }
     </style>
 @endsection
 
