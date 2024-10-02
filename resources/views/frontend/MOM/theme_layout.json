@@ -37,7 +37,7 @@
         "permission": ""
       },
       "broadloom": {
-        "label": "Broadloom",
+        "label": "Broadloom Products",
         "slug": "frontend.dashbord-broadloom",
         "permission": ""
       },
@@ -77,7 +77,7 @@
         "permission": "manage-financials"
       },
       "normalorder": {
-        "label": "Place Rug Order",
+        "label": "View Rug Order",
         "slug": "dashboard.placeorder",
         "permission": "manage-orders"
       },
