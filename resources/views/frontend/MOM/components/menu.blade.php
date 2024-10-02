@@ -131,7 +131,7 @@
                     </div> --}}
                     <div class="user-settings-block1 p-0">
                         <a href="{{route('dashboard.placeorder')}}" class="user-settings">
-                            <div>Place Order</div>
+                            <div>Place Rug Order</div>
                             <i class="icon-cart-plus"></i>
                         </a>
                     </div>
