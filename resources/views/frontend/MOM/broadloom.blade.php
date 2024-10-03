@@ -47,7 +47,7 @@
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
                     @if($correct_item_name)
-                        <div style="font-size: 28px;" class="show-bd-name"><strong>{{ ltrim($correct_item_name) }}</strong></div>
+                        <div style="font-size: 28px;" class="show-bd-name"><strong>{{ ltrim($correct_item_name) }} &nbsp;{{substr($item['ColorID'], 0, 3)}}</strong></div>
                     @else
                         <div style="font-size: 28px;" class="show-bd-name"><strong>{{$item['ItemName']}} {{substr($item['ColorID'], 0, 3)}}</strong></div>
                     @endif

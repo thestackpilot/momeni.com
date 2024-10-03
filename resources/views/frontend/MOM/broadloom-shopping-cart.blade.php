@@ -844,6 +844,26 @@
                 </div>
             </div>
         </main>
+        {{-- HASH MODAL --}}
+        <div class="modal fade bd-example-modal-lg popupModal login-modal-popup" id="checkOut_popup" tabindex="-1"
+            role="dialog" aria-labelledby="checkOutLabel" aria-hidden="true">
+            <div class="backdrop" style="display:none;"></div>
+        <div class="modal-dialog modal-lg wunst" role="document">
+            <div class="modal-content">
+                <div class="modal-header col-sm-12 justify-content-center flex-column">
+                    <h2 class="title d-flex flex-column justify-content-center text-center" style="margin: 0 auto;">
+                    </h2>
+                </div>
+                <div class="modal-body thanku flex-column justify-content-center" style="margin-top:-0;">
+                    <p class="thanku-msg text-center"></p>
+                    <a href="{{ route('frontend.home') }}" style="padding: 6px 12px;"
+                        class="btn btn-dark text-uppercase checkout-signin mt-20 col pull-left btn-back-to-home">BACK TO
+                        HOME</a>
+                </div>
+            </div>
+        </div>
+        </div>
+        {{-- HASH MODAL --}}
         @include('frontend.' . $active_theme->theme_abrv . '.components.footer')
     </div>
     @include('frontend.' . $active_theme->theme_abrv . '.components.login-modal')
@@ -1047,37 +1067,45 @@
                         data: formData,
                         success: function (response) {
                             if (response.success) {
-                                $('#orderno').text('');
-                                var spanText = response.msg.match(/\s+(\d+)/);
-                                var newOrderNo = spanText ? spanText[1] : '';
-                                $('#orderno').text(newOrderNo);
-                                console.log(response.msg);
-                                console.log(spanText);
-                                console.log(newOrderNo);
-                                $('.stepper-heading').text('Order Complete');
-                                $('.section-3').addClass('active');
-                                $('#section1').attr('style', 'display:none;');
-                                $('#section2').attr('style', 'display:none;');
-                                $('#section3').attr('style', 'display:block;');
-                                $('.badge.badge-pill.badge-primary.position-absolute.cartCount').text('0');
+                                if(!response.webhook){
+                                    $('#orderno').text('');
+                                    var spanText = response.msg.match(/\s+(\d+)/);
+                                    var newOrderNo = spanText ? spanText[1] : '';
+                                    $('#orderno').text(newOrderNo);
+                                    console.log(response.msg);
+                                    console.log(spanText);
+                                    console.log(newOrderNo);
+                                    $('.stepper-heading').text('Order Complete');
+                                    $('.section-3').addClass('active');
+                                    $('#section1').attr('style', 'display:none;');
+                                    $('#section2').attr('style', 'display:none;');
+                                    $('#section3').attr('style', 'display:block;');
+                                    $('.badge.badge-pill.badge-primary.position-absolute.cartCount').text('0');
 
-                                $.ajax({
-                                    url: "{{ route('delete-cart-items') }}",
-                                    type: "GET",
-                                    success: function (deleteResponse) {
-                                        if (deleteResponse) {
-                                            toastr.success('The order has been successfully processed, and the cart is now empty.', {
-                                                hideDuration: 10000,
-                                                closeButton: true,
-                                            });
-                                        } else {
-                                            toastr.error('Someting went wrong while empty the cart after place order.', {
-                                                hideDuration: 10000,
-                                                closeButton: true,
-                                            });
+                                    $.ajax({
+                                        url: "{{ route('delete-cart-items') }}",
+                                        type: "GET",
+                                        success: function (deleteResponse) {
+                                            if (deleteResponse) {
+                                                toastr.success('The order has been successfully processed, and the cart is now empty.', {
+                                                    hideDuration: 10000,
+                                                    closeButton: true,
+                                                });
+                                            } else {
+                                                toastr.error('Someting went wrong while empty the cart after place order.', {
+                                                    hideDuration: 10000,
+                                                    closeButton: true,
+                                                });
+                                            }
                                         }
-                                    }
-                                })
+                                    })
+                                }else{
+                                    $('#checkOut_popup .title').html('<i class="bi bi-info-circle-fill" style="color:#c90f41;font-size:30px;"></i>Oops!');
+                                    $('#checkOut_popup .btn-back-to-home').attr('data-dismiss', 'modal');
+                                    $('#checkOut_popup .thanku-msg').html(response.msg);
+                                    $('#checkOut_popup').modal({backdrop: 'static', keyboard: false});
+                                    $('#checkOut_popup').modal('show');
+                                }
                             } else {
                                 toastr.error(response.msg, {
                                     hideDuration: 10000,

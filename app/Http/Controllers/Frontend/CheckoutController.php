@@ -442,6 +442,7 @@ class CheckoutController extends FrontendController
                 $updatedString = '<span>' . $matched_string . '</span>';
                 $successMsg = str_replace($matched_string, $updatedString, $successMsg);
                 $response['success'] = 1;
+                $response['webhook'] = 0;
                 $response['msg'] = $successMsg;
 
                 // if ( isset($this->active_theme_json->general->order_ack) && $this->active_theme_json->general->order_ack ) {
@@ -486,7 +487,7 @@ class CheckoutController extends FrontendController
                     prr("Order Acknowledgment Email Exception :: " . $e->getMessage());
                 }
                 // }
-            } elseif (!$result['Success']) {
+            } else {
                 $order_payment = $this->order_payment_model->updateOrCreate(
                     ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                     [
@@ -495,9 +496,9 @@ class CheckoutController extends FrontendController
                 );
 
                 if ((isset($result['Exception']) && $result['Exception']) || (isset($result['ObjectID']) && $result['ObjectID'] >= 900)) {
-                   // $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', true);
-                    $response['success'] = 1;
-                    $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash;
+                    // $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', true);
+                    // $response['success'] = 1;
+                    // $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash;
 
                     try {
                         $order_data = [
@@ -511,7 +512,12 @@ class CheckoutController extends FrontendController
                            'email'    => ConstantsController::WEB_HOOK_EMAIL,
                            'template' => 'email.web_hook_email'
                        ] );
-                       prr(" :: WEB_HOOK Email Sent :: ");
+                        prr(" :: WEB_HOOK Email Sent :: ");
+                        $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', true);
+                        $response['success'] = 1;
+                        $response['webhook'] = 1;
+                        $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash . '</br>';
+
                     } catch (\Exception $e) {
                         prr("Mail Exception: " . $e->getMessage());
                     }
