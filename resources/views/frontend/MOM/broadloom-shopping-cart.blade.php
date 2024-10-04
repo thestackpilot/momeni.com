@@ -180,7 +180,7 @@
                                                                 $priceTotal += $item->item_price;
                                                                 number_format($priceTotal, 2);
                                                             @endphp
-                                                            {{ $item->item_currency }}{{ $item->item_price }}</td>
+                                                            {{ $item->item_currency }}{{ number_format($item->item_price, 2) }}</td>
                                                         <td class="align-content-center">
                                                             @php
                                                                 $sergingTotal += $sum_surging_charges;
@@ -893,17 +893,20 @@
 
             // var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " "));
             var subtotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
+            var formatted_subtotal = subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var shippingCharges = parseFloat($(".section_2_shipping_charges").text().replace('$', ''));
             var sergingTotal = parseFloat($("#sergingTotal").val());
             var serging_charges = parseFloat($(".serging_charges").text().replace('$', " ").replace(',', ""));
+            var formatted_serg_charges = serging_charges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var cutting_charges = parseFloat($(".cutting_charges").text().replace('$', " ").replace(',', ""));
+            var formatted_cut_charges = cutting_charges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var total = subtotal + serging_charges + cutting_charges + shippingCharges;
-
-            $(".section_2_subtotal").text("$" + subtotal.toFixed(2));
-            $(".section_2_serging_charges").text("$" + serging_charges.toFixed(2));
-            $(".section_2_cutting_charges").text("$" + cutting_charges.toFixed(2));
-            $(".section_2_cart_total").text("$" + total.toFixed(2));
-            $(".order_placed_total").text("$" + total.toFixed(2));
+            var formatted_total = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            $(".section_2_subtotal").text("$" + formatted_subtotal);
+            $(".section_2_serging_charges").text("$" + formatted_serg_charges);
+            $(".section_2_cutting_charges").text("$" + formatted_cut_charges);
+            $(".section_2_cart_total").text("$" + formatted_total);
+            $(".order_placed_total").text("$" + formatted_total);
 
             // $('.delete-row').click(function () {
             //     $(this).closest('tr').remove();
@@ -979,23 +982,28 @@
             function updateTotal() {
                 //var subtotal = parseFloat($("#item_subtotal_price").text());
                 var subtotal = parseFloat($("#item_subtotal_price").text().replace('$', " ").replace(',', ""));
+                var formatted_subtotal = subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 var shippingCharges = parseFloat($(".shipping_charges").text().replace('$', ''));
                 var sergingTotal = parseFloat($(".serging_charges").text().replace('$', " ").replace(',', ""));
                 var sergingCharges = parseFloat($(".section_2_serging_charges").text().replace('$', " ").replace(',', ""));
+                var formatted_sergingCharges = sergingCharges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 var cuttingCharges = parseFloat($(".section_2_cutting_charges").text().replace('$', " ").replace(',', ""));
+                var formatted_cuttingCharges = cuttingCharges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 // var orderDeatilSubTotal = subtotal + sergingTotal
                 var orderDeatilSubTotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
+                var formatted_orderDeatilSubTotal = orderDeatilSubTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 //subtotal = parseFloat($("#inside-hidden-subtotal").val().replace('$', " ").replace(',', ""));
                 var total = subtotal + sergingTotal + cuttingCharges + shippingCharges;
 
 
 
 
-                $('.order-detail-subtotal').text("$" + orderDeatilSubTotal.toFixed(2));
-                $('.order-detail-serging').text("$" + sergingCharges.toFixed(2));
-                $('.order-detail-cutting').text("$" + cuttingCharges.toFixed(2));
-                $(".cart_total").text("$" + subtotal.toFixed(2));
-                $(".cart_total_final").text("$" + total.toFixed(2));
+                $('.order-detail-subtotal').text("$" + formatted_orderDeatilSubTotal);
+                $('.order-detail-serging').text("$" + formatted_sergingCharges);
+                $('.order-detail-cutting').text("$" + formatted_cuttingCharges);
+                $(".cart_total").text("$" + formatted_subtotal);
+                // $(".cart_total_final").text("$" + total.toFixed(2));
+                $(".cart_total_final").text("$" + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
             }
 
             updateTotal();

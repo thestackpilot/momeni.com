@@ -1765,8 +1765,10 @@
             let extPrice = $("#sq-ft").val() * $("#ats-qty").val();
 
             // Update the SQ-YRD Price ($) and EXT Price ($) fields
-            $("#sq-yrd").val(sqYrdPrice.toFixed(2)); // Set SQ-YRD Price with two decimal places
-            $("#sq-ext").val(extPrice.toFixed(2)); // Set EXT Price with two decimal places
+            // $("#sq-yrd").val(sqYrdPrice.toFixed(2));
+            // $("#sq-ext").val(extPrice.toFixed(2));
+            $("#sq-ext").val( extPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) );
+            $("#sq-yrd").val( sqYrdPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) );
         }
 
         //updated
