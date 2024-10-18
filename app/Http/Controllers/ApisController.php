@@ -272,7 +272,7 @@ class ApisController extends RootController
     public function Get_SalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '', $Collection = '', $Design = '')
     {
         $sale_rep_id = Auth::user()->is_customer ? '' : $SalesRep;
-        $customer_id = Auth::user()->is_customer ? $SalesRep : '';
+        $customer_id = Auth::user()->is_customer ? $SalesRep : $CustomerID;
         $post_array = array('SalesRepID' => $sale_rep_id, 'CustomerID' => $customer_id, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
 
         if (Auth::user()->is_customer) {
