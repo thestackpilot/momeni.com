@@ -175,11 +175,17 @@ class BroadloomController extends FrontendController
 
         if (!empty($sergingTypeNo)) {
             $serging = 'Y';
-            $width = number_format($totalWidth % 12, ConstantsController::ALLOWED_DECIMALS);
-            $length = number_format($atslength, ConstantsController::ALLOWED_DECIMALS);
+            // $width = number_format($totalWidth % 12, ConstantsController::ALLOWED_DECIMALS);
+            // $length = number_format($atslength, ConstantsController::ALLOWED_DECIMALS);
+            // $area = ($width + $length) * 2;
+
+            $width = $totalWidth % 12;
+            $length = $atslength;
             $area = ($width + $length) * 2;
-//            $charges = $area * $charges;
+            $formattedArea = number_format($area, ConstantsController::ALLOWED_DECIMALS);
+            //  $charges = $area * $charges;
         }
+
 
         $res = $this->ApiObj->Get_AddCutPiece($tempsalesorderno, $cutpieceId, $rollId, $itemId, $atslength, $totalWidth, $totalSqft, $cutType, $description, $charges, $sergingTypeNo, $locationId, $waste, $remnant, $available, $isremship, $serging, $line, $userremarks, $logged_user_no);
         return [

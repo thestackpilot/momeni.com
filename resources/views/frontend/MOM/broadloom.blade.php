@@ -228,6 +228,9 @@
                                                         <input type="text" class="form-control" id="sq-ext"
                                                                value=""
                                                                disabled style="text-align:right;">
+                                                        <input type="hidden" class="form-control" id="without-format-sq-ext"
+                                                               value=""
+                                                               disabled style="text-align:right;">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-8 col-sm-12">
@@ -1076,7 +1079,7 @@
                                                 'cart_item_quantity': 1,
                                                 'cart_item_color': item.ItemColor,
                                                 'cart_item_size': max_len_size,//$('#size_price').val(),
-                                                'cart_item_price': $("#sq-ext").val(),
+                                                'cart_item_price': $("#without-format-sq-ext").val(),
                                                 'item_surging_price': $('#surging_charges').val(),
                                                 'cart_item_currency': '$',
                                                 'cart_item_image': item.ImageNameArray[0],
@@ -1195,7 +1198,7 @@
                                 'cart_item_quantity': 1,
                                 'cart_item_color': item.ItemColor,
                                 'cart_item_size': max_len_size,//$('#size_price').val(),
-                                'cart_item_price': $("#sq-ext").val(),
+                                'cart_item_price': $("#without-format-sq-ext").val(),
                                 'item_surging_price': $('#surging_charges').val(),
                                 'cart_item_currency': '$',
                                 'cart_item_image': item.ImageNameArray[0],
@@ -1655,8 +1658,10 @@
                             var widthMaxRollFeet = parseFloat($('#Twidth-ats-max').val());
                             var widthMaxRollInch = $('#TwidthInch-ats-max').val();
                             var widthInchesToFeet = parseFloat($('#TwidthInch-ats-max').val());
+                            var widthInchesToFeet = parseFloat(widthMaxRollInch) / 12
                             var finalWidth =  widthMaxRollFeet + widthInchesToFeet;
                             totalSqftPrice = finallength * finalWidth;
+                            console.log('totalSqftPrice', totalSqftPrice.toFixed(2));
                         }else{
                             totalSqftPrice = 0;
                         }
@@ -1765,8 +1770,14 @@
             let extPrice = $("#sq-ft").val() * $("#ats-qty").val();
 
             // Update the SQ-YRD Price ($) and EXT Price ($) fields
-            $("#sq-yrd").val(sqYrdPrice.toFixed(2)); // Set SQ-YRD Price with two decimal places
-            $("#sq-ext").val(extPrice.toFixed(2)); // Set EXT Price with two decimal places
+            // $("#sq-yrd").val(sqYrdPrice.toFixed(2));
+            // $("#sq-ext").val(extPrice.toFixed(2));
+            console.log('extPrice',extPrice);
+
+            var formatExt =  extPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            $("#sq-ext").val(formatExt);
+            $('#without-format-sq-ext').val(parseFloat(extPrice).toFixed(2));
+            $("#sq-yrd").val( sqYrdPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) );
         }
 
         //updated
