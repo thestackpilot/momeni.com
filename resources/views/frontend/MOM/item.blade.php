@@ -59,7 +59,7 @@
                             <div class="product-details-left">
                                 <div class="product-details-images-2 slider-lg-image-2">
                                     <div class="easyzoom-style" style="
-                                    height: 100%;">
+                                        height: 100%;">
                                         <div class="easyzoom easyzoom--overlay" style="height: 100%;">
                                             <a style="height: 100%;" href="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" class="poppu-img" id="product-main-image">
                                                 <img style="height: 100%;" id="image_0" class="img-fluid" src="{{isset($items['Items'][0]['ImageNameArray']) && $items['Items'][0]['ImageNameArray'] ? $items['Items'][0]['ImageNameArray'][0] : url('/').ConstantsController::IMAGE_PLACEHOLDER}}" alt="{{$items['Items'][0]['ItemName']}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
@@ -906,6 +906,11 @@ console.log('customer_id1: ', customer_id);
                 $('#disabled_customer_select').removeClass('d-none');
                 if (Customer.CustomerID == item.UserCustomerInfo.CustomerSet) {
                     customerID = Customer.CustomerID;
+                    if((Customer.CompanyName && Customer.CompanyName.includes('&amp;'))){
+                        Customer.CompanyName = Customer.CompanyName.replace(/&amp;/g, '&');
+                    }else{
+                        Customer.companyName;
+                    }
                     $('#item_customer').append($('<input>', {
                         value: item.ItemID + ' :: ' + Customer.CustomerID,
                         text: Customer.CompanyName,
@@ -925,6 +930,11 @@ console.log('customer_id1: ', customer_id);
             } else {
                 $('#active_customer_select').removeClass('d-none');
                 $('#disabled_customer_select').addClass('d-none');
+                if((Customer.CompanyName && Customer.CompanyName.includes('&amp;'))){
+                    Customer.CompanyName = Customer.CompanyName.replace(/&amp;/g, '&');
+                }else{
+                    Customer.companyName;
+                }
                 $('#item_customer').append($('<input>', {
                     value: item.ItemID + ' :: ' + Customer.CustomerID,
                     text: Customer.CompanyName,

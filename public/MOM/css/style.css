@@ -11259,7 +11259,7 @@ END OF NEW ADDITION OF CSS AFI 66
 
 .easyzoom img {
     width: 1200px;
-    height: 350px;
+    height: auto;
 }
 
 .my-table {
@@ -13153,6 +13153,7 @@ h3.selected-fltr {
 
 .cut-pieces {
     margin-top: 2rem;
+    overflow-x: auto;
 }
 
 .pieces {

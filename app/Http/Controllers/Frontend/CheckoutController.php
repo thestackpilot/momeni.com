@@ -201,6 +201,11 @@ class CheckoutController extends FrontendController
 
         // dd($countries);
         // dd($customer_details['CustomerDetail']['Country'],$customer_details['CustomerDetail']['State']);
+
+        if (!isset($customer_details['CustomerDetail'])) {
+            return redirect('/');
+        }
+
         $this->append_breadcrumbs( 'Checkout', route( 'frontend.checkout' ) );
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.checkout', [
             'countries'           => $countries,
