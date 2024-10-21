@@ -40,7 +40,7 @@ use App\Http\Controllers\CommonController;
     <link rel="stylesheet" href="{{asset('/MOM/css/vendor/vendor.min.css')}}">
     <link rel="stylesheet" href="{{asset('/MOM/css/plugins/plugins.min.css')}}?v=0.01">
     @yield('styles')
-    <link rel="stylesheet" href="{{asset('/MOM/css/style.css')}}?v=0.02">
+    <link rel="stylesheet" href="{{asset('/MOM/css/style.css')}}?v=0.03">
     <link rel="stylesheet" href="{{asset('/MOM/css/toastr.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
