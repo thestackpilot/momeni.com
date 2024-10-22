@@ -1413,13 +1413,14 @@
 
                           //  totalSqftPrice = (totalMaxLen * totalAddWid);
                             if( response?.OutPut?.AddCutPieces?.[0]?.TotalUsedLength ){
-                                var totalUsedLength = response['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
-                                var finallength = (totalUsedLength / 12);
+                                var totalUsedLength  = data['cut_piece']['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
+                                var finallength = (totalUsedLength / 12); // Converting Length to Feet:
                                 var widthMaxRollFeet = parseFloat($('#Twidth-ats-max').val());
-                                var widthMaxRollInch = $('#TwidthInch-ats-max').val();
-                                var widthInchesToFeet = parseFloat($('#TwidthInch-ats-max').val());
-                                var finalWidth =  widthMaxRollFeet + widthInchesToFeet;
+                                var widthMaxRollInch = parseFloat($('#TwidthInch-ats-max').val());
+                                var widthInchesToFeet = parseFloat(widthMaxRollInch) / 12 // Converts width from inches to feet.
+                                var finalWidth =  widthMaxRollFeet + widthInchesToFeet; // Adds the converted inches to width in feet to get the total width in feet.
                                 totalSqftPrice = finallength * finalWidth;
+                                console.log('totalSqftPrice', totalSqftPrice.toFixed(2));
                             }else{
                                 totalSqftPrice = 0;
                             }
@@ -1654,12 +1655,11 @@
 
                         if(data?.cut_piece?.OutPut?.AddCutPieces?.[0]?.TotalUsedLength){
                             var totalUsedLength  = data['cut_piece']['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
-                            var finallength = (totalUsedLength / 12);
+                            var finallength = (totalUsedLength / 12); // Converting Length to Feet:
                             var widthMaxRollFeet = parseFloat($('#Twidth-ats-max').val());
-                            var widthMaxRollInch = $('#TwidthInch-ats-max').val();
-                            var widthInchesToFeet = parseFloat($('#TwidthInch-ats-max').val());
-                            var widthInchesToFeet = parseFloat(widthMaxRollInch) / 12
-                            var finalWidth =  widthMaxRollFeet + widthInchesToFeet;
+                            var widthMaxRollInch = parseFloat($('#TwidthInch-ats-max').val());
+                            var widthInchesToFeet = parseFloat(widthMaxRollInch) / 12 // Converts width from inches to feet.
+                            var finalWidth =  widthMaxRollFeet + widthInchesToFeet; // Adds the converted inches to width in feet to get the total width in feet.
                             totalSqftPrice = finallength * finalWidth;
                             console.log('totalSqftPrice', totalSqftPrice.toFixed(2));
                         }else{

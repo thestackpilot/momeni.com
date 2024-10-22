@@ -119,7 +119,10 @@ class ShowCutPiece {
                     this.setRectangleData(response);
                     let length = this.CalculateATSLength(response.ShowCuts);
 
-                    if (length > 600) {
+                    // if (length > 600) {
+                    //     this.setFrameOrientation('H');
+                    // }
+                    if (length > 200) {
                         this.setFrameOrientation('H');
                     }
                     let orientation = this.getFrameOrientation();
