@@ -13153,7 +13153,7 @@ h3.selected-fltr {
 
 .cut-pieces {
     margin-top: 2rem;
-    overflow-x: auto;
+    /* overflow-x: auto; */
 }
 
 .pieces {
