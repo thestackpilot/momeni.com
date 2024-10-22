@@ -1413,7 +1413,7 @@
 
                           //  totalSqftPrice = (totalMaxLen * totalAddWid);
                             if( response?.OutPut?.AddCutPieces?.[0]?.TotalUsedLength ){
-                                var totalUsedLength  = data['cut_piece']['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
+                                var totalUsedLength  = response['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
                                 var finallength = (totalUsedLength / 12); // Converting Length to Feet:
                                 var widthMaxRollFeet = parseFloat($('#Twidth-ats-max').val());
                                 var widthMaxRollInch = parseFloat($('#TwidthInch-ats-max').val());
