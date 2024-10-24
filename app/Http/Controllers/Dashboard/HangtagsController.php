@@ -330,7 +330,8 @@ class HangtagsController extends DashboardController
         switch ( $designer )
         {
             case '00ERIN':
-                $logo = 'https://media.momeni.com/Full_Img/ErinGates_logo.png';
+               // $logo = 'https://media.momeni.com/Full_Img/ErinGates_logo.png';
+               $logo = 'https://media.momeni.com/Full_Img/eringates_NewLogo.jpg';
                 break;
 
             case 'CHRI02':
