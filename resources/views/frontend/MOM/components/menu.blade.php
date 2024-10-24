@@ -215,7 +215,7 @@
                                             <p class="specs m-0"><strong> SKU: </strong>
                                                 <span> {{$item -> oak_sku}} </span></p>
                                         @endif<p
-                                            class="price justify-content-end m-0">{{$item -> item_currency}}{{$item -> item_total}} </p>
+                                            class="price justify-content-end m-0">{{$item -> item_currency}}{{number_format($item->item_total, 2)}} </p>
                                         <hr>
                                         @if(!$item->broadloom_item)
                                             <div
@@ -314,7 +314,7 @@
                         <p class="specs m-0 d-flex justify-content-between total-amount">
                             <strong class="font-crimson"> Total </strong>
                             <span
-                                class="font-ropa cart_total_price"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
+                                class="font-ropa cart_total_price"> {{$cart->cart_currency}}{{$cart->cart_total}} </span>
                         </p>
                         {{-- {{ $broadloom_item ? route('broadloom.shopping_cart') : route('frontend.checkout')}} --}}
                         <a href=""

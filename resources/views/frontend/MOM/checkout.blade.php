@@ -254,11 +254,11 @@
                                                     </td>
                                                     <td class="col-md-2 border-0 text-center">
                                                         <p class="price justify-content-end m-0">
-                                                            {{ $item->item_currency }}{{ $item->item_price }} </p>
+                                                            {{ $item->item_currency }}{{ number_format($item->item_price, 2) }} </p>
                                                     </td>
                                                     <td class="col-md-2 border-0 text-center">
                                                         <p class="price justify-content-end m-0">
-                                                            {{ $item->item_currency }}{{ $item->item_total }} </p>
+                                                            {{ $item->item_currency }}{{ number_format($item->item_total, 2) }} </p>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -731,7 +731,7 @@
                                                                 class="font-ropa side-mark-span-{{ $item->item_id }}"></span>
                                                         </p>
                                                         <p class="price justify-content-end m-0"> Sub Total:
-                                                            {{ $item->item_currency }}{{ $item->item_total }} </p>
+                                                            {{ $item->item_currency }}{{ number_format($item->item_total, 2) }} </p>
                                                     </div>
                                                 </div>
                                             @endforeach
