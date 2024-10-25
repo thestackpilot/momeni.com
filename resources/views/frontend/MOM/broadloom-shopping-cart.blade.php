@@ -103,7 +103,7 @@
                                                                 </div>
                                                                 <div class="col-lg-8 col-md-12 col-sm-12 ps-5 mobile-mode-bd-cart" style="font-size: 12px">
                                                                     <div class=" mt-2 font-weight--bold row">Design: <p
-                                                                            class="font-weight--normal">
+                                                                            class="font-weight--normal d-flex flex-wrap">
                                                                             {{ $item_data->ItemName }} {{substr($item_data->ColorID, 0, 3)}}
                                                                             <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
                                                                             <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span> </p>
@@ -561,7 +561,7 @@
                                                             @endphp
                                                             <div class="col-9" style="font-size: 12px;">
                                                                 <div class="mx-3 mt-2 font-weight--bold row">Design: <p
-                                                                        class="font-weight--normal mx-2">{{$item->item_name}} {{$colorID}}
+                                                                        class="font-weight--normal d-flex flex-wrap">{{$item->item_name}} {{$colorID}}
                                                                         <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
                                                                         <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span>
                                                                     </p>
@@ -751,7 +751,7 @@
                                         @endphp
                                         <div class="col-9" style="font-size: 12px">
                                             <div class="mt-2 font-weight--bold row">Design:
-                                                <p class="font-weight--normal mx-2">{{$item->item_name}} {{$colorID}}
+                                                <p class="font-weight--normal mx-2 d-flex flex-wrap">{{$item->item_name}} {{$colorID}}
                                                     <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
                                                     <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span> </p>
                                             </div>
