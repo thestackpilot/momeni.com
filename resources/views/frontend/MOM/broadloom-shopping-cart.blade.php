@@ -101,7 +101,7 @@
                                                                         onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"
                                                                     >
                                                                 </div>
-                                                                <div class="col-lg-8 col-md-12 col-sm-12 ps-5" style="font-size: 12px">
+                                                                <div class="col-lg-8 col-md-12 col-sm-12 ps-5 mobile-mode-bd-cart" style="font-size: 12px">
                                                                     <div class=" mt-2 font-weight--bold row">Design: <p
                                                                             class="font-weight--normal">
                                                                             {{ $item_data->ItemName }} {{substr($item_data->ColorID, 0, 3)}}

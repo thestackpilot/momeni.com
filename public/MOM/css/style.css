@@ -12990,6 +12990,12 @@ h3.selected-fltr {
     .hp-video h2.title {
         margin-bottom: 15px;
     }
+    .cfa-rem{
+        margin: 0px;
+    }
+    .mobile-mode-bd-cart{
+        font-size: 8px !important;
+    }
 }
 @media (max-width: 767px){
     .collection-section .collection-prdt-wrapper{
@@ -13102,6 +13108,9 @@ h3.selected-fltr {
     .pt-apply-title {
         font-size: 24px;
         letter-spacing: -3px;
+    }
+    .cfa-rem{
+        margin: 0px;
     }
 }
 @media (max-width: 380px){
