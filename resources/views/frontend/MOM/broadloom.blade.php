@@ -1142,8 +1142,7 @@
                                                                     console.log('all cut response on change', response);
                                                                 }
                                                             })
-                                                            window.location.reload();
-
+                                                            // window.location.reload();
                                                             // $('.quickCart-opener').trigger('click');
                                                         });
                                                     } else {
@@ -1248,7 +1247,7 @@
                                             $('#add_to_cart').addClass('d-none');
                                             $('#roll_pieces').removeAttr("disabled");
                                             $('#cut-pieces').empty();
-                                            window.location.reload();
+                                            //window.location.reload();
                                             // $('.quickCart-opener').trigger('click');
                                         });
                                     } else {
