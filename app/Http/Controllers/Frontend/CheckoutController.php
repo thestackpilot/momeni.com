@@ -431,7 +431,7 @@ class CheckoutController extends FrontendController
                 ]
             );
 
-            if ($result['Success']) {
+            if (isset($result['Success']) && $result['Success']) {
                 $this->finalize_payment($order_payment, $order_payment_hash, $requestDataArray, 'capture');
                 $order_payment = $this->order_payment_model->updateOrCreate(
                     ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
