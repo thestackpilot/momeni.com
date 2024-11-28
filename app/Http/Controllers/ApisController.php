@@ -822,11 +822,11 @@ class ApisController extends RootController
 
     public function Place_BLQuotation($data)
     {
-        dump('api payload');
-        dump($data);
+        // dump('api payload');
+        // dump($data);
         $result = $this->Post_API_Signature( 'Place_BLQuotation', 'Place BL Quotation', $data, [], 1, 1, 0) ;
-
-        dd($result);
+        return $result;
+        //dd($result);
     }
 
 
