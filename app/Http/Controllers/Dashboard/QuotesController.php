@@ -41,25 +41,25 @@ class QuotesController extends DashboardController
         $data = $this->save_payload($request, $select_customer, $cancel_quote_date);
         $quote = $this->ApiObj->Place_BLQuotation($data);
 
-        // if($quote['OutPut']['Success']){
+        if($quote['OutPut']['Success']){
             $reportGet = $this->ApiObj->Get_ViewDocumentsReport('', '', 'ViewBLQuotation', '100');
             $maildata = [];
             $maildata['pdf'] = $reportGet['document']['ReportData'];
 
-            // if(isset($email) && $email){
-                // try {
-                //     SendMail::dispatch( [
-                //         'data'  => $maildata,
-                //         'slug'  => 'New Quotes Data',
-                //         'email' => ['sheikhammar568@gmail.com'],
-                //         'template' => 'email.quotes_submit'
-                //     ] );
-                // }
-                // catch ( \Exception$e )
-                // {
-                //     prr( "Quote Mail Exception: ".$e->getMessage() );
-                // }
-            // }
+            if(isset($email) && $email){
+                try {
+                    SendMail::dispatch( [
+                        'data'  => $maildata,
+                        'slug'  => 'New Quotes Data',
+                        'email' => ['sheikhammar568@gmail.com'],
+                        'template' => 'email.quotes_submit'
+                    ] );
+                }
+                catch ( \Exception$e )
+                {
+                    prr( "Quote Mail Exception: ".$e->getMessage() );
+                }
+            }
 
             return response()->json([
                'success' => true,
@@ -68,16 +68,35 @@ class QuotesController extends DashboardController
                'reportdata' => $reportGet['document']['ReportData'],
                'message' => 'Quote has been save successfully'
             ]);
-        // }else{
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'Something went wrong'
-        //      ]);
-        // }
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong'
+             ]);
+        }
     }
 
     public function save_payload($request, $formCustomer, $cancel_quote_date) {
-        $data = [];
+       // dd($formCustomer);
+        // Prepare CutPieces structure
+        $cutpiece = [
+            "TempSalesOrderNo" => "",
+            "ItemID" => $request->item_id,
+            "RollID" => "",
+            "CutPieceID" => "",
+            "ActualLength" => $request->length,
+            "ActualWidth" => $request->width,
+            "ActualSQFT" => "",
+            "CutType" => "",
+            "LocationID" => "",
+            "Serging" => $request->serging,
+            "SergingCharges" => $request->sergingcharges,
+            "SergingType" => $request->serging,
+            "LineNo" => "1",
+            "UserRemarks" => "",
+        ];
+
+        // Prepare Detail structure
         $details = [
             "ItemID" => $request->item_id,
             "OrderQty" => 1,
@@ -98,76 +117,35 @@ class QuotesController extends DashboardController
             "CFA" => "",
             "IsRemnantShipable" => "",
             "ETA_Date" => "",
-        ];
-        $cutpiece = [
-            "TempSalesOrderNo" => "",
-            "TempUserNo" => "",
-            "CutPieceID" => "",
-            "RollID" => "",
-            "ItemID" => $request->item_id,
-            "ActualLength" => $request->length,
-            "ActualWidth" => $request->width,
-            "ActualSQFT" => "",
-            "CutType" => "",
-            "Description" => "",
-            "LocationID" => "",
-            "Serging" => $request->serging,
-            "Waste" => "",
-            "Remnant" => "",
-            "AvailableForSale" => "",
-            "SergingCharges" => $request->sergingcharges,
-            "IsRemnantShipable" => "",
-            "SergingType" => $request->serging,
-            "LineNo" => "1",
-            "UserRemarks" => "1",
-            "LoggedUserNo" => Auth::user()->spars_logged_user_no,
+            "CutPieces" => [$cutpiece], // Nest CutPieces array properly
         ];
 
-        $data['Detail'] = $details;
-        $data['Detail']['CutPieces'] = $cutpiece;
-        $data = array_merge($data, [
+        // Combine data into the final structure
+        $data = [
+            "Detail" => [$details],
             "CustomerID" => $formCustomer['CustomerDetail']['CustomerID'],
-            "CustomerPO" => '',
-            "AddressName" =>'',
-            "FirstName" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['FirstName'],
-            "LastName" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['LastName'],
-            "Email" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Email'],
-            "CompanyName" =>$formCustomer['CustomerDetail']['Company'],
-            "ShipToCode" =>'',
-            "Address1" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Address1'],
-            "Address2" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Address2'],
-            "City" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['City'],
-            "State" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['State'],
-            "Zip" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Zip'],
-            "Country" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Country'],
-            "Phone" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Phone1'],
-            "OrderTakenBy" =>'',
-            "EventID" =>'',
-            "Instructions" =>'',
-            "ShipViaCode" =>$formCustomer['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]['ShipViaID'],
-            "OrderDate" =>'',
-            "ShipDate" =>'',
-            "CancelDate" =>$cancel_quote_date,
+            "CustomerPO" => $cancel_quote_date . rand(1,100),
+            "FirstName" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['FirstName'],
+            "LastName" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['LastName'],
+            "Email" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Email'],
+            "CompanyName" => $formCustomer['CustomerDetail']['Company'],
+            "ShipToCode" => '',
+            "Address1" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Address1'],
+            "Address2" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Address2'],
+            "City" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['City'],
+            "State" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['State'],
+            "Zip" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Zip'],
+            "Country" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Country'],
+            "Phone" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Phone1'],
+            "ShipViaCode" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]['ShipViaID'],
+            "CancelDate" => $cancel_quote_date,
             "ShippingCost" => 23.0,
-            "DeliveryTime" =>'',
-            "AddressType" =>'',
-            "SignatureRequired" =>'',
-            "IncludeDeclareValue" =>'',
-            "ShipComplete" =>'',
-            "OrderSource" =>'',
-            "ExternalID" =>'',
-            "PaymentTerm" =>'',
-            "IsAdvancePayment" =>'',
-            "AdvancePaymentAmout" =>'',
-            "TransactionCode" =>'',
-            "CashReceiptNo" =>'',
-            "TempQuotationNo" =>'',
-            "IsRugPad" =>$request->addRugpad,
-        ]);
+            "IsRugPad" => $request->addRugpad,
+        ];
 
         return $data;
-
     }
+
 
     public function order_quote(Request $request){
         $QuotationNo = $request->QuotationNo;
