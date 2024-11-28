@@ -340,8 +340,8 @@ class ComposerStaticInit78df7a37615a0bb19aff314af20e2574
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -587,9 +587,11 @@ class ComposerStaticInit78df7a37615a0bb19aff314af20e2574
         'App\\Http\\Controllers\\Dashboard\\FinanceController' => __DIR__ . '/../..' . '/app/Http/Controllers/Dashboard/FinanceController.php',
         'App\\Http\\Controllers\\Dashboard\\GenericReportsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Dashboard/GenericReportsController.php',
         'App\\Http\\Controllers\\Dashboard\\HangtagsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Dashboard/HangtagsController.php',
+        'App\\Http\\Controllers\\Dashboard\\QuotesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Dashboard/QuotesController.php',
         'App\\Http\\Controllers\\Dashboard\\ShippingController' => __DIR__ . '/../..' . '/app/Http/Controllers/Dashboard/ShippingController.php',
         'App\\Http\\Controllers\\Dashboard\\ShopController' => __DIR__ . '/../..' . '/app/Http/Controllers/Dashboard/ShopController.php',
         'App\\Http\\Controllers\\Dashboard\\StaffController' => __DIR__ . '/../..' . '/app/Http/Controllers/Dashboard/StaffController.php',
+        'App\\Http\\Controllers\\Frontend\\BroadloomController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/BroadloomController.php',
         'App\\Http\\Controllers\\Frontend\\CartController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/CartController.php',
         'App\\Http\\Controllers\\Frontend\\CheckoutController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/CheckoutController.php',
         'App\\Http\\Controllers\\Frontend\\CollectionsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend/CollectionsController.php',
@@ -609,6 +611,7 @@ class ComposerStaticInit78df7a37615a0bb19aff314af20e2574
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CWT' => __DIR__ . '/../..' . '/app/Http/Middleware/CWT.php',
+        'App\\Http\\Middleware\\CheckBroadLoomUser' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckBroadLoomUser.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',
         'App\\Http\\Middleware\\DashboardPermissions' => __DIR__ . '/../..' . '/app/Http/Middleware/DashboardPermissions.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
@@ -616,8 +619,10 @@ class ComposerStaticInit78df7a37615a0bb19aff314af20e2574
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\TrustHosts' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustHosts.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
+        'App\\Http\\Middleware\\VerifyAdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyAdminMiddleware.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Imports\\ExcelReader' => __DIR__ . '/../..' . '/app/Imports/ExcelReader.php',
+        'App\\Jobs\\SendMail' => __DIR__ . '/../..' . '/app/Jobs/SendMail.php',
         'App\\Jobs\\SendOrder' => __DIR__ . '/../..' . '/app/Jobs/SendOrder.php',
         'App\\Mail\\SendMail' => __DIR__ . '/../..' . '/app/Mail/SendMail.php',
         'App\\Models\\ApiContentManagement' => __DIR__ . '/../..' . '/app/Models/ApiContentManagement.php',

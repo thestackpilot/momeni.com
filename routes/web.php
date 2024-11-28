@@ -30,6 +30,7 @@ use App\Http\Controllers\Frontend\FavouriteController;
 use App\Http\Controllers\Frontend\CollectionsController;
 use App\Http\Controllers\Frontend\MainCollectionController;
 use App\Http\Controllers\Dashboard\GenericReportsController;
+use App\Http\Controllers\Dashboard\QuotesController;
 use App\Http\Controllers\Admin\DealerRegistrationsController;
 use App\Http\Controllers\Admin\ApiContentManagementController;
 use App\Http\Controllers\Admin\FormController as AdminFormController;
@@ -224,5 +225,11 @@ Route::group( ['prefix' => 'dashboard', 'middleware' => ['auth']], function ()
 
     //print order report
     Route::post( '/view-order/print-download', [GenericReportsController::class, 'download_print_orders'] )->name( 'dashboard.orders-print-download' );
+
+    // Quotes
+    Route::get('/quotes', [QuotesController::class, 'index'] )->name('dashboard.quotation');
+    Route::post('/save-quote', [QuotesController::class, 'save_quote'] )->name('save_quote');
+    Route::post('/order-quote', [QuotesController::class, 'order_quote'] )->name('order_quote');
+    Route::post('/quote-report-excel', [QuotesController::class, 'order_excel'] )->name('order_excel');
 
 } );

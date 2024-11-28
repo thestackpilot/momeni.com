@@ -10,11 +10,11 @@ class ConstantsController extends RootController
 
     const ADMIN_EMAIL = ["Aliuf@momeni.com","techbugs06@gmail.com","info@momeni.com"];
 
-    const WEB_HOOK_EMAIL = ['imran.majeed@sparsus.com', 'techbugs06@gmail.com'];
+    const WEB_HOOK_EMAIL = ['imran.majeed@sparsus.com', 'techbugs06@gmail.com' , 'sheikhammar568@gmail.com'];
 
     const ORDER_NOTIFICATION = ['Orders@momeni.com', 'techbugs06@gmail.com'];
 
-    const TEST_EMAIL = ['imran.majeed@sparsus.com', 'techbugs06@gmail.com'];
+    const TEST_EMAIL = ['imran.majeed@sparsus.com', 'techbugs06@gmail.com', 'sheikhammar568@gmail.com'];
 
     const ALLOWED_DECIMALS = 2;
 
