@@ -442,20 +442,24 @@ use Carbon\Carbon;
                 },
                 success: function(response) {
                     if(response.success){
+                        $('#purchase-order-modal-container').empty();
+                        var report_div = $('<div id="report_details"></div>');
+                        $('#purchase-order-modal-container').append(report_div);
+
                         // Embed
                         var obj = document.createElement('object');
                         obj.style.width = '100%';
                         obj.style.height = '842pt';
                         obj.type = 'application/pdf';
-                        obj.data = 'data:application/pdf;base64,' + response.b64;
+                        obj.data = 'data:application/pdf;base64,' + response.reportdata;
                         $(obj).insertAfter('#report_details');
 
                         // Download
                         var link = document.createElement('a');
                         link.innerHTML = 'Download Report';
-                        link.className = 'btn btn-primary mx-2';
+                        link.className = 'btn btn-primary my-3 py-3';
                         link.download = 'Report.pdf';
-                        link.href = 'data:application/octet-stream;base64,' + response.b64;
+                        link.href = 'data:application/octet-stream;base64,' + response.reportdata;
                         $(link).insertAfter('#report_details');
 
                         ReportExcelDownloadProcess(response.reportTitle, response.previewID, response.reportdata)
@@ -480,7 +484,7 @@ use Carbon\Carbon;
                         // Excel
                         var link = document.createElement('a');
                         link.innerHTML = 'Download Excel';
-                        link.className = 'btn btn-primary mx-2';
+                        link.className = 'btn btn-primary my-3 py-3 mr-1';
                         link.download = 'Report.xls';
                         link.href = 'data:application/octet-stream;base64,' + response.data;
                         $(link).insertAfter('#report_details');
