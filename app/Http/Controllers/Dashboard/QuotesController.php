@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Dashboard\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\SendMail;
 
 class QuotesController extends DashboardController
 {
@@ -40,29 +41,39 @@ class QuotesController extends DashboardController
         $data = $this->save_payload($request, $select_customer, $cancel_quote_date);
         $quote = $this->ApiObj->Place_BLQuotation($data);
 
-        if($quote['OutPut']['Success']){
-            $reportGet = $this->ApiObj->Get_ViewDocumentsReport('', '', 'ViewBLQuotation', $quote['OutPut']['ObjectID']);
-            $maildata = [
-                'QuoteNo' => $quote['OutPut']['ObjectID']
-            ];
-            $maildata['attachment'] = $reportGet['document']['ReportData'];
-            try {
-                SendMail::dispatch( [
-                    'data'  => $maildata,
-                    'slug'  => 'New Quotes Data',
-                    'email' => ['sheikhammar568@gmail.com'],
-                    'template' => 'email.quotes_submit'
-                ] );
-            }
-            catch ( \Exception$e )
-            {
-                prr( "Mail Exception User: ".$e->getMessage() );
-            }
+        // if($quote['OutPut']['Success']){
+            $reportGet = $this->ApiObj->Get_ViewDocumentsReport('', '', 'ViewBLQuotation', '100');
+            $maildata = [];
+            $maildata['pdf'] = $reportGet['document']['ReportData'];
 
-        }else{
+            // if(isset($email) && $email){
+                // try {
+                //     SendMail::dispatch( [
+                //         'data'  => $maildata,
+                //         'slug'  => 'New Quotes Data',
+                //         'email' => ['sheikhammar568@gmail.com'],
+                //         'template' => 'email.quotes_submit'
+                //     ] );
+                // }
+                // catch ( \Exception$e )
+                // {
+                //     prr( "Quote Mail Exception: ".$e->getMessage() );
+                // }
+            // }
 
-        }
-
+            return response()->json([
+               'success' => true,
+               'reportTitle' => $reportGet['document']['ReportTitle'],
+               'previewID' => $reportGet['document']['PreviewID'],
+               'reportdata' => $reportGet['document']['ReportData'],
+               'message' => 'Quote has been save successfully'
+            ]);
+        // }else{
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Something went wrong'
+        //      ]);
+        // }
     }
 
     public function save_payload($request, $formCustomer, $cancel_quote_date) {
@@ -167,5 +178,15 @@ class QuotesController extends DashboardController
         }else{
             return response()->json(['success' => false, 'msg' => $order['OutPut']['Message']]);
         }
+    }
+
+    public function order_excel(Request $request){
+        $title = isset($request->reportTitle) ? $request->reportTitle : '';
+        $id = isset($request->previewID) ? $request->previewID : 0;
+
+        $excel = $this->ApiObj->DownloadExcelReports($title, $id);
+        return $excel['Success'] ?
+            response()->json(['success' => 1, 'data' => $excel['ReportData']]) :
+            response()->json(['success' => 0]);
     }
 }

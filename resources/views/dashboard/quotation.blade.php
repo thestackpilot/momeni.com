@@ -183,6 +183,21 @@ use Carbon\Carbon;
                                 </div>
                             </div>
 
+                            {{-- report modal --}}
+                            <div class="modal fade" id="quoteReportModal" tabindex="-1" aria-labelledby="quoteReportModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-xl">
+                                    <div class="modal-content" style="border-radius: 20px !important;">
+                                        <div class="modal-header" style="border-bottom: none !important;">
+                                            <h5 class="modal-title sample-selext-title" id="quoteReportModalLabel">Quoate Report</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" id="purchase-order-modal-container">
+                                            <div id="report_details"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -426,13 +441,57 @@ use Carbon\Carbon;
                     $('.quotes-spinner').show();
                 },
                 success: function(response) {
-                    console.log('Request successful', response);
-                },
-                error: function(xhr, status, error) {
-                    console.log('Request failed', error);
+                    if(response.success){
+                        // Embed
+                        var obj = document.createElement('object');
+                        obj.style.width = '100%';
+                        obj.style.height = '842pt';
+                        obj.type = 'application/pdf';
+                        obj.data = 'data:application/pdf;base64,' + response.b64;
+                        $(obj).insertAfter('#report_details');
+
+                        // Download
+                        var link = document.createElement('a');
+                        link.innerHTML = 'Download Report';
+                        link.className = 'btn btn-primary mx-2';
+                        link.download = 'Report.pdf';
+                        link.href = 'data:application/octet-stream;base64,' + response.b64;
+                        $(link).insertAfter('#report_details');
+
+                        ReportExcelDownloadProcess(response.reportTitle, response.previewID, response.reportdata)
+                    }else{
+                        $('.quotes-spinner').hide();
+                        toastr.error(response.msg, {
+                            hideDuration: 10000,
+                            closeButton: true,
+                        });
+                    }
                 }
             });
         });
+
+        function ReportExcelDownloadProcess(reportTitle, previewID, b64){
+            $.post('/dashboard/quote-report-excel', {
+                _token: '{{ csrf_token() }}',
+                reportTitle: reportTitle,
+                previewID: previewID,
+            }).done(function(response) {
+                if (response.success) {
+                        // Excel
+                        var link = document.createElement('a');
+                        link.innerHTML = 'Download Excel';
+                        link.className = 'btn btn-primary mx-2';
+                        link.download = 'Report.xls';
+                        link.href = 'data:application/octet-stream;base64,' + response.data;
+                        $(link).insertAfter('#report_details');
+
+                        $('.quotes-spinner').hide();
+                        $('#quoteReportModal').modal('show');
+                }
+            }).fail(function() {
+                console.log('Error: Failed to get the excel data.');
+            });
+        }
 
         // Place order
         $('.quotes-order-btn').on('click', function(e){
