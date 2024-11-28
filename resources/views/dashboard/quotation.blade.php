@@ -533,6 +533,11 @@ use Carbon\Carbon;
                 },
             });
         });
+
+        $(document).on('click', '.btn-close', function () {
+            $('#quoteReportModal').modal('hide');
+        });
+
 });
 </script>
 @endsection
