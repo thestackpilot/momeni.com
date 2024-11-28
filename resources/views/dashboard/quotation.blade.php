@@ -74,7 +74,7 @@ use Carbon\Carbon;
                                             <div class="col-md-9 col-12">
                                                 <div class="mb-3">
                                                     <label class="form-label">Item ID</label>
-                                                    <select class="form-control" name="item_id" id="item_id">
+                                                    <select class="form-control js-example-basic-single" name="item_id" id="item_id">
                                                         <option disabled selected>Choose Item Id</option>
                                                         @foreach ($items as $single_item)
                                                             <option value="{{ $single_item['KeyID'] }}">{{ $single_item['Description'] }}</option>
@@ -362,10 +362,11 @@ use Carbon\Carbon;
         });
 
         // Item id and customer id searchable dropdown
-        $('#item_id, .customer_id_sr').select2({
-            theme: 'bootstrap-4',
-            width: '100%'
-        });
+        // $('#item_id, .customer_id_sr').select2({
+        //     theme: 'bootstrap-4',
+        //     width: '100%',
+        // });
+        $('#item_id, .customer_id_sr').select2({});
 
         // Validation
         function checkForm() {
@@ -442,6 +443,11 @@ use Carbon\Carbon;
                 },
                 success: function(response) {
                     if(response.success){
+                        toastr.success(response.message, {
+                            hideDuration: 300,
+                            closeButton: true,
+                        });
+
                         $('#purchase-order-modal-container').empty();
                         var report_div = $('<div id="report_details"></div>');
                         $('#purchase-order-modal-container').append(report_div);
@@ -462,7 +468,7 @@ use Carbon\Carbon;
                         link.href = 'data:application/octet-stream;base64,' + response.reportdata;
                         $(link).insertAfter('#report_details');
 
-                        ReportExcelDownloadProcess(response.reportTitle, response.previewID, response.reportdata)
+                        ReportExcelDownloadProcess(response.reportTitle, response.previewID, response.reportdata);
                     }else{
                         $('.quotes-spinner').hide();
                         toastr.error(response.msg, {

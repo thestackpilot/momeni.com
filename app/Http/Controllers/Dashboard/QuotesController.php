@@ -40,12 +40,12 @@ class QuotesController extends DashboardController
         $data = $this->save_payload($request, $select_customer, $cancel_quote_date);
         $quote = $this->ApiObj->Place_BLQuotation($data);
 
-        // if($quote['OutPut']['Success']){
+        if($quote['OutPut']['Success']){
             $reportGet = $this->ApiObj->Get_ViewDocumentsReport('', '', 'ViewBLQuotation', '100');
             $maildata = [];
             $maildata['pdf'] = $reportGet['document']['ReportData'];
 
-            // if(isset($email) && $email){
+            if(isset($email) && $email){
                 try {
                     SendMail::dispatch( [
                         'data'  => $maildata,
@@ -58,7 +58,7 @@ class QuotesController extends DashboardController
                 {
                     prr( "Quote Mail Exception: ".$e->getMessage() );
                 }
-            // }
+            }
 
             return response()->json([
                'success' => true,
@@ -67,12 +67,12 @@ class QuotesController extends DashboardController
                'reportdata' => $reportGet['document']['ReportData'],
                'message' => 'Quote has been save successfully'
             ]);
-        // }else{
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'Something went wrong'
-        //      ]);
-        // }
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong'
+             ]);
+        }
     }
 
     public function save_payload($request, $formCustomer, $cancel_quote_date) {
