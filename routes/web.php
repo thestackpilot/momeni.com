@@ -229,5 +229,6 @@ Route::group( ['prefix' => 'dashboard', 'middleware' => ['auth']], function ()
     // Quotes
     Route::get('/quotes', [QuotesController::class, 'index'] )->name('dashboard.quotation');
     Route::post('/save-quote', [QuotesController::class, 'save_quote'] )->name('save_quote');
+    Route::post('/order-quote', [QuotesController::class, 'order_quote'] )->name('order_quote');
 
 } );

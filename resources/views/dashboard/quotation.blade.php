@@ -11,6 +11,10 @@ use Carbon\Carbon;
 <div class="wrapper admin-side">
     @include('dashboard.components.header')
     <main class="main-content">
+        <div class="spinner-overlay quotes-spinner" style="display: none;">
+            <div class="spinner"></div>
+          </div>
+
         <section class="collection-section">
             <div class="container">
                 <div class="d-flex flex-row">
@@ -60,7 +64,7 @@ use Carbon\Carbon;
                                                 <div class="mb-3">
                                                     <label class="form-label">Cancel Date</label>
                                                     <div class="input-group">
-                                                        <input name="cancel_quote_date" id="cancel_quote_date" value="" class="form-control datepicker" type="text" data-required="true">
+                                                        <input name="cancel_quote_date" id="cancel_quote_date" value="" class="form-control cancel_quote_date" type="text" data-required="true">
                                                         <span class="input-group-addon">
                                                             <i class="bi bi-calendar"></i>
                                                         </span>
@@ -72,14 +76,9 @@ use Carbon\Carbon;
                                                     <label class="form-label">Item ID</label>
                                                     <select class="form-control" name="item_id" id="item_id">
                                                         <option disabled selected>Choose Item Id</option>
-                                                        <option value="1">One no</option>
-                                                        <option value="2">Two no</option>
-                                                        <option value="3">Three no</option>
-                                                        <option value="1">One no</option>
-                                                        <option value="1">five no</option>
-                                                        <option value="1">five no</option>
-                                                        <option value="1">five no</option>
-                                                        <option value="1">six no</option>
+                                                        @foreach ($items as $single_item)
+                                                            <option value="{{ $single_item['KeyID'] }}">{{ $single_item['Description'] }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -87,10 +86,9 @@ use Carbon\Carbon;
                                                 <div class="mb-3">
                                                     <label class="form-label">Serging</label>
                                                     <select class="form-control" name="serging" id="serging">
-                                                        <option disabled selected>Choose Item Id</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
+                                                        @foreach ($sergingtypes as $serging_type)
+                                                            <option value="{{ $serging_type['SergingTypeNo'] }}" data-sergingcharges="{{ $serging_type['Charges'] }}">{{ $serging_type['Description'] }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -127,7 +125,7 @@ use Carbon\Carbon;
                                             </div>
                                             <div class="col-md-2 offset-md-3 col-3">
                                                 <div class="form-check mt-5">
-                                                    <input class="form-check-input" type="checkbox" value="">
+                                                    <input class="form-check-input" type="checkbox" value="" name="add-rugpad" id="add-rugpad">
                                                     <label class="form-check-label" >
                                                     Add a Rugpad
                                                     </label>
@@ -150,27 +148,42 @@ use Carbon\Carbon;
                                                 <th scope="col">Cancel Date</th>
                                                 <th scope="col">Reservation</th>
                                                 <th scope="col">Status</th>
-                                                <th scope="col" class="invisble">place order btn</th>
+                                                <th scope="col" class="">&nbsp;&nbsp;</th>
                                               </tr>
                                             </thead>
                                             <tbody class="table-rows-custom">
-                                              <tr class="">
-                                                <td class="text-start">158</td>
-                                                <td class="text-start">123467</td>
-                                                <td class="text-start">02/04/2022</td>
-                                                <td class="text-start">02/04/2022</td>
-                                                <td class="text-start">Yes</td>
-                                                <td class="text-start">New</td>
-                                                <td><button type="button" class="btn btn-primary quotes-order-btn">Place Order</button></td>
-                                              </tr>
+                                                @foreach ($quotationsLists as $list)
+                                                    <tr class="">
+                                                        <td class="text-start">{{ $list['QuotationNo'] }}</td>
+                                                        <td class="text-start">{{ $list['CustomerID'] }}</td>
+                                                        <td class="text-start">{{ $list['QODate'] }}</td>
+                                                        <td class="text-start">{{ $list['CancelDate'] }}</td>
+                                                        <td class="text-start">{{ $list['Reservation'] }}</td>
+                                                        <td class="text-start">{{ $list['Status'] }}</td>
+                                                        <td><a class="btn btn-primary quotes-order-btn text-center" data-quoteno={{ $list['QuotationNo'] }}>Place Order</a></td>
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
                                           </table>
                                     </div>
                                 </div>
                                </div>
                             </div>
+
+                            {{-- order modal --}}
+                            <div class="modal fade" id="quoteorder" tabindex="-1" aria-labelledby="quoteorderLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                    <div class="modal-body text-center" id="quoteorderbody">
+                                        <h1 class="my-2">BL QUOTES ORDER</h1>
+                                        <p class="my-2"></p>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-dark p-2">Back To Dashbord</a>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-                        {{-- start from now --}}
                     </div>
                 </div>
             </div>
@@ -181,7 +194,7 @@ use Carbon\Carbon;
 @endsection
 @section('styles')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
 <style>
     .quotes-container {
@@ -241,7 +254,6 @@ use Carbon\Carbon;
         color: white;
         font-size: 12px;
         font-weight: bold;
-        padding: 1px 20px;
         border-radius: 5px;
         border: none;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -262,16 +274,43 @@ use Carbon\Carbon;
     .select2-container .select2-selection--single .select2-selection__rendered{
         padding: 10px !important
     }
+    .spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent dull background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it appears above other elements */
+    }
+    .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3; /* Light gray */
+    border-top: 5px solid #880000; /* Blue */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    }
 </style>
 @endsection
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var formValues = {};
-
+        // Hide show on the base customer or sales rep
         var is_sales_rep = '{{ Auth::user()->is_sale_rep }}';
         var is_customer = '{{ Auth::user()->is_customer }}';
         var is_customer_id = '{{ Auth::user()->customer_id }}';
@@ -284,20 +323,17 @@ use Carbon\Carbon;
             $('.customer_id_c').val(is_customer_id);
         }
 
+        // Dates Handle
         var currentDate = new Date();
         var currentDateFormatted = currentDate.toISOString().split('T')[0];
-        $('#quotes_date').val(currentDateFormatted);
-        $('#quotes_date').prop('readonly', true);
-        currentDate.setDate(currentDate.getDate() + 7);
-        var dateAfter7DaysFormatted = currentDate;
-        var maxCancelDate = new Date();
-        maxCancelDate.setDate(currentDate.getDate() + 14);
-        $('#cancel_quote_date').datepicker({
-            dateFormat: "mm/dd/yy", // Date format in the datepicker
-            defaultDate: dateAfter7DaysFormatted, // Set default date (7 days from today)
-            minDate: currentDate, // Set minimum selectable date (today + 7 days)
-            maxDate: maxCancelDate, // Set maximum selectable date (today + 21 days)
+        $('#quotes_date').val(currentDateFormatted).prop('readonly', true);
+        $('.cancel_quote_date').val(new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]);
+        $('.cancel_quote_date').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: new Date(),
+            endDate: new Date(new Date().setDate(new Date().getDate() + 13))
         });
+
 
         // Tabs handle
         $('.settings a[data-related-sect="view-active-quotes"]').addClass('active-btn');
@@ -310,15 +346,19 @@ use Carbon\Carbon;
             $('.' + $(this).attr('data-related-section')).show();
         });
 
-        // Item id dropdown
+        // Item id and customer id searchable dropdown
         $('#item_id, .customer_id_sr').select2({
             theme: 'bootstrap-4',
             width: '100%'
         });
 
-        // Required fields validation
+        // Validation
         function checkForm() {
-            var customer_id = $('#customer_id').val();
+            if(is_sales_rep == 1 && is_customer == 0){
+                var customer_id = $('#customer_id').val();
+            }else{
+                var customer_id = $('.customer_id_c').val();
+            }
             var quotes_date = $('#quotes_date').val();
             var cancel_quote_date = $('#cancel_quote_date').val();
             var item_id = $('#item_id').val();
@@ -342,18 +382,28 @@ use Carbon\Carbon;
         });
         checkForm();
 
+        // Get serging charges
+        var sergingcharges = ''
+        $('#serging').change(function() {
+            sergingcharges = $('#serging option:selected').data('sergingcharges');
+        });
+
         // Save quote
         $('.submit-btn').on('click', function(e) {
             e.preventDefault();
-            var customer_id = $('#customer_id').val();
+            var customer_id = (is_sales_rep == 1 && is_customer == 0) ? $('#customer_id').val() : '{{ Auth::user()->customer_id }}';
             var quotes_date = $('#quotes_date').val();
             var cancel_quote_date = $('#cancel_quote_date').val();
             var item_id = $('#item_id').val();
             var serging = $('#serging').val();
-            var lengthF = $('#lengthF').val();
-            var lengthI = $('#lengthI').val();
-            var widthF = $('#widthF').val();
-            var widthI = $('#widthI').val();
+            var lengthF = parseInt($('#lengthF').val());
+            var lengthI = parseInt($('#lengthI').val());
+            var widthF = parseInt($('#widthF').val());
+            var widthI = parseInt($('#widthI').val());
+            var addRugpad = $('#add-rugpad').is(':checked') ? true : false;
+            var length = lengthF * 12 + lengthI;
+            var width  = widthF * 12 + widthI;
+
 
             console.log(`Customer ID: ${customer_id} quotes_date: ${quotes_date} cancel_quote_date: ${cancel_quote_date} item_id: ${item_id}  serging: ${serging} lengthF: ${lengthF} lengthI: ${lengthI} widthF: ${widthF} widthI: ${widthI}`);
 
@@ -367,10 +417,13 @@ use Carbon\Carbon;
                     cancel_quote_date: cancel_quote_date,
                     item_id: item_id,
                     serging: serging,
-                    lengthF: lengthF,
-                    lengthI: lengthI,
-                    widthF: widthF,
-                    widthI: widthI,
+                    sergingcharges: sergingcharges,
+                    length: length,
+                    width: width,
+                    addRugpad: addRugpad
+                },
+                beforeSend: function(){
+                    $('.quotes-spinner').show();
                 },
                 success: function(response) {
                     console.log('Request successful', response);
@@ -378,6 +431,43 @@ use Carbon\Carbon;
                 error: function(xhr, status, error) {
                     console.log('Request failed', error);
                 }
+            });
+        });
+
+        // Place order
+        $('.quotes-order-btn').on('click', function(e){
+            e.preventDefault();
+            var quote_id = $(this).data('quoteno');
+            $.ajax({
+                url: '/dashboard/order-quote',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    QuotationNo: quote_id,
+                    UserNo: '{{  Auth::user()->spars_logged_user_no }}',
+                },
+                beforeSend: function(){
+                    $('.quotes-spinner').show();
+                },
+                success: function(response) {
+                    console.log('response.success', response);
+
+                    if(response.success) {
+                        $('#quoteorderbody p').text(`The order has been successfully placed based on the provided quotation. The order number associated with this transaction is ${response.order_no}.`);
+                        $('#quoteorder').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                        $('.quotes-spinner').hide();
+                        $('#quoteorder').modal('show');
+                    }else{
+                        $('.quotes-spinner').hide();
+                        toastr.error(response.msg, {
+                            hideDuration: 10000,
+                            closeButton: true,
+                        });
+                    }
+                },
             });
         });
 });

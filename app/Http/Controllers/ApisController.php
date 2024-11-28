@@ -784,4 +784,51 @@ class ApisController extends RootController
 
     }
 
+    // GQUOTES DASHBORD CALL
+    public function Get_QuotationSergingTypes()
+    {
+        $post_array = [];
+        return $this->Post_API_Signature( 'Get_QuotationSergingTypes', 'Get Quotation Serging Types', $post_array, ['SurgingTypesList']);
+    }
+
+    public function Get_QuotationList()
+    {
+        $sale_rep_id = Auth::user()->is_customer ? '' : Auth::user()->customer_id;
+        $customer_id = Auth::user()->is_customer ? Auth::user()->customer_id : '';
+        $post_array = [
+            'CustomerID' =>  $customer_id,
+            'SalesRepID'  =>  $sale_rep_id,
+        ];
+        return $this->Post_API_Signature( 'Get_QuotationList', 'Get Quotation List', $post_array, ['QuotationList']);
+    }
+
+    public function Get_AllBLItems()
+    {
+        $post_array = [];
+        return $this->Post_API_Signature( 'Get_AllBLItems', 'Get All BL Items', [], [], 1, 1, 1) ;
+    }
+
+    public function Place_QuotationOrder($QuotationNo, $UserNo)
+    {   $sale_rep_id = Auth::user()->is_customer ? '' : Auth::user()->customer_id;
+        $customer_id = Auth::user()->is_customer ? Auth::user()->customer_id : '';
+        $post_array = [
+            'QuotationNo' =>  $QuotationNo,
+            'CustomerID' =>  $customer_id,
+            'SalesRepID'  =>  $sale_rep_id,
+            'UserNo'      =>  $UserNo,
+        ];
+        return $this->Post_API_Signature( 'Place_QuotationOrder', 'Place Quotation Order', $post_array, [], 1, 1, 0) ;
+    }
+
+    public function Place_BLQuotation($data)
+    {
+        dump('api payload');
+        dump($data);
+        $result = $this->Post_API_Signature( 'Place_BLQuotation', 'Place BL Quotation', $data, [], 1, 1, 0) ;
+
+        dd($result);
+    }
+
+
+
 }
