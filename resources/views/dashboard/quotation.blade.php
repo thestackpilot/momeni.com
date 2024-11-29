@@ -6,7 +6,7 @@ use Carbon\Carbon;
 @endphp
 
 @extends('dashboard.layouts.app')
-@section('title','Dashboard | Account Information')
+@section('title','Dashboard | Quotation')
 @section('content')
 <div class="wrapper admin-side">
     @include('dashboard.components.header')
@@ -65,7 +65,7 @@ use Carbon\Carbon;
                                                     <label class="form-label">Cancel Date</label>
                                                     <div class="input-group">
                                                         <input name="cancel_quote_date" id="cancel_quote_date" value="" class="form-control cancel_quote_date" type="text" data-required="true">
-                                                        <span class="input-group-addon cancel_quote_date">
+                                                        <span class="input-group-addon">
                                                             <i class="bi bi-calendar"></i>
                                                         </span>
                                                     </div>
@@ -358,6 +358,9 @@ use Carbon\Carbon;
             todayHighlight: true,
             toggleActive: true
         });
+        $('.input-group-addon').on('click', function() {
+            $('#cancel_quote_date').focus();
+        });
 
         // Tabs handle
         $('.settings a[data-related-sect="view-active-quotes"]').addClass('active-btn');
@@ -370,11 +373,6 @@ use Carbon\Carbon;
             $('.' + $(this).attr('data-related-section')).show();
         });
 
-        // Item id and customer id searchable dropdown
-        // $('#item_id, .customer_id_sr').select2({
-        //     theme: 'bootstrap-4',
-        //     width: '100%',
-        // });
         $('#item_id, .customer_id_sr').select2({});
 
         // Validation
