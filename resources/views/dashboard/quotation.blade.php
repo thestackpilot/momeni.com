@@ -65,7 +65,7 @@ use Carbon\Carbon;
                                                     <label class="form-label">Cancel Date</label>
                                                     <div class="input-group">
                                                         <input name="cancel_quote_date" id="cancel_quote_date" value="" class="form-control cancel_quote_date" type="text" data-required="true">
-                                                        <span class="input-group-addon">
+                                                        <span class="input-group-addon cancel_quote_date">
                                                             <i class="bi bi-calendar"></i>
                                                         </span>
                                                     </div>
@@ -212,6 +212,9 @@ use Carbon\Carbon;
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
 <style>
+    body{
+        overflow-x: hidden !important;
+    }
     .quotes-container {
         background-color: #ffffff;
         border: 1px solid #e0e0e0;
@@ -346,9 +349,15 @@ use Carbon\Carbon;
         $('.cancel_quote_date').datepicker({
             format: 'yyyy-mm-dd',
             startDate: new Date(),
-            endDate: new Date(new Date().setDate(new Date().getDate() + 13))
+            endDate: new Date(new Date().setDate(new Date().getDate() + 13)),
+            maxViewMode: 3,
+            todayBtn: "linked",
+            clearBtn: false,
+            keyboardNavigation: false,
+            autoclose: true,
+            todayHighlight: true,
+            toggleActive: true
         });
-
 
         // Tabs handle
         $('.settings a[data-related-sect="view-active-quotes"]').addClass('active-btn');
