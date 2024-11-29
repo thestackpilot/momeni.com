@@ -41,7 +41,7 @@ class QuotesController extends DashboardController
         $quote = $this->ApiObj->Place_BLQuotation($data);
 
         if($quote['OutPut']['Success']){
-            $reportGet = $this->ApiObj->Get_ViewDocumentsReport('', '', 'ViewBLQuotation', '100');
+            $reportGet = $this->ApiObj->Get_ViewDocumentsReport('', '', 'ViewBLQuotation', $quote['OutPut']['ObjectID']);
             $maildata = [];
             $maildata['pdf'] = $reportGet['document']['ReportData'];
 
@@ -70,7 +70,7 @@ class QuotesController extends DashboardController
         }else{
             return response()->json([
                 'status' => false,
-                'message' => 'Something went wrong'
+                'message' => $quote['OutPut']['Message']
              ]);
         }
     }
