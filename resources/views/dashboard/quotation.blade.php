@@ -313,12 +313,15 @@ use Carbon\Carbon;
     animation: spin 1s linear infinite;
     }
     @keyframes spin {
-    0% {
-        transform: rotate(0deg);
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
     }
-    100% {
-        transform: rotate(360deg);
-    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+        top: 75% !important;
     }
 </style>
 @endsection
