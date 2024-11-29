@@ -481,7 +481,7 @@ use Carbon\Carbon;
                         ReportExcelDownloadProcess(response.reportTitle, response.previewID, response.reportdata);
                     }else{
                         $('.quotes-spinner').hide();
-                        toastr.error(response.msg, {
+                        toastr.error(response.message, {
                             hideDuration: 10000,
                             closeButton: true,
                         });
