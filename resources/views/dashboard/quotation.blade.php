@@ -323,6 +323,11 @@ use Carbon\Carbon;
     .select2-container--default .select2-selection--single .select2-selection__arrow b {
         top: 75% !important;
     }
+    @media only screen and (min-width: 750px) and (max-width: 1194px) {
+        .submit-btn {
+            bottom: -55px;
+        }
+    }
 </style>
 @endsection
 @section('scripts')
