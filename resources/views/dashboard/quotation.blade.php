@@ -65,7 +65,7 @@ use Carbon\Carbon;
                                                     <label class="form-label">Cancel Date</label>
                                                     <div class="input-group">
                                                         <input name="cancel_quote_date" id="cancel_quote_date" value="" class="form-control cancel_quote_date" type="text" data-required="true">
-                                                        <span class="input-group-addon">
+                                                        <span class="input-group-addon cancel-date-group">
                                                             <i class="bi bi-calendar"></i>
                                                         </span>
                                                     </div>
@@ -362,7 +362,7 @@ use Carbon\Carbon;
             todayHighlight: true,
             toggleActive: true
         });
-        $('.input-group-addon').on('click', function() {
+        $('.cancel-date-group').on('click', function() {
             $('#cancel_quote_date').focus();
         });
 
