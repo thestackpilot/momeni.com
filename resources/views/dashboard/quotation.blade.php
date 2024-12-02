@@ -464,7 +464,7 @@ use Carbon\Carbon;
                         $('#purchase-order-modal-container').append(report_div);
 
                         // Embed
-                        if (window.innerWidth <= 768){
+                        if (window.innerWidth <= 1024){
                             $('#report_details').html('<canvas id="pdf-canvas" style="width: 100%;"></canvas>');
                             var binary = atob(response.reportdata);
                             var len = binary.length;
