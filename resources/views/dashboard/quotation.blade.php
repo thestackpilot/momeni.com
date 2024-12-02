@@ -328,6 +328,7 @@ use Carbon\Carbon;
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -463,12 +464,42 @@ use Carbon\Carbon;
                         $('#purchase-order-modal-container').append(report_div);
 
                         // Embed
-                        var obj = document.createElement('object');
-                        obj.style.width = '100%';
-                        obj.style.height = '842pt';
-                        obj.type = 'application/pdf';
-                        obj.data = 'data:application/pdf;base64,' + response.reportdata;
-                        $(obj).insertAfter('#report_details');
+                        if (window.innerWidth <= 768){
+                            $('#report_details').html('<canvas id="pdf-canvas" style="width: 100%;"></canvas>');
+                            var binary = atob(response.reportdata);
+                            var len = binary.length;
+                            var buffer = new Uint8Array(len);
+                            for (var i = 0; i < len; i++) {
+                                buffer[i] = binary.charCodeAt(i);
+                            }
+                            var pdfData = buffer.buffer;
+                            var loadingTask = pdfjsLib.getDocument({ data: pdfData });
+                            loadingTask.promise.then(function (pdf) {
+                                pdf.getPage(1).then(function (page) {
+                                    var scale = 1.5;
+                                    var viewport = page.getViewport({ scale: scale });
+
+                                    var canvas = document.getElementById('pdf-canvas');
+                                    var context = canvas.getContext('2d');
+                                    canvas.width = viewport.width;
+                                    canvas.height = viewport.height;
+
+                                    var renderContext = {
+                                        canvasContext: context,
+                                        viewport: viewport
+                                    };
+
+                                    page.render(renderContext);
+                                });
+                            });
+                        }else{
+                            var obj = document.createElement('object');
+                            obj.style.width = '100%';
+                            obj.style.height = '842pt';
+                            obj.type = 'application/pdf';
+                            obj.data = 'data:application/pdf;base64,' + response.reportdata;
+                            $(obj).insertAfter('#report_details');
+                        }
 
                         // Download
                         var link = document.createElement('a');
