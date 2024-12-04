@@ -329,15 +329,20 @@ use Carbon\Carbon;
     .select2-container--default .select2-selection--single .select2-selection__arrow b {
         top: 75% !important;
     }
-    @media only screen and (min-width: 750px) and (max-width: 1194px) {
-        .submit-btn {
-            bottom: -55px;
-        }
-    }
     .quotes-btns-tag {
         pointer-events: none !important;
         cursor: not-allowed !important;
         color: gray !important;
+    }
+    @media only screen and (min-width: 1700px) and (max-width: 2000px){
+        .submit-btn {
+            bottom: 450px;
+        }
+    }
+    @media only screen and (min-width: 750px) and (max-width: 1194px) {
+        .submit-btn {
+            bottom: -55px;
+        }
     }
 </style>
 @endsection
