@@ -341,6 +341,7 @@ use Carbon\Carbon;
         var is_sales_rep = '{{ Auth::user()->is_sale_rep }}';
         var is_customer = '{{ Auth::user()->is_customer }}';
         var is_customer_id = '{{ Auth::user()->customer_id }}';
+        var sergingcharges = 0;
         if(is_sales_rep == 1 && is_customer == 0){
             $('.customer_box').addClass('d-none');
             $('.sale_rep_box').removeClass('d-none');
@@ -349,6 +350,9 @@ use Carbon\Carbon;
             $('.customer_box').removeClass('d-none');
             $('.customer_id_c').val(is_customer_id);
         }
+
+        // Serging charges on firrst screen load
+        sergingcharges = $('#serging option:selected').data('sergingcharges') || 0;
 
         // Dates Handle
         var currentDate = new Date();
@@ -415,7 +419,6 @@ use Carbon\Carbon;
         checkForm();
 
         // Get serging charges
-        var sergingcharges = ''
         $('#serging').change(function() {
             sergingcharges = $('#serging option:selected').data('sergingcharges');
         });
@@ -452,6 +455,10 @@ use Carbon\Carbon;
                     sergingcharges: sergingcharges,
                     length: length,
                     width: width,
+                    len_f: lengthF,
+                    len_i: lengthI,
+                    wid_f: widthF,
+                    wid_i: widthI,
                     addRugpad: addRugpad
                 },
                 beforeSend: function(){
