@@ -76,6 +76,7 @@ class QuotesController extends DashboardController
     }
 
     public function save_payload($request, $formCustomer, $cancel_quote_date) {
+        $sergCharges = ((  ($request->len_f * 12 + $request->len_i) + ($request->wid_f * 12 + $request->wid_i) ) * 2 / 12) * $request->sergingcharges;
         $cutpiece = [
             "TempSalesOrderNo" => "",
             "ItemID" => $request->item_id,
@@ -87,7 +88,7 @@ class QuotesController extends DashboardController
             "CutType" => "",
             "LocationID" => "",
             "Serging" => $request->serging,
-            "SergingCharges" => $request->sergingcharges,
+            "SergingCharges" => $sergCharges,
             "SergingType" => $request->serging,
             "LineNo" => "1",
             "UserRemarks" => "",
@@ -106,7 +107,7 @@ class QuotesController extends DashboardController
             "Line_No" => "1",
             "CutPieceID" => "",
             "RollID" => "",
-            "SergingCharges" => $request->sergingcharges,
+            "SergingCharges" => $sergCharges,
             "SergingType" => $request->serging,
             "UserRemarks" => "",
             "OrderLength" => "",
