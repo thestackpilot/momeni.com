@@ -153,13 +153,19 @@ use Carbon\Carbon;
                                             </thead>
                                             <tbody class="table-rows-custom">
                                                 @foreach ($quotationsLists as $list)
+                                                    @php
+                                                        $qoDate = \DateTime::createFromFormat('m/d/Y h:i:s A', $list['QODate']);
+                                                        $formattedqoDate = $qoDate ? $qoDate->format('Y-m-d') : null;
+                                                        $cancelDate = \DateTime::createFromFormat('m/d/Y h:i:s A', $list['CancelDate']);
+                                                        $formattedcancelDate = $cancelDate ? $cancelDate->format('Y-m-d') : null;
+                                                    @endphp
                                                     <tr class="">
                                                         <td class="text-start">{{ $list['QuotationNo'] }}</td>
                                                         <td class="text-start">{{ $list['CustomerID'] }}</td>
-                                                        <td class="text-start">{{ $list['QODate'] }}</td>
-                                                        <td class="text-start">{{ $list['CancelDate'] }}</td>
+                                                        <td class="text-start">{{ $formattedqoDate }}</td>
+                                                        <td class="text-start">{{ $formattedcancelDate}}</td>
                                                         <td class="text-start">{{ $list['Reservation'] }}</td>
-                                                        <td class="text-start">{{ $list['Status'] }}</td>
+                                                        <td class="text-start">{{ $list['StatusDescription'] }}</td>
                                                         <td><a class="btn btn-primary quotes-order-btn text-center" data-quoteno={{ $list['QuotationNo'] }}>Place Order</a></td>
                                                     </tr>
                                                 @endforeach
@@ -327,6 +333,11 @@ use Carbon\Carbon;
         .submit-btn {
             bottom: -55px;
         }
+    }
+    .quotes-btns-tag {
+        pointer-events: none !important;
+        cursor: not-allowed !important;
+        color: gray !important;
     }
 </style>
 @endsection
@@ -549,6 +560,7 @@ use Carbon\Carbon;
                         $(link).insertAfter('#report_details');
 
                         $('.quotes-spinner').hide();
+                        $('#quoteReportModal').modal({ backdrop: 'static', keyboard: false });
                         $('#quoteReportModal').modal('show');
                 }
             }).fail(function() {
@@ -594,7 +606,10 @@ use Carbon\Carbon;
         });
 
         $(document).on('click', '.btn-close', function () {
+            $('.quotes-btn').addClass('quotes-btns-tag');
             $('#quoteReportModal').modal('hide');
+            window.location.reload();
+            $('.quotes-btn').removeClass('quotes-btns-tag');
         });
 
 });

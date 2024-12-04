@@ -17,11 +17,15 @@ class QuotesController extends DashboardController
         $quotationsLists = $this->ApiObj->Get_QuotationList();
         $items = $this->ApiObj->Get_AllBLItems();
 
+        $blList = isset($items['OutPut']['BLItemsList']) ? $items['OutPut']['BLItemsList'] : [];
+        $sergList = isset($sergingtypes['SurgingTypesList']) ? $sergingtypes['SurgingTypesList'] : [];
+        $quoteList = isset($quotationsLists['QuotationList']) ? $quotationsLists['QuotationList'] : [];
+
         return view('dashboard.quotation', [
             'customer' => $customer,
-            'items' => $items['OutPut']['BLItemsList'],
-            'sergingtypes' => $sergingtypes['SurgingTypesList'],
-            'quotationsLists' => $quotationsLists['QuotationList'],
+            'items' => $blList,
+            'sergingtypes' => $sergList,
+            'quotationsLists' => $quoteList,
         ]);
     }
 
