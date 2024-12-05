@@ -434,6 +434,22 @@ use Carbon\Carbon;
         });
         checkForm();
 
+
+        // Auto do inch is 1 if feet for width/lenght is 0
+        $('#lengthF, #lengthI').on('change', function () {
+            validateFeetinchInput('#lengthF', '#lengthI');
+        });
+        $('#widthF, #widthI').on('change', function () {
+            validateFeetinchInput('#widthF', '#widthI');
+        });
+        function validateFeetinchInput(feetField, inchField) {
+            var feetValue = $(feetField).val();
+            var inchValue = $(inchField).val();
+            if (feetValue == 0 && inchValue == 0) {
+                $(inchField).val(1);
+            }
+        }
+
         // Get serging charges
         $('#serging').change(function() {
             sergingcharges = $('#serging option:selected').data('sergingcharges');

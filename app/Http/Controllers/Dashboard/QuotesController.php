@@ -12,7 +12,7 @@ class QuotesController extends DashboardController
     public function index(){
         $is_salse_rep = Auth::user()->is_sale_rep;
         $is_customer = Auth::user()->is_customer;
-        $customer = ($is_salse_rep && !$is_customer) ? $this->get_customers_dropdown_options(false) : [];
+        $customer = ($is_salse_rep && !$is_customer) ? $this->get_customers_dropdown_value(false) : [];
         $sergingtypes = $this->ApiObj->Get_QuotationSergingTypes();
         $quotationsLists = $this->ApiObj->Get_QuotationList();
         $items = $this->ApiObj->Get_AllBLItems();
@@ -166,5 +166,33 @@ class QuotesController extends DashboardController
         return $excel['Success'] ?
             response()->json(['success' => 1, 'data' => $excel['ReportData']]) :
             response()->json(['success' => 0]);
+    }
+
+    public function get_customers_dropdown_value( $include_all = 1 )
+    {
+        $options = [];
+        if ( $include_all )
+        {
+            $options[] = [
+                'value' => '',
+                'label' => 'All',
+            ];
+        }
+
+        if ( Auth::user() && Auth::user()->sales_rep_customers )
+        {
+            $sales_rep_customers = json_decode( Auth::user()->sales_rep_customers, true );
+            foreach ( $sales_rep_customers['Customers'] as $customer )
+            {
+                if ($customer['BroadloomCustomer'] === 'Y') {
+                    $options[] = [
+                        'value' => $customer['CustomerID'],
+                        'label' => "{$customer['CompanyName']} ({$customer['CustomerID']})",
+                    ];
+                }
+            }
+
+        }
+        return $options;
     }
 }
