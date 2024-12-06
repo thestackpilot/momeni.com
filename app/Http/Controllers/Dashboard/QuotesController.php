@@ -142,11 +142,8 @@ class QuotesController extends DashboardController
             "ShippingCost" => 23.0,
             "IsRugPad" => $request->addRugpad,
         ];
-
-        dd($data);
         return $data;
     }
-
 
     public function order_quote(Request $request){
         $QuotationNo = $request->QuotationNo;

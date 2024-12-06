@@ -17,7 +17,19 @@ use App\Http\Controllers\CommonController;
         @elseif(Auth::user()->is_customer && $item['slug'] === 'dashboard.saleshistory')
             <li> <a href="{{route($item['slug'])}}" class="{{ str_contains(url()->current(),route($item['slug']))  ?'active': $item['slug'] }}"> {{$item['label']}} </a></li>
         @elseif($item['slug'] !== "dashboard.paymentoptions" )
-        <li> <a href="{{route($item['slug'])}}" class="{{ str_contains(url()->current(),route($item['slug']))  ?'active': $item['slug'] }}"> {{$item['label']}} </a></li>
+            <li>
+                @if($item['slug'] == "dashboard.quotation" && (Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1))
+                    <a href="{{ route($item['slug']) }}"
+                    class="{{ str_contains(url()->current(), route($item['slug'])) ? 'active' : $item['slug'] }}">
+                        {{ $item['label'] }}
+                    </a>
+                @elseif($item['slug'] != "dashboard.quotation")
+                    <a href="{{ route($item['slug']) }}"
+                    class="{{ str_contains(url()->current(), route($item['slug'])) ? 'active' : $item['slug'] }}">
+                        {{ $item['label'] }}
+                    </a>
+                @endif
+            </li>
         @endif
         @endforeach
         <li> <a href="{{route('auth.logout')}}" class=""> Logout </a></li>
