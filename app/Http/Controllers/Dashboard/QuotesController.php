@@ -129,7 +129,7 @@ class QuotesController extends DashboardController
             "LastName" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['LastName'],
             "Email" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Email'],
             "CompanyName" => $formCustomer['CustomerDetail']['Company'],
-            "ShipToCode" => '',
+            "ShipToCode" =>  $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['AddressID'],
             "Address1" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Address1'],
             "Address2" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['Address2'],
             "City" => $formCustomer['CustomerDetail']['CustomerAddressDetail']['ShipToAddresses'][0]['City'],
@@ -143,6 +143,7 @@ class QuotesController extends DashboardController
             "IsRugPad" => $request->addRugpad,
         ];
 
+        dd($data);
         return $data;
     }
 
