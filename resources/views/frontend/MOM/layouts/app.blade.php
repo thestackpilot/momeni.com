@@ -377,10 +377,7 @@ use App\Http\Controllers\CommonController;
                 customerId:customerId,
                 checkbditem:broadloom,
                 rollId:rollId,
-<<<<<<< HEAD
-=======
                 randStr:randStr,
->>>>>>> boardloom-design
                 _token:token
             };
 
