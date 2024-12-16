@@ -553,6 +553,7 @@
 
                                             @php $total_price=0; @endphp
                                             @foreach ( $cart->items as $item)
+                                                @if($item->is_bd_child != 1)
                                                 @php
                                                     if (isset($item->item_data) && $item->item_data) {
                                                         $item_data = json_decode(unserialize($item -> item_data));
@@ -561,7 +562,6 @@
                                                     $total_price += $item->item_price;
                                                     $sum_surging_charges=0; $sergingTotal=0;
                                                 @endphp
-                                                @if($item->is_bd_child != 1)
                                                     <div class="row px-5">
                                                         <div class="col-md-10">
                                                             <div class="row">
@@ -626,7 +626,7 @@
                                                             </div>
                                                         </div>
                                                         <div
-                                                            class="col-md-2 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->unit_price + $sum_surging_charges, 2)}}</div>
+                                                            class="col-md-2 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->unit_price + $sum_surging_charges + $item->rugpad_price,  2)}}</div>
                                                     </div>
                                                     <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                                 @endif
