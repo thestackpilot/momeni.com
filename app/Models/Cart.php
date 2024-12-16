@@ -14,7 +14,7 @@ class Cart extends Model
     use SoftDeletes;
 
     protected $fillable = ['user_id', 'customer_id', 'item_id', 'item_name', 'item_quantity', 'item_price', 'item_color', 'item_size', 'item_currency', 'item_image', 'item_eta', 'item_data', 'oak_item', 'item_broadloom', 'bd_roll_id', 'bd_cutpiece_len', 'bd_cutpiece_wid', 'oak_sku',
-    'user_remarks', 'cfa', 'remnant_shipable', 'unit_price', 'sqft_area'];
+    'user_remarks', 'cfa', 'remnant_shipable', 'unit_price', 'sqft_area', 'rand_str', 'is_bd_child', 'rugpad_price'];
 
     //check if the user has an active cart item
     public function get_active_cart_customer()
@@ -129,10 +129,21 @@ class Cart extends Model
                 "remnant_shipable"      =>  $cart_item->remnant_shipable,
                 "unit_price"            =>  $cart_item->unit_price,
                 "sqft_area"             =>  $cart_item->sqft_area,
+                "rand_str"              => $cart_item->rand_str,
+                "is_bd_child"           => $cart_item->is_bd_child,
+                "rugpad_price"          => $cart_item->rugpad_price,
 //                "ATSQ"                   => isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0
             );
-            $cart_count += $cart_item->item_quantity;
-            $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
+           // dump($cart_item);
+            if($cart_item->item_broadloom){
+               if($cart_item->is_bd_child != 1){
+                $cart_count += $cart_item->item_quantity;
+                $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
+               }
+            }else{
+                $cart_count += $cart_item->item_quantity;
+                $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
+            }
             $cart['item_broadloom'] = $cart_item->item_broadloom;
             $cart['cart_currency'] = $cart_item->item_currency;
         }
@@ -198,7 +209,7 @@ class Cart extends Model
     }
 
     // soft Delete menu that no longer in theme
-    public function remove_cart_item( $user_id, $customer_id, $item_id, $checkbditem, $roll_id, $delete_all = false )
+    public function remove_cart_item( $user_id, $customer_id, $item_id, $checkbditem, $roll_id, $randStr, $delete_all = false )
     {
 
         if ( $delete_all )
@@ -207,8 +218,18 @@ class Cart extends Model
         }
         else if($checkbditem)
         {
-            $this->where( 'user_id', $user_id )->where( 'customer_id', $customer_id )->where( 'item_id', $item_id )
-            ->where( 'bd_roll_id', $roll_id )->delete();
+            $del = DB::table('carts')->where('user_id', $user_id)
+                                    ->where('customer_id', $customer_id)
+                                    ->where('item_id', $item_id)
+                                    ->where('bd_roll_id', $roll_id)
+                                    ->where('rand_str', $randStr)->first();
+
+            if ($del && $del->is_bd_child == 0) {
+                $this->where('user_id', $user_id)->where('customer_id', $customer_id)->where('rand_str', $randStr)->delete();
+            }else{
+                $this->where('user_id', $user_id)->where('customer_id', $customer_id)->where('item_id', $item_id)->where('bd_roll_id', $roll_id)->where('rand_str', $randStr)->delete();
+            }
+
         }
         else
         {
@@ -234,9 +255,9 @@ class Cart extends Model
 
             // $this->updateOrCreate(
             //     [
-            //         'user_id' => Auth::user()->id, 
-            //         'customer_id' => $request->cart_customer_id, 
-            //         'item_id' => $request->cart_item_id, 
+            //         'user_id' => Auth::user()->id,
+            //         'customer_id' => $request->cart_customer_id,
+            //         'item_id' => $request->cart_item_id,
             //         'item_size' => $request->cart_item_size
             //     ],
             //     [
@@ -269,8 +290,11 @@ class Cart extends Model
                 'cfa' => $request->cfa,
                 'remnant_shipable' => $request->remnant_shipable,
                 'unit_price' => $request->unit_price,
-                'sqft_area' => $request->sqft_area
-            ]);            
+                'sqft_area' => $request->sqft_area,
+                'rand_str' => $request->rand_str,
+                'is_bd_child'    => $request->is_bd_child,
+                'rugpad_price'  => $request->rugpad_price,
+            ]);
         }
         else{
             $item     = $this->where( 'user_id', Auth::user()->id )->where( 'customer_id', $request->cart_customer_id )->where( 'item_id', $request->cart_item_id )->first();
@@ -286,7 +310,7 @@ class Cart extends Model
                     'user_id'    => Auth::user()->id, 'customer_id'           => $request->cart_customer_id, 'item_id'           => $request->cart_item_id,
                     'item_name'  => $request->cart_item_name, 'item_quantity' => $quantity, 'item_price'                         => floatval(number_format( str_replace(',', '', $request->cart_item_price), ConstantsController::ALLOWED_DECIMALS, '.', '' )),
                     'item_color' => $request->cart_item_color, 'item_size'    => $request->cart_item_size, 'item_currency'       => $request->cart_item_currency,
-                    'item_image' => $request->cart_item_image, 'item_data'    => serialize( $request->cart_item_data ), 'item_eta' => $request->cart_item_eta, 'oak_item' => $request->cart_item_oak, 'oak_sku' => $request->cart_item_sku
+                    'item_image' => $request->cart_item_image, 'item_data'    => serialize( $request->cart_item_data ), 'item_eta' => $request->cart_item_eta, 'oak_item' => $request->cart_item_oak, 'oak_sku' => $request->cart_item_sku,
                 ]
             );
         }

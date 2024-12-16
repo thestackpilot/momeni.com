@@ -355,7 +355,7 @@ use App\Http\Controllers\CommonController;
         });
     }
 
-    function removeItemFromCart(itemId,token,customerId, broadloom, rollId, hideQuantity,isMobile, isBroadloom = false)
+    function removeItemFromCart(itemId,token,customerId, broadloom, rollId, randStr, hideQuantity,isMobile, isBroadloom = false)
     {
         if (confirm("Are you sure to remove this Item?"))
         {
@@ -377,6 +377,7 @@ use App\Http\Controllers\CommonController;
                 customerId:customerId,
                 checkbditem:broadloom,
                 rollId:rollId,
+                randStr:randStr,
                 _token:token
             };
 

@@ -296,32 +296,43 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-6 mt-5 text-center d-flex justify-content-start align-items-center">
+                                    <div class="col-md-5 col-12 mt-5 text-center d-flex justify-content-start align-items-center flex-wrap">
                                         <div>
-                                            <button class="add-piece-btn broadloom-btns add-cut-piece-btn" id="cut_piece_btn">
+                                            <button class="add-piece-btn broadloom-btns add-cut-piece-btn mb-3" id="cut_piece_btn">
                                                 Add Cut Piece <i class="fa fa-long-arrow-right"></i>
                                             </button>
-                                            <button class="show-piece-btn broadloom-btns d-none" id="show-cut-piece-btn" disabled>
+                                            <button class="show-piece-btn broadloom-btns d-none mb-3" id="show-cut-piece-btn" disabled>
                                                 Show Cut Piece <i class="fa fa-long-arrow-right"></i>
                                             </button>
-                                            <button class="show-piece-btn broadloom-btns d-none" id="hide-cut-piece-btn">
+                                            <button class="show-piece-btn broadloom-btns d-none mb-3" id="hide-cut-piece-btn">
                                                 Hide Cut Piece <i class="fa fa-long-arrow-right"></i></button>
                                         </div>
                                     </div>
-                                    <div class="col-6 mt-5 text-center d-flex justify-content-end align-items-center">
-                                        <div class="d-flex flex-row align-items-center">
-                                            <label for="" class="mx-2">
+                                    <div class="col-md-7 col-12 mt-5">
+                                        <div  class="d-flex flex-column flex-md-row justify-content-md-end justify-content-center align-items-center flex-wrap">
+                                            <label for="" class="mx-1">
                                                 <input type="checkbox" name="" id="cfa_check">
                                                 <strong> CFA Required </strong>
                                             </label>
-                                            <label for="" class="mx-2">
+                                            <label for="" class="mx-1">
                                                 <input type="checkbox" name="" id="remnant_check">
                                                 <strong> Remnant Required </strong>
                                             </label>
-                                            <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart" style="margin-right: 10px;">
+                                            @if(isset($item['ULTPad']) && $item['ULTPad'])
+                                            <label for="" class="mx-1">
+                                                <input type="checkbox" name="" id="add_rugpad">
+                                                <strong> Add a Rugpad </strong>
+                                            </label>
+                                            @endif
+                                            <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">
                                                 Add to Cart <i class="fa fa-long-arrow-right"></i>
                                             </button>
                                         </div>
+                                    </div>
+                                    <div class="d-none">
+                                        <input type="text" name="rug_pad_id" id="rug_pad_id" value="{{ $item['ULTPad'] }}">
+                                        <input type="text" name="rug_pad_price" id="rug_pad_price" value="">
+                                        <input type="text" name="rug_pad_price_ext" id="rug_pad_price_ext" value="">
                                     </div>
                                 </div>
                             </div>
@@ -1018,6 +1029,7 @@
         }
 
         function add_to_cart() {
+            $('#add_rugpad').prop('disabled', true);
             item = JSON.parse($('#item_json').val());
             let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "0";
             item.SQFTPrice = $('#sq-ft').val();
@@ -1055,6 +1067,7 @@
 
             var cfa_check = $("#cfa_check").is(":checked") ? 1 : 0;
             var remnant_check = $("#remnant_check").is(":checked") ? 1 : 0;
+            var randomString = Math.random().toString(36).substring(2, 12);
 
             $.ajax({
                 url: "{{ route('check-cart-item') }}",
@@ -1096,10 +1109,16 @@
                                                 'remnant_shipable': remnant_check,
                                                 'unit_price': $("#unit-price-cal").val(),
                                                 'sqft_area': $("#ats-qty").val(),
+                                                'rand_str': randomString,
+                                                'is_bd_child': 0,
+                                                'rugpad_price': $('#add_rugpad').is(':checked') ? $('#rug_pad_price_ext').val() : '',
                                             },
                                             success: function (response) {
                                                 if (response.success) {
                                                     console.log("new ", $('#item_json').length);
+                                                    if ($('#add_rugpad').is(':checked')) {
+                                                        add_rug_pad(item, max_len_size, bd_cutpiece_len, bd_cutpiece_wid, randomString)
+                                                    }
                                                     if ($('#item_json').length) {
                                                         refreshItemJson(function () {
                                                             toastr.success(response.message, {
@@ -1130,6 +1149,7 @@
                                                             $('#add_to_cart').addClass('d-none');
                                                             $('#roll_pieces').removeAttr("disabled");
                                                             $('#cut-pieces').empty();
+                                                            $('#add_rugpad').prop('disabled', false).prop('checked', false);
                                                             $.ajax({
                                                                 url: "{{ route('broadloom.removeAllCutPiece') }}",
                                                                 data: {
@@ -1214,9 +1234,15 @@
                                 'remnant_shipable': remnant_check,
                                 'unit_price': $("#unit-price-cal").val(),
                                 'sqft_area': $("#ats-qty").val(),
+                                'rand_str': randomString,
+                                'is_bd_child': 0,
+                                'rugpad_price': $('#add_rugpad').is(':checked') ? $('#rug_pad_price_ext').val() : '',
                             },
                             success: function (response) {
                                 if (response.success) {
+                                    if ($('#add_rugpad').is(':checked')) {
+                                        add_rug_pad(item, max_len_size, bd_cutpiece_len, bd_cutpiece_wid, randomString)
+                                    }
                                     console.log("new ", $('#item_json').length);
                                     if ($('#item_json').length) {
                                         refreshItemJson(function () {
@@ -1247,6 +1273,7 @@
                                             $('#add_to_cart').addClass('d-none');
                                             $('#roll_pieces').removeAttr("disabled");
                                             $('#cut-pieces').empty();
+                                            $('#add_rugpad').prop('disabled', false).prop('checked', false);
                                             //window.location.reload();
                                             // $('.quickCart-opener').trigger('click');
                                         });
@@ -1767,6 +1794,7 @@
             let sqYrdPrice = perSquareFeetPrice * 9;
 
             let extPrice = $("#sq-ft").val() * $("#ats-qty").val();
+            let extpriceRug = $("#rug_pad_price").val() * $("#ats-qty").val();
 
             // Update the SQ-YRD Price ($) and EXT Price ($) fields
             // $("#sq-yrd").val(sqYrdPrice.toFixed(2));
@@ -1776,6 +1804,7 @@
             var formatExt =  extPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $("#sq-ext").val(formatExt);
             $('#without-format-sq-ext').val(parseFloat(extPrice).toFixed(2));
+            $('#rug_pad_price_ext').val(parseFloat(extpriceRug).toFixed(2));
             $("#sq-yrd").val( sqYrdPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) );
         }
 
@@ -2059,5 +2088,71 @@
 
         var roll_cutpiece_id = $('#roll_pieces');
         roll_cutpiece_id.find('option').length <= 1 ?  $('.show-bd-name').hide() :  $('.show-bd-name').show();
+
+
+        // ADD RUGPAD
+        $.post('{{ route('frontend.item.ats') }}', {
+            _token: '{{ csrf_token() }}',
+            item_id: $('#rug_pad_id').val(),
+            customer_id: $('#customer_id').val(),
+        }, function (response) {
+            console.log('response', response);
+            $('#rug_pad_price').val(response.data.Price);
+        });
+
+        function add_rug_pad(item, max_len_size, bd_cutpiece_len, bd_cutpiece_wid, randomString){
+            let jsonData = JSON.parse($('#item_json').val())
+            jsonData.CutPieces = jsonData.CutPieces.map(cutPiece => {
+                return {
+                    ...cutPiece,
+                    ItemID:  $('#rug_pad_id').val(),
+                    RollID: "TBA",
+                };
+            });
+
+            console.log(jsonData);
+            $.ajax({
+                method: 'POST',
+                url: '{{ route('frontend.cart.add') }}',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'cart_item_id': $('#rug_pad_id').val(),
+                    'cart_customer_id': $('#customer_id').val(),
+                    'cart_item_name': item.ItemName,
+                    'cart_item_quantity': 1,
+                    'cart_item_color': item.ItemColor,
+                    'cart_item_size': max_len_size,
+                    'cart_item_price': $('#rug_pad_price_ext').val(),
+                    'item_surging_price': '',
+                    'cart_item_currency': '$',
+                    'cart_item_image': item.ImageNameArray[0],
+                    'cart_item_data': JSON.stringify(jsonData),
+                    'cart_item_broadloom': 1,
+                    'logged_user_no': '{{ Auth::user()->spars_logged_user_no }}',
+                    'temp_sales_order_no': $('#TempSalesOrderNo').val(),
+                    'bd_roll_id': 'TBA',
+                    'bd_cutpiece_len': bd_cutpiece_len,
+                    'bd_cutpiece_wid': bd_cutpiece_wid,
+                    'user_remarks': '',
+                    'cfa': '',
+                    'remnant_shipable': '',
+                    'unit_price': $("#unit-price-cal").val(),
+                    'sqft_area': $("#ats-qty").val(),
+                    'rand_str': randomString,
+                    'is_bd_child': 1,
+                    'rugpad_price': '',
+                },
+                success: function (response) {
+                    $('#rug_pad_price_ext').val('');
+                    toastr.success(response.message, {
+                        hideDuration: 10000,
+                        closeButton: true,
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error RugPad: ", error);
+                }
+            });
+        }
     </script>
 @endsection
