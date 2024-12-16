@@ -933,7 +933,7 @@
             var rugpad_charges = parseFloat($(".rugpad_charges").text().replace('$', " ").replace(',', ""));
             var formatted_rugpad_charges = rugpad_charges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var formatted_cut_charges = cutting_charges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            var total = subtotal + serging_charges + cutting_charges + shippingCharges;
+            var total = subtotal + serging_charges + cutting_charges + rugpad_charges + shippingCharges;
             var formatted_total = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $(".section_2_subtotal").text("$" + formatted_subtotal);
             $(".section_2_serging_charges").text("$" + formatted_serg_charges);
