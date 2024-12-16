@@ -293,6 +293,7 @@ class CheckoutController extends FrontendController
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom']) {
                 $count = 0;
                 foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
+                    // dd($item);
                     $count++;
                     $item_data = json_decode(unserialize($item['item_data']));
 //                    $item_data = json_decode($item['item_data']);
@@ -331,6 +332,8 @@ class CheckoutController extends FrontendController
                             $cut_pieces[] = $temp;
                         }
                     }
+                    // dump($item);
+                    // dd('end');
 
                     $itemDetail[] = [
                         'ItemID' => $item['item_id'],
@@ -340,7 +343,7 @@ class CheckoutController extends FrontendController
                         // 'SQFTArea' => $totalSQFT,
                         'SQFTArea'   => $item['sqft_area'],
                         'CutPieceID' => $item_data->CutPieceID,
-                        'RollID' => $item_data->RollID,
+                        'RollID' => $item['bd_roll_id'],//$item_data->RollID,
                         'SergingCharges' => $total_serging_charges,
                         'SergingType' => null,
                         'Line_No' => $count,
@@ -351,6 +354,7 @@ class CheckoutController extends FrontendController
                         "ETA_Date" => "\/Date(-62135596800000)\/",
                         'OrderLength' => $order_length,
                         "CFA" => $item['cfa'] == 1 ? "Y" : "N",
+                        'ParentLine_NO' => $item['is_bd_child'] == 1 ?  ($count - 1) : '',
                         "IsRemnantShipable" => $item['remnant_shipable'] == 1 ? "Y" : "N",
                         'CutPieces' => $cut_pieces,
                         'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : '',
@@ -383,6 +387,7 @@ class CheckoutController extends FrontendController
                     $total_amount += $item['item_price'];
                 }
             }
+
 
             $order_payment_hash = md5(json_encode(['general' => $headers, 'items' => $itemDetail]));
             $headers['IsAdvancePayment'] = false;
@@ -441,7 +446,7 @@ class CheckoutController extends FrontendController
                     ]
                 );
 
-                $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', true);
+                $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', '', true);
                 $successMsg = $result['Message'];
                 preg_match("/\[[^\]]*\]/", $successMsg, $matches);
                 $matched_string = $matches[0];

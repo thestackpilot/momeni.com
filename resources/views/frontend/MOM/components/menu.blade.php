@@ -192,7 +192,7 @@
                                     <div class="col-md-3 products-thumbnails position-relative align-self-baseline p-0">
                                         <a href="javascript:void(0)" class="d-block newStyle">
                                             <i class="position-absolute icon-cross removeProd"
-                                               onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}')"> </i>
+                                               onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '')"> </i>
                                             <img src="{{$item -> item_image}}"
                                                  onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'"
                                                  alt="{{$item -> item_name}}">
@@ -241,14 +241,14 @@
                         @endforeach
 
                         @foreach ($cart->items as $item)
-                            @if($item->broadloom_item)
+                            @if($item->broadloom_item && $item->is_bd_child != 1)
                                 <div
                                     class="d-flex flex-row justify-content-between align-items-center p-3 pt-3 border-bottom-thick"
                                     id="{{$item -> item_id}}__{{$item -> item_customer_id}}">
                                     <div class="col-md-3 products-thumbnails position-relative align-self-baseline p-0">
                                         <a href="javascript:void(0)" class="d-block newStyle">
                                             <i class="position-absolute icon-cross removeProd"
-                                               onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}')"> </i>
+                                               onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '{{$item->rand_str}}')"> </i>
                                             <img src="{{$item -> item_image}}"
                                                  onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'"
                                                  alt="{{$item -> item_name}}">
@@ -264,7 +264,6 @@
                                             </div>
                                             <div class="col-10">
                                                 <div class="specs">
-
                                                     @php
                                                         $sizes = json_decode( unserialize($item->item_data ), true );
                                                         //$sizes = json_decode($item->item_data, true);
@@ -316,8 +315,8 @@
                             <span
                                 class="font-ropa cart_total_price"> {{$cart->cart_currency}}{{$cart->cart_total}} </span>
                         </p>
-                        {{-- {{ $broadloom_item ? route('broadloom.shopping_cart') : route('frontend.checkout')}} --}}
-                        <a href=""
+
+                        <a href="{{ $broadloom_item ? route('broadloom.shopping_cart') : route('frontend.checkout')}}"
                            class="btn btn--md btn--border_1 mt-3 quick-cart-btn quick_btn d-block">View Cart & Checkout<i
                                 class="icon-arrow-right"></i></a>
                     </div>
@@ -354,7 +353,7 @@
 <div class="cartoverlay"></div>
 <script>
     $(document).ready(function () {
-        $('.quick_btn').on('click', function(event){
+        $('.quick_btn-now').on('click', function(event){
             event.preventDefault();
             $(this).attr('href', '');
             $.ajax({

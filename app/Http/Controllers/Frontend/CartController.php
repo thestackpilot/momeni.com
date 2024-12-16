@@ -98,7 +98,7 @@ class CartController extends FrontendController
     {
         try
         {
-            ( new Cart() )->remove_cart_item( Auth::user()->id, $request->customerId, $request->itemId, $request->checkbditem, $request->rollId );
+            ( new Cart() )->remove_cart_item( Auth::user()->id, $request->customerId, $request->itemId, $request->checkbditem, $request->rollId, $request->randStr );
 
             return response()->json( array( 'success' => 1, 'message' => "The item was removed from cart successfully" ), 200 );
         }

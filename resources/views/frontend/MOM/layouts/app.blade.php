@@ -40,7 +40,11 @@ use App\Http\Controllers\CommonController;
     <link rel="stylesheet" href="{{asset('/MOM/css/vendor/vendor.min.css')}}">
     <link rel="stylesheet" href="{{asset('/MOM/css/plugins/plugins.min.css')}}?v=0.01">
     @yield('styles')
+<<<<<<< HEAD
     <link rel="stylesheet" href="{{asset('/MOM/css/style.css')}}?v=0.03">
+=======
+    <link rel="stylesheet" href="{{asset('/MOM/css/style.css')}}?v=0.02">
+>>>>>>> boardloom-design
     <link rel="stylesheet" href="{{asset('/MOM/css/toastr.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
@@ -355,7 +359,7 @@ use App\Http\Controllers\CommonController;
         });
     }
 
-    function removeItemFromCart(itemId,token,customerId, broadloom, rollId, hideQuantity,isMobile, isBroadloom = false)
+    function removeItemFromCart(itemId,token,customerId, broadloom, rollId, randStr, hideQuantity,isMobile, isBroadloom = false)
     {
         if (confirm("Are you sure to remove this Item?"))
         {
@@ -377,6 +381,10 @@ use App\Http\Controllers\CommonController;
                 customerId:customerId,
                 checkbditem:broadloom,
                 rollId:rollId,
+<<<<<<< HEAD
+=======
+                randStr:randStr,
+>>>>>>> boardloom-design
                 _token:token
             };
 

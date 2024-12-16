@@ -68,6 +68,7 @@
                                                         <th>Quantity</th>
                                                     @endif
                                                 @endforeach
+                                                <th>Rug Pad</th>
                                                 <th>Price</th>
                                                 <th>Serging</th>
                                                 <th>Cutting</th>
@@ -76,7 +77,7 @@
                                             </thead>
                                             <tbody>
                                             @if (count((array) $cart->items))
-                                                @php  $subPriceTotal = 0;  $priceTotal = 0; $sergingTotal = 0;  $cuttingTotal = 0; @endphp
+                                                @php  $subPriceTotal = 0;  $priceTotal = 0; $sergingTotal = 0;  $cuttingTotal = 0; $rugPadTotal = 0; @endphp
                                                 @foreach ($cart->items as $item)
                                                     @php
                                                         if (isset($item->item_data) && $item->item_data) {
@@ -85,13 +86,14 @@
                                                         }
                                                         $serging_charges = 0;
                                                     @endphp
+                                                    @if($item->is_bd_child != 1)
                                                     <tr>
                                                         <th class="" scope="row">
                                                             <div class="row">
                                                                 <div
                                                                     class="col-1 justify-content-center align-content-center delete-row"
                                                                     style="color: red;cursor: pointer;"
-                                                                    onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}')">
+                                                                    onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '{{$item->rand_str}}')">
                                                                     x
                                                                 </div>
                                                                 <div class="col-3"><img
@@ -154,6 +156,13 @@
                                                                 </div>
                                                             </div>
                                                         </th>
+                                                        <td class="align-content-center">
+                                                            @php
+                                                                $rugPadTotal += $item->rugpad_price;
+                                                                number_format($rugPadTotal, 2);
+                                                            @endphp
+                                                            {{ $item->item_currency }}{{ number_format($item->rugpad_price, 2) }}
+                                                        </td>
                                                         @if(!$item->broadloom_item)
                                                             <td class="align-content-center">
                                                                 <div class="d-flex flex-row qty-styles mb-2">
@@ -196,13 +205,14 @@
                                                             {{ $item->item_currency }}{{ number_format($item->unit_price, 2) }}
                                                         </td>
                                                         <td class="align-content-center">{{ $item->item_currency }}<span
-                                                                id="item_total_price">{{ number_format($sum_surging_charges + $item->unit_price + $item->item_total, 2)  }}
+                                                                id="item_total_price">{{ number_format($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total, 2)  }}
                                                             @php
                                                                 $subPriceTotal += $sum_surging_charges + $item->unit_price + $item->item_total
                                                             @endphp
                                                         </span>
                                                         </td>
                                                     </tr>
+                                                    @endif
                                                 @endforeach
                                                 <input type="hidden" id="sergingTotal" value="{{ number_format($sergingTotal, 2) }}">
                                                 <input type="hidden" id="sergingTotal" value="{{ number_format($sergingTotal, 2) }}">
@@ -248,6 +258,11 @@
                                         <div class="row">
                                             <div class="col-md-7">Serging Charges:</div>
                                             <div class="col-md-5 text-right serging_charges">{{ $cart->cart_currency }}{{ number_format($sergingTotal, 2) }}</div>
+                                        </div>
+                                        <hr style="border-top-color: whitesmoke;">
+                                        <div class="row">
+                                            <div class="col-md-7">Rug Pad:</div>
+                                            <div class="col-md-5 text-right rugpad_charges">{{ $cart->cart_currency }}{{ number_format($rugPadTotal, 2) }}</div>
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row">
@@ -546,73 +561,75 @@
                                                     $total_price += $item->item_price;
                                                     $sum_surging_charges=0; $sergingTotal=0;
                                                 @endphp
-                                                <div class="row px-5">
-                                                    <div class="col-md-10">
-                                                        <div class="row">
-                                                            <div class="col-3"><img
-                                                                    src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
-                                                                    alt="{{$item_data->ItemID}}" height="50px"
-                                                                    width="80px"
-                                                                    onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
-                                                            </div>
-                                                            @php
-                                                                $decodedData = json_decode(unserialize($item->item_data), true);
-                                                                $colorID = substr($decodedData['ColorID'], 0, 3);
-                                                            @endphp
-                                                            <div class="col-9" style="font-size: 12px;">
-                                                                <div class="mx-3 mt-2 font-weight--bold row">Design: <p
-                                                                        class="font-weight--normal d-flex flex-wrap">{{$item->item_name}} {{$colorID}}
-                                                                        <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
-                                                                        <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span>
-                                                                    </p>
+                                                @if($item->is_bd_child != 1)
+                                                    <div class="row px-5">
+                                                        <div class="col-md-10">
+                                                            <div class="row">
+                                                                <div class="col-3"><img
+                                                                        src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
+                                                                        alt="{{$item_data->ItemID}}" height="50px"
+                                                                        width="80px"
+                                                                        onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
                                                                 </div>
-                                                                <div class="mx-3 mt-2 row">Roll Id: <p
-                                                                        class="font-weight--normal mx-2">{{$item_data->RollID}}</p>
-                                                                </div>
-                                                                <div class="mx-3 mt-2 row">
-                                                                    <div class="row">
-                                                                        <div class="col-md-2">Sizes:</div>
-                                                                        <div class="col-md-10">
-                                                                            @php
-                                                                            $sizes = json_decode( unserialize($item->item_data ), true );
-                                                                            @endphp
-                                                                            @foreach($sizes['CutPieces'] as $item_sizes)
+                                                                @php
+                                                                    $decodedData = json_decode(unserialize($item->item_data), true);
+                                                                    $colorID = substr($decodedData['ColorID'], 0, 3);
+                                                                @endphp
+                                                                <div class="col-9" style="font-size: 12px;">
+                                                                    <div class="mx-3 mt-2 font-weight--bold row">Design: <p
+                                                                            class="font-weight--normal d-flex flex-wrap">{{$item->item_name}} {{$colorID}}
+                                                                            <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
+                                                                            <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="mx-3 mt-2 row">Roll Id: <p
+                                                                            class="font-weight--normal mx-2">{{$item_data->RollID}}</p>
+                                                                    </div>
+                                                                    <div class="mx-3 mt-2 row">
+                                                                        <div class="row">
+                                                                            <div class="col-md-2">Sizes:</div>
+                                                                            <div class="col-md-10">
                                                                                 @php
-                                                                                    $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
-                                                                                    $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
-                                                                                    $lenght_inch =  $item_sizes['ATSLength'] % 12;
-                                                                                    $width_inch =   $item_sizes['ATSWidth'] % 12;
-                                                                                    if (!empty($item_sizes['SergingType'])) {
-                                                                                        $serging_charges = 0;
-                                                                                       // $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
-                                                                                        $cut_piece_serging_charges = ((($lenght_feet * 12 + $lenght_inch) + ($width_feet * 12 + $width_inch)) * 2 / 12) * $item_sizes['SergingCharges'];
-                                                                                        $serging_charges += $cut_piece_serging_charges;
-                                                                                        $sum_surging_charges += $serging_charges;
-                                                                                    }
+                                                                                $sizes = json_decode( unserialize($item->item_data ), true );
                                                                                 @endphp
-                                                                                <div
-                                                                                    class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
-                                                                                    style="margin: 2px 1px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                                                    {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
-                                                                                    @if(!empty($item_sizes['SergingType']))
-                                                                                        <span
-                                                                                            class="tooltiptext">
-                                                                                            {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
-                                                                                            <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
-                                                                                        </span>
-                                                                                    @endif
-                                                                                </div>
-                                                                            @endforeach
+                                                                                @foreach($sizes['CutPieces'] as $item_sizes)
+                                                                                    @php
+                                                                                        $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                                                        $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                                                        $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                                                        $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                                                        if (!empty($item_sizes['SergingType'])) {
+                                                                                            $serging_charges = 0;
+                                                                                        // $cut_piece_serging_charges = (($lenght_feet + $width_feet) * 2) * $item_sizes['SergingCharges'];
+                                                                                            $cut_piece_serging_charges = ((($lenght_feet * 12 + $lenght_inch) + ($width_feet * 12 + $width_inch)) * 2 / 12) * $item_sizes['SergingCharges'];
+                                                                                            $serging_charges += $cut_piece_serging_charges;
+                                                                                            $sum_surging_charges += $serging_charges;
+                                                                                        }
+                                                                                    @endphp
+                                                                                    <div
+                                                                                        class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                                                        style="margin: 2px 1px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                                                        {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
+                                                                                        @if(!empty($item_sizes['SergingType']))
+                                                                                            <span
+                                                                                                class="tooltiptext">
+                                                                                                {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
+                                                                                                <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                            </span>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div
+                                                            class="col-md-2 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->unit_price + $sum_surging_charges, 2)}}</div>
                                                     </div>
-                                                    <div
-                                                        class="col-md-2 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->unit_price + $sum_surging_charges, 2)}}</div>
-                                                </div>
-                                                <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                                    <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                                @endif
                                             @endforeach
                                             @if(isset($item))
                                                 <div class="row px-5">
@@ -626,6 +643,11 @@
                                             <div class="row px-5">
                                                 <div class="col-md-9">Serging Charges</div>
                                                 <div class="col-md-3 text-right section_2_serging_charges">$0.00</div>
+                                            </div>
+                                            <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
+                                            <div class="row px-5">
+                                                <div class="col-md-9">Rug Pad</div>
+                                                <div class="col-md-3 text-right section_2_rugpad_charges">$0.00</div>
                                             </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row px-5">
@@ -734,65 +756,67 @@
                             </div>
                             <div class="col-md-5">
                                 @foreach ( $cart->items as $item)
-                                    <div class="row">
-                                        <div class="col-3">
-                                            {{-- <img
-                                                src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
-                                                alt="{{$item_data->ItemID}}" height="80px" width="80px"
-                                                onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"> --}}
-                                            <img
-                                                src="{{ CommonController::getApiFullImage($item->item_image) }}"
-                                                alt="{{$item->item_id}}" height="80px" width="80px"
-                                                onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
-                                        </div>
-                                        @php
-                                            $decodedData = json_decode(unserialize($item->item_data), true);
-                                            $colorID = substr($decodedData['ColorID'], 0, 3);
-                                        @endphp
-                                        <div class="col-9" style="font-size: 12px">
-                                            <div class="mt-2 font-weight--bold row">Design:
-                                                <p class="font-weight--normal mx-2 d-flex flex-wrap">{{$item->item_name}} {{$colorID}}
-                                                    <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
-                                                    <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span> </p>
+                                    @if($item->is_bd_child != 1)
+                                        <div class="row">
+                                            <div class="col-3">
+                                                {{-- <img
+                                                    src="{{ CommonController::getApiFullImage($item_data->ImageName) }}"
+                                                    alt="{{$item_data->ItemID}}" height="80px" width="80px"
+                                                    onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'"> --}}
+                                                <img
+                                                    src="{{ CommonController::getApiFullImage($item->item_image) }}"
+                                                    alt="{{$item->item_id}}" height="80px" width="80px"
+                                                    onerror="this.onerror=null; this.src='{{url('/').ConstantsController::SPARS_LOGO}}'">
                                             </div>
-                                            {{-- <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p> --}}
-                                            <div class="mx-3 mt-2 row">Roll Id: <p
-                                                    class="font-weight--normal mx-2">{{ $item->bd_roll_id }}</p>
-                                            </div>
-                                            <div class="mx-0 mt-2 row">
-                                                <div class="col-2">Size:
+                                            @php
+                                                $decodedData = json_decode(unserialize($item->item_data), true);
+                                                $colorID = substr($decodedData['ColorID'], 0, 3);
+                                            @endphp
+                                            <div class="col-9" style="font-size: 12px">
+                                                <div class="mt-2 font-weight--bold row">Design:
+                                                    <p class="font-weight--normal mx-2 d-flex flex-wrap">{{$item->item_name}} {{$colorID}}
+                                                        <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
+                                                        <span class="cfa-rem {{$item->remnant_shipable != 1 ? 'd-none' : ''}}">Remnant Required</span> </p>
                                                 </div>
-                                                @php
-                                                    $sizes = json_decode( unserialize($item->item_data ), true );
-                                                    //$sizes = json_decode($item->item_data, true );
-                                                @endphp
-                                                <div class="col-md-12 col-lg-8 col-sm-12">
-
-                                                @foreach($sizes['CutPieces'] as $item_sizes)
-                                                    @php
-                                                        $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
-                                                        $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
-                                                        $lenght_inch =  $item_sizes['ATSLength'] % 12;
-                                                        $width_inch =   $item_sizes['ATSWidth'] % 12;
-                                                    @endphp
-                                                    <div
-                                                        class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
-                                                        style="margin: 2px 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                        {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
-                                                        @if(!empty($item_sizes['SergingType']))
-                                                            <span
-                                                                class="tooltiptext">
-                                                                                        <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
-                                                                                    </span>
-                                                        @endif
+                                                {{-- <div class="mx-3 mt-2 row">SKU: <p class="font-weight--normal mx-2">N/A</p> --}}
+                                                <div class="mx-3 mt-2 row">Roll Id: <p
+                                                        class="font-weight--normal mx-2">{{ $item->bd_roll_id }}</p>
+                                                </div>
+                                                <div class="mx-0 mt-2 row">
+                                                    <div class="col-2">Size:
                                                     </div>
+                                                    @php
+                                                        $sizes = json_decode( unserialize($item->item_data ), true );
+                                                        //$sizes = json_decode($item->item_data, true );
+                                                    @endphp
+                                                    <div class="col-md-12 col-lg-8 col-sm-12">
 
-                                                @endforeach
-                                            </div>
+                                                    @foreach($sizes['CutPieces'] as $item_sizes)
+                                                        @php
+                                                            $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                            $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                            $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                            $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                        @endphp
+                                                        <div
+                                                            class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                            style="margin: 2px 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                            {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
+                                                            @if(!empty($item_sizes['SergingType']))
+                                                                <span
+                                                                    class="tooltiptext">
+                                                                                            <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
+                                                                                        </span>
+                                                            @endif
+                                                        </div>
 
+                                                    @endforeach
+                                                </div>
+
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 @endforeach
                             </div>
 
@@ -906,11 +930,14 @@
             var serging_charges = parseFloat($(".serging_charges").text().replace('$', " ").replace(',', ""));
             var formatted_serg_charges = serging_charges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var cutting_charges = parseFloat($(".cutting_charges").text().replace('$', " ").replace(',', ""));
+            var rugpad_charges = parseFloat($(".rugpad_charges").text().replace('$', " ").replace(',', ""));
+            var formatted_rugpad_charges = rugpad_charges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var formatted_cut_charges = cutting_charges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var total = subtotal + serging_charges + cutting_charges + shippingCharges;
             var formatted_total = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $(".section_2_subtotal").text("$" + formatted_subtotal);
             $(".section_2_serging_charges").text("$" + formatted_serg_charges);
+            $(".section_2_rugpad_charges").text("$" + formatted_rugpad_charges);
             $(".section_2_cutting_charges").text("$" + formatted_cut_charges);
             $(".section_2_cart_total").text("$" + formatted_total);
             $(".order_placed_total").text("$" + formatted_total);
@@ -994,13 +1021,15 @@
                 var sergingTotal = parseFloat($(".serging_charges").text().replace('$', " ").replace(',', ""));
                 var sergingCharges = parseFloat($(".section_2_serging_charges").text().replace('$', " ").replace(',', ""));
                 var formatted_sergingCharges = sergingCharges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                var rugpadCharges = parseFloat($(".section_2_rugpad_charges").text().replace('$', " ").replace(',', ""));
+                var formatted_rugpadChargess = rugpadCharges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 var cuttingCharges = parseFloat($(".section_2_cutting_charges").text().replace('$', " ").replace(',', ""));
                 var formatted_cuttingCharges = cuttingCharges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 // var orderDeatilSubTotal = subtotal + sergingTotal
                 var orderDeatilSubTotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
                 var formatted_orderDeatilSubTotal = orderDeatilSubTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 //subtotal = parseFloat($("#inside-hidden-subtotal").val().replace('$', " ").replace(',', ""));
-                var total = subtotal + sergingTotal + cuttingCharges + shippingCharges;
+                var total = subtotal + rugpadCharges + sergingTotal + cuttingCharges + shippingCharges;
 
 
 
