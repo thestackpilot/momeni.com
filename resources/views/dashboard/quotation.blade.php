@@ -77,7 +77,7 @@ use Carbon\Carbon;
                                                     <select class="form-control js-example-basic-single" name="item_id" id="item_id">
                                                         <option disabled selected>Choose Item Id</option>
                                                         @foreach ($items as $single_item)
-                                                            <option value="{{ $single_item['KeyID'] }}">{{ $single_item['Description'] }}</option>
+                                                            <option value="{{ $single_item['KeyID'] }}" data-rugcheck="{{ $single_item['IsRugPad']}}">{{ $single_item['Description'] }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -125,7 +125,7 @@ use Carbon\Carbon;
                                             </div>
                                             <div class="col-md-2 offset-md-3 col-3">
                                                 <div class="form-check mt-5">
-                                                    <input class="form-check-input" type="checkbox" value="" name="add-rugpad" id="add-rugpad">
+                                                    <input class="form-check-input" type="checkbox" value="" name="add-rugpad" id="add-rugpad" disabled>
                                                     <label class="form-check-label" >
                                                     Add a Rugpad
                                                     </label>
@@ -631,6 +631,11 @@ use Carbon\Carbon;
             $('#quoteReportModal').modal('hide');
             window.location.reload();
             $('.quotes-btn').removeClass('quotes-btns-tag');
+        });
+
+        $('#item_id').change(function() {
+            var rugCheck = $(this).find('option:selected').data('rugcheck');
+            rugCheck == 'N' ? $('#add-rugpad').prop('disabled', true) : $('#add-rugpad').prop('disabled', false);
         });
 
 });
