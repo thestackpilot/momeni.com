@@ -127,7 +127,7 @@ use Carbon\Carbon;
                                                 <div class="form-check mt-5">
                                                     <input class="form-check-input" type="checkbox" value="" name="add-rugpad" id="add-rugpad" disabled>
                                                     <label class="form-check-label" >
-                                                    Add a Rugpad
+                                                    Add a Rug Pad
                                                     </label>
                                                 </div>
                                             </div>
