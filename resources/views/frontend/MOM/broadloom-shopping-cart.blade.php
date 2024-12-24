@@ -848,6 +848,11 @@
                             <div class="col-md-9 mb-3">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
+                            <div class="col-md-4 align-content-center">RugPag Charges</div>
+                            <div class="col-md-4 align-content-center text-right order-detail-rugpad">$0.00</div>
+                            <div class="col-md-9 mb-3">
+                                <hr class="mx-4" style="border-top-color: whitesmoke;">
+                            </div>
                             <div class="col-md-4 align-content-center">Cutting Charges</div>
                             <div class="col-md-4 align-content-center text-right order-detail-cutting">$0.00</div>
                             <div class="col-md-9 mb-3">
@@ -1029,6 +1034,7 @@
 
                 $('.order-detail-subtotal').text("$" + formatted_orderDeatilSubTotal);
                 $('.order-detail-serging').text("$" + formatted_sergingCharges);
+                $('.order-detail-rugpad').text("$" + formatted_rugpadChargess);
                 $('.order-detail-cutting').text("$" + formatted_cuttingCharges);
                 $(".cart_total").text("$" + formatted_subtotal);
                 // $(".cart_total_final").text("$" + total.toFixed(2));
