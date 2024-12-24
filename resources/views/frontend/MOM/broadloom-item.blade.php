@@ -571,8 +571,10 @@ use App\Http\Controllers\CommonController;
             color_node = '#item_color label:has([title="' + color + '"])';
             $(color_node).click();
             setTimeout(function() {
+                var escapedForVal = forVal.replace(/([!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~])/g, '\\$1');
                 var label = $(color_node);
-                $(`${color_node}, #${forVal}`).click();
+                // $(`${color_node}, #${forVal}`).click();
+                $(`${color_node}, #${escapedForVal}`).click();
             }, 1500);
         }else{
             var color = `{{isset($color) && $color ? $color : ''}}`;
@@ -1062,11 +1064,26 @@ use App\Http\Controllers\CommonController;
 
         function generateBroadloomUrl() {
            // var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id', 'color_id' ]) }}";
+            // var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id', 'color_id', 'item_name' => $items['Items'][0]['ItemName'] ?? '']) }}";
+            // href = href.replace('cust_id', $('#cart_customer_id').val());
+            // href = href.replace('color_id', $('#color_id').val());
+            // alert(href);
+            // die();
+            // console.log('href', href);
+            // window.location.replace(href)
+
             var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id', 'color_id', 'item_name' => $items['Items'][0]['ItemName'] ?? '']) }}";
-            href = href.replace('cust_id', $('#cart_customer_id').val());
-            href = href.replace('color_id', $('#color_id').val());
-            console.log('href', href);
-            window.location.replace(href)
+
+    // Replace placeholders with encoded values
+    href = href.replace('cust_id', encodeURIComponent($('#cart_customer_id').val()));
+    href = href.replace('color_id', encodeURIComponent($('#color_id').val()));
+
+    // Encode the last parameter dynamically
+    var lastParam = "{{ $items['Items'][0]['ItemName'] ?? '' }}"; // Fetch from Blade variable
+    href = href.replace('item_name', encodeURIComponent(lastParam));
+
+    alert(href);
+    window.location.replace(href);
         }
 
         $("#add_cart").on("click", function(){

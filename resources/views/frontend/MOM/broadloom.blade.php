@@ -6,7 +6,6 @@
     use App\Http\Controllers\CommonController;
 
 @endphp
-
 @section('title', 'Item Detail Page')
 @extends('frontend.' . $active_theme->theme_abrv . '.layouts.app')
 
@@ -2101,16 +2100,19 @@
         });
 
         function add_rug_pad(item, max_len_size, bd_cutpiece_len, bd_cutpiece_wid, randomString){
-            let jsonData = JSON.parse($('#item_json').val())
+            let jsonData = JSON.parse($('#item_json').val());
+            jsonData.SQFTPrice = $('#rug_pad_price').val();
             jsonData.CutPieces = jsonData.CutPieces.map(cutPiece => {
                 return {
                     ...cutPiece,
                     ItemID:  $('#rug_pad_id').val(),
                     RollID: "TBA",
+                    SergingCharges: "",
+                    SergingType: null,
+                    UserRemarks: "",
                 };
             });
 
-            console.log(jsonData);
             $.ajax({
                 method: 'POST',
                 url: '{{ route('frontend.cart.add') }}',
@@ -2135,7 +2137,7 @@
                     'bd_cutpiece_wid': bd_cutpiece_wid,
                     'user_remarks': '',
                     'cfa': '',
-                    'remnant_shipable': '',
+                    'remnant_shipable': $("#remnant_check").is(":checked") ? 1 : 0,
                     'unit_price': $("#unit-price-cal").val(),
                     'sqft_area': $("#ats-qty").val(),
                     'rand_str': randomString,
@@ -2154,5 +2156,13 @@
                 }
             });
         }
+
+        $('#add_rugpad').on('change', function() {
+            if (this.checked) {
+                $('#cfa_check').prop('checked', false).prop('disabled', true);
+            } else {
+                $('#cfa_check').prop('disabled', false);
+            }
+        });
     </script>
 @endsection

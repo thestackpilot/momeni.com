@@ -66,7 +66,7 @@ Route::post( '/designs/{id}/{filter}/{type}/{page}', [DesignController::class, '
 Route::post( '/designs/{id}/{filter}/{type}/{with_title}/{page}', [DesignController::class, 'get_paginated_designs'] )->name( 'frontend.designs_page' );
 //Item Routes
 Route::get( '/item/{id}/{designId}/{colorId?}', [ItemController::class, 'index'] )->name( 'frontend.item' );
-Route::get('/broad-loom/{id}/{cust_id}/{color_id}/{item_name?}', [BroadloomController::class, 'index'])->name('broadloom.cart')->middleware('check_bd_user');
+Route::get('/broad-loom/{id}/{cust_id}/{color_id}/{item_name?}', [BroadloomController::class, 'index'])->name('broadloom.cart')->where('item_name', '.*')->middleware('check_bd_user');
 Route::get('/broad-loom-checkout/', [BroadloomController::class, 'shopping_cart'])->name('broadloom.shopping_cart')->middleware('check_bd_user');
 //Route::get('/broad-loom-checkout', [BroadloomController::class, 'checkout'])->name('broadloom.checkout');
 Route::get('/broad-loom-full-size', [CartController::class, 'check_broadloom_full_size'])->name('broadloom.fullsize');
