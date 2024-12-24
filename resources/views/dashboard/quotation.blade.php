@@ -101,7 +101,7 @@ use Carbon\Carbon;
                                                             <span class="input-group-text">Ft</span>
                                                         </div>
                                                         <div class="input-group ms-2">
-                                                            <input type="number" class="form-control text-center small-input" name="lengthI" id="lengthI" placeholder="00" min="0" max="11">
+                                                            <input type="number" class="form-control text-center small-input" name="lengthI" id="lengthI" placeholder="00" min="0" max="11" value="0">
                                                             <span class="input-group-text">In</span>
                                                         </div>
                                                     </div>
@@ -117,7 +117,7 @@ use Carbon\Carbon;
                                                             <span class="input-group-text">Ft</span>
                                                         </div>
                                                         <div class="input-group ms-2">
-                                                            <input type="number" class="form-control text-center small-input" name="widthI" id="widthI" placeholder="00" min="0" max="11">
+                                                            <input type="number" class="form-control text-center small-input" name="widthI" id="widthI" placeholder="00" min="0" max="11" value="0">
                                                             <span class="input-group-text">In</span>
                                                         </div>
                                                     </div>
