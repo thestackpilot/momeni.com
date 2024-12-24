@@ -132,7 +132,7 @@ use Carbon\Carbon;
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary submit-btn" disabled>Save Quotes</button>
+                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn save-quote-btn" disabled>Save Quotes</a>
                                     </form>
                                 </div>
                                </div>
@@ -318,6 +318,9 @@ use Carbon\Carbon;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     }
+    .admin-side .btn.btn-primary{
+        line-height: inherit !important;
+    }
     @keyframes spin {
         0% {
             transform: rotate(0deg);
@@ -456,7 +459,7 @@ use Carbon\Carbon;
         });
 
         // Save quote
-        $('.submit-btn').on('click', function(e) {
+        $('.save-quote-btn').on('click', function(e) {
             e.preventDefault();
             var customer_id = (is_sales_rep == 1 && is_customer == 0) ? $('#customer_id').val() : '{{ Auth::user()->customer_id }}';
             var quotes_date = $('#quotes_date').val();
