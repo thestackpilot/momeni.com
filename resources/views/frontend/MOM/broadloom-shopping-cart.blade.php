@@ -848,7 +848,7 @@
                             <div class="col-md-9 mb-3">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
-                            <div class="col-md-4 align-content-center">RugPad Charges</div>
+                            <div class="col-md-4 align-content-center">Rug Pad Charges</div>
                             <div class="col-md-4 align-content-center text-right order-detail-rugpad">$0.00</div>
                             <div class="col-md-9 mb-3">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">

@@ -1073,17 +1073,12 @@ use App\Http\Controllers\CommonController;
             // window.location.replace(href)
 
             var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id', 'color_id', 'item_name' => $items['Items'][0]['ItemName'] ?? '']) }}";
-
-    // Replace placeholders with encoded values
-    href = href.replace('cust_id', encodeURIComponent($('#cart_customer_id').val()));
-    href = href.replace('color_id', encodeURIComponent($('#color_id').val()));
-
-    // Encode the last parameter dynamically
-    var lastParam = "{{ $items['Items'][0]['ItemName'] ?? '' }}"; // Fetch from Blade variable
-    href = href.replace('item_name', encodeURIComponent(lastParam));
-
-    alert(href);
-    window.location.replace(href);
+            // Replace placeholders with encoded values
+            href = href.replace('cust_id', encodeURIComponent($('#cart_customer_id').val()));
+            href = href.replace('color_id', encodeURIComponent($('#color_id').val()));
+            var lastParam = "{{ $items['Items'][0]['ItemName'] ?? '' }}"; // Fetch from Blade variable
+            href = href.replace('item_name', encodeURIComponent(lastParam));
+            window.location.replace(href);
         }
 
         $("#add_cart").on("click", function(){
