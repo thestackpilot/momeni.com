@@ -132,7 +132,7 @@ use Carbon\Carbon;
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn save-quote-btn" disabled>Save Quotes</a>
+                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn save-quote-btn submit-disabled-link">Save Quotes</a>
                                     </form>
                                 </div>
                                </div>
@@ -272,6 +272,11 @@ use Carbon\Carbon;
     .submit-btn:hover {
         background-color: #880000;
         box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    .submit-disabled-link {
+        pointer-events: none !important;
+        color: gray !important;
+        text-decoration: none !important;;
     }
     .quotes-order-btn{
         background-color: #660000;
@@ -427,9 +432,9 @@ use Carbon\Carbon;
 
 
             if (customer_id && quotes_date && cancel_quote_date && item_id && serging && lengthF && lengthI && widthF && widthI) {
-                $('.submit-btn').prop('disabled', false);
+                $('.submit-btn').removeClass('submit-disabled-link');
             } else {
-                $('.submit-btn').prop('disabled', true);
+                $('.submit-btn').addClass('submit-disabled-link');
             }
         }
         $('#customer_id, #quotes_date, #cancel_quote_date, #item_id, #serging, #lengthF, #lengthI, #widthF, #widthI').on('change', function() {
