@@ -208,9 +208,10 @@
                                             <span> {{$item -> item_color}} </span></p>
                                         <p class="specs m-0"><strong> Size: </strong>
                                             <span> {{$item -> item_size}} </span>
-                                        </p>@if($item->oak_item)
-                                <p class="specs m-0"> <strong> SKU: </strong> <span> {{$item -> oak_sku}} </span> </p>
-                                @endif
+                                        </p>
+                                        {{-- @if($item->oak_item)
+                                            <p class="specs m-0"> <strong> SKU: </strong> <span> {{$item -> oak_sku}} </span> </p>
+                                        @endif --}}
                                         @if($item->oak_item)
                                             <p class="specs m-0"><strong> SKU: </strong>
                                                 <span> {{$item -> oak_sku}} </span></p>
