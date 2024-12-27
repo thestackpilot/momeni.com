@@ -1102,7 +1102,9 @@
 
                 // form.checkValidity()
                 if (firstName.checkValidity() && streetaddress.checkValidity()  && country.checkValidity()  && city.checkValidity()  && zipCode.checkValidity() && refNo.checkValidity() && shipDate.checkValidity()) {
+                    $('#customer_info').find(':disabled').prop('disabled', false);
                     var formData = $('#customer_info').serialize();
+                    $('#customer_info').find(':disabled').prop('disabled', true);
                     console.log('form data', formData);
                     $.ajax({
                         url: '{{route("frontend.checkout.place_order")}}',
