@@ -1121,7 +1121,8 @@
                                     $('#orderno').text('');
                                     var spanText = response.msg.match(/\s+(\d+)/);
                                     var newOrderNo = spanText ? spanText[1] : '';
-                                    $('#orderno').text(newOrderNo);
+                                    // $('#orderno').text(newOrderNo);
+                                    $('#orderno').text(response.order_no);
                                     console.log(response.msg);
                                     console.log(spanText);
                                     console.log(newOrderNo);

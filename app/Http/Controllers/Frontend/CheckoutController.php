@@ -454,6 +454,7 @@ class CheckoutController extends FrontendController
                 $successMsg = str_replace($matched_string, $updatedString, $successMsg);
                 $response['success'] = 1;
                 $response['webhook'] = 0;
+                $response['order_no'] = $result['ObjectID'];
                 $response['msg'] = $successMsg;
 
                 // if ( isset($this->active_theme_json->general->order_ack) && $this->active_theme_json->general->order_ack ) {
