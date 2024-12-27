@@ -1322,5 +1322,17 @@
             $('#countries').change();
         });
 
+        $('#state_dropdown').prop('disabled', true);
+            $('#countries').prop('disabled', true);
+            $('input[name="shipping-address"]').on('change', function () {
+                if($(this).val() != "other"){
+                    $('#state_dropdown').prop('disabled', true);
+                    $('#countries').prop('disabled', true);
+                }else {
+                    $('#state_dropdown').prop('disabled', false);
+                    $('#countries').prop('disabled', false);
+                }
+            });
+
     </script>
 @endsection
