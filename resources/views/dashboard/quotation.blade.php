@@ -285,16 +285,16 @@ use Carbon\Carbon;
         text-decoration: none !important;;
     }
     .quotes-order-btn, .view-quote-btn{
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        color: #ffffff;
         background-color: #660000;
-        color: white;
-        font-size: 12px;
-        font-weight: bold;
-        border-radius: 5px;
-        border: none;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         cursor: pointer;
-        max-height: 2px !important;
-        /* min-height: 30px !important; */
+        transition: all 0.3s ease;
     }
     .table-rows-custom td{
         padding: 10px !important
