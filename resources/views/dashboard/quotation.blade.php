@@ -142,13 +142,13 @@ use Carbon\Carbon;
                                         <table class="table">
                                             <thead class="p-3" style="background-color: #596460; color: #fff;">
                                               <tr>
-                                                <th scope="col">Quotaion ID</th>
+                                                <th scope="col">Quotation ID</th>
                                                 <th scope="col">Customer ID</th>
                                                 <th scope="col">Quotation Date</th>
                                                 <th scope="col">Cancel Date</th>
                                                 <th scope="col">Reservation</th>
                                                 <th scope="col">Status</th>
-                                                <th scope="col" class="">&nbsp;&nbsp;</th>
+                                                <th scope="col" class=""></th>
                                               </tr>
                                             </thead>
                                             <tbody class="table-rows-custom">
@@ -166,7 +166,13 @@ use Carbon\Carbon;
                                                         <td class="text-start">{{ $formattedcancelDate}}</td>
                                                         <td class="text-start">{{ $list['Reservation'] }}</td>
                                                         <td class="text-start">{{ $list['StatusDescription'] }}</td>
-                                                        <td><a class="btn btn-primary quotes-order-btn text-center" data-quoteno={{ $list['QuotationNo'] }}>Place Order</a></td>
+                                                        <td>
+                                                            <a class="btn btn-primary quotes-order-btn text-center mx-1" data-quoteno="{{ $list['QuotationNo'] }}">Place Order</a>
+                                                            <a class="btn btn-primary view-quote-btn text-center mx-1" data-quoteno="{{ $list['QuotationNo'] }}">View Quote</a>
+                                                            <a class="void-quote-btn text-center mx-1 my-5" data-quoteno="{{ $list['QuotationNo'] }}">
+                                                                <i class="bi bi-x" style="color: red; font-size: 20px;"></i>
+                                                            </a>
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -195,7 +201,7 @@ use Carbon\Carbon;
                                     <div class="modal-content" style="border-radius: 20px !important;">
                                         <div class="modal-header" style="border-bottom: none !important;">
                                             <h5 class="modal-title sample-selext-title" id="quoteReportModalLabel">Quoate Report</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close btn-refresh" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body" id="purchase-order-modal-container">
                                             <div id="report_details"></div>
@@ -278,7 +284,7 @@ use Carbon\Carbon;
         color: gray !important;
         text-decoration: none !important;;
     }
-    .quotes-order-btn{
+    .quotes-order-btn, .view-quote-btn{
         background-color: #660000;
         color: white;
         font-size: 12px;
@@ -304,24 +310,24 @@ use Carbon\Carbon;
         padding: 10px !important
     }
     .spinner-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent dull background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Ensure it appears above other elements */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent dull background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999; /* Ensure it appears above other elements */
     }
     .spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3; /* Light gray */
-    border-top: 5px solid #880000; /* Blue */
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3; /* Light gray */
+        border-top: 5px solid #880000; /* Blue */
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
     }
     .admin-side .btn.btn-primary{
         line-height: inherit !important;
@@ -561,6 +567,8 @@ use Carbon\Carbon;
                         link.href = 'data:application/octet-stream;base64,' + response.reportdata;
                         $(link).insertAfter('#report_details');
 
+                        $('.btn-close').addClass('btn-refresh').removeClass('btn-close-without-refresh');
+
                         ReportExcelDownloadProcess(response.reportTitle, response.previewID, response.reportdata);
                     }else{
                         $('.quotes-spinner').hide();
@@ -634,10 +642,130 @@ use Carbon\Carbon;
             });
         });
 
-        $(document).on('click', '.btn-close', function () {
+        // View quote
+        $('.view-quote-btn').on('click', function(e){
+            e.preventDefault();
+            var quote_id = $(this).data('quoteno');
+            $.ajax({
+                url: '/dashboard/view-quote',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    QuotationNo: quote_id,
+                },
+                beforeSend: function(){
+                    $('.quotes-spinner').show();
+                },
+                success: function(response) {
+                    if(response.success){
+
+                        $('#purchase-order-modal-container').empty();
+                        var report_div = $('<div id="report_details"></div>');
+                        $('#purchase-order-modal-container').append(report_div);
+
+                        // Embed
+                        if (window.innerWidth <= 1024){
+                            $('#report_details').html('<canvas id="pdf-canvas" style="width: 100%;"></canvas>');
+                            var binary = atob(response.reportdata);
+                            var len = binary.length;
+                            var buffer = new Uint8Array(len);
+                            for (var i = 0; i < len; i++) {
+                                buffer[i] = binary.charCodeAt(i);
+                            }
+                            var pdfData = buffer.buffer;
+                            var loadingTask = pdfjsLib.getDocument({ data: pdfData });
+                            loadingTask.promise.then(function (pdf) {
+                                pdf.getPage(1).then(function (page) {
+                                    var scale = 1.5;
+                                    var viewport = page.getViewport({ scale: scale });
+
+                                    var canvas = document.getElementById('pdf-canvas');
+                                    var context = canvas.getContext('2d');
+                                    canvas.width = viewport.width;
+                                    canvas.height = viewport.height;
+
+                                    var renderContext = {
+                                        canvasContext: context,
+                                        viewport: viewport
+                                    };
+
+                                    page.render(renderContext);
+                                });
+                            });
+                        }else{
+                            var obj = document.createElement('object');
+                            obj.style.width = '100%';
+                            obj.style.height = '842pt';
+                            obj.type = 'application/pdf';
+                            obj.data = 'data:application/pdf;base64,' + response.reportdata;
+                            $(obj).insertAfter('#report_details');
+                        }
+
+                        // Download
+                        var link = document.createElement('a');
+                        link.innerHTML = 'Download Report';
+                        link.className = 'btn btn-primary my-3 py-3';
+                        link.download = 'Report.pdf';
+                        link.href = 'data:application/octet-stream;base64,' + response.reportdata;
+                        $(link).insertAfter('#report_details');
+
+                        $('.btn-close').removeClass('btn-refresh').addClass('btn-close-without-refresh');
+
+                        ReportExcelDownloadProcess(response.reportTitle, response.previewID, response.reportdata);
+                    }else{
+                        $('.quotes-spinner').hide();
+                        toastr.error(response.message, {
+                            hideDuration: 10000,
+                            closeButton: true,
+                        });
+                    }
+                },
+            });
+        });
+
+        // Voiq quote
+        $('.void-quote-btn').on('click', function(e){
+            e.preventDefault();
+            var quote_id = $(this).data('quoteno');
+            $.ajax({
+                url: '/dashboard/void-quote',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    QuotationNo: quote_id,
+                    UserNo: '{{  Auth::user()->spars_logged_user_no }}',
+                },
+                beforeSend: function(){
+                    $('.quotes-spinner').show();
+                },
+                success: function(response) {
+                    if(response.success) {
+                        toastr.success(response.message, {
+                            hideDuration: 10000,
+                            closeButton: true,
+                        });
+                        window.location.reload();
+                    }else{
+                        $('.quotes-spinner').hide();
+                        toastr.error(response.message, {
+                            hideDuration: 10000,
+                            closeButton: true,
+                        });
+                    }
+                },
+            });
+        });
+
+
+        $(document).on('click', '.btn-refresh', function () {
             $('.quotes-btn').addClass('quotes-btns-tag');
             $('#quoteReportModal').modal('hide');
             window.location.reload();
+            $('.quotes-btn').removeClass('quotes-btns-tag');
+        });
+        $(document).on('click', '.btn-close-without-refresh', function () {
+            $('.quotes-btn').addClass('quotes-btns-tag');
+            $('#quoteReportModal').modal('hide');
             $('.quotes-btn').removeClass('quotes-btns-tag');
         });
 

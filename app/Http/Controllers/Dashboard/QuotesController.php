@@ -156,6 +156,34 @@ class QuotesController extends DashboardController
         }
     }
 
+    public function view_quote(Request $request){
+        $reportGet = $this->ApiObj->Get_ViewDocumentsReport('', '', 'ViewBLQuotation', $request->QuotationNo);
+
+        return response()->json([
+           'success' => $reportGet['document']['Success'],
+           'reportTitle' => $reportGet['document']['ReportTitle'],
+           'previewID' => $reportGet['document']['PreviewID'],
+           'reportdata' => $reportGet['document']['ReportData'],
+           'message' =>  $reportGet['document']['Message'],
+        ]);
+    }
+
+    public function void_quote(Request $request){
+        $voidQuote = $this->ApiObj->VoidQuotation($request->QuotationNo, $request->UserNo);
+
+        if($voidQuote['OutPut']['Success']){
+            return response()->json([
+                'success' => $voidQuote['OutPut']['Success'],
+                'message' =>  $voidQuote['OutPut']['Message'],
+            ]);
+        }else{
+            return response()->json([
+               'success' => $voidQuote['OutPut']['Success'],
+               'message' =>  $voidQuote['OutPut']['Message'],
+            ]);
+        }
+    }
+
     public function order_excel(Request $request){
         $title = isset($request->reportTitle) ? $request->reportTitle : '';
         $id = isset($request->previewID) ? $request->previewID : 0;

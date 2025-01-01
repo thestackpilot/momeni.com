@@ -230,6 +230,8 @@ Route::group( ['prefix' => 'dashboard', 'middleware' => ['auth']], function ()
     Route::get('/quotes', [QuotesController::class, 'index'] )->name('dashboard.quotation');
     Route::post('/save-quote', [QuotesController::class, 'save_quote'] )->name('save_quote');
     Route::post('/order-quote', [QuotesController::class, 'order_quote'] )->name('order_quote');
+    Route::post('/view-quote', [QuotesController::class, 'view_quote'] )->name('view_quote');
+    Route::post('/void-quote', [QuotesController::class, 'void_quote'] )->name('void_quote');
     Route::post('/quote-report-excel', [QuotesController::class, 'order_excel'] )->name('order_excel');
 
 } );

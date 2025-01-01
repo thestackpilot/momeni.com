@@ -15,7 +15,6 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
 }
 }
 @endphp
-
 @extends('frontend.'.$active_theme -> theme_abrv.'.layouts.app')
 @section('title',$main_collection['Description'] .' '. array_key_first($collections) .' Collections')
 @section('content')
@@ -119,7 +118,21 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                         @if($with_title)
                                         <img class="single-img" src="{{CommonController::getApiFullImage($collection['ImageName'])}}" class="img-responsive" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
                                         @else
-                                        <div style="background-image: url('{{CommonController::getApiFullImage($collection['ImageName'])}}'), url({{url('/').ConstantsController::IMAGE_PLACEHOLDER}});" class="single-img"> </div>
+                                        {{-- <div style="background-image: url('{{CommonController::getApiFullImage($collection['ImageName'])}}'), url({{url('/').ConstantsController::IMAGE_PLACEHOLDER}});" class="single-img"> </div> --}}
+                                        <div class="position-relative overflow-hidden">
+                                            <!-- Image Section -->
+                                            <div
+                                              style="background-image: url('{{CommonController::getApiFullImage($collection['ImageName'])}}'), url({{url('/').ConstantsController::IMAGE_PLACEHOLDER}}); height: 250px; background-size: cover; background-position: center;"
+                                              class="w-100">
+                                            </div>
+
+                                            <!-- Overlay Section -->
+                                            <div class="position-absolute bottom-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay">
+                                              <span class="text-white fs-4 fw-bold">{{$collection['CollectionID']}}</span>
+                                            </div>
+                                          </div>
+
+
                                         @endif
                                     </a>
                                 </div>
@@ -164,6 +177,18 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
     .slider-for .single-img {
         max-height: 320px;
     }
+
+    .overlay {
+  background: rgba(0, 0, 0, 0.5); /* Light black background */
+  transform: translateY(100%); /* Initially positioned outside the image */
+  transition: transform 0.5s ease-in-out; /* Smooth sliding animation */
+}
+
+.position-relative:hover .overlay {
+  transform: translateY(0); /* Slide the overlay into view */
+}
+
+
 </style>
 @endif
 <script>

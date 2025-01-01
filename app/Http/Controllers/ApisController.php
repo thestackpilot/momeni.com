@@ -826,6 +826,14 @@ class ApisController extends RootController
         return $result;
     }
 
-
+    public function VoidQuotation($QuotationNo, $UserNo)
+    {
+        $post_array = [
+            'QuotationNo' =>  $QuotationNo,
+            'UserNo'      =>  $UserNo,
+        ];
+        $result = $this->Post_API_Signature( 'VoidQuotation', 'Void Quotation', $post_array, [], 1, 1, 0) ;
+        return $result;
+    }
 
 }
