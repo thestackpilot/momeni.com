@@ -148,7 +148,7 @@ use Carbon\Carbon;
                                                 <th scope="col">Cancel Date</th>
                                                 <th scope="col">Reservation</th>
                                                 <th scope="col">Status</th>
-                                                <th scope="col" class=""></th>
+                                                <th></th>
                                               </tr>
                                             </thead>
                                             <tbody class="table-rows-custom">
@@ -166,11 +166,11 @@ use Carbon\Carbon;
                                                         <td class="text-start">{{ $formattedcancelDate}}</td>
                                                         <td class="text-start">{{ $list['Reservation'] }}</td>
                                                         <td class="text-start">{{ $list['StatusDescription'] }}</td>
-                                                        <td>
+                                                        <td class="d-flex flex-row">
                                                             <a class="btn btn-primary quotes-order-btn text-center mx-1" data-quoteno="{{ $list['QuotationNo'] }}">Place Order</a>
                                                             <a class="btn btn-primary view-quote-btn text-center mx-1" data-quoteno="{{ $list['QuotationNo'] }}">View Quote</a>
-                                                            <a class="void-quote-btn text-center mx-1 my-5" data-quoteno="{{ $list['QuotationNo'] }}">
-                                                                <i class="bi bi-x" style="color: red; font-size: 20px;"></i>
+                                                            <a class="void-quote-btn text-center mx-1" data-quoteno="{{ $list['QuotationNo'] }}">
+                                                                <i class="bi bi-x" style="color: red; font-size: 30px;"></i>
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -293,7 +293,8 @@ use Carbon\Carbon;
         border: none;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         cursor: pointer;
-        min-height: 30px !important;
+        max-height: 2px !important;
+        /* min-height: 30px !important; */
     }
     .table-rows-custom td{
         padding: 10px !important
@@ -332,6 +333,9 @@ use Carbon\Carbon;
     .admin-side .btn.btn-primary{
         line-height: inherit !important;
     }
+    .void-quote-btn{
+        cursor: pointer;
+    }
     @keyframes spin {
         0% {
             transform: rotate(0deg);
@@ -356,6 +360,13 @@ use Carbon\Carbon;
     @media only screen and (min-width: 750px) and (max-width: 1194px) {
         .submit-btn {
             bottom: -55px;
+        }
+
+    }
+    @media (max-width: 768px) {
+        .quotes-order-btn, .view-quote-btn{
+            max-height: auto !important;
+            font-size: 11px !important
         }
     }
 </style>
