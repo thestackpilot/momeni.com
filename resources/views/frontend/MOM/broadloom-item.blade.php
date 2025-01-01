@@ -9,15 +9,16 @@ use App\Http\Controllers\CommonController;
 
 @section('title', 'Item Detail Page' )
 @extends('frontend.' . $active_theme -> theme_abrv . '.layouts.app')
-
 @section('content')
+
 <div class="wrapper">
     @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
     <main class="main-content">
         {{-- @include('frontend.'.$active_theme -> theme_abrv.'.components.breadcrumbs') --}}
         <div class="breadcrumb-area bg-gray container">
             <div class="container">
-                <h2 class="breadcrumb-title text-center">{{$items['Items'][0]['ItemName']}}<b>{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h2>
+                {{-- <h2 class="breadcrumb-title text-center">{{$items['Items'][0]['ItemName']}}<b>{{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h2> --}}
+                <h2 class="breadcrumb-title text-center">{{$items['Items'][0]['QualityDescription']}}</h2>
             </div>
         </div>
         {{-- @dump($items)
@@ -66,8 +67,8 @@ use App\Http\Controllers\CommonController;
                                 <input type="hidden" id="cart_item_image" name="cart_item_image" value="">
                                 <input type="hidden" id="cart_item_eta" name="cart_item_eta" value="">
                                 <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}">
-                                <h3 class="price" id="product-heading" style="text-wrap: wrap;"><b>{{$items['Items'][0]['ItemName']}} {{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
-
+                                <h3 class="price item_color_change" id="item_color_change"><b></b></h3>
+                                <h3 class="price" id="product-heading-new" style="text-wrap: wrap;"><b>{{$items['Items'][0]['QualityDescription']}} {{$items['Items'][0]['DesignID']}}</b></h3>
                                 <div class="col-12 row">
                                 @foreach ($items['Items'][0]['UDFFields'] as  $des_val)
                                     <div class="col-6 d-flex align-items-baseline">
@@ -286,6 +287,7 @@ use App\Http\Controllers\CommonController;
         </div>
         @endif
     </main>
+    <h3 class="price invisible" id="product-heading" style="text-wrap: wrap;"><b>{{$items['Items'][0]['QualityDescription']}} {{isset($color) && $color ? preg_replace("/0+$/", "", $color) : ''}}</b></h3>
     @include('frontend.'.$active_theme -> theme_abrv.'.components.footer')
 </div>
 @include('frontend.'.$active_theme -> theme_abrv.'.components.login-modal')
@@ -431,8 +433,10 @@ use App\Http\Controllers\CommonController;
                 }
                 init_sliders();
                 // console.log(`${item.ItemName}${($("label", $("input[name='color']:checked").parent()).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}`);
-                $('#product-heading').html(`${item.ItemName} <b>${($(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}</b>`);
-
+                console.log('here check item: ', item);
+                $('#item_color_change').html(`<b>${$(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-itemcolor')}</b>`);
+                $('#product-heading').html(`${item.QualityDescription} <b>${($(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}</b>`);
+                $('#product-heading-new').html(`${item.QualityDescription} <b>${($(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-designid'))}</b>`);
                 if (item.ProductDescription == null) {
                     item.ProductDescription = '';
                 }
@@ -523,7 +527,7 @@ use App\Http\Controllers\CommonController;
         hide_components(['#item_size_parent', '#item_customer_parent', '#qty-main', '#cart_main', '#add_to_cart', '#login_by_popup']);
         $('#item_color').html('');
         var urlParamsColorId  = new URLSearchParams(window.location.search).get('colorId');
-        console.log(item_object.Items)
+        console.log('item_object.Items', item_object.Items)
 
         item_object.Items.forEach(function(item, index) {
             // if (item.ItemName.trim() === ItemName.trim()) {
@@ -542,6 +546,8 @@ use App\Http\Controllers\CommonController;
                         title: item.ItemColor,
                         'data-toggle': "tooltip",
                         'data-color': item.ColorID,
+                        'data-itemcolor': item.ItemColor,
+                        'data-designid': item.DesignID,
                         class: 'for-checkbox-tools',
                         for: 'color_' + item.ItemID
                     }).append(
