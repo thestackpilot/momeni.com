@@ -51,7 +51,7 @@ use Carbon\Carbon;
                                             </div>
                                             <div class="col-md-3 col-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Quaotation Date</label>
+                                                    <label class="form-label">Quotation Date</label>
                                                     <div class="input-group">
                                                         <input name="quotes_date" id="quotes_date" value="" class="form-control"  type="text" data-required="true">
                                                         <span class="input-group-addon">
