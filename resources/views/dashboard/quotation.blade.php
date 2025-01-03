@@ -210,6 +210,23 @@ use Carbon\Carbon;
                                 </div>
                             </div>
 
+                            {{-- void modal --}}
+                            <div class="modal fade" id="voidConfirmation" tabindex="-1" aria-labelledby="voidConfirmationLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content text-center">
+                                    <div class="modal-body py-4">
+                                        <h4 class="mb-3 text-danger"><strong>Confirmation Required</strong></h4>
+                                        <hr style="border: 1px solid #333;">
+                                        <b><p class="mb-4 text-start" style="font-size:17px !important">Are you sure ? <br>You want to void Quotation No: <span id="voidConfirmationQuoteNo" class="text-danger fw-bold"></span></b>
+                                        </p>
+                                        <div class="text-end">
+                                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" id="closeVoidQuote">No</button>
+                                            <button type="button" class="btn btn-primary" id="confirmVoidQuote">Yes</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -734,37 +751,53 @@ use Carbon\Carbon;
             });
         });
 
-        // Voiq quote
-        $('.void-quote-btn').on('click', function(e){
+        // Void quote
+        let quoteId = null;
+        $('.void-quote-btn').on('click', function(e) {
             e.preventDefault();
-            var quote_id = $(this).data('quoteno');
-            $.ajax({
-                url: '/dashboard/void-quote',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    QuotationNo: quote_id,
-                    UserNo: '{{  Auth::user()->spars_logged_user_no }}',
-                },
-                beforeSend: function(){
-                    $('.quotes-spinner').show();
-                },
-                success: function(response) {
-                    if(response.success) {
-                        toastr.success(response.message, {
-                            hideDuration: 10000,
-                            closeButton: true,
-                        });
-                        window.location.reload();
-                    }else{
-                        $('.quotes-spinner').hide();
-                        toastr.error(response.message, {
-                            hideDuration: 10000,
-                            closeButton: true,
-                        });
-                    }
-                },
-            });
+            quoteId = $(this).data('quoteno');
+            $('#voidConfirmationQuoteNo').text(`"${quoteId}"`);
+            $('#voidConfirmation').modal({ backdrop: 'static',  keyboard: false  });
+            $('#voidConfirmation').modal('show');
+        });
+
+        $('#closeVoidQuote').on('click', function(e) {
+            e.preventDefault();
+            $('#voidConfirmation').modal('hide');
+        });
+
+        // When "Yes" is clicked in the modal
+        $('#confirmVoidQuote').on('click', function() {
+            if (quoteId) {
+                $.ajax({
+                    url: '/dashboard/void-quote',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        QuotationNo: quoteId,
+                        UserNo: '{{ Auth::user()->spars_logged_user_no }}',
+                    },
+                    beforeSend: function() {
+                        $('.quotes-spinner').show();
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message, {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                            window.location.reload();
+                        } else {
+                            $('.quotes-spinner').hide();
+                            toastr.error(response.message, {
+                                hideDuration: 10000,
+                                closeButton: true,
+                            });
+                        }
+                    },
+                });
+                $('#voidConfirmation').modal('hide');
+            }
         });
 
 
