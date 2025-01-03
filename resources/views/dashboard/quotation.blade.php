@@ -189,7 +189,7 @@ use Carbon\Carbon;
                                     <div class="modal-body text-center" id="quoteorderbody">
                                         <h1 class="my-2">BL QUOTES ORDER</h1>
                                         <p class="my-2"></p>
-                                        <a href="{{ route('dashboard') }}" class="btn btn-dark p-2">Back To Dashbord</a>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-dark p-2">Back To Dashboard</a>
                                     </div>
                                     </div>
                                 </div>
