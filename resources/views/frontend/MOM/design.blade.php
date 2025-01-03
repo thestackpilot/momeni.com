@@ -4,6 +4,7 @@
 
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
+use Illuminate\Support\Facades\Request;
 
 $is_discontinued = false;
 if(isset($default_filter) && $default_filter && isset(json_decode($default_filter, 1)['Filters'])) {
@@ -125,11 +126,17 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                               style="background-image: url('{{CommonController::getApiFullImage($collection['ImageName'])}}'), url({{url('/').ConstantsController::IMAGE_PLACEHOLDER}}); height: 250px; background-size: cover; background-position: center;"
                                               class="w-100">
                                             </div>
-
+                                            @php
+                                                $fullUrl = Request::url();
+                                                $segments = Request::segments(); // Get all URL segments
+                                                $designValue = $segments[array_search('designs', $segments) + 1]; // Get the value after 'designs'
+                                            @endphp
                                             <!-- Overlay Section -->
+                                            @if ($designValue == "BroadLoom")
                                             <div class="position-absolute bottom-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay">
-                                              <span class="text-white fs-4 fw-bold">{{$collection['CollectionID']}}</span>
+                                                <span class="text-white fs-4 fw-bold">{{$collection['CollectionID']}}</span>
                                             </div>
+                                            @endif
                                           </div>
 
 
