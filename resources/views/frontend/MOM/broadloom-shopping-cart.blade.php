@@ -141,7 +141,7 @@
                                                                                     <div
                                                                                         class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
                                                                                         style="margin:2px 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                                                        {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
+                                                                                        {{ $width_feet . "'" . $width_inch . "\"" . " x " . $lenght_feet  . "'" . $lenght_inch . "\"" }}
                                                                                         @if(!empty($item_sizes['SergingType']))
                                                                                             <span
                                                                                                 class="tooltiptext">
@@ -515,7 +515,7 @@
                                                 <div class="col-md-10 mb-2">
                                                     <label for="" class="form-label mb-1" style="font-size: 14px">Shipping
                                                         Method</label>
-                                                    <select name="shipping_method" class="form-control">
+                                                    <select name="shipping_method" class="form-control ship-method-select">
                                                         @if($shipping_options)
                                                             @foreach($shipping_options as $shipping_option)
                                                                 <option
@@ -529,8 +529,8 @@
                                                 <div class="col-md-10 mb-2">
                                                     <label for="" class="mb-0" style="font-size: 14px">Order Notes
                                                         (optional)</label>
-                                                    <textarea class="form-control" id="" name="shipping_instructions"
-                                                              style="height: 7rem;" placeholder=""></textarea>
+                                                    <textarea class="form-control" id="ship_instructions" name="shipping_instructions"
+                                                              style="height: 7rem;" placeholder="" class="ship_instructions"></textarea>
                                                     <input type="hidden" name="item_broadloom" id="item_broadloom"
                                                            value="{{$cart->item_broadloom}}">
                                                 </div>
@@ -609,7 +609,7 @@
                                                                                     <div
                                                                                         class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
                                                                                         style="margin: 2px 1px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                                                        {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
+                                                                                        {{ $width_feet . "'" . $width_inch . "\"" . " x " . $lenght_feet  . "'" . $lenght_inch . "\"" }}
                                                                                         @if(!empty($item_sizes['SergingType']))
                                                                                             <span
                                                                                                 class="tooltiptext">
@@ -801,7 +801,7 @@
                                                         <div
                                                             class="mytooltip badge badge-default broadloom-badge side-bar-broadloom-badge"
                                                             style="margin: 2px 2px !important;background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
-                                                            {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
+                                                            {{ $width_feet . "'" . $width_inch . "\"" . " x " . $lenght_feet  . "'" . $lenght_inch . "\"" }}
                                                             @if(!empty($item_sizes['SergingType']))
                                                                 <span
                                                                     class="tooltiptext">
@@ -1106,6 +1106,12 @@
                 var shipDate = $('input[name="ship_date"]')[0];
                 $('#lastpage-subtotal').text("$" + $('#inside-hidden-subtotal').val());
 
+                if ($('.ship-method-select').val() == 'AVER' || $('.ship-method-select').val() === 'BAX') {
+                    if($('#ship_instructions').val().trim() == ''){
+                        alert(`Order Notes are required when shipping method is (!!REPLACED!!) or (!REPLACED!)`);
+                        return true;
+                    }
+                }
 
                 // form.checkValidity()
                 if (firstName.checkValidity() && streetaddress.checkValidity()  && country.checkValidity()  && city.checkValidity()  && zipCode.checkValidity() && refNo.checkValidity() && shipDate.checkValidity()) {
@@ -1333,16 +1339,25 @@
         });
 
         $('#state_dropdown').prop('disabled', true);
-            $('#countries').prop('disabled', true);
-            $('input[name="shipping-address"]').on('change', function () {
-                if($(this).val() != "other"){
-                    $('#state_dropdown').prop('disabled', true);
-                    $('#countries').prop('disabled', true);
-                }else {
-                    $('#state_dropdown').prop('disabled', false);
-                    $('#countries').prop('disabled', false);
-                }
-            });
+        $('#countries').prop('disabled', true);
+        $('input[name="shipping-address"]').on('change', function () {
+            if($(this).val() != "other"){
+                $('#state_dropdown').prop('disabled', true);
+                $('#countries').prop('disabled', true);
+            }else {
+                $('#state_dropdown').prop('disabled', false);
+                $('#countries').prop('disabled', false);
+            }
+        });
+
+        $('.ship-method-select').on('change', function() {
+            const selectedValue = $(this).val();;
+            if (selectedValue == 'AVER' || selectedValue === 'BAX') {
+                $('#ship_instructions').prop('required', true);
+            } else {
+                $('#ship_instructions').prop('required', false);
+            }
+        });
 
     </script>
 @endsection

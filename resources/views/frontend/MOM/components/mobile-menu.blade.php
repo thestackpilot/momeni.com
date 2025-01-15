@@ -5,7 +5,7 @@
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
 
-@endphp 
+@endphp
 <div class="mobile-menu-overlay" id="mobile-menu-overlay">
         <div class="mobile-menu-overlay__inner">
             <div class="mobile-menu-close-box text-right"> <span class="mobile-navigation-close-icon" id="mobile-menu-close-trigger"> <i class="icon-cross2"></i></span> </div>
@@ -78,6 +78,12 @@ use App\Http\Controllers\CommonController;
                         <li class="has-children"> <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_url}}">{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_caption}}</a>
 
                         </li>
+
+                        @if(Auth::user())
+                        <li class="has-children"> <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_url}}">{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_caption}}</a>
+
+                        </li>
+                        @endif
 
                         <li class="has-children"> <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_url}}">{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_caption}}</a>
 

@@ -50,6 +50,13 @@
             </li>
         @endif
 
+        @if($pages -> all_pages -> sections -> main_top_menu -> menu_6_caption !== null && Auth::user())
+        <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_url}}"
+                              class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_caption}}</a>
+
+        </li>
+        @endif
+
         @if($pages -> all_pages -> sections -> main_top_menu -> menu_4_caption !== null)
             <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_url}}"
                                   class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_caption}}</a>
@@ -281,7 +288,7 @@
                                                                 class="badge badge-default broadloom-badge side-bar-broadloom-badge"
                                                                 style="background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
                                                         <span>
-                                                            {{ $lenght_feet . "'" . $lenght_inch . "\"" . " x " . $width_feet  . "'" . $width_inch . "\"" }}
+                                                            {{ $width_feet . "'" . $width_inch . "\"" . " x " . $lenght_feet  . "'" . $lenght_inch . "\"" }}
                                                         </span>
                                                             </div>
                                                         @endforeach
