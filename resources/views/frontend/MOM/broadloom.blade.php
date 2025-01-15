@@ -160,7 +160,7 @@
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Twidth"
                                                                            id="Twidth" placeholder=""
-                                                                           style="text-align:right;" min="0">
+                                                                           style="text-align:right;" min="0" disabled>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">
                                                                             <strong>Ft</strong></div>
@@ -189,7 +189,7 @@
                                                                     </select> --}}
                                                                     <input type="number" class="form-control TwidthInch"
                                                                            id="TwidthInch" placeholder=""
-                                                                           style="text-align:right;" min="0" max="11">
+                                                                           style="text-align:right;" min="0" max="11" disabled>
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">
                                                                             <strong>In</strong></div>
@@ -232,7 +232,7 @@
                                                                disabled style="text-align:right;">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8 col-sm-12">
+                                                <div class="col-md-12 col-sm-12">
                                                     <div class="form-group">
                                                         <label for=""><input type="checkbox" name="" id="surging_check">
                                                             <strong> With Serging </strong></label>
@@ -247,7 +247,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 col-sm-12">
+                                                <div class="col-md-0 col-sm-0 d-none">
                                                     <div class="form-group">
                                                         <label for=""><strong> Serging Rate ($)</strong></label>
                                                         <input class="form-control" type="text" name=""
@@ -2163,6 +2163,16 @@
             } else {
                 $('#cfa_check').prop('disabled', false);
             }
+        });
+
+        $('#surging_check').on('change', function() {
+            const isChecked = $(this).is(':checked');
+
+            $('#Twidth').prop('disabled', !isChecked)
+                        .attr('title', isChecked ? '' : 'Select Serging to Cut by Width');
+
+            $('#TwidthInch').prop('disabled', !isChecked)
+                            .attr('title', isChecked ? '' : 'Select Serging to Cut by Width');
         });
     </script>
 @endsection
