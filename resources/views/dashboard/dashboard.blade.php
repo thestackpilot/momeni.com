@@ -38,7 +38,21 @@ use App\Http\Controllers\CommonController;
                             <a href="{{route('dashboard.placeorder')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-bag.svg')}}" class="icon-img" style="width:23.69px;" />
-                                    <h5 class="card-title font-ropa">Place An Order</h5>
+                                    <h5 class="card-title font-ropa">Place Rug Order</h5>
+                                    <i class="bi bi-chevron-right d-none lr-theme-only"></i>
+                                </div>
+                            </a>
+                            <a href="{{route('dashboard.place_bl_order')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
+                                <div class="card-body text-center">
+                                    <img src="{{asset('Dashboard/images/icon-dashboard-bag.svg')}}" class="icon-img" style="width:23.69px;" />
+                                    <h5 class="card-title font-ropa">Place Broadloom Order</h5>
+                                    <i class="bi bi-chevron-right d-none lr-theme-only"></i>
+                                </div>
+                            </a>
+                            <a href="{{route('dashboard.quotation')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
+                                <div class="card-body text-center">
+                                    <img src="{{asset('Dashboard/images/icon-dashboard-bag.svg')}}" class="icon-img" style="width:23.69px;" />
+                                    <h5 class="card-title font-ropa">Custom Rug Quote</h5>
                                     <i class="bi bi-chevron-right d-none lr-theme-only"></i>
                                 </div>
                             </a>
@@ -52,7 +66,14 @@ use App\Http\Controllers\CommonController;
                             <a href="{{route('dashboard.vieworder')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-status.svg')}}" class="icon-img" style="width:26.87px;" />
-                                    <h5 class="card-title font-ropa">Check Order Status</h5>
+                                    <h5 class="card-title font-ropa">Check  Rug Order Status</h5>
+                                    <i class="bi bi-chevron-right d-none lr-theme-only"></i>
+                                </div>
+                            </a>
+                            <a href="{{route('dashboard.viewblorder')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
+                                <div class="card-body text-center">
+                                    <img src="{{asset('Dashboard/images/icon-dashboard-status.svg')}}" class="icon-img" style="width:26.87px;" />
+                                    <h5 class="card-title font-ropa">Check Broadloom Order Status</h5>
                                     <i class="bi bi-chevron-right d-none lr-theme-only"></i>
                                 </div>
                             </a>
@@ -63,10 +84,17 @@ use App\Http\Controllers\CommonController;
                                     <i class="bi bi-chevron-right d-none lr-theme-only"></i>
                                 </div>
                             </a>
+                            <a href="{{route('dashboard.saleshistory')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
+                                <div class="card-body text-center">
+                                    <img src="{{asset('Dashboard/images/icon-dashboard-invoice.svg')}}" class="icon-img" style="width:26.44px;" />
+                                    <h5 class="card-title font-ropa">Reports</h5>
+                                    <i class="bi bi-chevron-right d-none lr-theme-only"></i>
+                                </div>
+                            </a>
                         </div>
                         @if(count($client_address))
                         <div class="d-flex light-grey-bg p-4 mt-3 flex-column">
-                            {{-- 
+                            {{--
                             <h2 class="section-title text-center mb-3 font-ropa"> {{$client_address['CustomerAddress']['BillToAddresses'][0]['FirstName'].' '.$client_address['CustomerAddress']['BillToAddresses'][0]['LastName']}}</h2>
                             <div class="d-flex justify-content-between mb-5 flex-sm-wrap">
                                 <div class="d-flex flex-column bill-to mt-3 col-md-7">
