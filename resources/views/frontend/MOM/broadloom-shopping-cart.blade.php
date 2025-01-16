@@ -68,10 +68,9 @@
                                                         <th>Quantity</th>
                                                     @endif
                                                 @endforeach
+                                                <th>Cut Cost</th>
+                                                <th>Serging Cost</th>
                                                 <th>Rug Pad</th>
-                                                <th>Price</th>
-                                                <th>Serging</th>
-                                                <th>Cutting</th>
                                                 <th>Sub Total</th>
                                             </tr>
                                             </thead>
@@ -156,13 +155,6 @@
                                                                 </div>
                                                             </div>
                                                         </th>
-                                                        <td class="align-content-center">
-                                                            @php
-                                                                $rugPadTotal += $item->rugpad_price;
-                                                                number_format($rugPadTotal, 2);
-                                                            @endphp
-                                                            {{ $item->item_currency }}{{ number_format($item->rugpad_price, 2) }}
-                                                        </td>
                                                         @if(!$item->broadloom_item)
                                                             <td class="align-content-center">
                                                                 <div class="d-flex flex-row qty-styles mb-2">
@@ -194,15 +186,17 @@
                                                             @php
                                                                 $sergingTotal += $sum_surging_charges;
                                                                 number_format($sergingTotal, 2);
+                                                                $cuttingTotal += $item->unit_price;
+                                                                number_format($cuttingTotal, 2);
                                                             @endphp
-                                                            {{ $item->item_currency }}{{ number_format($sum_surging_charges, 2) }}
+                                                            {{ $item->item_currency }}{{ number_format($sum_surging_charges + $item->unit_price, 2) }}
                                                         </td>
                                                         <td class="align-content-center">
                                                             @php
-                                                            $cuttingTotal += $item->unit_price;
-                                                            number_format($cuttingTotal, 2);
+                                                                $rugPadTotal += $item->rugpad_price;
+                                                                number_format($rugPadTotal, 2);
                                                             @endphp
-                                                            {{ $item->item_currency }}{{ number_format($item->unit_price, 2) }}
+                                                            {{ $item->item_currency }}{{ number_format($item->rugpad_price, 2) }}
                                                         </td>
                                                         <td class="align-content-center">{{ $item->item_currency }}<span
                                                                 id="item_total_price">{{ number_format($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total, 2)  }}
@@ -251,23 +245,18 @@
                                     <div class="d-flex justify-content-around align-items-left flex-column">
                                         <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
                                         <div class="row mt-3">
-                                            <div class="col-md-7">Merchandise Total:</div>
+                                            <div class="col-md-7">Cut Cost:</div>
                                             <div class="col-md-5 text-right"><span id="item_subtotal_price" class="cart_total">{{ $cart->cart_currency }}{{ number_format($priceTotal, 2) }}</span></div>
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row">
-                                            <div class="col-md-7">Serging Charges:</div>
-                                            <div class="col-md-5 text-right serging_charges">{{ $cart->cart_currency }}{{ number_format($sergingTotal, 2) }}</div>
+                                            <div class="col-md-7">Serging Cost:</div>
+                                            <div class="col-md-5 text-right serging_charges">{{ $cart->cart_currency }}{{ number_format($sergingTotal + $cuttingTotal, 2) }}</div>
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row">
                                             <div class="col-md-7">Rug Pad:</div>
                                             <div class="col-md-5 text-right rugpad_charges">{{ $cart->cart_currency }}{{ number_format($rugPadTotal, 2) }}</div>
-                                        </div>
-                                        <hr style="border-top-color: whitesmoke;">
-                                        <div class="row">
-                                            <div class="col-md-7">Cutting Charges:</div>
-                                            <div class="col-md-5 text-right cutting_charges">{{ $cart->cart_currency }}{{ number_format($cuttingTotal, 2) }}</div>
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row">
@@ -633,7 +622,7 @@
                                             @endforeach
                                             @if(isset($item))
                                                 <div class="row px-5">
-                                                    <div class="col-md-6 font-weight-bold">Merchandise Total</div>
+                                                    <div class="col-md-6 font-weight-bold">Cut Cost</div>
 
                                                     <div
                                                         class="col-md-6 font-weight-bold text-right section_2_subtotal">{{$item->item_currency}}{{$total_price}}</div>
@@ -641,18 +630,13 @@
                                             @endif
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row px-5">
-                                                <div class="col-md-9">Serging Charges</div>
+                                                <div class="col-md-9">Serging Cost</div>
                                                 <div class="col-md-3 text-right section_2_serging_charges">$0.00</div>
                                             </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row px-5">
                                                 <div class="col-md-9">Rug Pad</div>
                                                 <div class="col-md-3 text-right section_2_rugpad_charges">$0.00</div>
-                                            </div>
-                                            <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                            <div class="row px-5">
-                                                <div class="col-md-9">Cutting Charges</div>
-                                                <div class="col-md-3 text-right section_2_cutting_charges">$0.00</div>
                                             </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row px-5">
@@ -835,7 +819,7 @@
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
-                            <div class="col-md-4 align-content-center font-weight--bold">Merchandise Total</div>
+                            <div class="col-md-4 align-content-center font-weight--bold">Cut Cost</div>
                             <div class="col-md-4 align-content-center text-right font-weight--bold order-detail-subtotal">
                                 ${{$cart->cart_total}}</div>
                             {{-- <div class="col-md-4 align-content-center text-right font-weight--bold">
@@ -843,18 +827,13 @@
                             <div class="col-md-9">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
-                            <div class="col-md-4 align-content-center">Serging Charges</div>
+                            <div class="col-md-4 align-content-center">Serging Cost</div>
                             <div class="col-md-4 align-content-center text-right order-detail-serging">$0.00</div>
                             <div class="col-md-9 mb-3">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
-                            <div class="col-md-4 align-content-center">Rug Pad Charges</div>
+                            <div class="col-md-4 align-content-center">Rug Pad</div>
                             <div class="col-md-4 align-content-center text-right order-detail-rugpad">$0.00</div>
-                            <div class="col-md-9 mb-3">
-                                <hr class="mx-4" style="border-top-color: whitesmoke;">
-                            </div>
-                            <div class="col-md-4 align-content-center">Cutting Charges</div>
-                            <div class="col-md-4 align-content-center text-right order-detail-cutting">$0.00</div>
                             <div class="col-md-9 mb-3">
                                 <hr class="mx-4" style="border-top-color: whitesmoke;">
                             </div>
@@ -863,7 +842,7 @@
                             <div class="col-md-4 align-content-center text-right font-weight--bold mb-5 cart_total_final"
                                  style="font-size: 20px"></div>
                             <div class="col-sm-8 my-5 row justify-content-center">
-                                <a href="/" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5"
+                                <a href="/dashboard/home" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5"
                                    id="add_cart">
                                     Go to dashboard &nbsp; &nbsp; &nbsp;<i class="fa fa-long-arrow-right pl-5"></i>
                                 </a>
@@ -938,7 +917,8 @@
             var rugpad_charges = parseFloat($(".rugpad_charges").text().replace('$', " ").replace(',', ""));
             var formatted_rugpad_charges = rugpad_charges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             var formatted_cut_charges = cutting_charges.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            var total = subtotal + serging_charges + cutting_charges + rugpad_charges + shippingCharges;
+            shippingCharges = 0;
+            var total = subtotal + serging_charges + rugpad_charges + shippingCharges;
             var formatted_total = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $(".section_2_subtotal").text("$" + formatted_subtotal);
             $(".section_2_serging_charges").text("$" + formatted_serg_charges);
@@ -1034,10 +1014,9 @@
                 var orderDeatilSubTotal = parseFloat($(".section_2_subtotal").text().replace('$', " ").replace(',', ""));
                 var formatted_orderDeatilSubTotal = orderDeatilSubTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 //subtotal = parseFloat($("#inside-hidden-subtotal").val().replace('$', " ").replace(',', ""));
-                var total = subtotal + rugpadCharges + sergingTotal + cuttingCharges + shippingCharges;
 
-
-
+                shippingCharges = 0;
+                var total = subtotal + rugpadCharges + sergingTotal  + shippingCharges;
 
                 $('.order-detail-subtotal').text("$" + formatted_orderDeatilSubTotal);
                 $('.order-detail-serging').text("$" + formatted_sergingCharges);
@@ -1351,13 +1330,18 @@
         });
 
         $('.ship-method-select').on('change', function() {
-            const selectedValue = $(this).val();;
+            const selectedValue = $(this).val();
             if (selectedValue == 'AVER' || selectedValue === 'BAX') {
                 $('#ship_instructions').prop('required', true);
             } else {
                 $('#ship_instructions').prop('required', false);
             }
-        });
 
+            if(selectedValue == 'BEST' || selectedValue === 'AMZX'){
+                $('.section_2_shipping_charges').text('TBD');
+            }else{
+                $('.section_2_shipping_charges').text('$0.00');
+            }
+        });
     </script>
 @endsection

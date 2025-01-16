@@ -1464,4 +1464,116 @@ class GenericReportsController extends DashboardController
 
         }
     }
+
+    public function sales_history_bl(Request $request){
+        if ( count( $request->all() ) > 0 )
+        {
+            $from_date = $request->has('from_date') ? $request->from_date : Carbon::now()->format('Y-m-d');
+            $to_date = $request->has('to_date') ? $request->to_date : Carbon::now()->format('Y-m-d');
+            $report = $this->ApiObj->Get_BLSalesReport( $request->sales_rep, $request->customer, $request->report_title, $from_date, $to_date, $request->quality, $request->item_id, $request->collection, $request->design);
+
+            if( $report['Success'] )
+            {
+                View::share( 'ReportData', $report['ReportData'] );
+                View::share( 'ReportTitle', $report['ReportTitle'] );
+                View::share( 'PreviewID', $report['PreviewID'] );
+            }
+
+        }
+
+        $reports_title  = array();
+        $reports        = $this->ApiObj->Get_AllBLReports();
+
+        if ( $reports['OutPut']['Success'] )
+        {
+            foreach ( $reports['OutPut']['ReportList'] as $report )
+            {
+                $reports_title[] =
+                    [
+                    'value' => $report['KeyID'],
+                    'label' => $report['Description'],
+                    'fields' => [
+                        'customer_show' => $report['CustomerField'],
+                        'date_field' => $report['DateField'],
+                        'item_id_show' => $report['ItemIDField'],
+                        'quality_show' => $report['QualityField'],
+                        'collection_show' => $report['CollectionField'],
+                        'design_show' => $report['DesignField']
+                    ]
+                ];
+
+            }
+
+        }
+        $filters = [
+            [
+                'title'       => 'Report Title',
+                'type'        => 'select',
+                'id'          => 'report_title',
+                'options'     => $reports_title ? $reports_title : '',
+                'placeholder' => '',
+                'value'       => $request->report_title ? $request->report_title : ''
+            ],
+            [
+                'title'       => 'From Date',
+                'type'        => 'date',
+                'id'          => 'date_field',
+                'attribues'   => ' data-required="true" ',
+                'placeholder' => '',
+                'value'       => $request->from_date ? CommonController::get_date_format( $request->from_date ) : CommonController::get_date_format( '-1 month' )
+            ],
+            [
+                'title'       => 'To Date',
+                'type'        => 'date',
+                'id'          => 'date_field',
+                'attribues'   => ' data-required="true" ',
+                'placeholder' => '',
+                'value'       => $request->to_date ? CommonController::get_date_format( $request->to_date ) : CommonController::get_date_format( date( 'Y-m-d' ) )
+            ],
+            [
+                'title'       => 'Customer',
+                'type'        => Auth::user()->is_customer ? 'hidden' : 'select',
+                'id'          => 'customer_show',
+                'options'     => $this->get_customers_dropdown_options(),
+                'placeholder' => '',
+                'value'       => $request->has( 'customer' ) ? $request->customer : ''
+            ],
+            [
+                'title'       => 'Item Id',
+                'type'        => 'text',
+                'id'          => 'item_id_show',
+                'attribues'   => '',
+                'placeholder' => 'Enter Item ID',
+                'value'       => $request->has( 'item_id' ) ? $request->item_id : ''
+            ],
+            [
+                'title'       => 'Quality',
+                'type'        => 'text',
+                'id'          => 'quality_show',
+                'attribues'   => '',
+                'placeholder' => 'Enter Quality',
+                'value'       => $request->has( 'quality' ) ? $request->quality : ''
+            ],
+            [
+                'title'       => 'Collection',
+                'type'        => 'text',
+                'id'          => 'collection_show',
+                'attribues'   => '',
+                'placeholder' => 'Enter Collection ',
+                'value'       => $request->has( 'collection' ) ? $request->collection : ''
+            ],
+            [
+                'title'       => 'Design',
+                'type'        => 'text',
+                'id'          => 'design_show',
+                'attribues'   => '',
+                'placeholder' => 'Enter Design',
+                'value'       => $request->has( 'design' ) ? $request->design : ''
+            ],
+        ];
+        View::share( 'filters', $filters );
+        View::share( 'reports_title', $reports_title );
+
+        return view( 'dashboard.bl-sales-history' );
+    }
 }
