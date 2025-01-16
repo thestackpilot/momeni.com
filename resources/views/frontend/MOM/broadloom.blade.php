@@ -1673,6 +1673,8 @@
 
                         $('#surging_check').prop('checked', false);
                         $('#surging_options').prop('disabled', true);
+                        $('#Twidth').prop('disabled', true);
+                        $('#TwidthInch').prop('disabled', true);
                         $('#surging_options').val('0')
                         $('#surging_charges').val('');
                         $("#sergingtypeno").val('');

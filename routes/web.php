@@ -197,6 +197,8 @@ Route::group( ['prefix' => 'dashboard', 'middleware' => ['auth']], function ()
     Route::post( '/payment-options', [FinanceController::class, 'save_payment_options'] )->name( 'dashboard.savepaymentoptions' );
     Route::get( '/sales-history', [GenericReportsController::class, 'sales_history'] )->name( 'dashboard.saleshistory' );
     Route::post( '/sales-history', [GenericReportsController::class, 'sales_history'] )->name( 'dashboard.saleshistory' );
+    Route::get( '/broadloom/sales-history/', [GenericReportsController::class, 'sales_history_bl'] )->name( 'dashboard.bl_reports' );
+    Route::post( '/broadloom/sales-history/', [GenericReportsController::class, 'sales_history_bl'] )->name( 'dashboard.bl_reports' );
     Route::post( '/download-excel', [GenericReportsController::class, 'download_excel'] )->name( 'dashboard.downloadexcel' );
 
     //Dashboard Shop Routes

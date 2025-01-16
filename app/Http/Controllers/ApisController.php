@@ -92,6 +92,7 @@ class ApisController extends RootController
         return $this->Post_API_Signature('Get_AllReports', 'Get All Reports', $post_array, ['Success', 'Message', 'ReportList'], 1, 1, 1);
     }
 
+
     public function Get_Collections( $mainCollectionId = 1, $collectionType = "Collections", $LifeStyleID = '', $CollectionID = '', $DesignID = '', $ColorID = '', $SizeID = '', $ShapeID = '', $MaterialID = '', $WeavingID = '', $filters = '' )
     {
         $post_array = array( 'MainCollectionID' => $mainCollectionId, 'LifeStyleID' => $LifeStyleID, 'CollectionID' => $CollectionID, 'DesignID' => $DesignID, 'ColorID' => $ColorID, 'SizeID' => $SizeID, 'ShapeID' => $ShapeID, 'MaterialID' => $MaterialID, 'WeavingID' => $WeavingID, 'Filters' => $filters );
@@ -482,6 +483,7 @@ class ApisController extends RootController
             'json_reponse'    => $json_reponse,
             'get_type'        => $get_type
         ];
+
         $cache_key = "{$api_slug}:".md5( serialize( $all_params ) );
 
         prr( " Method : {$api_slug} - {$api_text}" );
@@ -518,10 +520,10 @@ class ApisController extends RootController
                 }
 
                 $p_array = ["Input" => $post_array];
+
                 //
 		prr("TOKEN: " . print_r([$this->accessTokenArray, $p_array], 1));
                 $response = Http::timeout( 300 )->withHeaders( $this->accessTokenArray )->$request_type( $this->active_theme->theme_api_base_url.$api_slug, $p_array );
-
                 $ret = null;
 
                 if ( ! count( $specific_keys ) )
@@ -836,4 +838,26 @@ class ApisController extends RootController
         return $result;
     }
 
+    public function Get_AllBLReports()
+    {
+        $post_array = [];
+        if (Auth::user()->is_customer) {
+            return $this->Post_API_Signature('Get_AllBLCustomerReports', 'Get All BL Customer Reports', $post_array, [], 1, 1, 1);
+        }else{
+            return $this->Post_API_Signature('Get_AllBLSalesRepReports', 'Get All BL Sales Rep Reports', $post_array, [], 1, 1, 1);
+        }
+    }
+
+    public function Get_BLSalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '', $Collection = '', $Design = '')
+    {
+        $sale_rep_id = Auth::user()->is_customer ? '' : $SalesRep;
+        $customer_id = Auth::user()->is_customer ? $SalesRep : '';
+        $post_array = array('SalesRepID' => $sale_rep_id, 'CustomerID' => $customer_id, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
+
+        if (Auth::user()->is_customer) {
+            return $this->Post_API_Signature('ViewBLCustomerReportDetail', 'View BL Customer Report Detail', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
+        }else{
+            return $this->Post_API_Signature('ViewBLSalesRepReportDetail', 'View BL Sales Rep Report Detail', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
+        }
+    }
 }
