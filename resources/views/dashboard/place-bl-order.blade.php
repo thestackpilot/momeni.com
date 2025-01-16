@@ -1,0 +1,31 @@
+@php
+// $active_theme object is available containing the theme developer json loaded.
+// This is for the theme developers who want to load further view assets
+
+use App\Http\Controllers\ConstantsController;
+use App\Http\Controllers\CommonController;
+
+@endphp
+
+@extends('dashboard.layouts.app')
+@section('title','Dashboard | Place Broadloom Order')
+@section('content')
+<div class="wrapper admin-side">
+   @include('dashboard.components.header')
+   <main class="main-content">
+    <section class="collection-section">
+       <div class="container">
+          <div class="d-flex flex-row">
+             <div class="col-lg-3 col-sm-6 col-6 sidebar-main">
+                @include('dashboard.components.sidebar')
+             </div>
+             <div class="col-lg-9 col-sm-12 col-12 py-0">
+                <h1>Place Broadloom Order</h1>
+             </div>
+          </div>
+       </div>
+    </section>
+ </main>
+   @include('dashboard.components.footer')
+</div>
+@endsection

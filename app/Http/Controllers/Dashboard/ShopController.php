@@ -622,4 +622,9 @@ class ShopController extends DashboardController
 
     }
 
+    public function place_bl_order( Request $request )
+    {
+        return view( 'dashboard.place-bl-order' );
+    }
+
 }

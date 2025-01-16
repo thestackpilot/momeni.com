@@ -202,6 +202,7 @@ Route::group( ['prefix' => 'dashboard', 'middleware' => ['auth']], function ()
     //Dashboard Shop Routes
     Route::get( '/express-order', [ShopController::class, 'express_order'] )->name( 'dashboard.expressorder' );
     Route::get( '/place-order', [ShopController::class, 'place_order'] )->name( 'dashboard.placeorder' );
+    Route::get( '/place-bl-order', [ShopController::class, 'place_bl_order'] )->name( 'dashboard.place_bl_order' );
     Route::post( '/place-order/additional-filters', [ShopController::class, 'get_additional_filters'] )->name( 'dashboard.placeorder.additional-filters' );
     Route::post( '/place-order', [ShopController::class, 'place_order'] )->name( 'dashboard.placeorder' );
     Route::post( '/get-customer-addresses', [ShopController::class, 'get_customer_addresses'] )->name( 'dashboard.customeraddresses' );
