@@ -35,7 +35,11 @@ class CollectionsController extends FrontendController
 
                         if ( trim( $value ) != '' )
                         {
-                            $key                      = str_replace( 'ID', '', trim( $key ) );
+                            if($id == "BroadLoom" && $type == "Collections"){
+                                $key = "Category";
+                            }else{
+                                $key = str_replace( 'ID', '', trim( $key ) );
+                            }
                             $link_filter['Filters'][] = array(
                                 "FilterID" => $key,
                                 "Values"   => is_array( $value ) ? $value : [$value]
@@ -50,7 +54,11 @@ class CollectionsController extends FrontendController
 
                 if ( $with_title )
                 {
-                    $cols[$counter]['LinkUrl'] = route( 'frontend.designs_with_title', [$id, base64_encode( json_encode( $link_filter ) ), $type, 1] );
+                    if($id == "BroadLoom" && $type == "Collections"){
+                        $cols[$counter]['LinkUrl'] =   url('/collections/BroadLoom/Colors') . '/' . base64_encode(json_encode($link_filter));
+                    }else{
+                        $cols[$counter]['LinkUrl'] = route( 'frontend.designs_with_title', [$id, base64_encode( json_encode( $link_filter ) ), $type, 1] );
+                    }
                 }
                 else
                 {
@@ -101,7 +109,7 @@ class CollectionsController extends FrontendController
 
         $subCategory     = $this->active_theme_json->general->category_based_filters ? $this->checkSubcategoryForFilters( $filter ) : '';
         $filters         = $this->ApiObj->Get_Filters( $id, isset( $subCategory['id'] ) ? $subCategory['id'] : '', $this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) );
-   
+
         // $filters         = $this->addSelectedFilters( ConstantsController::NO_FILTER_FLAG, $filters );
         $filters    = $this->addSelectedFilters( json_decode( base64_decode( $filter ), true ), $filters );
 
@@ -110,8 +118,8 @@ class CollectionsController extends FrontendController
 
         $this->append_breadcrumbs( $main_collection['Description'], route( 'frontend.favourite', $id ) );
         $this->append_breadcrumbs( $type, route( 'frontend.collections', [$id, $type] ) );
-        
-       
+
+
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.collection', [
             'collections'     => $collections,
             'favourites'      => $favourites,
