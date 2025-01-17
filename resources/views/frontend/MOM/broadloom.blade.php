@@ -42,12 +42,13 @@
             <input type="hidden" id="unit-price" name="unit-price" value="">
             <input type="hidden" id="unit-price-cal" name="unit-price-cal" value="">
             {{-- <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}"> --}}
-
             <div class="site-wrapper-reveal">
                 <div class="broadloom-wrapper">
                     @if($correct_item_name)
-                        <div style="font-size: 28px;" class="show-bd-name"><strong>{{ ltrim($correct_item_name) }} &nbsp;{{substr($item['ColorID'], 0, 3)}}</strong></div>
+                        {{-- <div style="font-size: 28px;" class="show-bd-name"><strong>{{ ltrim($correct_item_name) }} &nbsp;{{substr($item['ColorID'], 0, 3)}}</strong></div> --}}
+                        <div style="font-size: 28px;" class="show-bd-name"><strong>{{ ltrim($correct_item_name) }} &nbsp;{{$item['ItemColor']}}</strong></div>
                     @else
+                        @dump('else')
                         <div style="font-size: 28px;" class="show-bd-name"><strong>{{$item['ItemName']}} {{substr($item['ColorID'], 0, 3)}}</strong></div>
                     @endif
                     <div class="card">
@@ -1142,13 +1143,14 @@
                                                             $('#cust-inst').val('');
                                                             $("#cfa_check").prop("checked", false);
                                                             $("#remnant_check").prop("checked", false);
-
                                                             $('#show-cut-piece-btn').addClass('d-none');
                                                             $('#hide-cut-piece-btn').addClass('d-none');
                                                             $('#add_to_cart').addClass('d-none');
                                                             $('#roll_pieces').removeAttr("disabled");
                                                             $('#cut-pieces').empty();
                                                             $('#add_rugpad').prop('disabled', false).prop('checked', false);
+                                                            $('#Twidth').prop('disabled', true);
+                                                            $('#TwidthInch').prop('disabled', true);
                                                             $.ajax({
                                                                 url: "{{ route('broadloom.removeAllCutPiece') }}",
                                                                 data: {
@@ -1273,6 +1275,8 @@
                                             $('#roll_pieces').removeAttr("disabled");
                                             $('#cut-pieces').empty();
                                             $('#add_rugpad').prop('disabled', false).prop('checked', false);
+                                            $('#Twidth').prop('disabled', true);
+                                            $('#TwidthInch').prop('disabled', true);
                                             //window.location.reload();
                                             // $('.quickCart-opener').trigger('click');
                                         });
