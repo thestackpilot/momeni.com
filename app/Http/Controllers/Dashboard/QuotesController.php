@@ -6,6 +6,9 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Jobs\SendMail;
+use App\Models\Cart;
+use App\Http\Controllers\CommonController;
+use App\Http\Controllers\ConstantsController;
 
 class QuotesController extends DashboardController
 {
@@ -148,13 +151,265 @@ class QuotesController extends DashboardController
     public function order_quote(Request $request){
         $QuotationNo = $request->QuotationNo;
         $UserNo = $request->UserNo;
-        $order = $this->ApiObj->Place_QuotationOrder($QuotationNo, $UserNo);
-        if($order['OutPut']['Success']){
-            return response()->json(['success' => true, 'msg' => $order['OutPut']['Message'], 'order_no' => $order['OutPut']['ObjectID']]);
-        }else{
-            return response()->json(['success' => false, 'msg' => $order['OutPut']['Message']]);
+       // $order = $this->ApiObj->Place_QuotationOrder($QuotationNo, $UserNo);
+        // if($order['OutPut']['Success']){
+        //     return response()->json(['success' => true, 'msg' => $order['OutPut']['Message'], 'order_no' => $order['OutPut']['ObjectID']]);
+        // }else{
+        //     return response()->json(['success' => false, 'msg' => $order['OutPut']['Message']]);
+        // }
+
+
+        //NEW LOGIN START
+        $customer_details = $shipping_options = $shippings = $shipping_addresses = $payment_terms_list = $customer_payment_options = $countries = $states = [];
+        $data = $this->ApiObj->GetQuotationOrderDetailForOrderPlace($QuotationNo, $UserNo);
+
+        $customer_details = $this->ApiObj->Get_CustomerDetail($data['OutPut']['CustomerID']);
+        if ($customer_details && $customer_details['Success'] == true) {
+            $shipping_addresses = $customer_details['CustomerDetail']['CustomerAddressDetail'];
+            $default_ship_via_id = isset($customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]) ? $customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]['ShipViaID'] : '';
         }
+
+        $countries = $this->ApiObj->Get_CountriesList();
+
+        $shippings = $this->ApiObj->Get_ShipViaList();
+        if ($shippings && $shippings['Success'] == true) {
+            $temp = [];
+            foreach ($shippings['ShipVias'] as $shipping) {
+                $temp[$shipping['Description']] = $shipping;
+            }
+            ksort($temp);
+            $shippings['ShipVias'] = $temp;
+            $shippings = $shipping_options = $shippings['ShipVias'];
+        }
+
+
+        $payment_terms_list = $this->ApiObj->Get_PaymentTermsList();
+        if ($payment_terms_list && $payment_terms_list['Success']) {
+            $payment_terms_list = $payment_terms_list['PaymentTerms'];
+            foreach ($payment_terms_list as $payment_term) {
+                if (!in_array(md5($payment_term['Description']), $payment_terms_list)) {
+                    $payment_terms_list[md5($payment_term['Description'])] = $payment_term;
+                }
+
+            }
+
+        }
+
+        $max_len_size  = $this->calculateMaxLenSize($data['OutPut']['QuotationDetailCutList']);
+        $price = $this->update_ats_prices( $this->ApiObj->Get_ATS($data['OutPut']['QuotationDetailList'][0]['ItemID'], $data['OutPut']['CustomerID'] )['ATSInfo'], $data['OutPut']['QuotationDetailList'][0]['ItemID'], $data['OutPut']['CustomerID'] );
+        $totalSqftArea = $this->calculateTotalSqftArea($data['OutPut']['QuotationDetailCutList']);
+        $item_price = number_format(($price['ATSQty'] * $totalSqftArea), 2, '.', ',');
+        $cut_charges =  $this->ApiObj->GetCutingService();
+        $unit_price =  $this->calculateUnitPrice($data['OutPut']['QuotationDetailCutList'], $cut_charges['OutPut']['UnitPrice']);
+
+        $item = $this->ApiObj->Get_Items('', '', $data['OutPut']['QuotationDetailList'][0]['ItemID'], '', '', '', '', '', '', '', '', '', '', '' );
+        $cut_piece_data = $this->cut_pieces_payload($data['OutPut']['QuotationDetailCutList']);
+        $item_json = [
+            "ItemID" => $item['Items'][0]['ItemID'] ?? "",
+            "ItemName" => $item['Items'][0]['ItemName'] ?? "",
+            "Dimensions" => $item['Items'][0]['Dimensions'] ?? "",
+            "BasePrice" => $item['Items'][0]['BasePrice'] ?? 0,
+            "ATSQ" => $item['Items'][0]['ATSQ'] ?? "",
+            "QualityDescription" => $item['Items'][0]['QualityDescription'] ?? "",
+            "IntroDate" => $item['Items'][0]['IntroDate'] ?? "",
+            "TimeStamp" => $item['Items'][0]['TimeStamp'] ?? "",
+            "UPC" => $item['Items'][0]['UPC'] ?? "",
+            "PriceLevel1" => $item['Items'][0]['PriceLevel1'] ?? 0,
+            "PriceLevel2" => $item['Items'][0]['PriceLevel2'] ?? 0,
+            "PriceLevel3" => $item['Items'][0]['PriceLevel3'] ?? 0,
+            "PriceLevel4" => $item['Items'][0]['PriceLevel4'] ?? 0,
+            "PriceLevel5" => $item['Items'][0]['PriceLevel5'] ?? 0,
+            "UDF1" => $item['Items'][0]['UDF1'] ?? "",
+            "UDF2" => $item['Items'][0]['UDF2'] ?? "",
+            "UDF3" => $item['Items'][0]['UDF3'] ?? "",
+            "UDF4" => $item['Items'][0]['UDF4'] ?? "",
+            "UDF5" => $item['Items'][0]['UDF5'] ?? "",
+            "UDF6" => $item['Items'][0]['UDF6'] ?? "",
+            "UDF7" => $item['Items'][0]['UDF7'] ?? "",
+            "UDF8" => $item['Items'][0]['UDF8'] ?? "",
+            "UDF9" => $item['Items'][0]['UDF9'] ?? "",
+            "UDF10" => $item['Items'][0]['UDF10'] ?? "",
+            "UDF11" => $item['Items'][0]['UDF11'] ?? "",
+            "UDF12" => $item['Items'][0]['UDF12'] ?? "",
+            "UDF13" => $item['Items'][0]['UDF13'] ?? "",
+            "UDF14" => $item['Items'][0]['UDF14'] ?? "",
+            "UDF15" => $item['Items'][0]['UDF15'] ?? "",
+            "UDF16" => $item['Items'][0]['UDF16'] ?? "",
+            "UDF17" => $item['Items'][0]['UDF17'] ?? "",
+            "UDF18" => $item['Items'][0]['UDF18'] ?? "",
+            "UDF19" => $item['Items'][0]['UDF19'] ?? "",
+            "UDF20" => $item['Items'][0]['UDF20'] ?? "",
+            "PhotoName" => $item['Items'][0]['PhotoName'] ?? "",
+            "Discontinued" => $item['Items'][0]['Discontinued'] ?? "",
+            "Source" => $item['Items'][0]['Source'] ?? "",
+            "IsDeleted" => $item['Items'][0]['IsDeleted'] ?? "",
+            "Weight" => $item['Items'][0]['Weight'] ?? "",
+            "QualityID" => $item['Items'][0]['QualityID'] ?? "",
+            "DesignID" => $item['Items'][0]['DesignID'] ?? "",
+            "ColorID" => $item['Items'][0]['ColorID'] ?? "",
+            "SizeID" => $item['Items'][0]['SizeID'] ?? "",
+            "ShapeID" => $item['Items'][0]['ShapeID'] ?? "",
+            "DesignDescription" => $item['Items'][0]['DesignDescription'] ?? "",
+            "ExternalID" => $item['Items'][0]['ExternalID'] ?? "",
+            "ProductType" => $item['Items'][0]['ProductType'] ?? "",
+            "DimentionalWeight" => $item['Items'][0]['DimentionalWeight'] ?? "",
+            "ImageName" => $item['Items'][0]['ImageName'] ?? "",
+            "Country" => $item['Items'][0]['Country'] ?? "",
+            "ProductDescription" => $item['Items'][0]['ProductDescription'] ?? "",
+            "CareInstructions" => $item['Items'][0]['CareInstructions'] ?? "",
+            "UDFFields" => $item['Items'][0]['UDFFields'] ?? [],
+            "NewArrivalExpiry" => $item['Items'][0]['NewArrivalExpiry'] ?? "",
+            "Clearence" => $item['Items'][0]['Clearence'] ?? "",
+            "TopSeller" => $item['Items'][0]['TopSeller'] ?? "",
+            "SpecialBuy" => $item['Items'][0]['SpecialBuy'] ?? "",
+            "Thickness" => $item['Items'][0]['Thickness'] ?? "",
+            "PileHeight" => $item['Items'][0]['PileHeight'] ?? "",
+            "HotBuy" => $item['Items'][0]['HotBuy'] ?? "",
+            "RugPad" => $item['Items'][0]['RugPad'] ?? "",
+            "MarketSpecial" => $item['Items'][0]['MarketSpecial'] ?? "",
+            "PrePad" => $item['Items'][0]['PrePad'] ?? "",
+            "ULTPad" => $item['Items'][0]['ULTPad'] ?? "",
+            "GroupPricing" => $item['Items'][0]['GroupPricing'] ?? "",
+            "VideoURL" => $item['Items'][0]['VideoURL'] ?? "",
+            "Length" => $item['Items'][0]['Length'] ?? "",
+            "Width" => $item['Items'][0]['Width'] ?? "",
+            "RegularDeliveryTime" => $item['Items'][0]['RegularDeliveryTime'] ?? "",
+            "ExpressDeliveryTime" => $item['Items'][0]['ExpressDeliveryTime'] ?? "",
+
+
+            "ImageNameArray" => ['https://media.momeni.com/Full_Img/'],
+            "ItemColor" => $item['Colors'][0]['Description'] ?? "",
+            "ItemColorImage" => "https://media.momeni.com/Full_Img/" ?? "",
+            "CutPieces" => $cut_piece_data ?? [],
+
+
+            "SQFTPrice" => $item_price ?? "",
+            "SQFTArea" => (string)$totalSqftArea ?? "",
+            "CutPieceID" => "",
+            "RollID" => $data['OutPut']['QuotationDetailList'][0]['RollID'] ?? "",
+            "SergingCharges" => "",
+            "SergingType" => "",
+            "location_id" => "",
+            "cut_type" => "",
+            "Serging" => ""
+        ];
+
+
+        $quote_cart_data = [
+            [
+                'id' => rand(0, 100),
+                'item_id' => $data['OutPut']['QuotationDetailList'][0]['ItemID'],
+                'item_customer_id' => $data['OutPut']['CustomerID'],
+                'item_name' => $item['Items'][0]['ItemName'],
+                'item_quantity' => 1,
+                'item_price' => $item_price,
+                'item_total' => $item_price,
+                'item_color' => $item['Colors'][0]['Description'],
+                'item_size' => $max_len_size,
+                'item_currency' => '$',
+                'item_image' => 'https://media.momeni.com/Full_Img/',
+                'item_eta' => null,
+                'item_data' => serialize(json_encode($item_json)),
+                'item_atsq' => 1,
+                'item_only_max_quantity' => false,
+                'oak_item' => 0,
+                'broadloom_item' => 1,
+                'oak_sku' => null,
+                'bd_roll_id' => $data['OutPut']['QuotationDetailList'][0]['RollID'],
+                'user_remarks' => null,
+                'cfa' => 0,
+                'remnant_shipable' => 0,
+                'unit_price' =>  $unit_price,
+                'sqft_area' => $totalSqftArea,
+                'rand_str' => '',
+                'is_bd_child' => 0,
+                'rugpad_price' => 0.00,
+                'order_length' => $data['OutPut']['QuotationDetailList'][0]['OrderLength'],
+            ]
+        ];
+        return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-shopping-cart', [
+            'quote_cart_data'     => json_decode(json_encode($quote_cart_data)),
+            'countries'           => $countries,
+            'cust_country'        => $data['OutPut']['Country'],
+            'cust_state'          => $data['OutPut']['State'],
+            'shipping_options'    => $shipping_options,
+            'shippings'           => $shippings,
+            'default_ship_via_id' => $default_ship_via_id,
+            'shipping_addresses' => isset($shipping_addresses) ? $shipping_addresses : [],
+            'payment_terms_list' => $payment_terms_list,
+            'customer_comment' => '',
+            'payment_term' =>  isset($customer_details['CustomerDetail']['PaymentTerm']) ? $customer_details['CustomerDetail']['PaymentTerm'] : '',
+            'payment_options' => []
+        ]);
     }
+
+    public function calculateMaxLenSize($cutpieces){
+        $maxLength = 0;
+        $maxWidth = 0;
+        foreach ($cutpieces as $cut) {
+            $length = (float)$cut['ActualLength'];
+            $width = (float)$cut['ActualWidth'];
+
+            if ($length > $maxLength) {
+                $maxLength = $length;
+            }
+
+            if ($width > $maxWidth) {
+                $maxWidth = $width;
+            }
+        }
+        $maxLengthFeet = floor($maxLength / 12);
+        $maxLengthInches = $maxLength % 12;
+        $maxWidthFeet = floor($maxWidth / 12);
+        $maxWidthInches = $maxWidth % 12;
+        return $max_len_size = "{$maxWidthFeet}'{$maxWidthInches}\" x {$maxLengthFeet}'{$maxLengthInches}\"";
+    }
+
+    public function calculateTotalSqftArea($cutpieces)
+    {
+        $totalSqftArea = 0;
+        foreach ($cutpieces as $cut) {
+            $length = (float)$cut['ActualLength'];
+            $width = (float)$cut['ActualWidth'];
+            $area = ($length / 12) * ($width / 12);
+            $totalSqftArea += $area;
+        }
+        return $totalSqftArea = round($totalSqftArea, 2);
+    }
+
+    public function calculateUnitPrice($cutpieces, $cut_charges)
+    {
+        $unit_price = 0;
+        foreach ($cutpieces as $cut) {
+            if($cut['SergingType'] != "0"){
+                $unit_price += (float)$cut_charges;
+            };
+        }
+        return $unit_price;
+    }
+
+    public function cut_pieces_payload($cutpieces){
+        $cutpiece_data = [];
+        foreach ($cutpieces as $cut) {
+            $cutpiece_data[] = [
+                'ItemID' => $cut['ItemID'],
+                'RollID' => $cut['RollID'],
+                'CutPieceID' => $cut['CutPieceID'],
+                'ATSLength' => $cut['ActualLength'],
+                'ATSWidth' => $cut['ActualWidth'],
+                'TotalUsedLength' => $cut['ActualLength'],
+                'LengthStatus' => $cut['Remnant'] == "Y" ? "R": "F",
+                'TempSalesOrderNo' => "",
+                'CPTempLine_No' => "",
+                'LengthID' => "",
+                'SergingType' => $cut['SergingType'],
+                'SergingCharges' => $cut['SergingCharges'],
+                'UserRemarks' => ""
+            ];
+        }
+        return $cutpiece_data;
+    }
+
 
     public function view_quote(Request $request){
         $reportGet = $this->ApiObj->Get_ViewDocumentsReport('', '', 'ViewBLQuotation', $request->QuotationNo);
@@ -220,5 +475,35 @@ class QuotesController extends DashboardController
 
         }
         return $options;
+    }
+
+    public function update_ats_prices($data, $item_id, $customer_id = 0)
+    {
+        $multiplier = 1;
+
+        if (
+            Auth::user() &&
+            strcmp(Auth::user()->getDataAttribute('cost-type', 'my-cost'), 'msrp') === 0 &&
+            Auth::user()->getDataAttribute('msrp-multiplier', 1)
+        ) {
+            $multiplier = Auth::user()->getDataAttribute('msrp-multiplier', 1);
+            $data['Price'] = number_format($data['Price'] * $multiplier, ConstantsController::ALLOWED_DECIMALS, '.', ',');
+        }
+
+        $data['OnlyMaxQuantity'] = (
+            CommonController::check_bit_field($data, 'Discontinued') ||
+            CommonController::check_bit_field($data, 'SpecialBuy') ||
+            CommonController::check_bit_field($data, 'Reviewed')
+        );
+
+        $data['ATSQtyOrig'] = $data['ATSQty'];
+        $data['ATSQty'] = $data['ATSQty'] - (new Cart())->get_item_quantity($item_id);
+        $data['ETADate'] = CommonController::get_date_format($data['ETADate']);
+        $cart_item = (new Cart())->get_item($item_id);
+
+        $data['ItemExistInCart'] = $cart_item ? ($cart_item->customer_id == $customer_id ? 1 : -1) : 0;
+
+        return $data;
+
     }
 }

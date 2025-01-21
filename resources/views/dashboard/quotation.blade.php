@@ -167,7 +167,11 @@ use Carbon\Carbon;
                                                         <td class="text-start">{{ $list['Reservation'] }}</td>
                                                         <td class="text-start">{{ $list['StatusDescription'] }}</td>
                                                         <td class="d-flex flex-row">
-                                                            <a class="btn btn-primary quotes-order-btn text-center mx-1" data-quoteno="{{ $list['QuotationNo'] }}">Place Order</a>
+                                                            <form id="quoteForm" action="/dashboard/order-quote" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" id="hiddenQuoteNo" name="QuotationNo" value="{{$list['QuotationNo']}}">
+                                                                <button type="submit" class="btn btn-primary quotes-order-btn place-order-call text-center mx-1">Place Order</button>
+                                                            </form>
                                                             <a class="btn btn-primary view-quote-btn text-center mx-1" data-quoteno="{{ $list['QuotationNo'] }}">View Quote</a>
                                                             <a class="void-quote-btn text-center mx-1" data-quoteno="{{ $list['QuotationNo'] }}">
                                                                 <i class="bi bi-x" style="color: red; font-size: 30px;"></i>
@@ -368,6 +372,9 @@ use Carbon\Carbon;
         pointer-events: none !important;
         cursor: not-allowed !important;
         color: gray !important;
+    }
+    .place-order-call{
+        min-height: 45px !important
     }
     @media only screen and (min-width: 1700px) and (max-width: 2000px){
         .submit-btn {
@@ -634,7 +641,7 @@ use Carbon\Carbon;
         }
 
         // Place order
-        $('.quotes-order-btn').on('click', function(e){
+        $('.quotes-order-btn1').on('click', function(e){
             e.preventDefault();
             var quote_id = $(this).data('quoteno');
             $.ajax({
