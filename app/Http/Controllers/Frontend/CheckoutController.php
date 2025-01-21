@@ -235,12 +235,16 @@ class CheckoutController extends FrontendController
             $payment_success = false;
             $itemDetail = [];
             $cartItems = [];
-            $requestDataArray = $request->all();
-            // dd($requestDataArray);
             $total_amount = 0;
+            $requestDataArray = $request->all();
+            $quoteCartData =  json_decode($requestDataArray['quoteCartData'], true );
+            // dump($requestDataArray);
+            // dump($quoteCartData);
+            // dump($quoteCartData[0]['item_customer_id']);
+            // dd('end');
 
             $headers = [
-                'CustomerID' => (new Cart())->get_active_cart_customer(),
+                'CustomerID' => !empty($quoteCartData) ? $quoteCartData[0]['item_customer_id'] : (new Cart())->get_active_cart_customer(),
                 'FirstName' => $requestDataArray['FirstName'],
                 'LastName' => $requestDataArray['LastName'],
                 'Email' => $requestDataArray['Email'],
@@ -251,7 +255,7 @@ class CheckoutController extends FrontendController
                 'Zip' => $requestDataArray['Zip'],
                 'ShipViaCode' => $requestDataArray['shipping_method'],
                 'OrderDate' => date("Y-m-d"),
-                'AddressType' => 'RESIDENTIAL' // if dropship
+                'AddressType' => 'RESIDENTIAL'
             ];
 
             if (isset($requestDataArray['country'])) {
@@ -259,12 +263,12 @@ class CheckoutController extends FrontendController
             }
 
             if (isset($requestDataArray['Country'])) {
-                $headers['Country'] = $requestDataArray['Country'];
+                $headers['Country'] = $requestDataArray['Country'] = 0 ? '' : $requestDataArray['Country'];
             }
 
             if (isset($requestDataArray['AddressID'])) {
                 $headers['ShipToCode'] = $requestDataArray['AddressID'];
-                $headers['AddressType'] = 'COMMERCIAL'; // if selected a given address
+                $headers['AddressType'] = 'COMMERCIAL';
             }
 
             if (isset($requestDataArray['shipping_cost'])) {
@@ -292,11 +296,9 @@ class CheckoutController extends FrontendController
             $TempSalesOrderNo = "";
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom']) {
                 $count = 0;
-                foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
-                    // dd($item);
+                if(!empty($quoteCartData)){
                     $count++;
-                    $item_data = json_decode(unserialize($item['item_data']));
-//                    $item_data = json_decode($item['item_data']);
+                    $item_data = json_decode(unserialize($quoteCartData[0]['item_data']));
                     $cut_pieces = [];
                     $order_length = 0;
                     $line = 0;
@@ -304,24 +306,24 @@ class CheckoutController extends FrontendController
                     $total_serging_charges = 0;
 
                     foreach ($item_data->CutPieces as $key => $cut_piece) {
-                        // if ($cut_piece->LengthStatus !== "R") {
                         if ($cut_piece->LengthStatus == "F") {
 
-                            $sqft =  round(($cut_piece->ATSWidth / 12) * ($cut_piece->ATSLength / 12), 2);
+                            $ats_len = intval($cut_piece->ATSLength);
+                            $ats_wid = intval($cut_piece->ATSWidth);
+                            $sqft =  round(($ats_wid / 12) * ($ats_len / 12), 2);
                             $totalSQFT += $sqft;
 
                             $temp = [];
-                            $temp['TempSalesOrderNo'] = $cut_piece->TempSalesOrderNo;
+                            $temp['TempSalesOrderNo'] = 1;
                             $temp['ItemID'] = $cut_piece->ItemID;
                             $temp['RollID'] = $cut_piece->RollID;
                             $temp['CutPieceID'] = $cut_piece->CutPieceID;
-                            $temp['ActualLength'] = $cut_piece->ATSLength;
-                            $temp['ActualWidth'] = $cut_piece->ATSWidth;
-                            $temp['ActualSQFT'] = $sqft;  // $cut_piece->ATSWidth * $cut_piece->ATSLength;
+                            $temp['ActualLength'] = $ats_len;
+                            $temp['ActualWidth'] = $ats_wid;
+                            $temp['ActualSQFT'] = $sqft;
                             $temp['CutType'] = $item_data->cut_type;
                             $temp['LocationID'] = $item_data->location_id;
                             $temp['Serging'] = !empty($cut_piece->SergingType) ? "Y" : "N";
-                          //  $temp['SergingCharges'] = !empty($cut_piece->SergingCharges) ? $cut_piece->SergingCharges : 0;
                             $temp['SergingCharges'] = (!empty($cut_piece->SergingCharges) && $temp['Serging'] == "Y") ? $cut_piece->SergingCharges : 0;
                             $temp['SergingType'] = empty($cut_piece->SergingType) ? "0" : $cut_piece->SergingType;
                             $temp['LineNo'] = ++$line;
@@ -332,49 +334,122 @@ class CheckoutController extends FrontendController
                             $cut_pieces[] = $temp;
                         }
                     }
-                    // dump($item);
-                    // dd('end');
 
                     $itemDetail[] = [
-                        'ItemID' => $item['item_id'],
-                        'OrderQty' => $item['item_quantity'],
-                        'UnitPrice' => $item['item_price'],
+                        'ItemID' => $quoteCartData[0]['item_id'],
+                        'OrderQty' => $quoteCartData[0]['item_quantity'],
+                        'UnitPrice' => $quoteCartData[0]['item_price'],
                         'SQFTPrice' => $item_data->SQFTPrice,
-                        // 'SQFTArea' => $totalSQFT,
-                        'SQFTArea'   => $item['sqft_area'],
-                        'CutPieceID' => $item_data->CutPieceID,
-                        'RollID' => $item['bd_roll_id'],//$item_data->RollID,
+                        'SQFTArea'   => $quoteCartData[0]['sqft_area'],
+                        'CutPieceID' => "",
+                        'RollID' => $quoteCartData[0]['bd_roll_id'],
                         'SergingCharges' => $total_serging_charges,
                         'SergingType' => null,
                         'Line_No' => $count,
                         "Discount" => 0,
                         "WHSID" => null,
                         "Remarks" => null,
-                        "UserRemarks" => $item['user_remarks'],
+                        "UserRemarks" => $quoteCartData[0]['user_remarks'],
                         "ETA_Date" => "\/Date(-62135596800000)\/",
-                        'OrderLength' => $order_length,
-                        "CFA" => $item['cfa'] == 1 ? "Y" : "N",
-                        'ParentLine_NO' => $item['is_bd_child'] == 1 ?  ($count - 1) : '',
-                        "IsRemnantShipable" => $item['remnant_shipable'] == 1 ? "Y" : "N",
+                        'OrderLength' => $quoteCartData[0]['order_length'],
+                        "CFA" => $quoteCartData[0]['cfa'] == 1 ? "Y" : "N",
+                        'ParentLine_NO' => $quoteCartData[0]['is_bd_child'] == 1 ?  ($count - 1) : '',
+                        "IsRemnantShipable" => $quoteCartData[0]['remnant_shipable'] == 1 ? "Y" : "N",
                         'CutPieces' => $cut_pieces,
-                        'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : '',
-                        'SKU'       => $item['oak_sku']];
+                        'MarkFor' => '',
+                        'SKU'       => null,
+                    ];
 
                     $cartItems[] = [
-                        'Image' => str_replace(' ', '%20', $item['item_image']),
-                        'ItemID' => $item['item_id'],
-                        'Color' => $item['item_color'],
-                        'Size' => $item['item_size'],
-                        'OrderQty' => $item['item_quantity'],
-                        'UnitPrice' => $item['item_price'],
-                        'SubTotal' => $item['item_total'],
-                        'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+                        'Image' => '',
+                        'ItemID' => $quoteCartData[0]['item_id'],
+                        'Color' => $quoteCartData[0]['item_color'],
+                        'Size' => $quoteCartData[0]['item_size'],
+                        'OrderQty' => $quoteCartData[0]['item_quantity'],
+                        'UnitPrice' => $quoteCartData[0]['item_price'],
+                        'SubTotal' => $quoteCartData[0]['item_total'],
+                        'MarkFor' => '',
 
                     ];
 
-                    $total_amount += $item['item_price'];
+                    $total_amount += $quoteCartData[0]['item_price'];
+                }else{
+                    foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
+                        $count++;
+                        $item_data = json_decode(unserialize($item['item_data']));
+                        $cut_pieces = [];
+                        $order_length = 0;
+                        $line = 0;
+                        $totalSQFT = 0;
+                        $total_serging_charges = 0;
+
+                        foreach ($item_data->CutPieces as $key => $cut_piece) {
+                            if ($cut_piece->LengthStatus == "F") {
+
+                                $sqft =  round(($cut_piece->ATSWidth / 12) * ($cut_piece->ATSLength / 12), 2);
+                                $totalSQFT += $sqft;
+
+                                $temp = [];
+                                $temp['TempSalesOrderNo'] = $cut_piece->TempSalesOrderNo;
+                                $temp['ItemID'] = $cut_piece->ItemID;
+                                $temp['RollID'] = $cut_piece->RollID;
+                                $temp['CutPieceID'] = $cut_piece->CutPieceID;
+                                $temp['ActualLength'] = $cut_piece->ATSLength;
+                                $temp['ActualWidth'] = $cut_piece->ATSWidth;
+                                $temp['ActualSQFT'] = $sqft;
+                                $temp['CutType'] = $item_data->cut_type;
+                                $temp['LocationID'] = $item_data->location_id;
+                                $temp['Serging'] = !empty($cut_piece->SergingType) ? "Y" : "N";
+                                $temp['SergingCharges'] = (!empty($cut_piece->SergingCharges) && $temp['Serging'] == "Y") ? $cut_piece->SergingCharges : 0;
+                                $temp['SergingType'] = empty($cut_piece->SergingType) ? "0" : $cut_piece->SergingType;
+                                $temp['LineNo'] = ++$line;
+                                $temp['UserRemarks'] = $cut_piece->UserRemarks;
+
+                                $order_length += $cut_piece->ATSLength;
+                                $total_serging_charges += $temp['SergingCharges'] * ((round($cut_piece->ATSWidth / 12, 2) + round($cut_piece->ATSLength / 12, 2)) * 2);
+                                $cut_pieces[] = $temp;
+                            }
+                        }
+
+                        $itemDetail[] = [
+                            'ItemID' => $item['item_id'],
+                            'OrderQty' => $item['item_quantity'],
+                            'UnitPrice' => $item['item_price'],
+                            'SQFTPrice' => $item_data->SQFTPrice,
+                            'SQFTArea'   => $item['sqft_area'],
+                            'CutPieceID' => $item_data->CutPieceID,
+                            'RollID' => $item['bd_roll_id'],//$item_data->RollID,
+                            'SergingCharges' => $total_serging_charges,
+                            'SergingType' => null,
+                            'Line_No' => $count,
+                            "Discount" => 0,
+                            "WHSID" => null,
+                            "Remarks" => null,
+                            "UserRemarks" => $item['user_remarks'],
+                            "ETA_Date" => "\/Date(-62135596800000)\/",
+                            'OrderLength' => $order_length,
+                            "CFA" => $item['cfa'] == 1 ? "Y" : "N",
+                            'ParentLine_NO' => $item['is_bd_child'] == 1 ?  ($count - 1) : '',
+                            "IsRemnantShipable" => $item['remnant_shipable'] == 1 ? "Y" : "N",
+                            'CutPieces' => $cut_pieces,
+                            'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : '',
+                            'SKU'       => $item['oak_sku']];
+
+                        $cartItems[] = [
+                            'Image' => str_replace(' ', '%20', $item['item_image']),
+                            'ItemID' => $item['item_id'],
+                            'Color' => $item['item_color'],
+                            'Size' => $item['item_size'],
+                            'OrderQty' => $item['item_quantity'],
+                            'UnitPrice' => $item['item_price'],
+                            'SubTotal' => $item['item_total'],
+                            'MarkFor' => isset($requestDataArray['sidemark']) && isset($requestDataArray['sidemark'][$item['item_id']]) ? $requestDataArray['sidemark'][$item['item_id']] : ''
+
+                        ];
+
+                        $total_amount += $item['item_price'];
+                    }
                 }
-                // $headers['Line_No'] = $count;
             } else {
                 foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
                     array_push($itemDetail, [
@@ -409,7 +484,7 @@ class CheckoutController extends FrontendController
             if (!$payment_response['success']) {
                 return response()->json($payment_response);
             }
-          //  dd($headers, $itemDetail);
+            // dd($headers, $itemDetail);
             prr(" :: Place Order API CALL DATA :: ");
             prr($headers, $itemDetail);
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] == 1) {
@@ -445,7 +520,9 @@ class CheckoutController extends FrontendController
                     ]
                 );
 
-                $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', '', true);
+                if(empty($quoteCartData)){
+                    $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', '', true);
+                }
                 $successMsg = $result['Message'];
                 preg_match("/\[[^\]]*\]/", $successMsg, $matches);
                 $matched_string = $matches[0];

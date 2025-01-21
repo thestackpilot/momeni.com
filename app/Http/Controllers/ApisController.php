@@ -860,4 +860,16 @@ class ApisController extends RootController
             return $this->Post_API_Signature('ViewBLSalesRepReportDetail', 'View BL Sales Rep Report Detail', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
         }
     }
+
+    public function GetQuotationOrderDetailForOrderPlace($QuotationNo, $UserNo)
+    {   $sale_rep_id = Auth::user()->is_customer ? '' : Auth::user()->customer_id;
+        $customer_id = Auth::user()->is_customer ? Auth::user()->customer_id : '';
+        $post_array = [
+            'QuotationNo' =>  $QuotationNo,
+            'CustomerID' =>  $customer_id,
+            'SalesRepID'  =>  $sale_rep_id,
+            'UserNo'      =>  $UserNo,
+        ];
+        return $this->Post_API_Signature( 'GetQuotationOrderDetailForOrderPlace', 'Get Quotation Order Detail For Order Place', $post_array, [], 1, 1, 0) ;
+    }
 }
