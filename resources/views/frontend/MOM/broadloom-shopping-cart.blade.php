@@ -76,8 +76,6 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @dump($quoteCartData)
-                                            @dump($cart->items)
                                             @if (count((array) $cart->items) || !empty($quoteCartData))
                                                 @php  $subPriceTotal = 0;  $priceTotal = 0; $sergingTotal = 0;  $cuttingTotal = 0; $rugPadTotal = 0;  @endphp
                                                 @if(empty($quoteCartData))
