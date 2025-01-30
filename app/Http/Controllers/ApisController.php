@@ -872,4 +872,9 @@ class ApisController extends RootController
         ];
         return $this->Post_API_Signature( 'GetQuotationOrderDetailForOrderPlace', 'Get Quotation Order Detail For Order Place', $post_array, [], 1, 1, 0) ;
     }
+
+    public function Get_AllBLItemsForOrderPlace()
+    {
+        return $this->Post_API_Signature( 'Get_AllBLItemsForOrderPlace', 'Get All BL Items For Order Place', [], [], 1, 1, 1);
+    }
 }
