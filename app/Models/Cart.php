@@ -63,96 +63,178 @@ class Cart extends Model
         ->whereIn( 'customer_id', $customers )
         ->get();
 
-        $max_quantities = [];
+       // $max_quantities = [];
 
-        if ( $cart_items )
-        {
+        // if ( $cart_items )
+        // {
+        //     $items = [];
+
+        //     foreach ( $cart_items as $cart_item )
+        //     {
+        //         $items[$cart_item->item_id] = $cart_item->item_id;
+        //     }
+
+        //     if ( $items )
+        //     {
+        //         $item_prices = $ApiObj->Get_GetMultipleItemsPrices( $this->get_active_cart_customer(), join( ',', $items ) );
+        //         dump($item_prices);
+        //         if ( $item_prices['Success'] )
+        //         {
+
+        //             foreach ( $item_prices['ItemPrices'] as $item_price )
+        //             {
+        //                 $item_quantity                         = $this->get_item_quantity( $item_price['ItemID'] );
+        //                 $item_atsq                             = isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0;
+        //                 $item_atsq                             = $item_atsq && ($item_atsq != $item_quantity)  ? ( $item_price['ATSQ'] - ( $item_quantity ? $item_quantity : 0 ) ) : $item_atsq;
+        //                 $max_quantities[$item_price['ItemID']] = [
+        //                     'ATSQ'            => $item_atsq,
+        //                     'item_atsq'       => isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0,
+        //                     'OnlyMaxQuantity' => CommonController::check_bit_field( $item_price, 'Discontinued' ) ||
+        //                         CommonController::check_bit_field( $item_price, 'SpecialBuy' ) ||
+        //                         CommonController::check_bit_field( $item_price, 'Reviewed' )
+        //                 ];
+
+        //             }
+
+        //         }
+        //     }
+
+        // }
+
+        // foreach ( $cart_items as $cart_item )
+        // {
+        //     $cart['items'][] = array(
+        //         "id"                     => $cart_item->id,
+        //         "item_id"                => $cart_item->item_id,
+        //         "item_customer_id"       => $cart_item->customer_id,
+        //         "item_name"              => $cart_item->item_name,
+        //         "item_quantity"          => $cart_item->item_quantity,
+        //         "item_price"             => number_format( $cart_item->item_price, ConstantsController::ALLOWED_DECIMALS, '.', '' ),
+        //         "item_total"             => number_format( $cart_item->item_price * $cart_item->item_quantity, ConstantsController::ALLOWED_DECIMALS, '.', '' ),
+        //         "item_color"             => $cart_item->item_color,
+        //         "item_size"              => $cart_item->item_size,
+        //         "item_currency"          => $cart_item->item_currency,
+        //         "item_image"             => $cart_item->item_image,
+        //         "item_eta"               => $cart_item->item_eta,
+        //         "item_data"              => $cart_item->item_data,
+        //         "item_atsq"              => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['ATSQ'] : 9999,
+        //         "item_only_max_quantity" => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['OnlyMaxQuantity'] : false,
+        //         "oak_item"              => $cart_item->oak_item,
+        //         "broadloom_item"        => $cart_item->item_broadloom,
+        //         "oak_sku"               =>  $cart_item->oak_sku,
+        //         "bd_roll_id"            => $cart_item->bd_roll_id,
+        //         "oak_sku"               =>  $cart_item->oak_sku,
+        //         "user_remarks"          =>  $cart_item->user_remarks,
+        //         "cfa"                   =>  $cart_item->cfa,
+        //         "remnant_shipable"      =>  $cart_item->remnant_shipable,
+        //         "unit_price"            =>  $cart_item->unit_price,
+        //         "sqft_area"             =>  $cart_item->sqft_area,
+        //         "rand_str"              => $cart_item->rand_str,
+        //         "is_bd_child"           => $cart_item->is_bd_child,
+        //         "rugpad_price"          => $cart_item->rugpad_price,
+        //     );
+        //     if($cart_item->item_broadloom){
+        //        if($cart_item->is_bd_child != 1){
+        //         $cart_count += $cart_item->item_quantity;
+        //         $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
+        //        }
+        //     }else{
+        //         $cart_count += $cart_item->item_quantity;
+        //         $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
+        //     }
+        //     $cart['item_broadloom'] = $cart_item->item_broadloom;
+        //     $cart['cart_currency'] = $cart_item->item_currency;
+        // }
+
+        // $cart['cart_count']    = $cart_count;
+        // $cart['cart_total']    = number_format( $cart_total, ConstantsController::ALLOWED_DECIMALS, '.', ',' );
+        // $cart['cart_currency'] = '$';
+        // return $cart;
+
+        if ($cart_items) {
             $items = [];
-
-            foreach ( $cart_items as $cart_item )
-            {
+            foreach ($cart_items as $cart_item) {
                 $items[$cart_item->item_id] = $cart_item->item_id;
             }
 
-            if ( $items )
-            {
-                $item_prices = $ApiObj->Get_GetMultipleItemsPrices( $this->get_active_cart_customer(), join( ',', $items ) );
+            $max_quantities = [];
+            if ($items) {
+                // Consider caching this response
+                $item_prices = $ApiObj->Get_GetMultipleItemsPrices($this->get_active_cart_customer(), join(',', $items));
 
-                if ( $item_prices['Success'] )
-                {
+                if (!empty($item_prices['Success']) && !empty($item_prices['ItemPrices'])) {
+                    foreach ($item_prices['ItemPrices'] as $item_price) {
+                        $item_quantity = $this->get_item_quantity($item_price['ItemID']);
+                        $item_atsq = !empty($item_price['ATSQ']) ? $item_price['ATSQ'] : 0;
+                        $item_atsq = ($item_atsq && ($item_atsq != $item_quantity)) ? ($item_atsq - ($item_quantity ?: 0)) : $item_atsq;
 
-                    foreach ( $item_prices['ItemPrices'] as $item_price )
-                    {
-                        $item_quantity                         = $this->get_item_quantity( $item_price['ItemID'] );
-                        $item_atsq                             = isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0;
-                        $item_atsq                             = $item_atsq && ($item_atsq != $item_quantity)  ? ( $item_price['ATSQ'] - ( $item_quantity ? $item_quantity : 0 ) ) : $item_atsq;
                         $max_quantities[$item_price['ItemID']] = [
                             'ATSQ'            => $item_atsq,
-                            'item_atsq'       => isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0,
-                            'OnlyMaxQuantity' => CommonController::check_bit_field( $item_price, 'Discontinued' ) ||
-                                CommonController::check_bit_field( $item_price, 'SpecialBuy' ) ||
-                                CommonController::check_bit_field( $item_price, 'Reviewed' )
+                            'item_atsq'       => !empty($item_price['ATSQ']) ? $item_price['ATSQ'] : 0,
+                            'OnlyMaxQuantity' => CommonController::check_bit_field($item_price, 'Discontinued') ||
+                                CommonController::check_bit_field($item_price, 'SpecialBuy') ||
+                                CommonController::check_bit_field($item_price, 'Reviewed')
                         ];
-
                     }
-
                 }
             }
 
-        }
+            $cart_total = 0;
+            $cart_count = 0;
+            foreach ($cart_items as $cart_item) {
+                $item_id = $cart_item->item_id;
+                $item_price = $cart_item->item_price;
+                $item_quantity = $cart_item->item_quantity;
+                $is_broadloom = $cart_item->item_broadloom;
+                $is_bd_child = $cart_item->is_bd_child;
 
-        foreach ( $cart_items as $cart_item )
-        {
-            $cart['items'][] = array(
-                "id"                     => $cart_item->id,
-                "item_id"                => $cart_item->item_id,
-                "item_customer_id"       => $cart_item->customer_id,
-                "item_name"              => $cart_item->item_name,
-                "item_quantity"          => $cart_item->item_quantity,
-                "item_price"             => number_format( $cart_item->item_price, ConstantsController::ALLOWED_DECIMALS, '.', '' ),
-                "item_total"             => number_format( $cart_item->item_price * $cart_item->item_quantity, ConstantsController::ALLOWED_DECIMALS, '.', '' ),
-                "item_color"             => $cart_item->item_color,
-                "item_size"              => $cart_item->item_size,
-                "item_currency"          => $cart_item->item_currency,
-                "item_image"             => $cart_item->item_image,
-                "item_eta"               => $cart_item->item_eta,
-                "item_data"              => $cart_item->item_data,
-                "item_atsq"              => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['ATSQ'] : 9999,
-                "item_only_max_quantity" => isset( $max_quantities[$cart_item->item_id] ) ? $max_quantities[$cart_item->item_id]['OnlyMaxQuantity'] : false,
-                "oak_item"              => $cart_item->oak_item,
-                "broadloom_item"        => $cart_item->item_broadloom,
-                "oak_sku"               =>  $cart_item->oak_sku,
-                "bd_roll_id"            => $cart_item->bd_roll_id,
-                "oak_sku"               =>  $cart_item->oak_sku,
-                "user_remarks"          =>  $cart_item->user_remarks,
-                "cfa"                   =>  $cart_item->cfa,
-                "remnant_shipable"      =>  $cart_item->remnant_shipable,
-                "unit_price"            =>  $cart_item->unit_price,
-                "sqft_area"             =>  $cart_item->sqft_area,
-                "rand_str"              => $cart_item->rand_str,
-                "is_bd_child"           => $cart_item->is_bd_child,
-                "rugpad_price"          => $cart_item->rugpad_price,
-//                "ATSQ"                   => isset( $item_price['ATSQ'] ) && $item_price['ATSQ'] ? $item_price['ATSQ'] : 0
-            );
-           // dump($cart_item);
-            if($cart_item->item_broadloom){
-               if($cart_item->is_bd_child != 1){
-                $cart_count += $cart_item->item_quantity;
-                $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
-               }
-            }else{
-                $cart_count += $cart_item->item_quantity;
-                $cart_total += ( $cart_item->item_price * $cart_item->item_quantity );
+                $cart['items'][] = [
+                    "id"                     => $cart_item->id,
+                    "item_id"                => $item_id,
+                    "item_customer_id"       => $cart_item->customer_id,
+                    "item_name"              => $cart_item->item_name,
+                    "item_quantity"          => $item_quantity,
+                    "item_price"             => number_format($item_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
+                    "item_total"             => number_format($item_price * $item_quantity, ConstantsController::ALLOWED_DECIMALS, '.', ''),
+                    "item_color"             => $cart_item->item_color,
+                    "item_size"              => $cart_item->item_size,
+                    "item_currency"          => $cart_item->item_currency,
+                    "item_image"             => $cart_item->item_image,
+                    "item_eta"               => $cart_item->item_eta,
+                    "item_data"              => $cart_item->item_data,
+                    "item_atsq"              => $max_quantities[$item_id]['ATSQ'] ?? 9999,
+                    "item_only_max_quantity" => $max_quantities[$item_id]['OnlyMaxQuantity'] ?? false,
+                    "oak_item"               => $cart_item->oak_item,
+                    "broadloom_item"         => $is_broadloom,
+                    "oak_sku"                => $cart_item->oak_sku,
+                    "bd_roll_id"             => $cart_item->bd_roll_id,
+                    "user_remarks"           => $cart_item->user_remarks,
+                    "cfa"                    => $cart_item->cfa,
+                    "remnant_shipable"       => $cart_item->remnant_shipable,
+                    "unit_price"             => $cart_item->unit_price,
+                    "sqft_area"              => $cart_item->sqft_area,
+                    "rand_str"               => $cart_item->rand_str,
+                    "is_bd_child"            => $is_bd_child,
+                    "rugpad_price"           => $cart_item->rugpad_price,
+                ];
+
+                if (!$is_broadloom || $is_bd_child != 1) {
+                    $cart_count += $item_quantity;
+                    $cart_total += ($item_price * $item_quantity);
+                }
+
+                $cart['item_broadloom'] = $is_broadloom;
+                $cart['cart_currency'] = $cart_item->item_currency;
             }
-            $cart['item_broadloom'] = $cart_item->item_broadloom;
-            $cart['cart_currency'] = $cart_item->item_currency;
+
+            // Format cart total once
+            $cart['cart_count'] = $cart_count;
+            $cart['cart_total'] = number_format($cart_total, ConstantsController::ALLOWED_DECIMALS, '.', ',');
+            $cart['cart_currency'] = '$';
+
+            return $cart;
         }
 
-        $cart['cart_count']    = $cart_count;
-        $cart['cart_total']    = number_format( $cart_total, ConstantsController::ALLOWED_DECIMALS, '.', ',' );
-        $cart['cart_currency'] = '$';
-
-        return $cart;
     }
 
     public function check_cart_items($broadloom_item = false) {

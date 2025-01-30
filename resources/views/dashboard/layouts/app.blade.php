@@ -18,7 +18,7 @@ use App\Http\Controllers\CommonController;
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @yield('head_scripts')
-    
+
     @if($active_theme_json->general->use_theme_header)
     <link rel="stylesheet" href="{{asset('/LR/css/vendor/vendor.min.css')}}">
     <link rel="stylesheet" href="{{asset('/LR/css/style.css')}}?v=0.9">
@@ -46,6 +46,9 @@ use App\Http\Controllers\CommonController;
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" /> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css" integrity="sha512-TQQ3J4WkE/rwojNFo6OJdyu6G8Xe9z8rMrlF9y7xpFbQfW5g8aSWcygCQ4vqRiJqFsDsE1T6MoAOMJkFXlrI9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 </head>
 
 <body class="{{$active_theme -> theme_abrv}} {{$active_theme_json->general->use_theme_header ? 'theme-header' : ''}}">
@@ -134,7 +137,7 @@ use App\Http\Controllers\CommonController;
             if ( typeof $(this).attr('maxlength') !== "undefined" && this.value.length > $(this).attr('maxlength')) {
                 this.value = this.value.slice(0, (this.value.indexOf('.') > -1) ? parseFloat($(this).attr('maxlength')) + 1 : $(this).attr('maxlength'));
             }
-            
+
             if ( typeof $(this).attr('max') !== 'undefined' && parseFloat($(this).attr('max')) < parseFloat(this.value) ) {
                 $(this).val($(this).attr('max') >= 0 ? $(this).attr('max') : 0);
             }
@@ -384,7 +387,7 @@ use App\Http\Controllers\CommonController;
             $(document).on('click','.btn-close',function(){
                 $('.alert').hide();
             });
-            
+
             $('.datepicker').datepicker({
                 format: "{{isset($active_theme_json->general->date_format) && $active_theme_json->general->date_format ? 'mm/dd/yyyy' : 'yyyy-mm-dd'}}",
                 startDate: "{{isset($datepicker_dates) && $datepicker_dates['min'] ? $datepicker_dates['min'] : '-10Y'}}",

@@ -105,4 +105,33 @@ class DashboardController extends RootController
         return $options;
     }
 
+    public function get_broadloom_customers_dropdown_options( $include_all = 1 )
+    {
+        $options = [];
+        if ( $include_all )
+        {
+            $options[] = [
+                'value' => '',
+                'label' => 'All'
+            ];
+        }
+
+        if ( Auth::user() && Auth::user()->sales_rep_customers )
+        {
+            $sales_rep_customers = json_decode( Auth::user()->sales_rep_customers, true );
+            foreach ( $sales_rep_customers['Customers'] as $customer )
+            {
+                if($customer['BroadloomCustomer'] != "N"){
+                    $options[] = [
+                        'value' => $customer['CustomerID'],
+                        'label' => "{$customer['CompanyName']} ({$customer['CustomerID']})"
+                    ];
+                }
+            }
+
+        }
+
+        return $options;
+    }
+
 }
