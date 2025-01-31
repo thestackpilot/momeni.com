@@ -143,6 +143,12 @@
                         </a>
                     </div>
                     <div class="user-settings-block1 p-0">
+                        <a href="{{route('dashboard.place_bl_order')}}" class="user-settings">
+                            <div>Place Broadloom Order</div>
+                            <i class="icon-cart-plus"></i>
+                        </a>
+                    </div>
+                    <div class="user-settings-block1 p-0">
                         <a href="{{route('dashboard.vieworder')}}" class="user-settings">
                             <div>View Orders</div>
                             <i class="icon-file-check"></i>

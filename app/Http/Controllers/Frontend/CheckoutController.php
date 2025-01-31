@@ -258,6 +258,14 @@ class CheckoutController extends FrontendController
                 'AddressType' => 'RESIDENTIAL'
             ];
 
+            if (isset($requestDataArray['Phone'])) {
+                $headers['Phone'] = $requestDataArray['Phone'];
+            }
+
+            if (isset($requestDataArray['ship_complete'])) {
+                $headers['ShipComplete'] = $requestDataArray['ship_complete'] == "on" ? "Y" : "N";
+            }
+
             if (isset($requestDataArray['country'])) {
                 $headers['Country'] = $requestDataArray['country'];
             }

@@ -277,7 +277,8 @@ use App\Http\Controllers\CommonController;
                             </a>
                         </div>
                         <div class="product-content">
-                            <h6 class="prodect-title"><a href="{{ $design['LinkUrl'] }}">{{$design['Description']}}</a></h6>
+                            {{-- <h6 class="prodect-title"><a href="{{ $design['LinkUrl'] }}">{{$design['Description']}}</a></h6> --}}
+                            <h6 class="prodect-title"><a href="{{ $design['LinkUrl'] }}">{{$design['ColorDescription']}}</a></h6>
                         </div>
                     </div>
                     @endforeach
