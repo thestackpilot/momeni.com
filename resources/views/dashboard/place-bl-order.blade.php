@@ -37,11 +37,6 @@ body{
 .badge {
     font-size: 0.9rem !important;
 }
-/* .broadloom-badge {
-    padding: 10px 19px;
-    position: relative;
-    margin: 5px;
-} */
 .add-piece-btn{
     background: #282828;
     border: 2px solid #282828;
@@ -77,7 +72,6 @@ body{
     display: inline-block;
     cursor: pointer;
 }
-
 .mytooltip .tooltiptext {
     visibility: hidden;
     width: 190px;
@@ -112,6 +106,24 @@ body{
     border-width: 5px;
     border-style: solid;
     border-color: #333 transparent transparent transparent;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 700 !important;
+}
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.cfa-remnat-rug{
+    flex-direction: row;
+}
+@media (max-width: 767px) {
+.cfa-remnat-rug{
+    flex-direction: column;
+}
 }
 </style>
 @endsection
@@ -230,7 +242,7 @@ body{
                                 <select name="roll_id" id="rollDropdown" class="form-control" disabled>
                                 </select>
                             </div>
-                            <div class="col-md-3 col-6">
+                            <div class="col-md-3 col-12">
                                 <div class="mb-3">
                                     <label class="form-label">Cut Length</label>
                                     <span class="Tlength-max-error d-none" style="font-size:0.6rem; font-weight:800; color:red;"></span>
@@ -250,7 +262,7 @@ body{
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-6">
+                            <div class="col-md-3 col-12">
                                 <div class="mb-3">
                                     <label class="form-label">Cut Width   <span class="Twidth-max-error d-none" style="font-size:0.6rem; font-weight:800; color:red;"></span></label>
                                     <div>
@@ -313,7 +325,7 @@ body{
                         <div class="row mt-3">
                             <div class="col-lg-9 col-md-9 col-6 text-start" id="cut_piece_parent">
                             </div>
-                            <div class="col-lg-3 col-md-3 col-6 text-end">
+                            <div class="col-lg-3 col-md-3 col-12 text-end">
                                 <button class="add-piece-btn broadloom-btns add-cut-piece-btn mb-3" id="cut_piece_btn">
                                     Add Cut Piece
                                 </button>
@@ -322,26 +334,26 @@ body{
 
                         <hr />
 
-                        <div class="row mt-3">
-                            <div class="col-3">
+                        <div class="row mt-3 cfa-remnat-rug">
+                            <div class="col-lg-3 col-md-3 col-12">
                                 <div class="form-group my-2">
                                     <label for="" class="mx-1"><input type="checkbox" name="" id="cfa_check">
                                     <strong>CFA Required</strong></label>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-3 col-md-3 col-12">
                                 <div class="form-group my-2">
                                     <label for="" class="mx-1"><input type="checkbox" name="" id="remnant_check">
                                     <strong>Remnant Required</strong></label>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-3 col-md-3 col-12">
                                 <div class="form-group my-2 rug-checkbox">
                                     <label for="" class="mx-1"><input type="checkbox" name="" id="add_rugpad">
                                     <strong>Rug Pad</strong></label>
                                 </div>
                             </div>
-                            <div class="col-3 text-end">
+                            <div class="col-lg-3 col-md-3 col-12 text-end">
                                 <button class="btn btn-primary add_cart">ADD TO CART</button>
                             </div>
                         </div>
@@ -562,7 +574,7 @@ body{
                                         <div class="col-md-6 font-weight-bold">Total:</div>
                                         <div class="col-md-6 font-weight-bold text-right cart_total_final">{{ $cart->cart_currency }}{{  number_format($dashboardTotal, 2)}}</div>
                                     </div>
-                                    <button class="btn btn-primary my-2 mx-2 cutpiece-section d-none" id="proceed_to_order">
+                                    <button class="btn btn-primary my-2 mx-2 cutpiece-section d-none" id="proceed_to_order" style="min-width: 225px !important;">
                                         Place Order <i class="fa fa-long-arrow-right"></i>
                                     </button>
                                 </div>
@@ -1961,24 +1973,40 @@ function refreshAjaxPage(){
         success: function (response) {
             var new_html = $($.parseHTML(response));;
             $('#cart-detail-area').html(new_html.find('#cart-detail-area').html());
-            if ($('[name="customer_id"]').is('select')) {
-                if ($('[name="customer_id"]').val() === $('.sales_rep_customer_check').val()) {
-                    $('[name="customer_id"]').prop('disabled', true);
-                }else{
-                    $('[name="customer_id"]').prop('disabled', false);
-                }
+
+            var $customerSelect = $('[name="customer_id"]');
+            var selectedValue = $customerSelect.val();
+            var salesRepValue = $('.sales_rep_customer_check').val();
+            var matchFound = false;
+            if ($customerSelect.is('select')) {
+                $customerSelect.find('option').each(function() {
+                    if ($(this).val() === salesRepValue) {
+                        matchFound = true;
+                        $customerSelect.val(salesRepValue);
+                        return false;
+                    }
+                });
+                $customerSelect.prop('disabled', matchFound);
             }
-        },
+        }
     });
 }
 
 function SalesRepCustomerCartCheck(){
-    if ($('[name="customer_id"]').is('select')) {
-        if ($('[name="customer_id"]').val() === $('.sales_rep_customer_check').val()) {
-            $('[name="customer_id"]').prop('disabled', true);
-        }else{
-            $('[name="customer_id"]').prop('disabled', false);
-        }
+    var $customerSelect = $('[name="customer_id"]');
+    var selectedValue = $customerSelect.val();
+    var salesRepValue = $('.sales_rep_customer_check').val();
+    var matchFound = false;
+
+    if ($customerSelect.is('select')) {
+        $customerSelect.find('option').each(function() {
+            if ($(this).val() === salesRepValue) {
+                matchFound = true;
+                $customerSelect.val(salesRepValue);
+                return false;
+            }
+        });
+        $customerSelect.prop('disabled', matchFound);
     }
 }
 
