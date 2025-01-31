@@ -120,9 +120,17 @@ body{
 .cfa-remnat-rug{
     flex-direction: row;
 }
+#proceed_to_order{
+    min-width: 225px !important;
+}
 @media (max-width: 767px) {
 .cfa-remnat-rug{
     flex-direction: column;
+}
+}
+@media (max-width: 1366px) {
+#proceed_to_order{
+    min-width: 180px !important;
 }
 }
 </style>
@@ -574,7 +582,7 @@ body{
                                         <div class="col-md-6 font-weight-bold">Total:</div>
                                         <div class="col-md-6 font-weight-bold text-right cart_total_final">{{ $cart->cart_currency }}{{  number_format($dashboardTotal, 2)}}</div>
                                     </div>
-                                    <button class="btn btn-primary my-2 mx-2 cutpiece-section d-none" id="proceed_to_order" style="min-width: 225px !important;">
+                                    <button class="btn btn-primary my-2 mx-2 cutpiece-section d-none" id="proceed_to_order">
                                         Place Order <i class="fa fa-long-arrow-right"></i>
                                     </button>
                                 </div>
