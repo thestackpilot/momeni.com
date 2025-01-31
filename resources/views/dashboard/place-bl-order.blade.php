@@ -868,8 +868,8 @@ $(document).ready(function() {
             success: function (response) {
 
                 console.log('response here', response);
-
-                $("#sq-ft").val(response.data['Price']);
+                var formattedprice= parseFloat(response.data['Price']).toFixed(2);
+                $("#sq-ft").val(formattedprice);
                 updatePrices();
                 $.ajax({
                     url: "{{ route('broadloom.removeAllCutPiece') }}",
