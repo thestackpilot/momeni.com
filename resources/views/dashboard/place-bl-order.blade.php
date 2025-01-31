@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 @extends('dashboard.layouts.app')
 @section('title','Dashboard | Place Broadloom Order')
 @section('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 body{
@@ -132,6 +133,24 @@ body{
 .broadloom-order:hover{
     background: #282828 !important;
 }
+.select2-container .select2-selection--single {
+    font-size: 14px !important;
+    color: #333333 !important;
+    height: 40px !important;
+    border: 1px solid #e4e4e4 !important;
+    border-radius: 1px !important;
+    background: transparent !important;
+}
+.select2-container .select2-selection--single .select2-selection__rendered{
+    padding: 10px !important
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    top: 75% !important;
+}
+.label-without-form{
+    font-size: 18px !important;
+    color: #333333 !important;
+}
 @media (max-width: 767px) {
 .cfa-remnat-rug{
     flex-direction: column;
@@ -246,7 +265,7 @@ body{
                     <div class="row col-md-12">
                         <div class="row">
                             <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
-                                <label class="form-label">Item ID</label>
+                                <label class="label-without-form">Item ID</label>
                                 <select name="item_id" id="itemDropdown" class="form-control">
                                     <option value="">Select Item Id</option>
                                     @foreach($itemIds as $item)
@@ -255,13 +274,13 @@ body{
                                 </select>
                             </div>
                             <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
-                                <label class="form-label">Roll ID</label>
+                                <label class="label-without-form">Roll ID</label>
                                 <select name="roll_id" id="rollDropdown" class="form-control" disabled>
                                 </select>
                             </div>
                             <div class="col-md-3 col-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Cut Length</label>
+                                    <label class="label-without-form">Cut Length</label>
                                     <span class="Tlength-max-error d-none" style="font-size:0.6rem; font-weight:800; color:red;"></span>
                                     <div>
                                         <input type="hidden" class="form-control Tlength-ats-max" id="Tlength-ats-max" value="">
@@ -281,7 +300,7 @@ body{
                             </div>
                             <div class="col-md-3 col-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Cut Width   <span class="Twidth-max-error d-none" style="font-size:0.6rem; font-weight:800; color:red;"></span></label>
+                                    <label class="label-without-form">Cut Width   <span class="Twidth-max-error d-none" style="font-size:0.6rem; font-weight:800; color:red;"></span></label>
                                     <div>
                                         <input type="hidden" class="form-control Twidth-ats-max" id="Twidth-ats-max" value="">
                                         <input type="hidden" class="form-control TwidthInch-ats-max" id="TwidthInch-ats-max" value="">
@@ -302,16 +321,16 @@ body{
 
                         <div class="row">
                             <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
-                                <label class="form-label">SQ-FT Price ($)</label>
+                                <label class="label-without-form">SQ-FT Price ($)</label>
                                 <input type="text" name="q-ft" id="sq-ft" value="" class="form-control" disabled>
                                 <input type="hidden" class="form-control" id="ats-qty" value="" disabled="" style="text-align:right;">
                             </div>
                             <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
-                                <label class="form-label">SQ-YRD Price ($)</label>
+                                <label class="label-without-form">SQ-YRD Price ($)</label>
                                 <input type="text" name="sq-yrd" id="sq-yrd" value="" class="form-control" disabled>
                             </div>
                             <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
-                                <label class="form-label">EXT Price ($)</label>
+                                <label class="label-without-form">EXT Price ($)</label>
                                 <input type="text" name="sq-ext" id="sq-ext" class="form-control" disabled>
                                 <input type="hidden" class="form-control" id="without-format-sq-ext" value="" disabled>
                             </div>
@@ -320,7 +339,7 @@ body{
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for=""><input type="checkbox" name="" id="surging_check">
+                                    <label class=""><input type="checkbox" name="" id="surging_check">
                                     <strong> With Serging </strong></label>
                                     <select name="" id="surging_options" class="form-control" disabled="disabled">
                                         <option value="0" charges="">Select Option</option>
@@ -334,7 +353,7 @@ body{
 
                         <div class="row">
                             <div class="col-md-12">
-                                <label class="form-label">Customer Instructions</label>
+                                <label class="label-without-form">Customer Instructions</label>
                                 <textarea name="" id="cust-inst" class="form-control" rows="20" style="height:100px;"></textarea>
                             </div>
                         </div>
@@ -439,7 +458,7 @@ body{
                                                                     <div class="mt-1 row" style="display:flex; align-items: center;">
                                                                         <div class="col-md-2 col-lg-2 p-0 font-weight--bold"> Design:</div>
                                                                         <div class="col-md-10 col-lg-10 p-0 font-weight--normal" style="align-items: center;">
-                                                                            {{ $item_data->ItemName }} {{substr($item_data->ColorID, 0, 3)}}
+                                                                            {{ Str::after($item_data->ItemName, 'DESIGN: ') }} {{substr($item_data->ColorID, 0, 3)}}
                                                                         </div>
                                                                         <div class="col-md-10 col-lg-10 p-0" style="align-items: center;">
                                                                             <span class="cfa-rem {{$item->cfa != 1 ? 'd-none' : ''}}">CFA Required</span>
@@ -610,6 +629,7 @@ body{
 </div>
 @endsection
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script>
 let input_lenght_ats = 0;
 let added_cut_pieces = [];
@@ -621,6 +641,11 @@ SalesRepCustomerCartCheck();
 
 
 $(document).ready(function() {
+
+    $('#itemDropdown').select2();
+    $('#rollDropdown').select2();
+    $("select[name='customer_id']").select2();
+    $("select[name='ship_via_id']").select2();
 
     $(document).on('change', '.select-address', function() {
         $('.address-card').addClass('d-none');
@@ -687,7 +712,7 @@ $(document).ready(function() {
             var selectedAddress = '{{old("address_id") ? old("address_id") : "" }}';
             addresses += '<div class="row mb-4">';
             addresses += '<div class="col-md-12">';
-            addresses += '<label>Address</label>';
+            addresses += '<label class="label-without-form">Address</label>';
             addresses += '<select class="form-control select-address">';
             data.addresses.ShipToAddresses.forEach((address) => {
                 addresses += '<option ' + (selectedAddress == address.AddressID ? 'selected' : '') + ' value="' + address.AddressID + '">' + address.FirstName + ' ' + address.LastName + '</option>';
@@ -1039,6 +1064,8 @@ $(document).ready(function() {
             $('#surging_options').prop('disabled', true);
             $('#surging_options').val(0);
             $('#surging_charges').val("");
+            $('#Twidth').val( $('#Twidth-ats-max').val() );
+            $('#TwidthInch').val( $('#TwidthInch-ats-max').val() );
         }
         $('#Twidth').prop('disabled', !isChecked).attr('title', isChecked ? '' : 'Select Serging to Cut by Width');
         $('#TwidthInch').prop('disabled', !isChecked).attr('title', isChecked ? '' : 'Select Serging to Cut by Width');
@@ -1119,6 +1146,13 @@ $(document).ready(function() {
 });
 
 function add_cut_pieces() {
+    if($('#surging_check').is(':checked') && $('#surging_options').val() == 0){
+        toastr.error('Kindly choose serging type', {
+            hideDuration: 10000,
+            closeButton: true,
+        });
+        return true;
+    }
     if(!$(".Tlength-max-error").hasClass("d-none") || !$(".Twidth-max-error").hasClass("d-none")){
         toastr.error('Lenght/Width must not be greater than ATS ROLL', {
             hideDuration: 10000,
@@ -1280,6 +1314,8 @@ function add_cut_pieces() {
                 $('#surging_options').val('0')
                 $('#surging_charges').val('');
                 $("#sergingtypeno").val('');
+                $('#Twidth').val( $('#Twidth-ats-max').val() );
+                $('#TwidthInch').val( $('#TwidthInch-ats-max').val() );
 
                 if(data?.cut_piece?.OutPut?.AddCutPieces?.[0]?.TotalUsedLength){
                     var totalUsedLength  = data['cut_piece']['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
@@ -2029,3 +2065,4 @@ function SalesRepCustomerCartCheck(){
 
 </script>
 @endsection
+

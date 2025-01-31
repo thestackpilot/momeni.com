@@ -321,7 +321,7 @@
                                             @if(isset($item['ULTPad']) && $item['ULTPad'])
                                             <label for="" class="mx-1">
                                                 <input type="checkbox" name="" id="add_rugpad">
-                                                <strong> Add a Rugpad </strong>
+                                                <strong> Add a Rug Pad </strong>
                                             </label>
                                             @endif
                                             <button class="add-to-cart-broadloom-btn broadloom-btns" id="add_to_cart">
@@ -1151,6 +1151,7 @@
                                                             $('#add_rugpad').prop('disabled', false).prop('checked', false);
                                                             $('#Twidth').prop('disabled', true);
                                                             $('#TwidthInch').prop('disabled', true);
+                                                            $('#cfa_check').prop('disabled', false);
                                                             $.ajax({
                                                                 url: "{{ route('broadloom.removeAllCutPiece') }}",
                                                                 data: {
@@ -1163,8 +1164,6 @@
                                                                     console.log('all cut response on change', response);
                                                                 }
                                                             })
-                                                            // window.location.reload();
-                                                            // $('.quickCart-opener').trigger('click');
                                                         });
                                                     } else {
                                                         refreshUser('quick-cart', function () {
@@ -1277,8 +1276,7 @@
                                             $('#add_rugpad').prop('disabled', false).prop('checked', false);
                                             $('#Twidth').prop('disabled', true);
                                             $('#TwidthInch').prop('disabled', true);
-                                            //window.location.reload();
-                                            // $('.quickCart-opener').trigger('click');
+                                            $('#cfa_check').prop('disabled', false);
                                         });
                                     } else {
                                         refreshUser('quick-cart', function () {
@@ -1498,6 +1496,13 @@
         let added_cut_pieces = [];
 
         function add_cut_pieces() {
+            if($('#surging_check').is(':checked') && $('#surging_options').val() == 0){
+                toastr.error('Kindly choose serging type', {
+                    hideDuration: 10000,
+                    closeButton: true,
+                });
+                return true;
+            }
             if(!$("#Tlength-max-error").hasClass("d-none") || !$("#Tlengthinch-max-error").hasClass("d-none") || !$("#Twidth-max-error").hasClass("d-none") || !$("#Twidthinch-max-error").hasClass("d-none")){
                 toastr.error('Lenght/Width must not be greater than ATS ROLL', {
                     hideDuration: 10000,
@@ -1682,6 +1687,8 @@
                         $('#surging_options').val('0')
                         $('#surging_charges').val('');
                         $("#sergingtypeno").val('');
+                        $('#Twidth').val( $('#Twidth-ats-max').val() );
+                        $('#TwidthInch').val( $('#TwidthInch-ats-max').val() );
                         //totalSqftPrice = (totalMaxLen * totalAddWid);
 
                         if(data?.cut_piece?.OutPut?.AddCutPieces?.[0]?.TotalUsedLength){
@@ -1947,10 +1954,11 @@
                     $('#surging_options').prop('disabled', false);
                 } else {
                     $('#surging_options').prop('disabled', true);
-                    // $('#surging_options').val($('#surging_options').val());
                     $('#sergingtypeno').val('');
                     $('#surging_options').val(0);
                     $('#surging_charges').val("");
+                    $('#Twidth').val( $('#Twidth-ats-max').val() );
+                    $('#TwidthInch').val( $('#TwidthInch-ats-max').val() );
                 }
             });
 
