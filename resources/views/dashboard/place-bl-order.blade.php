@@ -798,8 +798,8 @@ $(document).ready(function() {
                     $('#item_json').val(response.item_json);
                     $('#rug_pad_id').val(response.rug_pad);
                     item_object = JSON.parse($('#item_json').val());
-                    if($('#rug_pad_id').val != ''){
-                        $('.rug-checkbox').show();
+                    if($('#rug_pad_id').val() != ''){
+                        $('#add_rugpad').prop('disabled', false);
                         $.post('{{ route('frontend.item.ats') }}', {
                             _token: '{{ csrf_token() }}',
                             item_id: $('#rug_pad_id').val(),
@@ -808,7 +808,7 @@ $(document).ready(function() {
                             $('#rug_pad_price').val(response.data.Price);
                         });
                     }else{
-                        $('.rug-checkbox').hide();
+                        $('#add_rugpad').prop('disabled', true);
                     }
 
                 },
