@@ -20,6 +20,12 @@ body{
     font-size: 16px !important;
     font-style: normal !important;
 }
+.font-ropa-sans{
+    font-family: "Ropa Sans", sans-serif !important;
+}
+.font-prox{
+    font-family: 'ProximaNovaFont' !important;
+}
 .table thead th{
     font-family: 'ProximaNovaFont' !important;
 }
@@ -321,16 +327,16 @@ body{
 
                         <div class="row">
                             <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
-                                <label class="label-without-form">SQ-FT Price ($)</label>
+                                <label class="label-without-form">SQ-FT Price <span class="font-prox">($)</span></label>
                                 <input type="text" name="q-ft" id="sq-ft" value="" class="form-control" disabled>
                                 <input type="hidden" class="form-control" id="ats-qty" value="" disabled="" style="text-align:right;">
                             </div>
                             <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
-                                <label class="label-without-form">SQ-YRD Price ($)</label>
+                                <label class="label-without-form">SQ-YRD Price <span class="font-prox">($)</span></label>
                                 <input type="text" name="sq-yrd" id="sq-yrd" value="" class="form-control" disabled>
                             </div>
                             <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
-                                <label class="label-without-form">EXT Price ($)</label>
+                                <label class="label-without-form">EXT Price <span class="font-prox">($)</span></label>
                                 <input type="text" name="sq-ext" id="sq-ext" class="form-control" disabled>
                                 <input type="hidden" class="form-control" id="without-format-sq-ext" value="" disabled>
                             </div>
@@ -397,7 +403,13 @@ body{
                     <hr />
 
                     {{-- CART SECTION --}}
-                    <div class="account-content p-5 {{ count((array) $cart->items) ? '' : 'd-none' }}" id="cart-detail-area">
+                    @php  $is_bd_item = false; @endphp
+                    @foreach ($cart->items as $row)
+                        @php
+                            $is_bd_item = $row->broadloom_item == 1 ? true : false;
+                        @endphp
+                    @endforeach
+                    <div class="account-content p-5 {{ count((array) $cart->items) && $is_bd_item ? '' : 'd-none' }}" id="cart-detail-area">
                         <div class="row mt-4 mb-5">
                             <div class="col-md-9 col-sm-12">
                                 <div class="table-responsive">
@@ -436,7 +448,7 @@ body{
                                                         $sum_surging_charges = 0;
                                                         $serging_charges = 0;
                                                     @endphp
-                                                    @if($item->is_bd_child != 1)
+                                                    @if($item->broadloom_item && $item->is_bd_child != 1)
                                                     <tr>
                                                         <th class="" scope="row">
                                                             <input type="hidden" name="sales_rep_customer_check" class="sales_rep_customer_check" value="{{$item->item_customer_id}}">
@@ -534,7 +546,7 @@ body{
                                                                 $priceTotal += $item->item_price;
                                                                 number_format($priceTotal, 2);
                                                             @endphp
-                                                            {{ $item->item_currency }}{{ number_format($item->item_price, 2) }}</td>
+                                                            <span class="font-prox">$</span>{{ number_format($item->item_price, 2) }}</td>
                                                         <td class="align-content-center">
                                                             @php
                                                                 $sergingTotal += $sum_surging_charges;
@@ -542,16 +554,16 @@ body{
                                                                 $cuttingTotal += $item->unit_price;
                                                                 number_format($cuttingTotal, 2);
                                                             @endphp
-                                                            {{ $item->item_currency }}{{ number_format($sum_surging_charges + $item->unit_price, 2) }}
+                                                            <span class="font-prox">$</span>{{ number_format($sum_surging_charges + $item->unit_price, 2) }}
                                                         </td>
                                                         <td class="align-content-center">
                                                             @php
                                                                 $rugPadTotal += $item->rugpad_price;
                                                                 number_format($rugPadTotal, 2);
                                                             @endphp
-                                                            {{ $item->item_currency }}{{ number_format($item->rugpad_price, 2) }}
+                                                            <span class="font-prox">$</span>{{ number_format($item->rugpad_price, 2) }}
                                                         </td>
-                                                        <td class="align-content-center">{{ $item->item_currency }}<span
+                                                        <td class="align-content-center"><span class="font-prox">$</span><span
                                                                 id="item_total_price">{{ number_format($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total, 2)  }}
                                                             @php
                                                                 $dashboardTotal += ($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total);
@@ -588,7 +600,7 @@ body{
                                     <p class="mt-2 mb-2 text-center fa-2x">Cart Totals</p>
                                     <div class="row mt-3">
                                         <div class="col-md-7">Cut Cost:</div>
-                                        <div class="col-md-5 text-right"><span id="item_subtotal_price" class="cart_total">{{ $cart->cart_currency }}{{ number_format($priceTotal, 2) }}</span></div>
+                                        <div class="col-md-5 text-right cart_total">{{ $cart->cart_currency }}{{ number_format($priceTotal, 2) }}</div>
                                     </div>
                                     <hr style="border-top-color: whitesmoke;">
                                     <div class="row">
