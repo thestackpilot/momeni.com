@@ -142,7 +142,6 @@
                             <i class="icon-cart-plus"></i>
                         </a>
                     </div>
-                    @dump(Auth::user()->broadloom_user)
                     @if(Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1)
                     <div class="user-settings-block1 p-0">
                         <a href="{{route('dashboard.place_bl_order')}}" class="user-settings">
