@@ -1311,6 +1311,8 @@
                         "can-skip": $('.go-to-confirmation').attr('data-skip'),
                         "save-update-card": $('.save-update-card').is(':checked')
                     };
+                    _formData['quoteCartData']  = "";
+
 
                     $('.payment-card .card-key-details input').each(function() {
                         if (typeof $(this).val().length !== 'undefined' && $(this).val().length >
