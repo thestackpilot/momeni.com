@@ -360,6 +360,7 @@ use App\Http\Controllers\CommonController;
         if (confirm("Are you sure to remove this Item?"))
         {
             var itemNode = typeof isMobile !== "undefined" && isMobile ? "#mob_"+itemId+"__"+customerId : "#"+itemId+"__"+customerId;
+            itemNode = itemNode.replace(/([ #;&,.+*~\':"!^$[\]()=>|/@])/g, '\\$1');
             $(itemNode).addClass('all-muted');
             $(itemNode+" #updating-cart").removeClass('d-none');
             if (typeof hideQuantity !== "undefined" && hideQuantity)
