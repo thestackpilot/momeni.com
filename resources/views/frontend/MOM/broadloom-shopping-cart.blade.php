@@ -339,6 +339,7 @@
                                                 <input type="hidden" id="sergingTotal" value="{{ number_format($sergingTotal, 2) }}">
                                                 <input type="hidden" name="inside-hidden-subtotal" id="inside-hidden-subtotal" value="{{ number_format( $subPriceTotal, 2)}}">
                                                 <input type="hidden" name="quote-cart-data" id="quote-cart-data" value="{{ json_encode($quoteCartData) }}">
+                                                <input type="hidden" name="quote-no" id="quote-no" value="{{ !empty($quoteCartData) ? $quoteCartData[0]->quotation_no : "" }}">
                                             @else
                                                 <tr>
                                                     No Item in Cart
@@ -1306,7 +1307,9 @@
                     var formData = $('#customer_info').serialize();
                     $('#customer_info').find(':disabled').prop('disabled', true);
                     var quoteCartData = $('#quote-cart-data').val();
+                    var quoteNo = $('#quote-no').val();
                     formData += '&quoteCartData=' + encodeURIComponent(quoteCartData);
+                    formData += '&quoteNo=' + encodeURIComponent(quoteNo);
                     console.log('form data', formData);
                     $.ajax({
                         url: '{{route("frontend.checkout.place_order")}}',

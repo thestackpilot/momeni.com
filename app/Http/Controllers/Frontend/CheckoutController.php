@@ -301,6 +301,10 @@ class CheckoutController extends FrontendController
                 $headers['DeliveryTime'] = date('H:i:s', strtotime($requestDataArray['ship_date']));
             }
 
+            if (isset($requestDataArray['quoteNo']) && !empty($requestDataArray['quoteNo'])) {
+                $headers['QuotationNo'] = $requestDataArray['quoteNo'];
+            }
+
             $TempSalesOrderNo = "";
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom']) {
                 $count = 0;
