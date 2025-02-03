@@ -656,8 +656,8 @@ $(document).ready(function() {
 
     $('#itemDropdown').select2();
     $('#rollDropdown').select2();
-    $("select[name='customer_id']").select2();
-    $("select[name='ship_via_id']").select2();
+    // $("select[name='customer_id']").select2();
+    // $("select[name='ship_via_id']").select2();
 
     $(document).on('change', '.select-address', function() {
         $('.address-card').addClass('d-none');
