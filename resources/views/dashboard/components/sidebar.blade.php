@@ -18,12 +18,12 @@ use App\Http\Controllers\CommonController;
             <li> <a href="{{route($item['slug'])}}" class="{{ str_contains(url()->current(),route($item['slug']))  ?'active': $item['slug'] }}"> {{$item['label']}} </a></li>
         @elseif($item['slug'] !== "dashboard.paymentoptions" )
             <li>
-                @if($item['slug'] == "dashboard.quotation" && (Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1))
+                @if(in_array($item['slug'], ["dashboard.quotation", "dashboard.viewblorder", "dashboard.place_bl_order"])  && (Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1))
                     <a href="{{ route($item['slug']) }}"
                     class="{{ str_contains(url()->current(), route($item['slug'])) ? 'active' : $item['slug'] }}">
                         {{ $item['label'] }}
                     </a>
-                @elseif($item['slug'] != "dashboard.quotation")
+                @elseif(!in_array($item['slug'], ["dashboard.quotation", "dashboard.viewblorder", "dashboard.place_bl_order"]))
                     <a href="{{ route($item['slug']) }}"
                     class="{{ str_contains(url()->current(), route($item['slug'])) ? 'active' : $item['slug'] }}">
                         {{ $item['label'] }}

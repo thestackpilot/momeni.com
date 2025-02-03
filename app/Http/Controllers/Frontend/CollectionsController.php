@@ -14,19 +14,17 @@ class CollectionsController extends FrontendController
         parent::__construct();
     }
 
-    public function addCollectionUrls( $collections, $id, $type, $with_title = false )
+    public function addCollectionUrls( $collections, $id, $type, $with_title = false, $collectionID = "" )
     {
         $cols    = array();
         $counter = 0;
 
         if ( isset( $collections[$type] ) )
         {
-
             foreach ( $collections[$type] as $collection )
             {
                 $url_link    = '';
                 $link_filter = array( 'Filters' => array() );
-
                 foreach ( $collection as $key => $value )
                 {
 
@@ -37,13 +35,26 @@ class CollectionsController extends FrontendController
                         {
                             if($id == "BroadLoom" && $type == "Collections"){
                                 $key = "Category";
+                                $link_filter['Filters'][] = array(
+                                    "FilterID" => $key,
+                                    "Values"   => is_array( $value ) ? $value : [$value]
+                                );
+                            }else if($id == "BroadLoom" && $type == "Colors"){
+                                $link_filter['Filters'][] = array(
+                                    "FilterID" => "Shades_Of_Color",
+                                    "Values"   => is_array( $value ) ? $value : [$value]
+                                );
+                                $link_filter['Filters'][] = array(
+                                    "FilterID" => "Category",
+                                    "Values"   => [$collectionID]
+                                );
                             }else{
                                 $key = str_replace( 'ID', '', trim( $key ) );
+                                $link_filter['Filters'][] = array(
+                                    "FilterID" => $key,
+                                    "Values"   => is_array( $value ) ? $value : [$value]
+                                );
                             }
-                            $link_filter['Filters'][] = array(
-                                "FilterID" => $key,
-                                "Values"   => is_array( $value ) ? $value : [$value]
-                            );
                         }
 
                     }
@@ -85,7 +96,8 @@ class CollectionsController extends FrontendController
     {
         // die(print_r($this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) ));
         $hash        = md5( json_encode( ['id' => join( '~', [$id, $type, $filter] ), 'method' => 'Get_'.$type, 'theme' => $this->active_theme->id] ) );
-        $collections = $this->addCollectionUrls( $this->ApiObj->Get_Collections_With_Filters( $id, $type, CommonController::escape_string( base64_decode( $filter ), 1 ) ), $id, $type, true );
+        $collectionID = json_decode(CommonController::escape_string( base64_decode( $filter )), true)['Filters'][0]['Values'][0];
+        $collections = $this->addCollectionUrls( $this->ApiObj->Get_Collections_With_Filters( $id, $type, CommonController::escape_string( base64_decode( $filter ), 1 ) ), $id, $type, true, $collectionID );
 
         $updated_content = $this->content_model->get_content( $this->active_theme->id, $hash );
 
@@ -147,7 +159,7 @@ class CollectionsController extends FrontendController
     public function index( $id, $type )
     {
         $hash            = md5( json_encode( ['id' => join( '~', [$id, $type, ''] ), 'method' => 'Get_'.$type, 'theme' => $this->active_theme->id] ) );
-        $collections     = $this->addCollectionUrls( $this->ApiObj->Get_Collections( $id, $type ), $id, $type, true );
+        $collections     = $this->addCollectionUrls( $this->ApiObj->Get_Collections( $id, $type ), $id, $type, true, "" );
         $updated_content = $this->content_model->get_content( $this->active_theme->id, $hash );
 
         // prr( $id );
