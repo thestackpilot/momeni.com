@@ -42,6 +42,7 @@ use App\Http\Controllers\CommonController;
                                     <i class="bi bi-chevron-right d-none lr-theme-only"></i>
                                 </div>
                             </a>
+                            @if(Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1)
                             <a href="{{route('dashboard.place_bl_order')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-bag.svg')}}" class="icon-img" style="width:23.69px;" />
@@ -49,6 +50,7 @@ use App\Http\Controllers\CommonController;
                                     <i class="bi bi-chevron-right d-none lr-theme-only"></i>
                                 </div>
                             </a>
+                            @endif
                             <a href="{{route('dashboard.quotation')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-bag.svg')}}" class="icon-img" style="width:23.69px;" />
@@ -70,6 +72,7 @@ use App\Http\Controllers\CommonController;
                                     <i class="bi bi-chevron-right d-none lr-theme-only"></i>
                                 </div>
                             </a>
+                            @if(Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1)
                             <a href="{{route('dashboard.viewblorder')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-status.svg')}}" class="icon-img" style="width:26.87px;" />
@@ -77,6 +80,7 @@ use App\Http\Controllers\CommonController;
                                     <i class="bi bi-chevron-right d-none lr-theme-only"></i>
                                 </div>
                             </a>
+                            @endif
                             <a href="{{$active_theme_json->general->use_company_credit ? route('dashboard.companycredit', ['rtype' => 'invoices']) : route('dashboard.invoice')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-invoice.svg')}}" class="icon-img" style="width:26.44px;" />
