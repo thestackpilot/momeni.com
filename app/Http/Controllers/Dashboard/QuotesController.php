@@ -325,6 +325,7 @@ class QuotesController extends DashboardController
                 'is_bd_child' => 0,
                 'rugpad_price' => 0.00,
                 'order_length' => $data['OutPut']['QuotationDetailList'][0]['OrderLength'],
+                'quotation_no' => $QuotationNo,
             ]
         ];
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-shopping-cart', [
