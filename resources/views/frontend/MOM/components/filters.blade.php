@@ -82,7 +82,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                             <span class="mb-1 badge">
                                 {{str_replace('_', ' ', $filter['FilterID'])}} : {{$value['value']}}
                                 <button class = "remove-filer-cross" type="button" class="close" aria-label="Dismiss">
-                                    @if($filter['FilterID'] === 'Generic_Size')
+                                    @if($filter['FilterID'] === 'Generic_Size' || $filter['FilterID'] == "RollWidth")
                                     <input type="hidden" class="remove-filter-value" value="{{$filter['FilterID']}} : {{str_replace('"', '\\"', $value['value'])}}" }}>
                                     @else
                                     <input type="hidden" class="remove-filter-value" value="{{$filter['FilterID']}} : {{$value['value']}}" }}>
@@ -143,7 +143,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                         @foreach($filter['Values'] as $value)
                         <li>
                             <div class="form-check">
-                                @if($filter['FilterID'] === 'Generic_Size')
+                                @if($filter['FilterID'] === 'Generic_Size' || $filter['FilterID'] == "RollWidth")
                                 <input class="form-check-input sidebar-filters-input" type="checkbox" name="{{$filter['FilterID']}}" value="{{str_replace('"', '\\"', $value['value']) }}" {{($value['checked'])?'checked = ':''}} {{($value['checked'])?'"checked"':''}} id="flexCheckChecked-{{md5($filter['Description'].$value['value'])}}">
                                 @else
                                 <input class="form-check-input sidebar-filters-input" type="checkbox" name="{{$filter['FilterID']}}" value="{{$value['value']}}" {{($value['checked'])?'checked = ':''}} {{($value['checked'])?'"checked"':''}} id="flexCheckChecked-{{md5($filter['Description'].$value['value'])}}">
