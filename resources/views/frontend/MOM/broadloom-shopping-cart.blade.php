@@ -829,7 +829,7 @@
                                                             class="col-md-2 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->unit_price + $sum_surging_charges + $item->rugpad_price,  2)}}</div>
                                                     </div>
                                                     <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
-                                                @endphp
+                                                @endif
                                                 @endforeach
                                             @endif
                                             @if(isset($item))
