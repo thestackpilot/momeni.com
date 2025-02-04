@@ -50,7 +50,7 @@
             </li>
         @endif
 
-        @if($pages -> all_pages -> sections -> main_top_menu -> menu_6_caption !== null && Auth::user())
+        @if($pages -> all_pages -> sections -> main_top_menu -> menu_6_caption !== null && Auth::user() && (Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1))
         <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_url}}"
                               class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_caption}}</a>
 

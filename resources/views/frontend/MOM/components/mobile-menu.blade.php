@@ -79,7 +79,7 @@ use App\Http\Controllers\CommonController;
 
                         </li>
 
-                        @if(Auth::user())
+                        @if(Auth::user() && (Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1))
                         <li class="has-children"> <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_url}}">{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_caption}}</a>
 
                         </li>
