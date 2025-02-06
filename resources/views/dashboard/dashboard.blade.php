@@ -10,10 +10,12 @@ use App\Http\Controllers\CommonController;
 @extends('dashboard.layouts.app')
 @section('title','Dashboard | Home')
 @section('content')
+@php
+    $hideBadges = Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1 ? '' : 'd-none';
+@endphp
 <div class="wrapper admin-side">
     @include('dashboard.components.header')
     <main class="main-content">
-
         <section class="collection-section">
             <div class="container">
 
@@ -43,7 +45,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
                             </a>
                             @if(Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1)
-                            <a href="{{route('dashboard.place_bl_order')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
+                            <a href="{{route('dashboard.place_bl_order')}}" class="card text-white bg-success mb-3 {{$hideBadges}}" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-bag.svg')}}" class="icon-img" style="width:23.69px;" />
                                     <h5 class="card-title font-ropa">Place Broadloom Order</h5>
@@ -51,13 +53,15 @@ use App\Http\Controllers\CommonController;
                                 </div>
                             </a>
                             @endif
-                            <a href="{{route('dashboard.quotation')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
+                            @if(Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1)
+                            <a href="{{route('dashboard.quotation')}}" class="card text-white bg-success mb-3 {{$hideBadges}}" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-bag.svg')}}" class="icon-img" style="width:23.69px;" />
                                     <h5 class="card-title font-ropa">Custom Rug Quote</h5>
                                     <i class="bi bi-chevron-right d-none lr-theme-only"></i>
                                 </div>
                             </a>
+                            @endif
                             <a href="{{url('/')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-box.svg')}}" class="icon-img" style="width:28.74px;" />
@@ -73,7 +77,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
                             </a>
                             @if(Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1)
-                            <a href="{{route('dashboard.viewblorder')}}" class="card text-white bg-success mb-3" style="max-width: 18rem;">
+                            <a href="{{route('dashboard.viewblorder')}}" class="card text-white bg-success mb-3 {{$hideBadges}}" style="max-width: 18rem;">
                                 <div class="card-body text-center">
                                     <img src="{{asset('Dashboard/images/icon-dashboard-status.svg')}}" class="icon-img" style="width:26.87px;" />
                                     <h5 class="card-title font-ropa">Check Broadloom Order Status</h5>
