@@ -188,7 +188,7 @@ body{
                 @endif
                 @if (Session::has('message') && Session::get('message')['type'] == 'success')
                     <script>
-                        localStorage.removeItem('customer_po');
+                        localStorage.clear();
                     </script>
                 @endif
 
@@ -246,35 +246,33 @@ body{
                                 $is_bd_item = $row->broadloom_item == 1 ? true : false;
                             @endphp
                         @endforeach
-                        @if(  count((array) $cart->items) &&  $is_bd_item)
-                            <div class="row addresses-section">
-                            <div class="d-flex justify-content-center m-5">
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
+                        <div class="row addresses-section">
+                        <div class="d-flex justify-content-center m-5">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
                             </div>
-                            </div>
-                            <div class="other-address d-none" style="">
-                            <input type="hidden" name="address_id" />
-                            <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
-                                <input type="text" data-required="true" class="form-control bg-white " name="first_name" value="{{old('first_name')}}" aria-describedby="FirstName" maxlength="35" placeholder="First Name*">
-                                <input type="text" data-required="true" class="form-control bg-white" name="last_name" value="{{old('last_name')}}" aria-describedby="LastName" maxlength="35" placeholder="Last Name*">
-                            </div>
-                            <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
-                                <input type="email" data-required="true" class="form-control bg-white" name="email" value="{{old('email')}}" aria-describedby="Email" maxlength="60" placeholder="Email*">
-                            </div>
-                            <div class="d-flex flex-column">
-                                <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('address1')}}" name="address1" aria-describedby="Address" maxlength="35" placeholder="Address*">
-                                <input type="text" class="form-control bg-white mb-3" value="{{old('address2')}}" name="address2" aria-describedby="Apartment" maxlength="35" placeholder="Apartment, suite, etc. (optional)">
-                                <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('state')}}" name="state" maxlength="50" aria-describedby="State" placeholder="State*">
-                                <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('city')}}" name="city" maxlength="35" aria-describedby="City" placeholder="City*">
-                                <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('country')}}" name="country" maxlength="35" aria-describedby="Country" placeholder="Country*">
-                            </div>
-                            <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
-                                <input type="text" data-required="true" class="form-control bg-white" value="{{old('postal_code')}}" name="postal_code" maxlength="10" aria-describedby="PostalCode" placeholder="Postal Code*">
-                            </div>
-                            </div>
-                        @endif
+                        </div>
+                        </div>
+                        <div class="other-address d-none" style="">
+                        <input type="hidden" name="address_id" />
+                        <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
+                            <input type="text" data-required="true" class="form-control bg-white " name="first_name" value="{{old('first_name')}}" aria-describedby="FirstName" maxlength="35" placeholder="First Name*">
+                            <input type="text" data-required="true" class="form-control bg-white" name="last_name" value="{{old('last_name')}}" aria-describedby="LastName" maxlength="35" placeholder="Last Name*">
+                        </div>
+                        <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
+                            <input type="email" data-required="true" class="form-control bg-white" name="email" value="{{old('email')}}" aria-describedby="Email" maxlength="60" placeholder="Email*">
+                        </div>
+                        <div class="d-flex flex-column">
+                            <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('address1')}}" name="address1" aria-describedby="Address" maxlength="35" placeholder="Address*">
+                            <input type="text" class="form-control bg-white mb-3" value="{{old('address2')}}" name="address2" aria-describedby="Apartment" maxlength="35" placeholder="Apartment, suite, etc. (optional)">
+                            <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('state')}}" name="state" maxlength="50" aria-describedby="State" placeholder="State*">
+                            <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('city')}}" name="city" maxlength="35" aria-describedby="City" placeholder="City*">
+                            <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('country')}}" name="country" maxlength="35" aria-describedby="Country" placeholder="Country*">
+                        </div>
+                        <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
+                            <input type="text" data-required="true" class="form-control bg-white" value="{{old('postal_code')}}" name="postal_code" maxlength="10" aria-describedby="PostalCode" placeholder="Postal Code*">
+                        </div>
+                        </div>
                         <hr />
                         <button type="submit" class="btn btn-primary submit-btn-hide" style="visibility: hidden;">Submit</button>
                     </form>
@@ -660,11 +658,13 @@ SalesRepCustomerCartCheck();
 
 
 $(document).ready(function() {
+    const fields = [
+        'first_name', 'last_name', 'email', 'address1', 'address2',
+        'state', 'city', 'country', 'postal_code'
+    ];
 
     $('#itemDropdown').select2();
     $('#rollDropdown').select2();
-    // $("select[name='customer_id']").select2();
-    // $("select[name='ship_via_id']").select2();
 
     $("input[name='customer_po']").on('input', function() {
         localStorage.setItem('customer_po', $(this).val());
@@ -673,10 +673,49 @@ $(document).ready(function() {
         $("input[name='customer_po']").val(localStorage.getItem('customer_po'));
     }
 
+    $(document).on('change', '[name="shipping-address"]',function() {
+        localStorage.setItem('shipping-address', $(this).val());
+    });
+    if (localStorage.getItem('shipping-address')) {
+        $("input[name='shipping-address']").val(localStorage.getItem('shipping-address'));
+    }
+
+
+    fields.forEach(field => {
+        const inputSelector = `input[name='${field}']`;
+        $(inputSelector).on('input', function() {
+            localStorage.setItem(field, $(this).val());
+        });
+    });
+
+    function loadDropShip(){
+        fields.forEach(field => {
+        const inputSelector = `input[name='${field}']`;
+            if (localStorage.getItem(field) && localStorage.getItem('shipping-address') == "other") {
+                $(inputSelector).val(localStorage.getItem(field));
+            }
+        });
+    }
+
+    function removeDropShip(){
+        fields.forEach(key => {
+            localStorage.removeItem(key);
+        });
+    }
+
     $(document).on('change', '.select-address', function() {
         $('.address-card').addClass('d-none');
         $(`.address-card.${$(this).val()}`).removeClass('d-none');
-        $(`.address-card.${$(this).val()} input[type="radio"]`).click();
+        if(localStorage.getItem('shipping-address')){
+            $(`.address-card.${localStorage.getItem('shipping-address')} input[type="radio"]`).click();
+            if(localStorage.getItem('shipping-address') == "other"){
+                loadDropShip();
+            }else{
+                removeDropShip();
+            }
+        }else{
+            $(`.address-card.${$(this).val()} input[type="radio"]`).click();
+        }
     }).change();
 
     function validateEmail(email) {
@@ -787,7 +826,6 @@ $(document).ready(function() {
         addresses += '</div>';
         addresses += '</div>';
         addresses += '</div>';
-
         $('.addresses-section').html(addresses);
         $('.select-address').change();
         bind_radio_clicks();
@@ -830,8 +868,19 @@ $(document).ready(function() {
             $('.cutpiece-section').removeClass('d-none');
         });
 
-        if ($('.addresses-section input[type="radio"]').val() === 'undefined' || $('.addresses-section input[type="radio"]').val() !== 'other')
-        $('.addresses-section input[type="radio"]:first').click();
+        if ($('.addresses-section input[type="radio"]').val() === 'undefined' || $('.addresses-section input[type="radio"]').val() !== 'other'){
+            if(localStorage.getItem('shipping-address')){
+                if(localStorage.getItem('shipping-address') == 'other') {
+                    $('.addresses-section input[type="radio"]:last').click()
+                    loadDropShip();
+                }else{
+                    $('.addresses-section input[type="radio"]:first').click();
+                    removeDropShip();
+                }
+            }else{
+                $('.addresses-section input[type="radio"]:first').click();
+            }
+        }
     }
 
     $(document).on('change', '[name="shipping-address"]',function() {
@@ -1122,6 +1171,7 @@ $(document).ready(function() {
 
     // ADD TO CART
     $('.add_cart').click(function () {
+        $('.add_cart').prop('disabled', true);
         pushToCart();
     });
 
@@ -1813,6 +1863,7 @@ function add_to_cart(){
                                                     $('#add_rugpad').prop('disabled', false).prop('checked', false);
                                                     $('#Twidth').prop('disabled', true);
                                                     $('#TwidthInch').prop('disabled', true);
+                                                    $('.add_cart').prop('disabled', false);
                                                     setTimeout(() => {
                                                         window.location.reload();
                                                     }, 3000);
@@ -1924,6 +1975,7 @@ function add_to_cart(){
                                     $('#add_rugpad').prop('disabled', false).prop('checked', false);
                                     $('#Twidth').prop('disabled', true);
                                     $('#TwidthInch').prop('disabled', true);
+                                    $('.add_cart').prop('disabled', false);
                                     setTimeout(() => {
                                         window.location.reload();
                                     }, 3000);
