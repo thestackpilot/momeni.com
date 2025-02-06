@@ -1198,14 +1198,12 @@ $(document).ready(function() {
 
         if (!rollDropdown) {
             toastr.error("Please select a Roll");
-            $('.add_cart').prop('disabled', true);
             isValid = false;
             return false;
         }
         if (!itemDropdown) {
             toastr.error("Please select an Item.");
             isValid = false;
-            $('.add_cart').prop('disabled', true);
             return false;
         }
 
@@ -1218,27 +1216,22 @@ $(document).ready(function() {
         if (!TlengthInch) {
             toastr.error("Please enter Length Inches");
             isValid = false;
-            $('.add_cart').prop('disabled', true);
             return false;
         }
         if (!Twidth) {
             toastr.error("Please enter Width.");
             isValid = false;
-            $('.add_cart').prop('disabled', true);
             return false;
         }
         if (!TwidthInch) {
             toastr.error("Please enter Width Inches.");
             isValid = false;
-            $('.add_cart').prop('disabled', true);
             return false;
         }
 
         if (!isValid) {
             return false;
-            $('.add_cart').prop('disabled', true);
         }else{
-            $('.add_cart').prop('disabled', false);
             pushToCart();
         }
 
