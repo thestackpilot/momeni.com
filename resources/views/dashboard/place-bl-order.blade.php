@@ -188,7 +188,21 @@ body{
                 @endif
                 @if (Session::has('message') && Session::get('message')['type'] == 'success')
                     <script>
-                        localStorage.clear();
+                        const keysToRemove = [
+                            'address1', 'address2', 'city', 'country', 'customer_po',
+                            'email', 'first_name', 'last_name', 'postal_code',
+                            'shipping-address', 'state'
+                        ];
+
+                        keysToRemove.forEach(key => {
+                            if (localStorage.getItem(key) !== null) {
+                                localStorage.removeItem(key);
+                            }
+                            const field = document.querySelector(`[name="${key}"]`);
+                            if (field) {
+                                field.value = '';
+                            }
+                        });
                     </script>
                 @endif
 
@@ -707,10 +721,12 @@ $(document).ready(function() {
         $('.address-card').addClass('d-none');
         $(`.address-card.${$(this).val()}`).removeClass('d-none');
         if(localStorage.getItem('shipping-address')){
-            $(`.address-card.${localStorage.getItem('shipping-address')} input[type="radio"]`).click();
+            // $(`.address-card.${localStorage.getItem('shipping-address')} input[type="radio"]`).click();
             if(localStorage.getItem('shipping-address') == "other"){
+                $('.addresses-section input[type="radio"]:last').click()
                 loadDropShip();
             }else{
+                $(`.address-card.${$(this).val()} input[type="radio"]`).click();
                 removeDropShip();
             }
         }else{
@@ -1171,8 +1187,61 @@ $(document).ready(function() {
 
     // ADD TO CART
     $('.add_cart').click(function () {
-        $('.add_cart').prop('disabled', true);
-        pushToCart();
+
+        let rollDropdown = $("#rollDropdown").val();
+        let itemDropdown = $("#itemDropdown").val();
+        let Tlength = $("#Tlength").val();
+        let TlengthInch = $("#TlengthInch").val();
+        let Twidth = $("#Twidth").val();
+        let TwidthInch = $("#TwidthInch").val();
+        let isValid = true;
+
+        if (!rollDropdown) {
+            toastr.error("Please select a Roll");
+            $('.add_cart').prop('disabled', true);
+            isValid = false;
+            return false;
+        }
+        if (!itemDropdown) {
+            toastr.error("Please select an Item.");
+            isValid = false;
+            $('.add_cart').prop('disabled', true);
+            return false;
+        }
+
+        if (!Tlength) {
+            toastr.error("Please enter Length.");
+            isValid = false;
+            $('.add_cart').prop('disabled', true);
+            return false;
+        }
+        if (!TlengthInch) {
+            toastr.error("Please enter Length Inches");
+            isValid = false;
+            $('.add_cart').prop('disabled', true);
+            return false;
+        }
+        if (!Twidth) {
+            toastr.error("Please enter Width.");
+            isValid = false;
+            $('.add_cart').prop('disabled', true);
+            return false;
+        }
+        if (!TwidthInch) {
+            toastr.error("Please enter Width Inches.");
+            isValid = false;
+            $('.add_cart').prop('disabled', true);
+            return false;
+        }
+
+        if (!isValid) {
+            return false;
+            $('.add_cart').prop('disabled', true);
+        }else{
+            $('.add_cart').prop('disabled', false);
+            pushToCart();
+        }
+
     });
 
     // PLACE ORDER
