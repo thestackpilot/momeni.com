@@ -942,7 +942,7 @@ $(document).ready(function() {
                             $('#rug_pad_price').val(response.data.Price);
                         });
                     }else{
-                        $('#add_rugpad').prop('disabled', true);
+                        $('#add_rugpad').prop('disabled', true).prop('checked', false);
                     }
 
                 },
@@ -1892,7 +1892,7 @@ function add_to_cart(){
                                     success: function (response) {
                                         if (response.success) {
                                             console.log("new ", $('#item_json').length);
-                                            if ($('#add_rugpad').is(':checked') && $('#add_rugpad:not(:disabled)').length) {
+                                            if ($('#add_rugpad').is(':checked')) {
                                                 add_rug_pad(item, max_len_size, bd_cutpiece_len, bd_cutpiece_wid, randomString)
                                             }
                                             toastr.success(response.message, {
@@ -2000,7 +2000,7 @@ function add_to_cart(){
                     },
                     success: function (response) {
                         if (response.success) {
-                            if ($('#add_rugpad').is(':checked') && $('#add_rugpad:not(:disabled)').length) {
+                            if ($('#add_rugpad').is(':checked')) {
                                 add_rug_pad(item, max_len_size, bd_cutpiece_len, bd_cutpiece_wid, randomString)
                             }
                             console.log("new ", $('#item_json').length);

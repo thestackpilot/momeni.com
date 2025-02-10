@@ -186,12 +186,19 @@ class CartController extends FrontendController
     }
 
     function check_broadloom_full_size(Request $request){
-        $res = Cart::where('item_id', $request->itemId)->where('customer_id', $request->customerId)->where('bd_roll_id', $request->rollid)->first();
+        $res = Cart::where('item_id', $request->itemId)->where('customer_id', $request->customerId)->where('bd_roll_id', $request->rollid)->whereNull('deleted_at')->get();
+
+        $total_bd_cutpiece_len = 0;
+        $total_bd_cutpiece_wid = 0;
         if ($res) {
+            foreach ($res as $item) {
+                $total_bd_cutpiece_len += (int)$item['bd_cutpiece_len'];
+                $total_bd_cutpiece_wid += (int)$item['bd_cutpiece_wid'];
+            }
             $response = [
                 'success' => true,
-                'bd_cutpiece_len' => $res->bd_cutpiece_len,
-                'bd_cutpiece_wid' => $res->bd_cutpiece_wid,
+                'bd_cutpiece_len' => $total_bd_cutpiece_len,
+                'bd_cutpiece_wid' => $total_bd_cutpiece_wid,
             ];
             return response()->json($response);
         } else {
