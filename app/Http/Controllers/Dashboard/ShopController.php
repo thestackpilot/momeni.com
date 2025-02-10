@@ -1008,11 +1008,11 @@ class ShopController extends DashboardController
                            'template' => 'email.web_hook_email'
                        ] );
                         prr(" :: WEB_HOOK Email Sent :: ");
-                        $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', true);
+                        $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', '', true);
                         // $response['success'] = 1;
                         // $response['webhook'] = 1;
                         // $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash . '</br>';
-                        return redirect()->back()->withInput()->with( 'message', ['type' => 'success', 'body' => 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash] );
+                        return redirect()->back()->with( 'message', ['type' => 'success', 'body' => 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash] );
 
                     } catch (\Exception $e) {
                         prr("Mail Exception: " . $e->getMessage());
