@@ -984,19 +984,7 @@
                     console.log('check full size resposne', response);
 
                     if (response.success) {
-                        console.log('db check len add', (parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)));
-                        console.log('ATS_ROLL_LENGHT', ATS_ROLL_LENGHT);
-                        console.log('db check width add', (parseInt(response.bd_cutpiece_wid) + parseInt(bd_cutpiece_wid)));
-                        console.log('ATS_ROLL_WIDTH', ATS_ROLL_WIDTH);
                         var rollIdForError = $("#roll_id").val();
-                        // if ((parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)) > ATS_ROLL_LENGHT || (parseInt(response.bd_cutpiece_wid) + parseInt(bd_cutpiece_wid)) > ATS_ROLL_WIDTH) {
-                        //     toastr.error('Roll selected lenght is greater than actual total lenght', {
-                        //         hideDuration: 10000,
-                        //         closeButton: true,
-                        //     });
-                        //     $('#add_to_cart').removeClass('btn-muted');
-                        //     return false;
-                        // }
                         if ((parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)) > ATS_ROLL_LENGHT) {
                             toastr.error(`The selected length of the roll (${rollIdForError}) has already been consumed.`, {
                                 hideDuration: 10000,

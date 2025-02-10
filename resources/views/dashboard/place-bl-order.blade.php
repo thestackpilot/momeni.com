@@ -666,6 +666,7 @@ let input_lenght_ats = 0;
 let added_cut_pieces = [];
 var item_object = "";
 var unitprice = 0.00;
+var ATS_ROLL_LENGHT = "";
 
 GetCutingService();
 SalesRepCustomerCartCheck();
@@ -1777,12 +1778,8 @@ function pushToCart() {
         method: 'GET',
         data: payload,
         success: function (response) {
-            //console.log('check full size resposne', response);
+            console.log('response',response);
             if (response.success) {
-                // console.log('db check len add', (parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)));
-                // console.log('ATS_ROLL_LENGHT', ATS_ROLL_LENGHT);
-                // console.log('db check width add', (parseInt(response.bd_cutpiece_wid) + parseInt(bd_cutpiece_wid)));
-                // console.log('ATS_ROLL_WIDTH', ATS_ROLL_WIDTH);
                 var rollIdForError = $("#rollDropdown").val();
                 if ((parseInt(response.bd_cutpiece_len) + parseInt(bd_cutpiece_len)) > ATS_ROLL_LENGHT) {
                     toastr.error(`The selected length of the roll (${rollIdForError}) has already been consumed.`, {
@@ -1895,7 +1892,7 @@ function add_to_cart(){
                                     success: function (response) {
                                         if (response.success) {
                                             console.log("new ", $('#item_json').length);
-                                            if ($('#add_rugpad').is(':checked')) {
+                                            if ($('#add_rugpad').is(':checked') && $('#add_rugpad:not(:disabled)').length) {
                                                 add_rug_pad(item, max_len_size, bd_cutpiece_len, bd_cutpiece_wid, randomString)
                                             }
                                             toastr.success(response.message, {
@@ -2003,7 +2000,7 @@ function add_to_cart(){
                     },
                     success: function (response) {
                         if (response.success) {
-                            if ($('#add_rugpad').is(':checked')) {
+                            if ($('#add_rugpad').is(':checked') && $('#add_rugpad:not(:disabled)').length) {
                                 add_rug_pad(item, max_len_size, bd_cutpiece_len, bd_cutpiece_wid, randomString)
                             }
                             console.log("new ", $('#item_json').length);
