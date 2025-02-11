@@ -192,7 +192,7 @@ class QuotesController extends DashboardController
         $quote_cart_data = [];
         $max_len_size  = "";
         $totalSqftArea = "";
-        $item_price = "";
+        $item_price = 0;
         $unit_price =  "";
         $bd_child = 0;
         $rugpad_price = 0.00;
@@ -211,13 +211,14 @@ class QuotesController extends DashboardController
 
                     $max_len_size  = $this->calculateMaxLenSize($rowCutList);
                     $totalSqftArea = $this->calculateTotalSqftArea($rowCutList);
-                    $item_price = number_format(($price['Price'] * $totalSqftArea), 2, '.', ',');
-
+                    //  $item_price = number_format(($price['Price'] * $totalSqftArea), 2, '.', ',');
+                    $item_price = $price['Price'] * $totalSqftArea;
                     $unit_price =  $this->calculateUnitPrice($rowCutList, $cut_charges['OutPut']['UnitPrice']);
                     $cut_piece_data = $this->cut_pieces_payload($rowCutList);
 
                     if(isset($rugpad_price_get['Price'])){
-                        $rugpad_price = number_format(($rugpad_price_get['Price'] * $totalSqftArea), 2, '.', ',');
+                        // $rugpad_price = number_format(($rugpad_price_get['Price'] * $totalSqftArea), 2, '.', ',');
+                        $rugpad_price = $rugpad_price_get['Price'] * $totalSqftArea;
                     }
                 }
             }
@@ -314,8 +315,8 @@ class QuotesController extends DashboardController
                 'item_customer_id' => $data['OutPut']['CustomerID'],
                 'item_name' => $item['Items'][0]['ItemName'],
                 'item_quantity' => 1,
-                'item_price' => (float) number_format((float)$item_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
-                'item_total' =>  (float) number_format((float)$item_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
+                'item_price' => $item_price, //(float) number_format((float)$item_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
+                'item_total' =>  $item_price, //(float) number_format((float)$item_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
                 'item_color' => $item['Colors'][0]['Description'],
                 'item_size' => $max_len_size,
                 'item_currency' => '$',
@@ -343,7 +344,7 @@ class QuotesController extends DashboardController
 
             foreach($quote_cart_data as $index => $quote){
                 if($quote['id'] == $rowDetail['Line_NO'] && $index > 0){
-                    $quote_cart_data[$index - 1]['rugpad_price'] = number_format((float)$rugpad_price,2);
+                    $quote_cart_data[$index - 1]['rugpad_price'] = (float)$rugpad_price;
                 }
             }
         }
