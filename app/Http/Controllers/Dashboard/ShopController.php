@@ -493,6 +493,7 @@ class ShopController extends DashboardController
         }
         $states = $this->ApiObj->Get_CountryStates( $country_id );
          */
+        $countries = $this->ApiObj->Get_CountriesList();
         View::share( 'countries', $countries );
         View::share( 'states', $states );
 
@@ -672,6 +673,7 @@ class ShopController extends DashboardController
         }
 
         $countries = $states = [];
+        $countries = $this->ApiObj->Get_CountriesList();
         $itemIds =  $this->ApiObj->Get_AllBLItemsForOrderPlace();
         $surging_types = $this->ApiObj->Get_SurgingTypes();
 
@@ -990,7 +992,8 @@ class ShopController extends DashboardController
                 $order_payment = $this->order_payment_model->updateOrCreate(
                     ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                     [
-                        'order_status' => ConstantsController::ORDER_STATUS['failed']
+                        'order_status' => ConstantsController::ORDER_STATUS['failed'],
+                        'item_broadloom' => 1
                     ]
                 );
 

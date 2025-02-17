@@ -26,7 +26,7 @@ use App\Http\Controllers\CommonController;
                      {!!Session::get('message')['body']!!}
                   </div>
                   @endif
-                  
+
                   <div class="account-content p-5">
                      <h1 class="section-title text-center mb-3 mt-3 font-ropa">Place Order</h1>
                      <form method="POST" class="place-order-form" action="{{ route('dashboard.placeorder') }}" class="pt-3">
@@ -80,9 +80,19 @@ use App\Http\Controllers\CommonController;
                               <!--                                            <input type="text" class="form-control bg-white mb-3" name="Company" aria-describedby="Company" placeholder="Company (optional)">-->
                               <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('address1')}}" name="address1" aria-describedby="Address" maxlength="35" placeholder="Address*">
                               <input type="text" class="form-control bg-white mb-3" value="{{old('address2')}}" name="address2" aria-describedby="Apartment" maxlength="35" placeholder="Apartment, suite, etc. (optional)">
-                              <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('state')}}" name="state" maxlength="50" aria-describedby="State" placeholder="State*">
+                              {{-- <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('state')}}" name="state" maxlength="50" aria-describedby="State" placeholder="State*"> --}}
+                              <select name="state" id="state_dropdown" class="form-control bg-white reter checkout-dropdown my-2"></select>
                               <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('city')}}" name="city" maxlength="35" aria-describedby="City" placeholder="City*">
-                              <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('country')}}" name="country" maxlength="35" aria-describedby="Country" placeholder="Country*">
+                              {{-- <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('country')}}" name="country" maxlength="35" aria-describedby="Country" placeholder="Country*"> --}}
+                              <select name="country" id="countries" class="form-control bg-white mb-3" aria-describedby="country" required>
+                                <option value="" disabled selected>Select your country*</option>
+                                @foreach ($countries['Countries'] as $country)
+                                    <option value="{{ $country['OriginCode'] }}" {{ old('country') == $country['OriginCode'] ? 'selected' : '' }}
+                                        origincode="{{ $country['CountryNo'] }}">
+                                        {{ $country['Description'] }}
+                                    </option>
+                                @endforeach
+                            </select>
                            </div>
                            <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
                               <input type="text" data-required="true" class="form-control bg-white" value="{{old('postal_code')}}" name="postal_code" maxlength="10" aria-describedby="PostalCode" placeholder="Postal Code*">
@@ -556,6 +566,49 @@ use App\Http\Controllers\CommonController;
          });
          bind_radio_clicks();
       }).change();
+
+    $('#countries').on('change', function () {
+        let selectedOption = $(this).find('option:selected');
+        let selectedCountry = selectedOption.attr('origincode');
+        if (selectedCountry) {
+            states(selectedCountry);
+        }
+    });
+
+    function states(countryno) {
+        $.ajax({
+            url: "{{route('checkout.states')}}",
+            method: 'POST',
+            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+            data: {country: countryno},
+            success: function (response) {
+                if (response.Success) {
+                    console.log("if");
+                    $('#state_dropdown').empty();
+                    $('#state_dropdown').append('<option value="">Select a state*</option>');
+                    $.each(response.States, function (index, value) {
+                        var option = $('<option>', {
+                            value: value.StateCode.toString(),
+                            text: value.StateName
+                        });
+                        console.log($('#customer_state').val());
+                        if (value.StateCode == $('#customer_state').val()) {
+                            option.prop('selected', true);
+                        }
+                        $('#state_dropdown').append(option);
+                    });
+                } else {
+                    console.log("if");
+                    $('#state').val('');
+                    $('#state_dropdown').empty();
+                    $('#state_dropdown').append('<option value="">No States Available</option>');
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    }
 
       function bind_radio_clicks() {
          $('.addresses-section input[type="radio"]')

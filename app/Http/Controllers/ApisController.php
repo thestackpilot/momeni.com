@@ -588,7 +588,7 @@ class ApisController extends RootController
                 prr( " Exception Message : ".$e->getMessage() );
                 prr( " *********************************************************** " );
 
-                if ( strcmp( $api_slug, 'Place_Order' ) === 0 )
+                if ( strcmp( $api_slug, 'Place_Order' ) === 0 || strcmp( $api_slug, 'Place_BLOrder' ) === 0 )
                 {
                     $ret = [
                         'Exception'   => true,
