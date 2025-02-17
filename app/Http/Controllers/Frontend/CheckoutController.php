@@ -68,7 +68,8 @@ class CheckoutController extends FrontendController
                                 ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                                 [
                                     'payment_response' => json_encode(['payment' => $payment_response]),
-                                    'payment_status' => ConstantsController::PAYMENT_STATUS['failed']
+                                    'payment_status' => ConstantsController::PAYMENT_STATUS['failed'],
+                                    'item_broadloom' => isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] ? 1 : 0
                                 ]
                             );
                         } else {
@@ -495,7 +496,7 @@ class CheckoutController extends FrontendController
             if (!$payment_response['success']) {
                 return response()->json($payment_response);
             }
-           // dd($headers, $itemDetail);
+            // dd($headers, $itemDetail);
             prr(" :: Place Order API CALL DATA :: ");
             prr($headers, $itemDetail);
             //dd($headers, $itemDetail);
@@ -591,7 +592,8 @@ class CheckoutController extends FrontendController
                 $order_payment = $this->order_payment_model->updateOrCreate(
                     ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                     [
-                        'order_status' => ConstantsController::ORDER_STATUS['failed']
+                        'order_status' => ConstantsController::ORDER_STATUS['failed'],
+                        'item_broadloom' => isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] ? 1 : 0
                     ]
                 );
 

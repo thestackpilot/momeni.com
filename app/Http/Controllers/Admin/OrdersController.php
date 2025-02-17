@@ -96,10 +96,17 @@ class OrdersController extends AdminController
                 $total_amount += $item['UnitPrice'];
             }
 
-            $result = $this->ApiObj->Place_Order(
-                $headers,
-                $itemDetail
-            );
+            if(isset($order['item_broadloom']) && $order['item_broadloom']){
+                $result = $this->ApiObj->Place_BLOrder(
+                    $headers,
+                    $itemDetail
+                );
+            }else{
+                $result = $this->ApiObj->Place_Order(
+                    $headers,
+                    $itemDetail
+                );
+            }
 
             $order_payment = $this->order_payment_model->updateOrCreate(
                 ['hash' => $order->hash],
@@ -133,7 +140,8 @@ class OrdersController extends AdminController
                 $order_payment = $this->order_payment_model->updateOrCreate(
                     ['hash' => $order->hash],
                     [
-                        'order_status' => ConstantsController::ORDER_STATUS['failed']
+                        'order_status' => ConstantsController::ORDER_STATUS['failed'],
+                        'item_broadloom' => isset($order['item_broadloom']) && $order['item_broadloom'] ? 1 : 0
                     ]
                 );
 

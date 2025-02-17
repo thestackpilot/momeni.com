@@ -46,6 +46,7 @@ use App\Http\Controllers\CommonController;
                                         <th class="border-0">Payment Status</th>
                                         <th class="border-0">Order Response</th>
                                         <th class="border-0">Order Data</th>
+                                        <th class="border-0">Broadloom</th>
                                         <th class="border-0">Created At</th>
                                         <th class="border-0">Action</th>
                                     </tr>
@@ -105,6 +106,7 @@ use App\Http\Controllers\CommonController;
                                             echo '<textarea style="width: 300px;" class="form-control" rows="5" >'.print_r(json_encode($data), 1).'</textarea>';
                                             @endphp
                                         </td>
+                                        <td>{{ $order->item_broadloom ? "Yes" : "No"}}</td>
                                         <td>{{ CommonController::get_date_format($order->created_at) }}</td>
                                         <td>
                                             <form action="{{route('admin.process-orders')}}" method="POST">
