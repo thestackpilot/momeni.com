@@ -1307,6 +1307,16 @@ $(document).ready(function() {
             $('input[name="customer_id"]').removeClass('is-invalid');
         }
 
+        if ($("#countries").val() == "") {
+            $("#countries").addClass('is-invalid');
+            allOk = false;
+        }
+
+        if (allOk && $("#state_dropdown").val() == "") {
+            $("#state_dropdown").addClass('is-invalid');
+            allOk = false;
+        }
+
         return allOk;
     });
 

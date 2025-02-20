@@ -740,6 +740,18 @@ use App\Http\Controllers\CommonController;
             $('input[name="customer_id"]').removeClass('is-invalid');
          }
 
+         if ($("#countries").val() == "") {
+            $('html, body').animate({ scrollTop: $("#countries").offset().top - 20 }, 100);
+            $("#countries").addClass('is-invalid');
+            allOk = false;
+        }
+
+        if (allOk && $("#state_dropdown").val() == "") {
+            $('html, body').animate({ scrollTop: $("#state_dropdown").offset().top - 20 }, 100);
+            $("#state_dropdown").addClass('is-invalid');
+            allOk = false;
+        }
+
 
          return allOk;
       });

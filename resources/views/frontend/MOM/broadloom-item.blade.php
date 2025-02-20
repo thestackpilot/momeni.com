@@ -181,6 +181,7 @@ use App\Http\Controllers\CommonController;
 
                                 <input type="hidden" value="{{$items['Items'][0]['UserCustomerInfo']['IsSaleRep']}}" name="sale_rep">
                                 <input type="hidden" id="customer-id" value="" name="customer-id">
+                                <input type="hidden" id="nextpage-itemid" value="" name="nextpage-itemid">
                                 {{-- @dd($items) --}}
 
                                 <div class="section over-hide z-bigger d-none" id="item_customer_parent">
@@ -547,7 +548,7 @@ use App\Http\Controllers\CommonController;
                         title: item.ItemColor,
                         'data-toggle': "tooltip",
                         'data-color': item.ColorID,
-                        'data-itemcolor': item.ItemColor,
+                        'data-itemid': item.ItemID,
                         'data-designid': item.DesignID,
                         class: 'for-checkbox-tools',
                         for: 'color_' + item.ItemID
@@ -1003,8 +1004,10 @@ use App\Http\Controllers\CommonController;
             .on('click', function() {
                 var colorValue = $(this).val();
                 var labelColor = $(this).closest('div').find('label[for="' + $(this).attr('id') + '"]').data('color');
+                var labelItemId = $(this).closest('div').find('label[for="' + $(this).attr('id') + '"]').data('itemid');
                 // console.log("Label data-color attribute: " + labelColor);
                 $("#color_id").val(labelColor);
+                $("#nextpage-itemid").val(labelItemId);
                 refresh_product($(this).val());
                 $('#color_name').html(`: ${$("#item_color input[name='color']:checked").text().trim()}`);
                 getSizes($("#item_variant input:radio[name='variant']:checked").text().trim(), $("#item_color input[name='color']:checked").text().trim(), $(this).val());
@@ -1079,12 +1082,12 @@ use App\Http\Controllers\CommonController;
             // console.log('href', href);
             // window.location.replace(href)
 
-            var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id', 'color_id', 'item_name' => $items['Items'][0]['ItemName'] ?? '']) }}";
-            // Replace placeholders with encoded values
+            var href = "{{ route('broadloom.cart', ['id' => $items['Colors'][0]['DesignID'], 'cust_id', 'color_id', 'item_name' => $items['Items'][0]['ItemName'] ?? '', 'item_id' => 'item_id']) }}";
             href = href.replace('cust_id', encodeURIComponent($('#cart_customer_id').val()));
             href = href.replace('color_id', encodeURIComponent($('#color_id').val()));
-            var lastParam = "{{ $items['Items'][0]['ItemName'] ?? '' }}"; // Fetch from Blade variable
+            var lastParam = "{{ $items['Items'][0]['ItemName'] ?? '' }}";
             href = href.replace('item_name', encodeURIComponent(lastParam));
+            href = href.replace('item_id', encodeURIComponent($('#nextpage-itemid').val()));
             window.location.replace(href);
         }
 
