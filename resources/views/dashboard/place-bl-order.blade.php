@@ -271,7 +271,7 @@ body{
                         <input type="hidden" name="address_id" />
                         <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
                             <input type="text" data-required="true" class="form-control bg-white " name="first_name" value="{{old('first_name')}}" aria-describedby="FirstName" maxlength="35" placeholder="First Name*">
-                            <input type="text" data-required="true" class="form-control bg-white" name="last_name" value="{{old('last_name')}}" aria-describedby="LastName" maxlength="35" placeholder="Last Name*">
+                            <input type="text" class="form-control bg-white" name="last_name" value="{{old('last_name')}}" aria-describedby="LastName" maxlength="35" placeholder="Last Name*">
                         </div>
                         <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
                             <input type="email" data-required="true" class="form-control bg-white" name="email" value="{{old('email')}}" aria-describedby="Email" maxlength="60" placeholder="Email*">
@@ -279,11 +279,9 @@ body{
                         <div class="d-flex flex-column">
                             <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('address1')}}" name="address1" aria-describedby="Address" maxlength="35" placeholder="Address*">
                             <input type="text" class="form-control bg-white mb-3" value="{{old('address2')}}" name="address2" aria-describedby="Apartment" maxlength="35" placeholder="Apartment, suite, etc. (optional)">
-                            {{-- <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('state')}}" name="state" maxlength="50" aria-describedby="State" placeholder="State*"> --}}
-                            <select name="state" id="state_dropdown" class="form-control bg-white reter checkout-dropdown my-2"></select>
+                            <select name="state" id="state_dropdown" class="form-control bg-white reter checkout-dropdown my-2 other-state d-none"></select>
                             <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('city')}}" name="city" maxlength="35" aria-describedby="City" placeholder="City*">
-                            {{-- <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('country')}}" name="country" maxlength="35" aria-describedby="Country" placeholder="Country*"> --}}
-                            <select name="country" id="countries" class="form-control bg-white mb-3" aria-describedby="country" required>
+                            <select name="country" id="countries" class="form-control bg-white mb-3 other-country d-none" aria-describedby="country" required>
                                 <option value="" disabled selected>Select your country*</option>
                                 @foreach ($countries['Countries'] as $country)
                                     <option value="{{ $country['OriginCode'] }}" {{ old('country') == $country['OriginCode'] ? 'selected' : '' }}
@@ -292,6 +290,8 @@ body{
                                     </option>
                                 @endforeach
                             </select>
+                            <input type="hidden"class="form-control bg-white mb-3 default-country" value="{{old('country')}}" name="country" maxlength="35" aria-describedby="Country" placeholder="Country*">
+                            <input type="hidden" class="form-control bg-white mb-3 default-state" value="{{old('state')}}" name="state" maxlength="50" aria-describedby="State" placeholder="State*">
                         </div>
                         <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
                             <input type="text" data-required="true" class="form-control bg-white" value="{{old('postal_code')}}" name="postal_code" maxlength="10" aria-describedby="PostalCode" placeholder="Postal Code*">
@@ -711,6 +711,20 @@ $(document).ready(function() {
         $("input[name='shipping-address']").val(localStorage.getItem('shipping-address'));
     }
 
+    $(document).on('change', '[name="shipping-address"]',function() {
+        let selectedValue = $('input[name="shipping-address"]:checked').val();
+        if(selectedValue == "other"){
+            $('.default-country').addClass('d-none');
+            $('.default-state').addClass('d-none');
+            $('.other-country').removeClass('d-none');
+            $('.other-state').removeClass('d-none');
+        }else{
+            $('.default-country').removeClass('d-none');
+            $('.default-state').removeClass('d-none');
+            $('.other-country').addClass('d-none');
+            $('.other-state').addClass('d-none');
+        }
+    });
 
     fields.forEach(field => {
         const inputSelector = `input[name='${field}']`;
@@ -894,15 +908,18 @@ $(document).ready(function() {
                     $(this).attr('data-old-val', $(this).val());
                     }
                 });
+                console.log('address_data', address_data);
+
                 $('[name="address_id"]').val($(this).val());
                 $('[name="first_name"]').val(address_data.FirstName);
                 $('[name="last_name"]').val(address_data.LastName);
-                $('[name="email"]').val(address_data.Email);
+                $('[name="email"]').val(address_data.Email);  //mango
                 $('[name="address1"]').val(address_data.Address1);
                 $('[name="address2"]').val(address_data.Address2);
                 $('[name="city"]').val(address_data.City);
                 $('[name="state"]').val(address_data.State);
                 $('[name="postal_code"]').val(address_data.Zip);
+                $('[name="country"]').val(address_data.Country);
             }
 
             $('.cutpiece-section').removeClass('d-none');
