@@ -1309,11 +1309,13 @@ $(document).ready(function() {
 
         if ($("#countries").val() == "") {
             $("#countries").addClass('is-invalid');
+            $('html, body').animate({ scrollTop: $("#countries").offset().top - 20 }, 100);
             allOk = false;
         }
 
         if (allOk && $("#state_dropdown").val() == "") {
             $("#state_dropdown").addClass('is-invalid');
+            $('html, body').animate({ scrollTop: $("#state_dropdown").offset().top - 20 }, 100);
             allOk = false;
         }
 
