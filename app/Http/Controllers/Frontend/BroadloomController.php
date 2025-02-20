@@ -22,7 +22,7 @@ class BroadloomController extends FrontendController
     }
 
 
-    public function index($id, $cust_id, $color_id, $item_name = '')
+    public function index($id, $cust_id, $color_id, $item_name = '', $item_id = '')
     {
         $itemController = new ItemController();
 
@@ -34,11 +34,12 @@ class BroadloomController extends FrontendController
         // dd($images);
 
         foreach ($items['Items'] as $row) {
-            if ($row['ProductType'] == 'Broadloom') {
+            if ($row['ProductType'] == 'Broadloom' && $row['ItemID'] == $item_id) {
                 $item = $row;
             }
         }
-        $roll_pieces = $this->ApiObj->Get_ItemsRollAndCutPieceList($item['ItemID']);
+
+        $roll_pieces =  $this->ApiObj->Get_ItemsRollAndCutPieceList($item_id);
         $surging_types = $this->ApiObj->Get_SurgingTypes();
         // dd($roll_pieces);
         return view('frontend.' . $this->active_theme->theme_abrv . '.broadloom', [
