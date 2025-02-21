@@ -608,6 +608,8 @@
             });
             $('#filtered-table-body .item-color').empty();
             filteredData.forEach(function(itemETA) {
+               // console.log("ItemETA JSON:", JSON.stringify(itemETA, null, 2));
+
                 var basePrice = "{{ ConstantsController::CURRENCY }}" + parseFloat(itemETA.BasePrice).toFixed(parseInt("{{ ConstantsController::ALLOWED_DECIMALS }}"));
                 var row = '<tr class="item-color" id="chart-remove">' +
                         '<input type="hidden" class="cart_item_id" name="product_cart_item_id[]" value="' + itemETA.ItemID + '">' +

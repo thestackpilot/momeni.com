@@ -735,7 +735,11 @@ $(document).ready(function() {
 
     function loadDropShip() {
         fields.forEach(field => {
-            const inputSelector = `input[name='${field}'], select[name='${field}']`;
+            if(field == "country" || field == "state"){
+                var inputSelector = `select[name='${field}']`;
+            }else{
+                var inputSelector = `input[name='${field}']`;
+            }
             if (localStorage.getItem(field) && localStorage.getItem('shipping-address') == "other") {
                 const storedValue = localStorage.getItem(field);
                 if ($(inputSelector).is('input')) {

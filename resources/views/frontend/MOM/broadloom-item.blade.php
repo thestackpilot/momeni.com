@@ -412,6 +412,8 @@ use App\Http\Controllers\CommonController;
 
     function refresh_product(ItemID) {
         item_object.Items.forEach(function(item, index) {
+            console.log(`Refresh Product: ${item.ItemID} :: ${ItemID}`);
+
             if (item.ItemID == ItemID) {
                 $('#product-main-image').fadeOut(400, function() {
                     $("#image_0").attr('src', item.ImageNameArray[0]).attr('onerror', "this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'");
@@ -435,7 +437,6 @@ use App\Http\Controllers\CommonController;
                 }
                 init_sliders();
                 // console.log(`${item.ItemName}${($("label", $("input[name='color']:checked").parent()).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}`);
-                console.log('here check item: ', item);
                 $('#item_color_change').html(`<b>${$(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-itemcolor')}</b>`);
                 $('#product-heading').html(`${item.QualityDescription} <b>${($(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-color')).replace(/^0+$/, '').replace(/0+$/, '')}</b>`);
                 $('#product-heading-new').html(`${item.QualityDescription} <b>${($(`label[for="color_${$("input[name='color']:checked").val()}"]`).attr('data-designid'))}</b>`);
@@ -548,6 +549,7 @@ use App\Http\Controllers\CommonController;
                         title: item.ItemColor,
                         'data-toggle': "tooltip",
                         'data-color': item.ColorID,
+                        'data-itemcolor': item.ItemColor,
                         'data-itemid': item.ItemID,
                         'data-designid': item.DesignID,
                         class: 'for-checkbox-tools',
