@@ -211,13 +211,11 @@ class QuotesController extends DashboardController
 
                     $max_len_size  = $this->calculateMaxLenSize($rowCutList);
                     $totalSqftArea = $this->calculateTotalSqftArea($rowCutList);
-                    //  $item_price = number_format(($price['Price'] * $totalSqftArea), 2, '.', ',');
                     $item_price = $price['Price'] * $totalSqftArea;
                     $unit_price =  $this->calculateUnitPrice($rowCutList, $cut_charges['OutPut']['UnitPrice']);
-                    $cut_piece_data = $this->cut_pieces_payload($rowCutList);
+                    $cut_piece_data[] = $this->cut_pieces_payload($rowCutList);
 
                     if(isset($rugpad_price_get['Price'])){
-                        // $rugpad_price = number_format(($rugpad_price_get['Price'] * $totalSqftArea), 2, '.', ',');
                         $rugpad_price = $rugpad_price_get['Price'] * $totalSqftArea;
                     }
                 }
@@ -438,9 +436,9 @@ class QuotesController extends DashboardController
 
     public function cut_pieces_payload($cutpieces) {
         $cutpiece_data = [];
-        if (isset($cutpieces[0])) {
+        if (isset($cutpieces[0]) && !isset($cutpieces[1])) {
             foreach ($cutpieces as $cut) {
-                $cutpiece_data[] = [
+                $cutpiece_data = [
                     'ItemID' => $cut['ItemID'],
                     'RollID' => $cut['RollID'],
                     'CutPieceID' => $cut['CutPieceID'],
@@ -457,7 +455,7 @@ class QuotesController extends DashboardController
                 ];
             }
         } else {
-            $cutpiece_data[] = [
+            $cutpiece_data = [
                 'ItemID' => $cutpieces['ItemID'],
                 'RollID' => $cutpieces['RollID'],
                 'CutPieceID' => $cutpieces['CutPieceID'],
@@ -475,6 +473,7 @@ class QuotesController extends DashboardController
         }
         return $cutpiece_data;
     }
+
 
     public function view_quote(Request $request){
         $reportGet = $this->ApiObj->Get_ViewDocumentsReport('', '', 'ViewBLQuotation', $request->QuotationNo);
