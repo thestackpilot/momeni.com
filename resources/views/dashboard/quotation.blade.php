@@ -204,7 +204,7 @@ use Carbon\Carbon;
                                 <div class="modal-dialog modal-dialog-centered modal-xl">
                                     <div class="modal-content" style="border-radius: 20px !important;">
                                         <div class="modal-header" style="border-bottom: none !important;">
-                                            <h5 class="modal-title sample-selext-title" id="quoteReportModalLabel">Quoate Report</h5>
+                                            <h5 class="modal-title sample-selext-title" id="quoteReportModalLabel">Quote Report</h5>
                                             <button type="button" class="btn-close btn-refresh" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body" id="purchase-order-modal-container">
