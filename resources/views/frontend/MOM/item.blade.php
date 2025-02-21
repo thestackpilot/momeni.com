@@ -685,7 +685,7 @@
                 }, function(response) {
                     setTimeout(() => {
                         startBuyingBulk(item_object.Items[0].ItemID, customer_id, response.data);
-                    }, 2000);
+                    }, 3000);
                 });
             }
         } else {
