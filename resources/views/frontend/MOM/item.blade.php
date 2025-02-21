@@ -683,7 +683,9 @@
                     design_id: item_object.Items[0]['DesignID'],
                     customer_id: customer_id
                 }, function(response) {
-                    startBuyingBulk(item_object.Items[0].ItemID, customer_id, response.data);
+                    setTimeout(() => {
+                        startBuyingBulk(item_object.Items[0].ItemID, customer_id, response.data);
+                    }, 2000);
                 });
             }
         } else {
