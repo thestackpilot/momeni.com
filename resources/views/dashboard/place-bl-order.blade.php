@@ -651,7 +651,7 @@ body{
                                         <div class="col-md-6 font-weight-bold">Total:</div>
                                         <div class="col-md-6 font-weight-bold text-right cart_total_final">{{ $cart->cart_currency }}{{  number_format($dashboardTotal, 2)}}</div>
                                     </div>
-                                    <button class="broadloom-order btn my-2 mx-2 cutpiece-section d-none" id="proceed_to_order">
+                                    <button class="broadloom-order btn my-2 mx-2 cutpiece-section1" id="proceed_to_order">
                                         Place Order <i class="fa fa-long-arrow-right"></i>
                                     </button>
                                 </div>
@@ -2264,7 +2264,9 @@ function refreshAjaxPage(){
             'refresh': true,
         },
         success: function (response) {
-            var new_html = $($.parseHTML(response));;
+            var new_html = $($.parseHTML(response));
+            console.log(`New Html :: ${JSON.stringify(new_html)}`);
+
             $('#cart-detail-area').html(new_html.find('#cart-detail-area').html());
 
             var $customerSelect = $('[name="customer_id"]');
