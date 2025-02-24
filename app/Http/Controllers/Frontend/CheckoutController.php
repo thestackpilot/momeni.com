@@ -317,7 +317,7 @@ class CheckoutController extends FrontendController
                         $total_serging_charges = 0;
 
                         foreach ($item_data->CutPieces as $key => $cut_piece) {
-                            if ($cut_piece->LengthStatus == "F") {
+                            if ($cut_piece->LengthStatus == "F" && $cut_piece->ItemID == $quoteCart['item_id']) {
 
                                 $ats_len = intval($cut_piece->ATSLength);
                                 $ats_wid = intval($cut_piece->ATSWidth);
