@@ -25,7 +25,7 @@ use Carbon\Carbon;
                         <div class="container-fluid bg-white">
                             <div class="quotes-btn-parent">
                                 <div class="d-flex flex-row settings">
-                                    <a href="javascript:void(0)" data-related-section="new-quotes" class="quotes-btn">New Quotes</a>
+                                    <a href="javascript:void(0)" data-related-section="new-quotes" class="quotes-btn">New Quote</a>
                                     <a href="javascript:void(0)" data-related-section="view-active-quotes" class="quotes-btn active-btn">View Active Quotes</a>
                                 </div>
                             </div>
@@ -73,9 +73,9 @@ use Carbon\Carbon;
                                             </div>
                                             <div class="col-md-9 col-12">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Item ID</label>
+                                                    <label class="form-label">Style</label>
                                                     <select class="form-control js-example-basic-single" name="item_id" id="item_id">
-                                                        <option disabled selected>Choose Item Id</option>
+                                                        <option disabled selected>Choose Style</option>
                                                         @foreach ($items as $single_item)
                                                             <option value="{{ $single_item['KeyID'] }}" data-rugcheck="{{ $single_item['IsRugPad']}}">{{ $single_item['Description'] }}</option>
                                                         @endforeach
@@ -90,21 +90,6 @@ use Carbon\Carbon;
                                                             <option value="{{ $serging_type['SergingTypeNo'] }}" data-sergingcharges="{{ $serging_type['Charges'] }}">{{ $serging_type['Description'] }}</option>
                                                         @endforeach
                                                     </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 col-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Cut Length</label>
-                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                                        <div class="input-group me-2">
-                                                            <input type="number" class="form-control text-center small-input" name="lengthF" id="lengthF" placeholder="00" min="0" max="100">
-                                                            <span class="input-group-text">Ft</span>
-                                                        </div>
-                                                        <div class="input-group ms-2">
-                                                            <input type="number" class="form-control text-center small-input" name="lengthI" id="lengthI" placeholder="00" min="0" max="11" value="0">
-                                                            <span class="input-group-text">In</span>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
 
@@ -123,7 +108,31 @@ use Carbon\Carbon;
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 offset-md-3 col-3">
+                                            <div class="col-md-3 col-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Cut Length</label>
+                                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                                        <div class="input-group me-2">
+                                                            <input type="number" class="form-control text-center small-input" name="lengthF" id="lengthF" placeholder="00" min="0" max="100">
+                                                            <span class="input-group-text">Ft</span>
+                                                        </div>
+                                                        <div class="input-group ms-2">
+                                                            <input type="number" class="form-control text-center small-input" name="lengthI" id="lengthI" placeholder="00" min="0" max="11" value="0">
+                                                            <span class="input-group-text">In</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 offset-md-1 col-3">
+                                                <div class="form-check mt-5">
+                                                    <input class="form-check-input" type="checkbox" value="" name="reserve-stock" id="reserve-stock">
+                                                    <label class="form-check-label" >
+                                                        Reserve Stock
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-3">
                                                 <div class="form-check mt-5">
                                                     <input class="form-check-input" type="checkbox" value="" name="add-rugpad" id="add-rugpad" disabled>
                                                     <label class="form-check-label" >
@@ -132,7 +141,9 @@ use Carbon\Carbon;
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn save-quote-btn submit-disabled-link">Save Quotes</a>
+                                        <p class="my-2 total-amount"><b>Total :</b> <span class="quote-total-price">$0.00</span></p>
+                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn-other generate-quote-btn mx-5">Create or Generate Quote ?</a>
+                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn save-quote-btn submit-disabled-link mx-5">Save Quote</a>
                                     </form>
                                 </div>
                                </div>
@@ -282,6 +293,12 @@ use Carbon\Carbon;
     .small-input {
         max-width: 80px !important
     }
+    .total-amount{
+        font-size: 1.3rem;
+        position: absolute;
+        bottom: 65px;
+        right: 84px;
+    }
     .submit-btn {
         position: absolute;
         bottom: 20px;
@@ -295,6 +312,22 @@ use Carbon\Carbon;
         border: none;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         cursor: pointer;
+        margin: 0px 50px !important;
+    }
+    .submit-btn-other {
+        position: absolute;
+        bottom: 20px;
+        right: 205px;
+        background-color: #660000;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 8px 50px;
+        border-radius: 5px;
+        border: none;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        margin: 0px 50px !important;
     }
     .submit-btn:hover {
         background-color: #880000;
@@ -391,6 +424,17 @@ use Carbon\Carbon;
         .quotes-order-btn, .view-quote-btn{
             max-height: auto !important;
             font-size: 11px !important
+        }
+        .submit-btn{
+            bottom: -116px !important;
+        }
+        .submit-btn-other {
+            bottom: -67px !important;
+            right: -21px !important;
+        }
+        .total-amount {
+            bottom: 18px;
+            right: 37px;
         }
     }
 </style>
@@ -500,8 +544,73 @@ use Carbon\Carbon;
         }
 
         // Get serging charges
+        $('#serging').val(2).trigger('change');
         $('#serging').change(function() {
             sergingcharges = $('#serging option:selected').data('sergingcharges');
+
+            if($(this).val() == 0){
+                $('#widthF').prop('disabled', true);
+                $('#widthI').prop('disabled', true);
+            }else{
+                $('#widthF').prop('disabled', false);
+                $('#widthI').prop('disabled', false);
+            }
+        });
+
+        // GENRATE PRICE
+        $('.generate-quote-btn').on('click', function(e) {
+            e.preventDefault();
+
+            var customer_id = (is_sales_rep == 1 && is_customer == 0) ? $('#customer_id').val() : '{{ Auth::user()->customer_id }}';
+            var item_id = $('#item_id').val();
+            var serging = $('#serging').val();
+            var lengthF = parseInt($('#lengthF').val());
+            var lengthI = parseInt($('#lengthI').val());
+            var widthF = parseInt($('#widthF').val());
+            var widthI = parseInt($('#widthI').val());
+            var addRugpad = $('#add-rugpad').is(':checked') ? "Y" : "N";
+
+            var missingFields = [];
+            if (!customer_id) missingFields.push("Customer ID");
+            if (!item_id) missingFields.push("Item ID");
+            if (!serging) missingFields.push("Serging");
+            if (!lengthF) missingFields.push("Length (Feet)");
+            if (!lengthI) missingFields.push("Length (Inches)");
+            if (!widthF) missingFields.push("Width (Feet)");
+            if (!widthI) missingFields.push("Width (Inches)");
+
+            if (missingFields.length > 0) {
+                toastr.error("The following fields are required: " + missingFields.join(", "), "Validation Error");
+                return;
+            }
+
+            $.ajax({
+                url: '/dashboard/quote-price',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    CustomerID: customer_id,
+                    ItemID: item_id,
+                    SergingType: serging,
+                    CutLengthFeet: lengthF,
+                    CutLengthInches: lengthI,
+                    CutWidthFeet: widthF,
+                    CutWidthInches: widthI,
+                    RugPad: addRugpad,
+                },
+                beforeSend: function(){
+                    $('.quotes-spinner').show();
+                },
+                success: function(response) {
+                    if(response.success){
+                        $('.quotes-spinner').hide();
+                        $('.quote-total-price').text(`$${response.price}`)
+                    }else{
+                        $('.quotes-spinner').hide();
+                        toastr.error(toastr.message);
+                    }
+                }
+            });
         });
 
         // Save quote
@@ -517,6 +626,7 @@ use Carbon\Carbon;
             var widthF = parseInt($('#widthF').val());
             var widthI = parseInt($('#widthI').val());
             var addRugpad = $('#add-rugpad').is(':checked') ? true : false;
+            var reserveStock = $('#reserve-stock').is(':checked') ? "Y" : "N";
             var length = lengthF * 12 + lengthI;
             var width  = widthF * 12 + widthI;
 
@@ -540,7 +650,8 @@ use Carbon\Carbon;
                     len_i: lengthI,
                     wid_f: widthF,
                     wid_i: widthI,
-                    addRugpad: addRugpad
+                    addRugpad: addRugpad,
+                    reserveStock: reserveStock,
                 },
                 beforeSend: function(){
                     $('.quotes-spinner').show();

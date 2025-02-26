@@ -144,6 +144,7 @@ class QuotesController extends DashboardController
             "CancelDate" => $cancel_quote_date,
             "ShippingCost" => 23.0,
             "IsRugPad" => $request->addRugpad,
+            "IsReserveStock" =>  $request->reserveStock,
         ];
         return $data;
     }
@@ -569,5 +570,20 @@ class QuotesController extends DashboardController
 
         return $data;
 
+    }
+
+    public function quote_price(Request $request){
+        $price = $this->ApiObj->CheckBLQuotePrice($request->CustomerID, $request->ItemID, $request->SergingType, $request->CutLengthFeet, $request->CutLengthInches, $request->CutWidthFeet, $request->CutWidthInches, $request->RugPad);
+        if($price['OutPut']['Success']){
+            return response()->json([
+                'success' => $price['OutPut']['Success'],
+                'price' =>  $price['OutPut']['QuotePrice'],
+            ]);
+        }else{
+            return response()->json([
+                'success' => $price['OutPut']['Success'],
+                'message' =>  $price['OutPut']['Message'],
+            ]);
+        }
     }
 }

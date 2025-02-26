@@ -163,10 +163,13 @@ try {
                 {
                     // $data[$key]['image'] = asset( $request->{'file.'.$key}->store( 'storage' ) );
                     $data[$key]['image'] = CommonController::upload_file_ftp($request->{'file.'.$key});
+                    $data[$key]['ImageName'] = CommonController::upload_file_ftp($request->{'file.'.$key});
                 }
                 else
                 {
+                    $data[$key]['raw']['ImageName'] = $request->image[$key];
                     $data[$key]['image'] = $request->image[$key];
+                    $data[$key]['ImageName'] = $request->image[$key];
                 }
 
             }
