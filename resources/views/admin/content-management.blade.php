@@ -83,14 +83,18 @@ use App\Http\Controllers\CommonController;
 
                             <div class="card-body shadow-sm mt-2 p-3 bg-white rounded">
                                 @foreach($collections as $collection)
+                                {{-- @dump($collection)
+                                @dump($content) --}}
                                 @php
-                                if (!array_key_exists($collection['Description'], $content)) {
+                                if (!array_key_exists($collection['Description'], $content)) {;
                                 $content[$collection['Description']] = [
                                 'title' => $collection['Description'],
                                 'description' => '',
-                                'image' => CommonController::getApiFullImage( $collection['Description'] )
+                                'image' => CommonController::getApiFullImage( $collection['Description'] ),
+                                'ImageName' => CommonController::getApiFullImage( $collection['Description'] )
                                 ];
                                 }
+                                // dump(CommonController::getApiFullImage( $content[$collection['Description']]['image'] ));
                                 @endphp
                                 <input type="hidden" name="raw[{{$collection['Description']}}]" value="{{json_encode($collection)}}" />
                                 <div class="form-group">
@@ -198,7 +202,7 @@ use App\Http\Controllers\CommonController;
     $(document).ready(function() {
         $('.fav-image').each(function(){
             if (
-                $('img', $(this)).attr('src') !== $('img', $(this)).attr('alt-src') && 
+                $('img', $(this)).attr('src') !== $('img', $(this)).attr('alt-src') &&
                 $('img', $(this)).attr('src') !== '{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'
             ) {
                 $('.remove-image', $(this)).addClass('d-block').removeClass('d-none');

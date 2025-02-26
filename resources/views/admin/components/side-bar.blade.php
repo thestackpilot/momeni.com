@@ -76,7 +76,9 @@ use App\Http\Controllers\CommonController;
         <div id="collapseFavourites" class="collapse" aria-labelledby="headingFavourites" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 @foreach($maincollections['MainCollections'] as $maincollection)
-                <a class="collapse-item" href="{{ route('admin.favourite',[$maincollection['MainCollectionID']]) }}"> {{ucfirst($maincollection['Description'])}} </a>
+                    @if(ucfirst($maincollection['Description']) != "BroadLoom" && ucfirst($maincollection['Description']) != "OAK")
+                        <a class="collapse-item" href="{{ route('admin.favourite',[$maincollection['MainCollectionID']]) }}"> {{ucfirst($maincollection['Description'])}} </a>
+                    @endif
                 @endforeach
             </div>
         </div>
@@ -89,7 +91,11 @@ use App\Http\Controllers\CommonController;
         <div id="collapseCollections" class="collapse" aria-labelledby="headingCollections" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 @foreach($maincollections['MainCollections'] as $maincollection)
-                <a class="collapse-item" href="{{ route('admin.collections',[$maincollection['MainCollectionID']]) }}"> {{ucfirst($maincollection['Description'])}} </a>
+                    @if(ucfirst($maincollection['Description']) != "BroadLoom" && ucfirst($maincollection['Description']) != "OAK")
+                        <a class="collapse-item" href="{{ route('admin.collections',[$maincollection['MainCollectionID']]) }}"> {{ucfirst($maincollection['Description'])}} </a>
+                    @elseif(ucfirst($maincollection['Description']) == "BroadLoom")
+                        <a class="collapse-item" href="{{ url('/admin/favourites/' . $maincollection['MainCollectionID'] . '/collections/Collections/') }}">{{ ucfirst($maincollection['Description']) }}</a>
+                    @endif
                 @endforeach
             </div>
         </div>

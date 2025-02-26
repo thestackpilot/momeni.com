@@ -877,4 +877,20 @@ class ApisController extends RootController
     {
         return $this->Post_API_Signature( 'Get_AllBLItemsForOrderPlace', 'Get All BL Items For Order Place', [], [], 1, 1, 1);
     }
+
+    public function CheckBLQuotePrice($CustomerID, $ItemID, $SergingType, $CutLengthFeet, $CutLengthInches, $CutWidthFeet, $CutWidthInches, $RugPad)
+    {
+        $post_array = [
+            'CustomerID' =>  $CustomerID,
+            'ItemID'     =>  $ItemID,
+            'SergingType'  =>  $SergingType,
+            'RugPad'        => $RugPad,
+            'CutLengthFeet'   =>  $CutLengthFeet,
+            'CutLengthInches' =>  $CutLengthInches,
+            'CutWidthFeet' =>  $CutWidthFeet,
+            'CutWidthInches' =>  $CutWidthInches,
+        ];
+        $result = $this->Post_API_Signature( 'CheckBLQuotePrice', 'Chec kBL Quote Price', $post_array, [], 1, 1, 0) ;
+        return $result;
+    }
 }

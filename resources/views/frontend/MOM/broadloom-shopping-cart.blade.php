@@ -1363,9 +1363,11 @@
                 var shipDate = $('input[name="ship_date"]')[0];
                 $('#lastpage-subtotal').text("$" + $('#inside-hidden-subtotal').val());
 
-                if ($('.ship-method-select').val() == 'AVER' || $('.ship-method-select').val() === 'BAX') {
+                if ($('.ship-method-select').val() == 'BEST' || $('.ship-method-select').val() === 'FD58' || $('.ship-method-select').val() === 'FD51'
+                || $('.ship-method-select').val() === 'FD50' || $('.ship-method-select').val() === 'OTHER' || $('.ship-method-select').val() === 'UT01'
+                || $('.ship-method-select').val() === 'UT03') {
                     if($('#ship_instructions').val().trim() == ''){
-                        alert(`Order Notes are required when shipping method is (!!REPLACED!!) or (!REPLACED!)`);
+                        alert(`Order Notes are required`);
                         return true;
                     }
                 }
@@ -1613,7 +1615,9 @@
 
         $('.ship-method-select').on('change', function() {
             const selectedValue = $(this).val();
-            if (selectedValue == 'AVER' || selectedValue === 'BAX') {
+            if (selectedValue == 'BEST' || selectedValue === 'FD58' || selectedValue === 'FD51' || selectedValue === 'FD50' || selectedValue === 'OTHER'
+                || selectedValue === 'UT01' || selectedValue === 'UT03'
+            ) {
                 $('#ship_instructions').prop('required', true);
             } else {
                 $('#ship_instructions').prop('required', false);
