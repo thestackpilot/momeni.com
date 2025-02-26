@@ -142,7 +142,7 @@ use Carbon\Carbon;
                                             </div>
                                         </div>
                                         <p class="my-2 total-amount"><b>Total :</b> <span class="quote-total-price">$0.00</span></p>
-                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn-other generate-quote-btn mx-5">Create or Generate Quote ?</a>
+                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn-other generate-quote-btn mx-5">Create or Generate Quote</a>
                                         <a href="javascript:void(0)" class="btn btn-primary submit-btn save-quote-btn submit-disabled-link mx-5">Save Quote</a>
                                     </form>
                                 </div>
@@ -413,12 +413,20 @@ use Carbon\Carbon;
         .submit-btn {
             bottom: 450px;
         }
+        .submit-btn-other {
+            bottom: 450px;
+        }
+        .total-amount {
+            bottom: 510px;
+        }
     }
     @media only screen and (min-width: 750px) and (max-width: 1194px) {
         .submit-btn {
             bottom: -55px;
         }
-
+        .submit-btn-other {
+            bottom: -55px;
+        }
     }
     @media (max-width: 768px) {
         .quotes-order-btn, .view-quote-btn{
