@@ -83,7 +83,15 @@ use App\Http\Controllers\CommonController;
                                         <div class="carousel-inner slider-for">
                                             <div class="active item slide--1" data-slide="-1">
                                                 <a href="{{$collection['LinkUrl']}}">
-                                                    <div class="single-img" style="background-image: url('{{CommonController::getApiFullImage($collection['ImageName'])}}'), url('{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}')" class="img-responsive"></div>
+                                                    @php
+                                                    $img_check = strpos($collection['ImageName'] , 'storage') === 0 ? true : false;
+                                                    if($img_check){
+                                                        $url = url('/') . "/" . $collection['ImageName'];
+                                                    }else{
+                                                        $url = CommonController::getApiFullImage($collection['ImageName']);
+                                                    }
+                                                    @endphp
+                                                    <div class="single-img" style="background-image: url('{{$url}}'), url('{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}')" class="img-responsive"></div>
                                                 </a>
                                             </div>
                                             {{-- @foreach($collection['DesignsList'] as $k => $thumb_design)

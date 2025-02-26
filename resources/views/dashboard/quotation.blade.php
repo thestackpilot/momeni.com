@@ -573,9 +573,9 @@ use Carbon\Carbon;
             var item_id = $('#item_id').val();
             var serging = $('#serging').val();
             var lengthF = parseInt($('#lengthF').val());
-            var lengthI = parseInt($('#lengthI').val());
+            var lengthI = $('#lengthI').val();
             var widthF = parseInt($('#widthF').val());
-            var widthI = parseInt($('#widthI').val());
+            var widthI = $('#widthI').val();
             var addRugpad = $('#add-rugpad').is(':checked') ? "Y" : "N";
 
             var missingFields = [];
