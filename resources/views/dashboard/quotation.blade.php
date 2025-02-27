@@ -77,7 +77,8 @@ use Carbon\Carbon;
                                                     <select class="form-control js-example-basic-single" name="item_id" id="item_id">
                                                         <option disabled selected>Choose Style</option>
                                                         @foreach ($items as $single_item)
-                                                            <option value="{{ $single_item['KeyID'] }}" data-rugcheck="{{ $single_item['IsRugPad']}}">{{ $single_item['Description'] }}</option>
+                                                            <option value="{{ $single_item['KeyID'] }}" data-rugcheck="{{ $single_item['IsRugPad']}}"
+                                                            data-width={{$single_item['TotalWidth']}}>{{ $single_item['Description'] }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -246,6 +247,8 @@ use Carbon\Carbon;
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="orignal-width-feet" id="orignal-width-feet" value="">
+            <input type="hidden" name="orignal-width-inches" id="orignal-width-inches" value="">
         </section>
     </main>
     @include('dashboard.components.footer')
@@ -479,7 +482,7 @@ use Carbon\Carbon;
         $('.cancel_quote_date').datepicker({
             format: 'yyyy-mm-dd',
             startDate: new Date(),
-            endDate: new Date(new Date().setDate(new Date().getDate() + 13)),
+            endDate: new Date(new Date().setDate(new Date().getDate() + 14)),
             maxViewMode: 3,
             todayBtn: "linked",
             clearBtn: false,
@@ -559,6 +562,8 @@ use Carbon\Carbon;
             if($(this).val() == 0){
                 $('#widthF').prop('disabled', true);
                 $('#widthI').prop('disabled', true);
+                $('#widthF').val( $('#orignal-width-feet').val() );
+                $('#widthI').val( $('#orignal-width-inches').val() );
             }else{
                 $('#widthF').prop('disabled', false);
                 $('#widthI').prop('disabled', false);
@@ -942,6 +947,15 @@ use Carbon\Carbon;
         $('#item_id').change(function() {
             var rugCheck = $(this).find('option:selected').data('rugcheck');
             rugCheck == 'N' ? $('#add-rugpad').prop('disabled', true) : $('#add-rugpad').prop('disabled', false);
+            var widthInches = $(this).find('option:selected').data('width');
+            var feet = Math.floor(widthInches / 12);
+            var inches = widthInches % 12;
+            $('#orignal-width-feet').val(feet);
+            $('#orignal-width-inches').val(inches);
+            if($('#serging').val() == 0){
+                $('#widthF').val( feet );
+                $('#widthI').val( inches );
+            }
         });
 
 });
