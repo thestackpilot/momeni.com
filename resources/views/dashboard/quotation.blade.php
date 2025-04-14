@@ -25,15 +25,21 @@ use Carbon\Carbon;
                         <div class="container-fluid bg-white">
                             <div class="quotes-btn-parent">
                                 <div class="d-flex flex-row settings">
-                                    <a href="javascript:void(0)" data-related-section="new-quotes" class="quotes-btn">New Quote</a>
-                                    <a href="javascript:void(0)" data-related-section="view-active-quotes" class="quotes-btn active-btn">View Active Quotes</a>
+                                    <a href="javascript:void(0)" data-related-section="new-quotes" class="quotes-btn  active-btn">New Quote</a>
+                                    <a href="javascript:void(0)" data-related-section="view-active-quotes" class="quotes-btn">View Active Quotes</a>
                                 </div>
                             </div>
                             <div>
                                <div style="" class="new-quotes mt-3">
                                 <div class="container-fluid">
                                     <form action="" method="" >
-                                        <div class="row">
+                                      
+                                            <div class="row">
+                                                <div class="col-md-9"></div>
+                                                    <div class="col-md-3 col-12 d-flex flex-column align-items-end">
+                                                        <label class="form-label" ><b>This quote remain active for the next 14 days</b></label>
+                                                    </div>
+                                            
                                             <div class="col-md-6 col-12">
                                                     <div class="mb-3 sale_rep_box">
                                                         <label class="form-label">Customer ID</label>
@@ -62,6 +68,7 @@ use Carbon\Carbon;
                                             </div>
                                             <div class="col-md-3 col-12">
                                                 <div class="mb-3">
+                                                    {{-- <label class="form-lable"><b>This quote remain active for the next 14 days</b></label>                                        --}}
                                                     <label class="form-label">Cancel Date</label>
                                                     <div class="input-group">
                                                         <input name="cancel_quote_date" id="cancel_quote_date" value="" class="form-control cancel_quote_date" type="text" data-required="true">
@@ -70,6 +77,7 @@ use Carbon\Carbon;
                                                         </span>
                                                     </div>
                                                 </div>
+                                                
                                             </div>
                                             <div class="col-md-9 col-12">
                                                 <div class="mb-3">
@@ -478,7 +486,7 @@ use Carbon\Carbon;
         var currentDate = new Date();
         var currentDateFormatted = currentDate.toISOString().split('T')[0];
         $('#quotes_date').val(currentDateFormatted).prop('readonly', true);
-        $('.cancel_quote_date').val(new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0]);
+        $('.cancel_quote_date').val(new Date(new Date().setDate(new Date().getDate() + 14)).toISOString().split('T')[0]);
         $('.cancel_quote_date').datepicker({
             format: 'yyyy-mm-dd',
             startDate: new Date(),
@@ -497,8 +505,8 @@ use Carbon\Carbon;
 
         // Tabs handle
         $('.settings a[data-related-sect="view-active-quotes"]').addClass('active-btn');
-        $('.view-active-quotes').show();
-        $('.new-quotes').hide();
+        $('.view-active-quotes').hide();
+        $('.new-quotes').show();
         $('.settings a').click(function() {
             $('.quotes-btn').removeClass('active-btn');
             $(this).addClass('active-btn');

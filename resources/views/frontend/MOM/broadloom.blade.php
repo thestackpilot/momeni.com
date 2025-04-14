@@ -105,56 +105,6 @@
                                                 </div>
                                                 <div class="col-md-6 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for=""><strong> Cut Length </strong></label>
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="input-group">
-                                                                    <input type="number" class="form-control Tlength"
-                                                                           id="Tlength" placeholder=""
-                                                                           style="text-align:right;" min="0">
-                                                                    <div class="input-group-prepend">
-                                                                        <div class="input-group-text"><strong>
-                                                                                Ft</strong></div>
-                                                                    </div>
-                                                                    <span id="Tlength-max-error" class="text-red d-none" style="font-size:0.6rem; font-weight:800;"></span>
-                                                                </div>
-                                                                <input type="hidden" class="form-control Tlength-ats-max"
-                                                                           id="Tlength-ats-max">
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="input-group">
-                                                                    {{-- <select name="" id="TlengthInch"
-                                                                        class="form-control">
-                                                                        <option value="0">0</option>
-                                                                        <option value="1">1</option>
-                                                                        <option value="2">2</option>
-                                                                        <option value="3">3</option>
-                                                                        <option value="4">4</option>
-                                                                        <option value="5">5</option>
-                                                                        <option value="6">6</option>
-                                                                        <option value="7">7</option>
-                                                                        <option value="8">8</option>
-                                                                        <option value="9">9</option>
-                                                                        <option value="10">10</option>
-                                                                        <option value="11">11</option>
-                                                                    </select> --}}
-                                                                    <input type="number"
-                                                                           class="form-control TlengthInch"
-                                                                           id="TlengthInch" placeholder=""
-                                                                           style="text-align:right;" min="0" max="11">
-                                                                    <div class="input-group-prepend">
-                                                                        <div class="input-group-text">
-                                                                            <strong>In</strong></div>
-                                                                    </div>
-                                                                    <span id="Tlengthinch-max-error" class="text-red d-none" style="font-size:0.6rem; font-weight:800;"></span>
-                                                                </div>
-                                                                <input type="hidden" class="form-control TlengthInch-ats-max" id="TlengthInch-ats-max" value="">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12">
-                                                    <div class="form-group">
                                                         <label for=""><strong>Cut Width</strong></label>
                                                         <div class="row">
                                                             <div class="col-6">
@@ -203,6 +153,57 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for=""><strong> Cut Length </strong></label>
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                                <div class="input-group">
+                                                                    <input type="number" class="form-control Tlength"
+                                                                           id="Tlength" placeholder=""
+                                                                           style="text-align:right;" min="0">
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text"><strong>
+                                                                                Ft</strong></div>
+                                                                    </div>
+                                                                    <span id="Tlength-max-error" class="text-red d-none" style="font-size:0.6rem; font-weight:800;"></span>
+                                                                </div>
+                                                                <input type="hidden" class="form-control Tlength-ats-max"
+                                                                           id="Tlength-ats-max">
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="input-group">
+                                                                    {{-- <select name="" id="TlengthInch"
+                                                                        class="form-control">
+                                                                        <option value="0">0</option>
+                                                                        <option value="1">1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                        <option value="6">6</option>
+                                                                        <option value="7">7</option>
+                                                                        <option value="8">8</option>
+                                                                        <option value="9">9</option>
+                                                                        <option value="10">10</option>
+                                                                        <option value="11">11</option>
+                                                                    </select> --}}
+                                                                    <input type="number"
+                                                                           class="form-control TlengthInch"
+                                                                           id="TlengthInch" placeholder=""
+                                                                           style="text-align:right;" min="0" max="11">
+                                                                    <div class="input-group-prepend">
+                                                                        <div class="input-group-text">
+                                                                            <strong>In</strong></div>
+                                                                    </div>
+                                                                    <span id="Tlengthinch-max-error" class="text-red d-none" style="font-size:0.6rem; font-weight:800;"></span>
+                                                                </div>
+                                                                <input type="hidden" class="form-control TlengthInch-ats-max" id="TlengthInch-ats-max" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                               
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label for=""><strong> SQ-FT Price ($)</strong></label>

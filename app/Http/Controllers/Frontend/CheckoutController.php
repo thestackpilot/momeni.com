@@ -497,6 +497,8 @@ class CheckoutController extends FrontendController
                 return response()->json($payment_response);
             }
             // dd($headers, $itemDetail);
+//             Log::debug('This is a log message');
+// Log::debug('Data:', $itemDetail);
             prr(" :: Place Order API CALL DATA :: ");
             prr($headers, $itemDetail);
             //dd($headers, $itemDetail);

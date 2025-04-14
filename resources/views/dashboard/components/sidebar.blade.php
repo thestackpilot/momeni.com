@@ -26,7 +26,12 @@ use App\Http\Controllers\CommonController;
                 @elseif(!in_array($item['slug'], ["dashboard.quotation", "dashboard.viewblorder", "dashboard.place_bl_order" , "dashboard.bl_reports"]))
                     <a href="{{ route($item['slug']) }}"
                     class="{{ str_contains(url()->current(), route($item['slug'])) ? 'active' : $item['slug'] }}">
-                        {{ $item['label'] }}
+                    {{$item['label']}}
+                    {{-- @if ($item['label']==="Place Rug  Order")
+                    New Quote
+                    @else 
+                    {{$item['label']}}
+                    @endif --}}
                     </a>
                 @endif
             </li>

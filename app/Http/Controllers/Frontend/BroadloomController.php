@@ -24,6 +24,7 @@ class BroadloomController extends FrontendController
 
     public function index($id, $cust_id, $color_id, $item_name = '', $item_id = '')
     {
+        
         $itemController = new ItemController();
 
         $items = $itemController->generate_color_name($itemController->generate_image_urls($this->ApiObj->Get_Items("", $id, "", "", "", "", $color_id)));
@@ -42,6 +43,7 @@ class BroadloomController extends FrontendController
         $roll_pieces =  $this->ApiObj->Get_ItemsRollAndCutPieceList($item_id);
         $surging_types = $this->ApiObj->Get_SurgingTypes();
         // dd($roll_pieces);
+        // dd( 'frontend.' . $this->active_theme->theme_abrv . '.broadloom');
         return view('frontend.' . $this->active_theme->theme_abrv . '.broadloom', [
             'surging_types' => $surging_types,
             'roll_pieces' => $roll_pieces,
@@ -62,6 +64,7 @@ class BroadloomController extends FrontendController
             $customer_details = $this->ApiObj->Get_CustomerDetail((new Cart())->get_active_cart_customer());
             $payment_terms_list = $this->ApiObj->Get_PaymentTermsList();
             $shippings = $this->ApiObj->Get_ShipViaList();
+           // dd($shippings);
 
             if ($shippings && $shippings['Success'] == true) {
                 $temp = [];

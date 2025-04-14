@@ -162,6 +162,7 @@ class Page extends Model
     {
         $array_to_return = [];
         $sections = $this->model_sections ->where('page_id',$page['id'])->get();
+       
         if(!$sections ->isEmpty()){
             $sections = $sections->toArray();
         }
@@ -169,6 +170,7 @@ class Page extends Model
         foreach ($sections as $section){
             $section_metas_array = [];
             $section_meta = $this->model_section_meta->where('section_id',$section['id'])->get();
+        
             foreach($section_meta as $meta)
             {
                 $section_metas_array [$meta -> meta_key] = $meta -> meta_value;
@@ -177,6 +179,7 @@ class Page extends Model
             $section = array_merge($section,$section_metas_array);
             array_push($array_to_return,$section);
         }
+      //  dd($this->array_slug_to_outter_key($array_to_return));
         return $this->array_slug_to_outter_key($array_to_return);
 
     }
@@ -193,6 +196,7 @@ class Page extends Model
                 $final_array[$key] = $value;
             }
         }
+        // dd($final_array);
         return $final_array;
     }
     public function get_pages_with_sections_raw()

@@ -321,6 +321,25 @@ body{
                             </div>
                             <div class="col-md-3 col-12">
                                 <div class="mb-3">
+                                    <label class="label-without-form">Cut Width   <span class="Twidth-max-error d-none" style="font-size:0.6rem; font-weight:800; color:red;"></span></label>
+                                    <div>
+                                        <input type="hidden" class="form-control Twidth-ats-max" id="Twidth-ats-max" value="">
+                                        <input type="hidden" class="form-control TwidthInch-ats-max" id="TwidthInch-ats-max" value="">
+                                    </div>
+                                    <div class="mb-3 d-flex align-items-center justify-content-between">
+                                        <div class="input-group me-2">
+                                            <input type="number" class="form-control Twidth text-center small-input" name="Twidth" id="Twidth" placeholder="00" min="0" disabled style="text-align:right;">
+                                            <span class="input-group-text TwidthGroup">Ft</span>
+                                        </div>
+                                        <div class="input-group ms-2">
+                                            <input type="number" class="form-control TwidthInch text-center small-input" name="TwidthInch" id="TwidthInch" disabled placeholder="00" min="0" max="11" style="text-align:right;">
+                                            <span class="input-group-text TwidthInchGroup">In</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-12">
+                                <div class="mb-3">
                                     <label class="label-without-form">Cut Length</label>
                                     <span class="Tlength-max-error d-none" style="font-size:0.6rem; font-weight:800; color:red;"></span>
                                     <div>
@@ -339,25 +358,7 @@ body{
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-12">
-                                <div class="mb-3">
-                                    <label class="label-without-form">Cut Width   <span class="Twidth-max-error d-none" style="font-size:0.6rem; font-weight:800; color:red;"></span></label>
-                                    <div>
-                                        <input type="hidden" class="form-control Twidth-ats-max" id="Twidth-ats-max" value="">
-                                        <input type="hidden" class="form-control TwidthInch-ats-max" id="TwidthInch-ats-max" value="">
-                                    </div>
-                                    <div class="mb-3 d-flex align-items-center justify-content-between">
-                                        <div class="input-group me-2">
-                                            <input type="number" class="form-control Twidth text-center small-input" name="Twidth" id="Twidth" placeholder="00" min="0" disabled style="text-align:right;">
-                                            <span class="input-group-text TwidthGroup">Ft</span>
-                                        </div>
-                                        <div class="input-group ms-2">
-                                            <input type="number" class="form-control TwidthInch text-center small-input" name="TwidthInch" id="TwidthInch" disabled placeholder="00" min="0" max="11" style="text-align:right;">
-                                            <span class="input-group-text TwidthInchGroup">In</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="row">

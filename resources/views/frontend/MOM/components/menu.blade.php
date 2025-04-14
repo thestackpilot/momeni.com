@@ -7,7 +7,7 @@
 
 @endphp
 
-<div class="col-lg-10 col-md-5 header-menu text-left">
+<div class=" header-menu text-left">
     <ul class="menu">
         <li class="parant">
             @if(isset($menus -> rug_header))
@@ -45,7 +45,14 @@
 
         @if($pages -> all_pages -> sections -> main_top_menu -> menu_3_caption !== null)
             <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_url}}"
-                                  class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_caption}}</a>
+                                  class="main-item">@if($pages -> all_pages -> sections -> main_top_menu -> menu_3_caption==="OAK")
+
+                                      ONE OF A KIND
+@else
+{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_caption==="OAK"}}
+                                  @endif
+                                  
+                                      </a>
 
             </li>
         @endif

@@ -529,50 +529,6 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-5 mb-2">
-                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Town/
-                                                        City<span class="text-danger"
-                                                                  style="font-size: 18px">*</span></label>
-                                                    <input class="form-control disable-toggle" type="text" id=""
-                                                           name="City"
-                                                           placeholder=""
-                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['City']}}"
-                                                           required>
-                                                </div>
-                                                <div class="col-md-5 mb-2">
-                                                    <label for="" class="form-label mb-0"
-                                                           style="font-size: 14px">State<span class="text-danger"
-                                                                                              style="font-size: 18px">*</span></label>
-                                                    {{-- <input class="form-control disable-toggle" type="text" id="state" name="State"
-                                                           placeholder=""
-                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['State']}}"
-                                                           required> --}}
-                                                    @if(isset($cust_state))
-                                                        <select name="State" id="state_dropdown"
-                                                                class="form-control bg-white reter checkout-dropdown">
-                                                        </select>
-                                                    @elseif(!isset($cust_state) && isset($cust_state))
-                                                        <input type="text" data-required="true"
-                                                               class="form-control bg-white" name="State" maxlength="50"
-                                                               aria-describedby="State" value="{{$cust_state}}">
-                                                    @else
-                                                        <input type="text" data-required="true"
-                                                               class="form-control bg-white" name="State" maxlength="50"
-                                                               aria-describedby="State" placeholder="State*">
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-5 mb-2">
-                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Zip
-                                                        Code<span class="text-danger"
-                                                                  style="font-size: 18px">*</span></label>
-                                                    <input class="form-control disable-toggle" type="text" id=""
-                                                           name="Zip"
-                                                           placeholder=""
-                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}"
-                                                           required>
-                                                </div>
-                                                <div class="col-md-5 mb-2">
                                                     <label for="" class="form-label mb-0" style="font-size: 14px">Country
                                                         <span class="text-danger" style="font-size: 18px">*</span>
                                                     </label>
@@ -602,6 +558,52 @@
                                                                aria-describedby="Country" placeholder="Country*">
                                                     @endif
                                                 </div>
+                                               
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0"
+                                                           style="font-size: 14px">State<span class="text-danger"
+                                                                                              style="font-size: 18px">*</span></label>
+                                                    {{-- <input class="form-control disable-toggle" type="text" id="state" name="State"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['State']}}"
+                                                           required> --}}
+                                                    @if(isset($cust_state))
+                                                        <select name="State" id="state_dropdown"
+                                                                class="form-control bg-white reter checkout-dropdown">
+                                                        </select>
+                                                    @elseif(!isset($cust_state) && isset($cust_state))
+                                                        <input type="text" data-required="true"
+                                                               class="form-control bg-white" name="State" maxlength="50"
+                                                               aria-describedby="State" value="{{$cust_state}}">
+                                                    @else
+                                                        <input type="text" data-required="true"
+                                                               class="form-control bg-white" name="State" maxlength="50"
+                                                               aria-describedby="State" placeholder="State*">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Town/
+                                                        City<span class="text-danger"
+                                                                  style="font-size: 18px">*</span></label>
+                                                    <input class="form-control disable-toggle" type="text" id=""
+                                                           name="City"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['City']}}"
+                                                           required>
+                                                </div>
+                                                <div class="col-md-5 mb-2">
+                                                    <label for="" class="form-label mb-0" style="font-size: 14px">Zip
+                                                        Code<span class="text-danger"
+                                                                  style="font-size: 18px">*</span></label>
+                                                    <input class="form-control disable-toggle" type="text" id=""
+                                                           name="Zip"
+                                                           placeholder=""
+                                                           value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}"
+                                                           required>
+                                                </div>
+                                               
                                             </div>
                                             <p class="font-weight--bold " style="font-size: 18px">Additional
                                                 Information</p>
@@ -1382,6 +1384,7 @@
                     formData += '&quoteCartData=' + encodeURIComponent(quoteCartData);
                     formData += '&quoteNo=' + encodeURIComponent(quoteNo);
                     console.log('form data', formData);
+                    console.log('checking testing')
                     $.ajax({
                         url: '{{route("frontend.checkout.place_order")}}',
                         type: "POST",
