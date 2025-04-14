@@ -33,11 +33,11 @@ use Carbon\Carbon;
                                <div style="" class="new-quotes mt-3">
                                 <div class="container-fluid">
                                     <form action="" method="" >
-                                      
+
                                             <div class="row">
                                                 <div class="col-md-9"></div>
-                                                    <div class="col-md-3 col-12 d-flex flex-column align-items-end">
-                                                        <label class="form-label" ><b>This quote remain active for the next 14 days</b></label>
+                                                    <div class="col-md-3 col-12  d-flex flex-column align-items-end">
+                                                        <div class="alert" >This quote will remain active for the next 14 days</div>
                                                     </div>
                                             
                                             <div class="col-md-6 col-12">
