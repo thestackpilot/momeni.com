@@ -652,9 +652,10 @@
                                                         (optional)</label>
                                                     <textarea class="form-control" id="ship_instructions" name="shipping_instructions"
                                                               style="height: 7rem;" placeholder="" class="ship_instructions"></textarea>
-                                                    <input type="hidden" name="item_broadloom" id="item_broadloom"
-                                                           value="{{1}}">
+                                                    
                                                 </div>
+                                                <input type="hidden" name="item_broadloom" id="item_broadloom"
+                                                           value="{{1}}">
                                             </div>
                                         </form>
                                     @endif
@@ -1469,6 +1470,7 @@
                     $(".disable-toggle").addClass("muted-bd-fields");
                     $(".disable-toggle").removeAttr("required");
                     $("input").not("[type='radio']").val('');
+                    $("#item_broadloom").val(1);
 
                     $('#select-address').trigger('change');
                     $('input[name="reference_number"]').val(referenceNumberValue);

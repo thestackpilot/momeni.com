@@ -9,6 +9,8 @@ use App\Models\OrderPayments;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PaytraceController;
 use App\Http\Controllers\ConstantsController;
+use Illuminate\Support\Facades\Log;
+
 
 class CheckoutController extends FrontendController
 {
@@ -516,7 +518,7 @@ class CheckoutController extends FrontendController
             prr(" :: Place Order API CALL RESULT :: ");
             prr($result);
             // dd($result);
-
+            //\Log::info('API Response:');
             $order_payment = $this->order_payment_model->updateOrCreate(
                 ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],
                 [
