@@ -234,7 +234,7 @@ body{
                            <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                               <label for="{{$filter['placeholder'] ? str_replace(' ', '_', strtolower($filter['placeholder'])) : str_replace(' ', '_', strtolower($filter['title']))}}" class="form-label">{{$filter['placeholder'] ? $filter['placeholder'] : $filter['title']}}</label>
                               @if($filter['type'] == 'select')
-                              <select name="{{str_replace(' ', '_', strtolower($filter['title']))}}" class="form-control">
+                              <select name="{{str_replace(' ', '_', strtolower($filter['title']))}}" class="form-control" id="test">
                                  @foreach($filter['options'] as $option)
                                  <option {{old(str_replace(' ', '_', strtolower($filter['title']))) && old(str_replace(' ', '_', strtolower($filter['title']))) == $option['value'] ? 'selected' : ($filter['value'] == $option['value'] ? 'selected' : '' ) }} value="{{$option['value']}}">{{$option['label']}}</option>
                                  @endforeach
@@ -645,7 +645,7 @@ body{
                                     <hr style="border-top-color: whitesmoke;">
                                     <div class="row">
                                         <div class="col-md-7">Shipping Charges:</div>
-                                        <div class="col-md-5 text-right shipping_charges">$0.00</div>
+                                        <div class="col-md-5 text-right shipping_charges" id="shippingCharges">$0.00</div>
                                     </div>
                                     <hr style="border-top-color: whitesmoke;">
                                     <div class="row mt-3">
@@ -2305,7 +2305,22 @@ function SalesRepCustomerCartCheck(){
         $customerSelect.prop('disabled', matchFound);
     }
 }
+$('select[name="ship_via_id"]').on('change', function() {
+            const selectedValue = $(this).val();
+            // if (selectedValue == 'BEST' || selectedValue === 'FD58' || selectedValue === 'FD51' || selectedValue === 'FD50' || selectedValue === 'OTHER'
+            //     || selectedValue === 'UT01' || selectedValue === 'UT03'
+            // ) {
+            //     $('#ship_instructions').prop('required', true);
+            // } else {
+            //     $('#ship_instructions').prop('required', false);
+            // }
 
+            if(selectedValue == 'BEST' || selectedValue === 'AMZX'){
+                $('#shippingCharges').text('TBD');
+            }else{
+                $('#shippingCharges').text('$0.00');
+            }
+        });
 </script>
 @endsection
 

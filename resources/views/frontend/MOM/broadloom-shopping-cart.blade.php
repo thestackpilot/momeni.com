@@ -1461,7 +1461,7 @@
 
             $(document).on('click', 'input[name="shipping-address"]', function () {
                 var addressValue = $(this).val();
-                console.log('addressValue', addressValue);
+                // console.log('addressValue', addressValue);
                 if (addressValue == 'existing-address') {
                     var referenceNumberValue = $('input[name="reference_number"]').val();
                     var shipValue = $('.order-ship-date').val();
@@ -1477,15 +1477,15 @@
                     $('.order-ship-date').val(shipValue);
                     $('#select-address').prop("disabled", false);
                 } else {
-                    $(".disable-toggle").removeClass("muted-bd-fields");
-                    $(".hidden-inp").val("");
-                    $('#hidden-address_id').val("");
-                    $(".disable-toggle").val("");
-                    $("#countries").val(0);
-                    $("#state_dropdown").val('');
-                    $(".disable-toggle").attr("required", true);
-                    $("#bd-address2").removeAttr("required")
-                    $('#select-address').prop("disabled", true);
+                     $(".disable-toggle").removeClass("muted-bd-fields");
+                    // $(".hidden-inp").val("");
+                    // $('#hidden-address_id').val("");
+                    // $(".disable-toggle").val("");
+                    // $("#countries").val(0);
+                    // $("#state_dropdown").val('');
+                    // $(".disable-toggle").attr("required", true);
+                    // $("#bd-address2").removeAttr("required")
+                    // $('#select-address').prop("disabled", true);
                 }
             });
 
