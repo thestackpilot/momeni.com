@@ -347,7 +347,7 @@ class QuotesController extends DashboardController
                 }
             }
         }
-
+//dd(isset($customer_details['CustomerDetail']['PaymentTerm']) ? $customer_details['CustomerDetail']['PaymentTerm'] : '');
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-shopping-cart', [
             'quote_cart_data'     => json_decode(json_encode($quote_cart_data)),
             'countries'           => $countries,

@@ -143,7 +143,7 @@
                                                                                                 <span
                                                                                                     class="tooltiptext">
                                                                                                     {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
-                                                                                                    <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                                    <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
                                                                                                 </span>
                                                                                             @endif
                                                                                         </div>
@@ -272,7 +272,7 @@
                                                                                                 <span
                                                                                                     class="tooltiptext">
                                                                                                     {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
-                                                                                                    <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                                    <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
                                                                                                 </span>
                                                                                             @endif
                                                                                         </div>
@@ -737,7 +737,7 @@
                                                                                                 <span
                                                                                                     class="tooltiptext">
                                                                                                     {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
-                                                                                                    <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                                    <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
                                                                                                 </span>
                                                                                             @endif
                                                                                         </div>
@@ -817,7 +817,7 @@
                                                                                             <span
                                                                                                 class="tooltiptext">
                                                                                                 {{-- <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
-                                                                                                <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                                <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
                                                                                             </span>
                                                                                         @endif
                                                                                     </div>
@@ -1005,7 +1005,7 @@
                                                             @if(!empty($item_sizes['SergingType']))
                                                                 <span
                                                                     class="tooltiptext">
-                                                                                            <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
+                                                                                            <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
                                                                                         </span>
                                                             @endif
                                                         </div>
@@ -1069,7 +1069,7 @@
                                                             @if(!empty($item_sizes['SergingType']))
                                                                 <span
                                                                     class="tooltiptext">
-                                                                                            <strong>Serging Rate: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
+                                                                                            <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
                                                                                         </span>
                                                             @endif
                                                         </div>
@@ -1469,8 +1469,8 @@
                     $("#state_dropdown").val('');
                     $(".disable-toggle").addClass("muted-bd-fields");
                     $(".disable-toggle").removeAttr("required");
-                    $("input").not("[type='radio']").val('');
-                    $("#item_broadloom").val(1);
+                    // $("input").not("[type='radio']").val('');
+                    //$("#item_broadloom").val(1);
 
                     $('#select-address').trigger('change');
                     $('input[name="reference_number"]').val(referenceNumberValue);
