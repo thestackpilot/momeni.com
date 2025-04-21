@@ -191,7 +191,7 @@ body{
                         const keysToRemove = [
                             'address1', 'address2', 'city', 'country', 'customer_po',
                             'email', 'first_name', 'last_name', 'postal_code',
-                            'shipping-address', 'state'
+                            'shipping-address', 'state', 'ship_via_id', 'req_ship_date'
                         ];
 
                         keysToRemove.forEach(key => {
@@ -279,7 +279,7 @@ body{
                         <div class="d-flex flex-column">
                             <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('address1')}}" name="address1" aria-describedby="Address" maxlength="35" placeholder="Address*">
                             <input type="text" class="form-control bg-white mb-3" value="{{old('address2')}}" name="address2" aria-describedby="Apartment" maxlength="35" placeholder="Apartment, suite, etc. (optional)">
-                            <select name="state" id="state_dropdown" class="form-control bg-white reter checkout-dropdown my-2 other-state d-none"></select>
+                            <select name="state" data-default="{{old('state')}}" id="state_dropdown" class="form-control bg-white reter checkout-dropdown my-2 other-state d-none"></select>
                             <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('city')}}" name="city" maxlength="35" aria-describedby="City" placeholder="City*">
                             <select name="country" id="countries" class="form-control bg-white mb-3 other-country d-none" aria-describedby="country" required>
                                 <option value="" disabled selected>Select your country*</option>
@@ -290,8 +290,10 @@ body{
                                     </option>
                                 @endforeach
                             </select>
-                            <input type="hidden"class="form-control bg-white mb-3 default-country" value="{{old('country')}}" name="country" maxlength="35" aria-describedby="Country" placeholder="Country*">
-                            <input type="hidden" class="form-control bg-white mb-3 default-state" value="{{old('state')}}" name="state" maxlength="50" aria-describedby="State" placeholder="State*">
+                            <input type="hidden"class="form-control bg-white mb-3 default-country" value="{{old('country')}}" maxlength="35" aria-describedby="Country" placeholder="Country*">
+                            <!-- name="country" -->
+                            <input type="hidden" class="form-control bg-white mb-3 default-state" value="{{old('state')}}" maxlength="50" aria-describedby="State" placeholder="State*"> 
+                            <!-- name="state"  -->
                         </div>
                         <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
                             <input type="text" data-required="true" class="form-control bg-white" value="{{old('postal_code')}}" name="postal_code" maxlength="10" aria-describedby="PostalCode" placeholder="Postal Code*">
@@ -695,12 +697,32 @@ $(document).ready(function() {
     $("input[name='customer_po']").on('input', function() {
         localStorage.setItem('customer_po', $(this).val());
     });
+
+    $("[name='req_ship_date']").on('change', function() {
+        localStorage.setItem('req_ship_date', $(this).val());
+    });
+
     $('#state_dropdown').on('change', function() {
         localStorage.setItem('state', $(this).val());
     });
     $('#countries').on('change', function() {
         localStorage.setItem('country', $(this).val());
     });
+
+    if (localStorage.getItem('customer_po')) {
+        $("input[name='customer_po']").val(localStorage.getItem('customer_po'));
+    }
+
+    if (localStorage.getItem('ship_via_id')) {
+        console.log('ship_via_id :: ', localStorage.getItem('ship_via_id'))
+        $("[name='ship_via_id']").val(localStorage.getItem('ship_via_id'));
+        $(`option[value='${localStorage.getItem('ship_via_id')}']`, $("[name='ship_via_id']")).attr('selected', 'selected').trigger('change');
+    }
+
+    if (localStorage.getItem('req_ship_date')) {
+        console.log('req_ship_date :: ', localStorage.getItem('req_ship_date'))
+        $("[name='req_ship_date']").val(localStorage.getItem('req_ship_date'));
+    }
     if (localStorage.getItem('customer_po')) {
         $("input[name='customer_po']").val(localStorage.getItem('customer_po'));
     }
@@ -828,10 +850,10 @@ $(document).ready(function() {
         _token: '{{csrf_token()}}'
         }, function(data) {
         if (typeof data !== 'undefined' && data.success && typeof data.addresses !== 'undefined') {
-            const selectedValue = data?.addresses?.CustomerShipVias?.[0]?.ShipViaID;
+            const selectedValue = localStorage.getItem('ship_via_id') || data?.addresses?.CustomerShipVias?.[0]?.ShipViaID;
             const dropdown = $('[name="ship_via_id"]');
             const optionExists = dropdown.find(`option[value="${selectedValue}"]`).length > 0;
-            dropdown.val(optionExists ? selectedValue : dropdown.find('option:first').val()).change();
+            dropdown.val(optionExists ? selectedValue : (localStorage.getItem('ship_via_id') ? localStorage.getItem('ship_via_id') : dropdown.find('option:first').val())).change();
 
             var selectedAddress = '{{old("address_id") ? old("address_id") : "" }}';
             addresses += '<div class="row mb-4">';
@@ -2306,6 +2328,7 @@ function SalesRepCustomerCartCheck(){
     }
 }
 $('select[name="ship_via_id"]').on('change', function() {
+    localStorage.setItem('ship_via_id', $(this).val());
             const selectedValue = $(this).val();
             // if (selectedValue == 'BEST' || selectedValue === 'FD58' || selectedValue === 'FD51' || selectedValue === 'FD50' || selectedValue === 'OTHER'
             //     || selectedValue === 'UT01' || selectedValue === 'UT03'
