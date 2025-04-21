@@ -279,7 +279,7 @@ body{
                         <div class="d-flex flex-column">
                             <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('address1')}}" name="address1" aria-describedby="Address" maxlength="35" placeholder="Address*">
                             <input type="text" class="form-control bg-white mb-3" value="{{old('address2')}}" name="address2" aria-describedby="Apartment" maxlength="35" placeholder="Apartment, suite, etc. (optional)">
-                            <select name="state" data-default="{{old('state')}}" id="state_dropdown" class="form-control bg-white reter checkout-dropdown my-2 other-state d-none"></select>
+                            <select  data-default="{{old('state')}}" id="state_dropdown" class="form-control bg-white reter checkout-dropdown my-2 other-state d-none"></select>
                             <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('city')}}" name="city" maxlength="35" aria-describedby="City" placeholder="City*">
                             <select name="country" id="countries" class="form-control bg-white mb-3 other-country d-none" aria-describedby="country" required>
                                 <option value="" disabled selected>Select your country*</option>
@@ -292,7 +292,7 @@ body{
                             </select>
                             <input type="hidden"class="form-control bg-white mb-3 default-country" value="{{old('country')}}" maxlength="35" aria-describedby="Country" placeholder="Country*">
                             <!-- name="country" -->
-                            <input type="hidden" name="state" class="form-control bg-white mb-3 default-state" value="{{old('state')}}" maxlength="50" aria-describedby="State" placeholder="State*"> 
+                            <input type="hidden" name="state" id="stateid" class="form-control bg-white mb-3 default-state" value="{{old('state')}}" maxlength="50" aria-describedby="State" placeholder="State*"> 
                             <!-- name="state"  -->
                         </div>
                         <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
@@ -2346,6 +2346,16 @@ $('select[name="ship_via_id"]').on('change', function() {
                 $('#shippingCharges').text('$0.00');
             }
         });
+        $(document).ready(function () {
+    $('#state_dropdown').on('change', function () {
+        var selectedState = $(this).val();       // Get selected value
+        $('#stateid').val(selectedState);        // Set it to the hidden input
+    });
+
+    // Optional: trigger once on page load if preselected
+    $('#state_dropdown').trigger('change');
+});
+
 </script>
 @endsection
 
