@@ -630,6 +630,7 @@ class CheckoutController extends FrontendController
                         prr("Mail Exception: " . $e->getMessage());
                     }
                 } else {
+                    //dd($order_payment_hash);
                     $this->finalize_payment($order_payment, $order_payment_hash, $requestDataArray, 'void');
                     $errorMsg = $result['Message'];
 
@@ -659,7 +660,7 @@ class CheckoutController extends FrontendController
             }
 
             // TODO : we have a btter way of doing this - Adil needs to look into this
-
+            //dd($itemDetail);
             return response()->json($response);
 
         } catch (\Exception$e) {

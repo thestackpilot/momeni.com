@@ -132,6 +132,21 @@ class BroadloomController extends FrontendController
 //            'cart_total' => 169.00,
 //        ];
         // dd($payload);
+    //     dd( 
+    //          $countries,
+    //          isset($customer_details['CustomerDetail']['Country']) ? $customer_details['CustomerDetail']['Country'] : null,
+    //          isset($customer_details['CustomerDetail']['State']) ? $customer_details['CustomerDetail']['State'] : null,
+    //          $states,
+    //         $shipping_options,
+    //         $shippings,
+    //          $default_ship_via_id,
+    //         isset($shipping_addresses) ? $shipping_addresses : [],
+    //          $payment_terms_list,
+    //         isset($customer_details['CustomerDetail']['Comment']) ? $customer_details['CustomerDetail']['Comment'] : '',
+    //         isset($customer_details['CustomerDetail']['PaymentTerm']) ? $customer_details['CustomerDetail']['PaymentTerm'] : '',
+    //      isset($customer_payment_options['customers']) && count($customer_payment_options['customers']) > 0 ? $customer_payment_options['customers'][0] : []
+        
+    // );
         return view('frontend.' . $this->active_theme->theme_abrv . '.broadloom-shopping-cart', [
             'countries' => $countries,
             'cust_country' => isset($customer_details['CustomerDetail']['Country']) ? $customer_details['CustomerDetail']['Country'] : null,

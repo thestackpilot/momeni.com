@@ -540,7 +540,7 @@ body{
                                                                                         @if(!empty($item_sizes['SergingType']))
                                                                                             <span
                                                                                                 class="tooltiptext">
-                                                                                                <strong>Serging Rate: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+                                                                                                <strong>Serging charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
                                                                                             </span>
                                                                                         @endif
                                                                                     </div>
@@ -696,7 +696,7 @@ $(document).ready(function() {
         localStorage.setItem('customer_po', $(this).val());
     });
     $('#state_dropdown').on('change', function() {
-        localStorage.setItem('state', $(this).val());
+         localStorage.setItem('state', $(this).val());
     });
     $('#countries').on('change', function() {
         localStorage.setItem('country', $(this).val());
@@ -1894,7 +1894,8 @@ function pushToCart() {
             }
 
             if (!response.success) {
-                add_to_cart();
+                console.log("Till add to cart")
+               // add_to_cart();
             }
         },
         error: function (error) {
@@ -2024,7 +2025,7 @@ function add_to_cart(){
                                                     $('#TwidthInch').prop('disabled', true);
                                                     $('.add_cart').prop('disabled', false);
                                                     setTimeout(() => {
-                                                        window.location.reload();
+                                                      window.location.reload();
                                                     }, 3000);
                                                     $.ajax({
                                                         url: "{{ route('broadloom.removeAllCutPiece') }}",
@@ -2136,7 +2137,7 @@ function add_to_cart(){
                                     $('#TwidthInch').prop('disabled', true);
                                     $('.add_cart').prop('disabled', false);
                                     setTimeout(() => {
-                                        window.location.reload();
+                                         window.location.reload();
                                     }, 3000);
                         } else {
                             toastr.warning(response.message, {
@@ -2240,7 +2241,7 @@ function removeItemFromCartInDashboard(itemId,token,customerId,checkbditem,rollI
         .done(function (response)
         {
             if(response.success == 1){
-                //location.reload();
+                window.location.reload();
                 toastr.success(response.message,{
                     hideDuration: 10000,
                     closeButton: true,

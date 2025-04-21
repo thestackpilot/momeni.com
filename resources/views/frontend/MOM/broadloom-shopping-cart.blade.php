@@ -1005,8 +1005,11 @@
                                                             @if(!empty($item_sizes['SergingType']))
                                                                 <span
                                                                     class="tooltiptext">
-                                                                                            <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
-                                                                                        </span>
+                                                                        {{-- <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
+                                                                    {{-- <strong>Serging Charges::: ${{ number_format($item_sizes['SergingCharges'],2) }}</strong> --}}
+                                                                <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
+
+                                                                </span>
                                                             @endif
                                                         </div>
 
@@ -1069,7 +1072,8 @@
                                                             @if(!empty($item_sizes['SergingType']))
                                                                 <span
                                                                     class="tooltiptext">
-                                                                                            <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong>
+                                                                                            {{-- <strong>Serging Charges: ${{ number_format($item_sizes['SergingCharges'], ConstantsController::ALLOWED_DECIMALS) }}</strong> --}}
+                                                                                            <strong>Serging Charges: {{ $item->item_currency }}{{ number_format($serging_charges, 2) }}</strong>
                                                                                         </span>
                                                             @endif
                                                         </div>
@@ -1328,7 +1332,7 @@
                         "CustomerId": $('#customer_id').val()
                     },
                     success: function (response) {
-                        location.reload();
+                        window.location.reload();
                         console.log(response);
                     },
                     error: function (xhr, status, error) {
