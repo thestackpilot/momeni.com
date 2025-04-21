@@ -292,7 +292,7 @@ body{
                             </select>
                             <input type="hidden"class="form-control bg-white mb-3 default-country" value="{{old('country')}}" maxlength="35" aria-describedby="Country" placeholder="Country*">
                             <!-- name="country" -->
-                            <input type="hidden" class="form-control bg-white mb-3 default-state" value="{{old('state')}}" maxlength="50" aria-describedby="State" placeholder="State*"> 
+                            <input type="hidden" name="state" class="form-control bg-white mb-3 default-state" value="{{old('state')}}" maxlength="50" aria-describedby="State" placeholder="State*"> 
                             <!-- name="state"  -->
                         </div>
                         <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
@@ -1351,7 +1351,7 @@ $(document).ready(function() {
             $('input[name="customer_id"]').removeClass('is-invalid');
         }
 
-        
+
         if ($("#countries").val() == "") {
             $("#countries").addClass('is-invalid');
             $('html, body').animate({ scrollTop: $("#countries").offset().top - 20 }, 100);
