@@ -1469,12 +1469,12 @@
                 if (addressValue == 'existing-address') {
                     var referenceNumberValue = $('input[name="reference_number"]').val();
                     var shipValue = $('.order-ship-date').val();
-                    $("#countries").val(0);
-                    $("#state_dropdown").val('');
+                    //$("#countries").val(0);
+                    //$("#state_dropdown").val('');
                     $(".disable-toggle").addClass("muted-bd-fields");
                     $(".disable-toggle").removeAttr("required");
                     // $("input").not("[type='radio']").val('');
-                    //$("#item_broadloom").val(1);
+
 
                     $('#select-address').trigger('change');
                     $('input[name="reference_number"]').val(referenceNumberValue);
@@ -1487,8 +1487,8 @@
                     // $(".disable-toggle").val("");
                     // $("#countries").val(0);
                     // $("#state_dropdown").val('');
-                    // $(".disable-toggle").attr("required", true);
-                    // $("#bd-address2").removeAttr("required")
+                     $(".disable-toggle").attr("required", true);
+                     $("#bd-address2").removeAttr("required")
                     // $('#select-address').prop("disabled", true);
                 }
             });
@@ -1502,11 +1502,11 @@
                 console.log('firstPart', firstPart);
                 console.log('secondPart',secondPart);
 
-                $('.hidden-address_id').val('');
+                // $('.hidden-address_id').val('');
                 if (firstPart != undefined) {
                     $('#hidden-address_id').val(firstPart);
                 }
-                $('.hidden-inp').val('');
+                // $('.hidden-inp').val('');
                 if (secondPart != undefined) {
                     $('.hidden-inp').val(secondPart);
                 }
@@ -1589,16 +1589,17 @@
 
 
         $(document).ready(function () {
+            console.log("triger 1592");
             var selectaddress = $('#select-address').val();
             var parts = selectaddress.split('~~~');
             var firstPart = parts[0];
             var secondPart = parts[1];
 
-            $('.hidden-address_id').val('');
+            // $('.hidden-address_id').val('');
             if (firstPart != undefined) {
                 $('#hidden-address_id').val(firstPart);
             }
-            $('.hidden-inp').val('');
+            // $('.hidden-inp').val('');
             if (secondPart != undefined) {
                 $('.hidden-inp').val(secondPart);
             }
@@ -1610,12 +1611,12 @@
             $('#countries').change();
         });
 
-        $('#state_dropdown').prop('disabled', true);
-        $('#countries').prop('disabled', true);
+        // $('#state_dropdown').prop('disabled', true);
+        // $('#countries').prop('disabled', true);
         $('input[name="shipping-address"]').on('change', function () {
             if($(this).val() != "other"){
-                $('#state_dropdown').prop('disabled', true);
-                $('#countries').prop('disabled', true);
+                // $('#state_dropdown').prop('disabled', true);
+                // $('#countries').prop('disabled', true);
             }else {
                 $('#state_dropdown').prop('disabled', false);
                 $('#countries').prop('disabled', false);

@@ -440,7 +440,7 @@ class ApisController extends RootController
     public function Login( $email, $password )
     {
         $post_array = array( 'EmailID' => $email, 'Password' => $password );
-
+        
         return $this->Post_API_Signature( 'Login', 'Login', $post_array, ['UserDetails', 'Success'], 0 );
     }
 
@@ -851,12 +851,15 @@ class ApisController extends RootController
     public function Get_BLSalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '', $Collection = '', $Design = '')
     {
         $sale_rep_id = Auth::user()->is_customer ? '' : $SalesRep;
-        $customer_id = Auth::user()->is_customer ? $SalesRep : '';
+        $customer_id = Auth::user()->is_customer ? $SalesRep : $CustomerID;
+        // $sale_rep_id = Auth::user()->is_customer ? '' : $SalesRep;
+        // $customer_id = Auth::user()->is_customer ? $SalesRep : '';
         $post_array = array('SalesRepID' => $sale_rep_id, 'CustomerID' => $customer_id, 'GroupBy' => $groupBy, 'DateFrom' => $FromDate, 'DateTo' => $ToDate, 'Quality' => $Quality, 'ItemID' => $ItemID, 'Collection' => $Collection, 'Design' => $Design);
 
         if (Auth::user()->is_customer) {
             return $this->Post_API_Signature('ViewBLCustomerReportDetail', 'View BL Customer Report Detail', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
         }else{
+            // dd($post_array);
             return $this->Post_API_Signature('ViewBLSalesRepReportDetail', 'View BL Sales Rep Report Detail', $post_array, ['Success', 'Message', 'ReportData', 'ReportTitle', 'PreviewID'], 0);
         }
     }
