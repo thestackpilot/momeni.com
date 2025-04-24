@@ -953,6 +953,8 @@ use Carbon\Carbon;
         });
 
         $('#item_id').change(function() {
+           
+            document.getElementById('add-rugpad').checked = false;
             var rugCheck = $(this).find('option:selected').data('rugcheck');
             rugCheck == 'N' ? $('#add-rugpad').prop('disabled', true) : $('#add-rugpad').prop('disabled', false);
             var widthInches = $(this).find('option:selected').data('width');
