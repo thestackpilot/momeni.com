@@ -717,6 +717,7 @@ class ShopController extends DashboardController
             ]
         ];
 
+        // dd([$filters, $request->all(), $default_ship_via_id]);
         View::share( 'datepicker_dates', ['min' => 'today', 'max' => '+1m'] );
         View::share( 'filters', $filters );
         View::share( 'itemIds', $itemIds['OutPut']['BLItemsList']);

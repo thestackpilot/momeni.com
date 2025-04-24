@@ -162,6 +162,8 @@ class QuotesController extends DashboardController
             $default_ship_via_id = isset($customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]) ? $customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]['ShipViaID'] : '';
         }
 
+        // dd([$QuotationNo, $UserNo, $data, $customer_details]);
+
         $countries = $this->ApiObj->Get_CountriesList();
 
         $shippings = $this->ApiObj->Get_ShipViaList();
@@ -351,8 +353,8 @@ class QuotesController extends DashboardController
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-shopping-cart', [
             'quote_cart_data'     => json_decode(json_encode($quote_cart_data)),
             'countries'           => $countries,
-            'cust_country'        => $data['OutPut']['Country'],
-            'cust_state'          => $data['OutPut']['State'],
+            'cust_country'        => $data['OutPut']['Country'] ? $data['OutPut']['Country'] : $customer_details['CustomerDetail']['Country'],
+            'cust_state'          => $data['OutPut']['State'] ? $data['OutPut']['State'] : $customer_details['CustomerDetail']['State'],
             'shipping_options'    => $shipping_options,
             'shippings'           => $shippings,
             'default_ship_via_id' => $default_ship_via_id,

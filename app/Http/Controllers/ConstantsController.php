@@ -35,14 +35,14 @@ class ConstantsController extends RootController
     ];
 
     const CACHEABLE = [
-        // 'Get_Favourities',
-        // 'Get_Designs',
-        // 'Get_Collections',
-        // 'Get_MainCollections',
-        // 'Get_Filters',
-        // 'Get_GetHangTagsDetailData'
-        // 'Get_Items',
-        // 'theme'
+        'Get_Favourities',
+        'Get_Designs',
+        'Get_Collections',
+        'Get_MainCollections',
+        'Get_Filters',
+        'Get_GetHangTagsDetailData',
+        'Get_Items',
+        'theme'
     ];
 
     const CACHE_DURATION = 30;

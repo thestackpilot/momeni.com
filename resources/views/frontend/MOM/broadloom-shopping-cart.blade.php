@@ -6,6 +6,7 @@
     use App\Http\Controllers\ConstantsController;
     use App\Http\Controllers\CommonController;
     $quoteCartData = $quote_cart_data ?? [];
+
 @endphp
 
 @section('title', 'Item Detail Page')
@@ -1535,15 +1536,18 @@
             var custCountry = "{{$cust_country}}";
             var selectedValue = $('#countries').find('option').filter(function () {
                 return $(this).text().trim() === custCountry.trim();
-            }).val();
-            states(selectedValue)
+            }).attr('origincode');
+            setTimeout(() => {
+                console.log('selectedValue :: ', selectedValue);
+                states(selectedValue);
+            }, 500);
             @endif
 
             $('#countries').change(function () {
                 let selectedOption = $(this).find('option:selected');
                 // Get the origincode attribute from the selected option
                 let selectedCountry = selectedOption.attr('origincode');
-                console.log(selectedCountry);
+                console.log('selectedCountry :: ', selectedCountry);
 
                 if (selectedCountry) {
                     states(selectedCountry);
@@ -1566,8 +1570,8 @@
                                     value: value.StateCode.toString(),
                                     text: value.StateName
                                 });
-                                console.log($('#customer_state').val());
-                                if (value.StateCode == $('#customer_state').val()) {
+                                // console.log(`${value.StateCode} == ${$('#customer_state').val()}`);
+                                if (value?.StateCode.toLowerCase() == $('#customer_state').val()?.toLowerCase()) {
                                     option.prop('selected', true);
                                 }
                                 $('#state_dropdown').append(option);
