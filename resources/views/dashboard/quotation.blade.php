@@ -15,6 +15,17 @@ use Carbon\Carbon;
             <div class="spinner"></div>
           </div>
 
+<div class="spinner-overlay position-fixed top-0 start-0 w-100 h-100 d-none flex-column justify-content-center align-items-center"
+id="resetloader"
+style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
+<div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+<span class="visually-hidden">Loading...</span>
+</div>
+<div class="mt-3 text-center">
+<small class="text-black">If your window is not reset automatically by the browser, please reset manually.</small>
+</div>
+</div>
+
         <section class="collection-section">
             <div class="container">
                 <div class="d-flex flex-row">
@@ -943,6 +954,8 @@ use Carbon\Carbon;
         $(document).on('click', '.btn-refresh', function () {
             $('.quotes-btn').addClass('quotes-btns-tag');
             $('#quoteReportModal').modal('hide');
+            // $('#resetloader').show()
+            document.getElementById('resetloader').classList.remove('d-none');
             window.location.reload();
             $('.quotes-btn').removeClass('quotes-btns-tag');
         });
