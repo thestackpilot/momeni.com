@@ -22,7 +22,7 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
 <span class="visually-hidden">Loading...</span>
 </div>
 <div class="mt-3 text-center">
-<small class="text-black">If your window is not reset automatically by the browser, please reset manually.</small>
+<small class="text-black">Resetting... If not refreshed, reload to place a new quote.</small>
 </div>
 </div>
 
