@@ -212,7 +212,7 @@ class CheckoutController extends FrontendController
         $this->append_breadcrumbs( 'Checkout', route( 'frontend.checkout' ) );
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.checkout', [
             'countries'           => $countries,
-            // 'states'              => $states,
+             'states'              => $states,
             'cust_country'        => $customer_details['CustomerDetail']['Country'],
             'cust_state'          => $customer_details['CustomerDetail']['State'],
             'shipping_options'    => $shipping_options,
