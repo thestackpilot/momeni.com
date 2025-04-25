@@ -84,7 +84,7 @@ use App\Http\Controllers\CommonController;
                               <select name="state" id="state_dropdown" class="form-control bg-white reter checkout-dropdown my-2"></select>
                               <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('city')}}" name="city" maxlength="35" aria-describedby="City" placeholder="City*">
                               {{-- <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('country')}}" name="country" maxlength="35" aria-describedby="Country" placeholder="Country*"> --}}
-                              <select name="country" id="countries" class="form-control bg-white mb-3" aria-describedby="country" required>
+                              <select name="country" id="countries" class="form-control bg-white mb-3" aria-describedby="country">
                                 <option value="" disabled selected>Select your country*</option>
                                 @foreach ($countries['Countries'] as $country)
                                     <option value="{{ $country['OriginCode'] }}" {{ old('country') == $country['OriginCode'] ? 'selected' : '' }}

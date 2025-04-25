@@ -164,12 +164,16 @@
                                         <label class="for-checkbox-tools" for=""> </label>
                                     </div>
                                 </div>
+                                @if(Auth::check())
 
                                 <div class="price d-flex align-items-center my-3">
                                     <span class="base_price muted prefix"> $ </span>
                                     <span class="base_price muted" id="base_price">0</span>
                                     <span class="postfix muted" style="text-transform: initial;margin-left: 5px;font-size: 16px;margin-top: 5px;">wholesale</span>
                                 </div>
+                           
+
+                            @endif
                                 <div class="d-flex align-items-center mb-20">
                                     <span class="form-label font-crimson bg-secondary" id="qty_msg">Loading...</span>
                                 </div>
