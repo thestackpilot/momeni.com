@@ -83,7 +83,7 @@
                                                 id="existing-address" value="existing-address" />
                                             <span class="checkmark"></span>
                                         </div>
-                                        <select class="select-address">
+                                        <select class="select-address" id="select_add">
                                             @foreach ($shipping_addresses['ShipToAddresses'] as $address)
                                                 <option value="{{ $address['AddressID'] }}">
                                                     {{ $address['AddressID'] }} : {!! $address['FirstName'] ? $address['FirstName'] . ($address['LastName'] ? " {$address['LastName']}" : '') : '' !!}
@@ -395,7 +395,7 @@
                                                             class="color-red d-none">*</span> </label>
                                                     <input type="text" class="form-control bg-white" name="LastName"
                                                         maxlength="35" aria-describedby="LastName"
-                                                        placeholder="Last Name">
+                                                        placeholder="Last Name"> 
                                                 </div>
                                             </div>
                                             <div class="d-flex flex-column justify-content-between column-gap-20 mb-4">
@@ -1416,5 +1416,65 @@
                 }
             });
         });
+
+        $('#select_add').on('change', function() {
+            console.log("changeing state");
+            let shipToAddresses = @json($shipping_addresses['ShipToAddresses']);
+            console.log(shipToAddresses);
+    const selectedId = $(this).val(); // Get selected AddressID
+
+    // Find the address in the array
+    const selectedAddress = shipToAddresses.find(addr => addr.AddressID === selectedId);
+
+    if (selectedAddress) {
+        const stateValue = selectedAddress.State;
+
+        // Enable, set, and disable the state dropdown
+        const $stateDropdown = $('#state_dropdown');
+        $stateDropdown.prop('disabled', false); // Enable it
+        console.log("seting avlue" , stateValue);
+        matchStateByPattern(stateValue);
+
+    }
+});
+function matchStateByPattern(abbr) {
+    abbr = abbr.toUpperCase();
+    let matched = false;
+
+    $('#state_dropdown option').each(function () {
+        const stateText = $(this).text().trim();
+        const words = stateText.split(' ');
+
+        let pattern = '';
+        if (words.length >= 2) {
+            // Two or more words: first letter of first two words
+            pattern = words[0][0] + words[1][0];
+        } else if (words.length === 1) {
+            // One word: first two letters
+            pattern = words[0].substring(0, 2);
+        }
+
+        if (pattern.toUpperCase() === abbr) {
+            $('#state_dropdown')
+                .prop('disabled', false)
+                .val($(this).val())
+                .change()
+                .prop('disabled', true);
+
+            matched = true;
+            return false; // Stop loop
+        }
+    });
+
+    if (!matched) {
+        $('#state_dropdown')
+            .prop('disabled', false)
+            .val('')
+            .change()
+            .prop('disabled', true);
+    }
+}
+
+
     </script>
 @endsection
