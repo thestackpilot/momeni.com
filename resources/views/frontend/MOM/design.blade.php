@@ -33,6 +33,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                             {!! $custom_title_descripton['title'] !!}
                             @else
                             {!! isset($collections[array_key_first($collections)][0]) ? $collections[array_key_first($collections)][0]['Title'] : $main_collection['Description'] !!}
+                           {!! isset($collections['Designs'][0]['CollectionID'])? $collections['Designs'][0]['CollectionID']:$main_collection['Description']!!}
                             @endif
                         </h2>
                     </div>

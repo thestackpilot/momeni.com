@@ -400,8 +400,10 @@
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row">
-                                            <div class="col-md-7">Shipping Charges:</div>
-                                            <div class="col-md-5 text-right shipping_charges">$0.00</div>
+                                            <div class="col-md-3">Shipping Charges:</div>
+                                            <div class="col-md-9 text-right shipping_charges">will be calculated at time of Shipping
+                                            </div>
+                                            {{-- <div class="col-md-5 text-right shipping_charges">$0.00</div> --}}
                                         </div>
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row mt-3">
@@ -865,8 +867,9 @@
                                             </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row px-5">
-                                                <div class="col-md-9">Shipping Charges</div>
-                                                <div class="col-md-3 text-right section_2_shipping_charges">$0.00</div>
+                                                <div class="col-md-4">Shipping Charges</div>
+                                                <div class="col-md-8 text-right section_2_shipping_charges">will be calculated at time of Shipping</div>
+                                                {{-- <div class="col-md-3 text-right section_2_shipping_charges">$0.00</div> --}}
                                             </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row my-4 px-5">
@@ -877,10 +880,10 @@
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row my-4 px-5 justify-content-center">
                                                 <div class="col-md-12">
-                                                    <p class="text-center">Your personal data will be used to process
+                                                    {{-- <p class="text-center">Your personal data will be used to process
                                                         your
                                                         order, support your experience throughout this website, and for
-                                                        other purposes described in our privacy policy.</p>
+                                                        other purposes described in our privacy policy.</p> --}}
                                                     <div class="text-center">
                                                         <button
                                                             class="add-to-cart-button btn btn-dark align-content-center text-left"
@@ -1380,10 +1383,13 @@
                 var shipDate = $('input[name="ship_date"]')[0];
                 $('#lastpage-subtotal').text("$" + $('#inside-hidden-subtotal').val());
 
-                if ($('.ship-method-select').val() == 'BEST' || $('.ship-method-select').val() === 'FD58' || $('.ship-method-select').val() === 'FD51'
-                || $('.ship-method-select').val() === 'FD50' || $('.ship-method-select').val() === 'OTHER' || $('.ship-method-select').val() === 'UT01'
-                || $('.ship-method-select').val() === 'UT03') {
+                // if ($('.ship-method-select').val() == 'BEST' || $('.ship-method-select').val() === 'FD58' || $('.ship-method-select').val() === 'FD51'
+                // || $('.ship-method-select').val() === 'FD50' || $('.ship-method-select').val() === 'OTHER' || $('.ship-method-select').val() === 'UT01'
+                // || $('.ship-method-select').val() === 'UT03') {
+                if ( 
+                 $('.ship-method-select').val() === 'OTHER' || $('.ship-method-select').val() === 'Third Party') {
                     if($('#ship_instructions').val().trim() == ''){
+                        console.log($('.ship-method-select').val());
                         alert(`Order Notes are required`);
                         return true;
                     }
@@ -1646,11 +1652,12 @@
                 $('#ship_instructions').prop('required', false);
             }
 
-            if(selectedValue == 'BEST' || selectedValue === 'AMZX'){
-                $('.section_2_shipping_charges').text('TBD');
-            }else{
-                $('.section_2_shipping_charges').text('$0.00');
-            }
+            // if(selectedValue == 'BEST' || selectedValue === 'AMZX'){
+            //     //$('.section_2_shipping_charges').text('TBD');
+            //     $('.section_2_shipping_charges').text('will be calculated at time of Shipping');
+            // }else{
+            //     $('.section_2_shipping_charges').text('will be calculated at time of Shipping');
+            // }
         });
     </script>
 @endsection

@@ -168,7 +168,7 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
                                             </div>
                                         </div>
                                         <p class="my-2 total-amount"><b>Total :</b> <span class="quote-total-price">$0.00</span></p>
-                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn-other generate-quote-btn mx-5">Create or Generate Quote</a>
+                                        <a href="javascript:void(0)" class="btn btn-primary submit-btn-other generate-quote-btn mx-5">Generate Quote</a>
                                         <a href="javascript:void(0)" class="btn btn-primary submit-btn save-quote-btn submit-disabled-link mx-5">Save Quote</a>
                                     </form>
                                 </div>
