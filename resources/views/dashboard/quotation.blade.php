@@ -33,6 +33,12 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
                         @include('dashboard.components.sidebar')
                     </div>
                     <div class="col-lg-9 col-sm-12 col-12 py-3 quotes-container">
+                        @if (session('message'))
+                            <div class="alert alert-error mx-3 alert-dismissible fade show" role="alert">
+                                {{ session('message') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
                         <div class="container-fluid bg-white">
                             <div class="quotes-btn-parent">
                                 <div class="d-flex flex-row settings">

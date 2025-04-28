@@ -8,13 +8,13 @@ class ConstantsController extends RootController
 
     const ADMIN_SECRET_STRING = "OPEN SESAME, I'M ADMIN";
 
-    const ADMIN_EMAIL = ["Aliuf@momeni.com","techbugs06@gmail.com","info@momeni.com"];
+    const ADMIN_EMAIL = ['techbugs06@gmail.com']; // ["Aliuf@momeni.com","techbugs06@gmail.com","info@momeni.com"];
 
-    const WEB_HOOK_EMAIL = ['imran.majeed@sparsus.com', 'techbugs06@gmail.com' , 'sheikhammar568@gmail.com'];
+    const WEB_HOOK_EMAIL = ['techbugs06@gmail.com']; // ['imran.majeed@sparsus.com', 'techbugs06@gmail.com' , 'sheikhammar568@gmail.com'];
 
-    const ORDER_NOTIFICATION = ['Orders@momeni.com', 'techbugs06@gmail.com'];
+    const ORDER_NOTIFICATION = ['techbugs06@gmail.com']; // ['Orders@momeni.com', 'techbugs06@gmail.com'];
 
-    const TEST_EMAIL = ['imran.majeed@sparsus.com', 'techbugs06@gmail.com', 'sheikhammar568@gmail.com'];
+    const TEST_EMAIL = ['imran.majeed@sparsus.com', 'techbugs06@gmail.com'];
 
     const ALLOWED_DECIMALS = 2;
 
@@ -36,7 +36,7 @@ class ConstantsController extends RootController
 
     const CACHEABLE = [
         'Get_Favourities',
-        'Get_Designs',
+        // 'Get_Designs',
         'Get_Collections',
         'Get_MainCollections',
         'Get_Filters',

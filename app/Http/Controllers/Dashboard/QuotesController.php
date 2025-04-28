@@ -150,221 +150,249 @@ class QuotesController extends DashboardController
     }
 
     public function order_quote(Request $request){
-        $QuotationNo = $request->QuotationNo;
-        $UserNo = $request->UserNo;
+        try {
+            $QuotationNo = $request->QuotationNo;
+            $UserNo = $request->UserNo;
 
-        $customer_details = $shipping_options = $shippings = $shipping_addresses = $payment_terms_list = $customer_payment_options = $countries = $states = [];
-        $data = $this->ApiObj->GetQuotationOrderDetailForOrderPlace($QuotationNo, $UserNo);
+            $customer_details = $shipping_options = $shippings = $shipping_addresses = $payment_terms_list = $customer_payment_options = $countries = $states = [];
+            $data = $this->ApiObj->GetQuotationOrderDetailForOrderPlace($QuotationNo, $UserNo);
 
-        $customer_details = $this->ApiObj->Get_CustomerDetail($data['OutPut']['CustomerID']);
-        if ($customer_details && $customer_details['Success'] == true) {
-            $shipping_addresses = $customer_details['CustomerDetail']['CustomerAddressDetail'];
-            $default_ship_via_id = isset($customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]) ? $customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]['ShipViaID'] : '';
-        }
-
-        // dd([$QuotationNo, $UserNo, $data, $customer_details]);
-
-        $countries = $this->ApiObj->Get_CountriesList();
-
-        $shippings = $this->ApiObj->Get_ShipViaList();
-        if ($shippings && $shippings['Success'] == true) {
-            $temp = [];
-            foreach ($shippings['ShipVias'] as $shipping) {
-                $temp[$shipping['Description']] = $shipping;
+            $customer_details = $this->ApiObj->Get_CustomerDetail($data['OutPut']['CustomerID']);
+            if ($customer_details && $customer_details['Success'] == true) {
+                $shipping_addresses = $customer_details['CustomerDetail']['CustomerAddressDetail'];
+                $default_ship_via_id = isset($customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]) ? $customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]['ShipViaID'] : '';
             }
-            ksort($temp);
-            $shippings['ShipVias'] = $temp;
-            $shippings = $shipping_options = $shippings['ShipVias'];
-        }
 
+            // dd([$QuotationNo, $UserNo, $data, $customer_details]);
 
-        $payment_terms_list = $this->ApiObj->Get_PaymentTermsList();
-        if ($payment_terms_list && $payment_terms_list['Success']) {
-            $payment_terms_list = $payment_terms_list['PaymentTerms'];
-            foreach ($payment_terms_list as $payment_term) {
-                if (!in_array(md5($payment_term['Description']), $payment_terms_list)) {
-                    $payment_terms_list[md5($payment_term['Description'])] = $payment_term;
+            $countries = $this->ApiObj->Get_CountriesList();
+            $shippings = $this->ApiObj->Get_ShipViaList();
+
+            if ($shippings && $shippings['Success'] == true) {
+                $temp = [];
+                foreach ($shippings['ShipVias'] as $shipping) {
+                    $temp[$shipping['Description']] = $shipping;
                 }
-
+                ksort($temp);
+                $shippings['ShipVias'] = $temp;
+                $shippings = $shipping_options = $shippings['ShipVias'];
             }
 
-        }
 
-
-        $price = 0;
-        $quote_cart_data = [];
-        $max_len_size  = "";
-        $totalSqftArea = "";
-        $item_price = 0;
-        $unit_price =  "";
-        $bd_child = 0;
-        $rugpad_price = 0.00;
-        $cut_piece_data = [];
-        $cut_charges =  $this->ApiObj->GetCutingService();
-        foreach($data['OutPut']['QuotationDetailList'] as $rowDetail){
-            $item = $this->ApiObj->Get_Items('', '', $rowDetail['ItemID'], '', '', '', '', '', '', '', '', '', '', '' );
-            $price = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
-            foreach($data['OutPut']['QuotationDetailCutList'] as $rowCutList){
-                if($rowCutList['ItemID'] == $rowDetail['ItemID'] && $rowCutList['RollID'] == $rowDetail['RollID']){
-                    $bd_child = $rowCutList['RugPad'] == "1" ? 0 : 1;
-
-                    if($rowCutList['Line_No'] == $rowDetail['ParentLine_NO']){
-                        $rugpad_price_get = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
+            $payment_terms_list = $this->ApiObj->Get_PaymentTermsList();
+            if ($payment_terms_list && $payment_terms_list['Success']) {
+                $payment_terms_list = $payment_terms_list['PaymentTerms'];
+                foreach ($payment_terms_list as $payment_term) {
+                    if (!in_array(md5($payment_term['Description']), $payment_terms_list)) {
+                        $payment_terms_list[md5($payment_term['Description'])] = $payment_term;
                     }
 
-                    $max_len_size  = $this->calculateMaxLenSize($rowCutList);
-                    $totalSqftArea = $this->calculateTotalSqftArea($rowCutList);
-                    $item_price = $price['Price'] * $totalSqftArea;
-                    $unit_price =  $this->calculateUnitPrice($rowCutList, $cut_charges['OutPut']['UnitPrice']);
-                    $cut_piece_data[] = $this->cut_pieces_payload($rowCutList);
+                }
 
-                    if(isset($rugpad_price_get['Price'])){
-                        $rugpad_price = $rugpad_price_get['Price'] * $totalSqftArea;
+            }
+
+            $price = 0;
+            $quote_cart_data = [];
+            $max_len_size  = "";
+            $totalSqftArea = "";
+            $item_price = 0;
+            $unit_price =  "";
+            $bd_child = 0;
+            $rugpad_price = 0.00;
+            $cut_piece_data = [];
+            $cut_charges =  $this->ApiObj->GetCutingService();
+            foreach($data['OutPut']['QuotationDetailList'] as $rowDetail) {
+                $item_price = 0;
+                $item = $this->ApiObj->Get_Items('', '', $rowDetail['ItemID'], '', '', '', '', '', '', '', '', '', '', '' );
+                $price = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
+                foreach($data['OutPut']['QuotationDetailCutList'] as $rowCutList){
+                    if($rowCutList['ItemID'] == $rowDetail['ItemID'] && $rowCutList['RollID'] == $rowDetail['RollID']){
+                        $bd_child = $rowCutList['RugPad'] == "1" ? 0 : 1;
+
+                        if($rowCutList['Line_No'] == $rowDetail['ParentLine_NO']){
+                            $rugpad_price_get = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
+                        }
+
+                        $max_len_size  = $this->calculateMaxLenSize($rowCutList);
+                        $totalSqftArea = $this->calculateTotalSqftArea($rowCutList);
+                        try {
+                            $item_price += $price['Price'] * $totalSqftArea;
+                        } catch (\Exception $e) {
+                            throw new Exception('Error in price calculation');
+                        } catch (\Error $e) {
+                            throw new Exception('Error in price calculation');
+                        }
+                        try {
+                            $unit_price = $this->calculateUnitPrice($rowCutList, $cut_charges['OutPut']['UnitPrice']);
+                        } catch (\Exception $e) {
+                            throw new Exception('Error in unit price calculation');
+                        } catch (\Error $e) {
+                            throw new Exception('Error in unit price calculation');
+                        }
+                        
+                        $cut_piece_data[] = $this->cut_pieces_payload($rowCutList);
+
+                        if(isset($rugpad_price_get['Price'])){
+                            try {
+                                $rugpad_price += $rugpad_price_get['Price'] * $totalSqftArea;
+                            } catch (\Exception $e) {
+                                $rugpad_price = 0;
+                            }
+                            
+                        }
+                    }
+                }
+
+                $item_json = [
+                    "ItemID" => $item['Items'][0]['ItemID'] ?? "",
+                    "ItemName" => $item['Items'][0]['ItemName'] ?? "",
+                    "Dimensions" => $item['Items'][0]['Dimensions'] ?? "",
+                    "BasePrice" => $item['Items'][0]['BasePrice'] ?? 0,
+                    "ATSQ" => $item['Items'][0]['ATSQ'] ?? "",
+                    "QualityDescription" => $item['Items'][0]['QualityDescription'] ?? "",
+                    "IntroDate" => $item['Items'][0]['IntroDate'] ?? "",
+                    "TimeStamp" => $item['Items'][0]['TimeStamp'] ?? "",
+                    "UPC" => $item['Items'][0]['UPC'] ?? "",
+                    "PriceLevel1" => $item['Items'][0]['PriceLevel1'] ?? 0,
+                    "PriceLevel2" => $item['Items'][0]['PriceLevel2'] ?? 0,
+                    "PriceLevel3" => $item['Items'][0]['PriceLevel3'] ?? 0,
+                    "PriceLevel4" => $item['Items'][0]['PriceLevel4'] ?? 0,
+                    "PriceLevel5" => $item['Items'][0]['PriceLevel5'] ?? 0,
+                    "UDF1" => $item['Items'][0]['UDF1'] ?? "",
+                    "UDF2" => $item['Items'][0]['UDF2'] ?? "",
+                    "UDF3" => $item['Items'][0]['UDF3'] ?? "",
+                    "UDF4" => $item['Items'][0]['UDF4'] ?? "",
+                    "UDF5" => $item['Items'][0]['UDF5'] ?? "",
+                    "UDF6" => $item['Items'][0]['UDF6'] ?? "",
+                    "UDF7" => $item['Items'][0]['UDF7'] ?? "",
+                    "UDF8" => $item['Items'][0]['UDF8'] ?? "",
+                    "UDF9" => $item['Items'][0]['UDF9'] ?? "",
+                    "UDF10" => $item['Items'][0]['UDF10'] ?? "",
+                    "UDF11" => $item['Items'][0]['UDF11'] ?? "",
+                    "UDF12" => $item['Items'][0]['UDF12'] ?? "",
+                    "UDF13" => $item['Items'][0]['UDF13'] ?? "",
+                    "UDF14" => $item['Items'][0]['UDF14'] ?? "",
+                    "UDF15" => $item['Items'][0]['UDF15'] ?? "",
+                    "UDF16" => $item['Items'][0]['UDF16'] ?? "",
+                    "UDF17" => $item['Items'][0]['UDF17'] ?? "",
+                    "UDF18" => $item['Items'][0]['UDF18'] ?? "",
+                    "UDF19" => $item['Items'][0]['UDF19'] ?? "",
+                    "UDF20" => $item['Items'][0]['UDF20'] ?? "",
+                    "PhotoName" => $item['Items'][0]['PhotoName'] ?? "",
+                    "Discontinued" => $item['Items'][0]['Discontinued'] ?? "",
+                    "Source" => $item['Items'][0]['Source'] ?? "",
+                    "IsDeleted" => $item['Items'][0]['IsDeleted'] ?? "",
+                    "Weight" => $item['Items'][0]['Weight'] ?? "",
+                    "QualityID" => $item['Items'][0]['QualityID'] ?? "",
+                    "DesignID" => $item['Items'][0]['DesignID'] ?? "",
+                    "ColorID" => $item['Items'][0]['ColorID'] ?? "",
+                    "SizeID" => $item['Items'][0]['SizeID'] ?? "",
+                    "ShapeID" => $item['Items'][0]['ShapeID'] ?? "",
+                    "DesignDescription" => $item['Items'][0]['DesignDescription'] ?? "",
+                    "ExternalID" => $item['Items'][0]['ExternalID'] ?? "",
+                    "ProductType" => $item['Items'][0]['ProductType'] ?? "",
+                    "DimentionalWeight" => $item['Items'][0]['DimentionalWeight'] ?? "",
+                    "ImageName" => $item['Items'][0]['ImageName'] ?? "",
+                    "Country" => $item['Items'][0]['Country'] ?? "",
+                    "ProductDescription" => $item['Items'][0]['ProductDescription'] ?? "",
+                    "CareInstructions" => $item['Items'][0]['CareInstructions'] ?? "",
+                    "UDFFields" => $item['Items'][0]['UDFFields'] ?? [],
+                    "NewArrivalExpiry" => $item['Items'][0]['NewArrivalExpiry'] ?? "",
+                    "Clearence" => $item['Items'][0]['Clearence'] ?? "",
+                    "TopSeller" => $item['Items'][0]['TopSeller'] ?? "",
+                    "SpecialBuy" => $item['Items'][0]['SpecialBuy'] ?? "",
+                    "Thickness" => $item['Items'][0]['Thickness'] ?? "",
+                    "PileHeight" => $item['Items'][0]['PileHeight'] ?? "",
+                    "HotBuy" => $item['Items'][0]['HotBuy'] ?? "",
+                    "RugPad" => $item['Items'][0]['RugPad'] ?? "",
+                    "MarketSpecial" => $item['Items'][0]['MarketSpecial'] ?? "",
+                    "PrePad" => $item['Items'][0]['PrePad'] ?? "",
+                    "ULTPad" => $item['Items'][0]['ULTPad'] ?? "",
+                    "GroupPricing" => $item['Items'][0]['GroupPricing'] ?? "",
+                    "VideoURL" => $item['Items'][0]['VideoURL'] ?? "",
+                    "Length" => $item['Items'][0]['Length'] ?? "",
+                    "Width" => $item['Items'][0]['Width'] ?? "",
+                    "RegularDeliveryTime" => $item['Items'][0]['RegularDeliveryTime'] ?? "",
+                    "ExpressDeliveryTime" => $item['Items'][0]['ExpressDeliveryTime'] ?? "",
+                    "ImageNameArray" => ['https://media.momeni.com/Full_Img/'],
+                    "ItemColor" => $item['Colors'][0]['Description'] ?? "",
+                    "ItemColorImage" => "https://media.momeni.com/Full_Img/" ?? "",
+                    "CutPieces" => $cut_piece_data ?? [],
+                    "SQFTPrice" => (string)$totalSqftArea ?? "",
+                    "SQFTArea" => "",
+                    "CutPieceID" => "",
+                    "RollID" => $rowDetail['RollID'] ?? "",
+                    "SergingCharges" => "",
+                    "SergingType" => "",
+                    "location_id" => "",
+                    "cut_type" => "",
+                    "Serging" => ""
+                ];
+
+                $quote_cart = [
+                    'id' => $rowDetail['Line_NO'],
+                    'item_id' => $rowDetail['ItemID'],
+                    'item_customer_id' => $data['OutPut']['CustomerID'],
+                    'item_name' => $item['Items'][0]['ItemName'],
+                    'item_quantity' => 1,
+                    'item_price' => $item_price, //(float) number_format((float)$item_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
+                    'item_total' =>  $item_price, //(float) number_format((float)$item_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
+                    'item_color' => $item['Colors'][0]['Description'],
+                    'item_size' => $max_len_size,
+                    'item_currency' => '$',
+                    'item_image' => 'https://media.momeni.com/Full_Img/',
+                    'item_eta' => null,
+                    'item_data' => serialize(json_encode($item_json)),
+                    'item_atsq' => 1,
+                    'item_only_max_quantity' => false,
+                    'oak_item' => 0,
+                    'broadloom_item' => 1,
+                    'oak_sku' => null,
+                    'bd_roll_id' => $rowDetail['RollID'],
+                    'user_remarks' => null,
+                    'cfa' => 0,
+                    'remnant_shipable' => 0,
+                    'unit_price' => (float) number_format((float)$unit_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
+                    'sqft_area' => (float) number_format((float)$totalSqftArea, ConstantsController::ALLOWED_DECIMALS, '.', ''),
+                    'rand_str' => '',
+                    'is_bd_child' => $bd_child,
+                    'rugpad_price' =>  0.00,
+                    'order_length' => $rowDetail['OrderLength'],
+                    'quotation_no' => $QuotationNo,
+                ];
+                $quote_cart_data[] = $quote_cart;
+
+                foreach($quote_cart_data as $index => $quote){
+                    if($quote['id'] == $rowDetail['Line_NO'] && $index > 0) {
+                        $quote_cart_data[$index - 1]['rugpad_price'] = (float)$rugpad_price;
                     }
                 }
             }
+            
+            // dd([$data, $quote_cart_data]);
+            return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-shopping-cart', [
+                'quote_cart_data'     => json_decode(json_encode($quote_cart_data)),
+                'countries'           => $countries,
+                'cust_country'        => $data['OutPut']['Country'] ? $data['OutPut']['Country'] : $customer_details['CustomerDetail']['Country'],
+                'cust_state'          => $data['OutPut']['State'] ? $data['OutPut']['State'] : $customer_details['CustomerDetail']['State'],
+                'shipping_options'    => $shipping_options,
+                'shippings'           => $shippings,
+                'default_ship_via_id' => $default_ship_via_id,
+                'shipping_addresses' => isset($shipping_addresses) ? $shipping_addresses : [],
+                'payment_terms_list' => $payment_terms_list,
+                'customer_comment' => '',
+                'payment_term' =>  isset($customer_details['CustomerDetail']['PaymentTerm']) ? $customer_details['CustomerDetail']['PaymentTerm'] : '',
+                'payment_options' => []
+            ]);
 
-            $item_json = [
-                "ItemID" => $item['Items'][0]['ItemID'] ?? "",
-                "ItemName" => $item['Items'][0]['ItemName'] ?? "",
-                "Dimensions" => $item['Items'][0]['Dimensions'] ?? "",
-                "BasePrice" => $item['Items'][0]['BasePrice'] ?? 0,
-                "ATSQ" => $item['Items'][0]['ATSQ'] ?? "",
-                "QualityDescription" => $item['Items'][0]['QualityDescription'] ?? "",
-                "IntroDate" => $item['Items'][0]['IntroDate'] ?? "",
-                "TimeStamp" => $item['Items'][0]['TimeStamp'] ?? "",
-                "UPC" => $item['Items'][0]['UPC'] ?? "",
-                "PriceLevel1" => $item['Items'][0]['PriceLevel1'] ?? 0,
-                "PriceLevel2" => $item['Items'][0]['PriceLevel2'] ?? 0,
-                "PriceLevel3" => $item['Items'][0]['PriceLevel3'] ?? 0,
-                "PriceLevel4" => $item['Items'][0]['PriceLevel4'] ?? 0,
-                "PriceLevel5" => $item['Items'][0]['PriceLevel5'] ?? 0,
-                "UDF1" => $item['Items'][0]['UDF1'] ?? "",
-                "UDF2" => $item['Items'][0]['UDF2'] ?? "",
-                "UDF3" => $item['Items'][0]['UDF3'] ?? "",
-                "UDF4" => $item['Items'][0]['UDF4'] ?? "",
-                "UDF5" => $item['Items'][0]['UDF5'] ?? "",
-                "UDF6" => $item['Items'][0]['UDF6'] ?? "",
-                "UDF7" => $item['Items'][0]['UDF7'] ?? "",
-                "UDF8" => $item['Items'][0]['UDF8'] ?? "",
-                "UDF9" => $item['Items'][0]['UDF9'] ?? "",
-                "UDF10" => $item['Items'][0]['UDF10'] ?? "",
-                "UDF11" => $item['Items'][0]['UDF11'] ?? "",
-                "UDF12" => $item['Items'][0]['UDF12'] ?? "",
-                "UDF13" => $item['Items'][0]['UDF13'] ?? "",
-                "UDF14" => $item['Items'][0]['UDF14'] ?? "",
-                "UDF15" => $item['Items'][0]['UDF15'] ?? "",
-                "UDF16" => $item['Items'][0]['UDF16'] ?? "",
-                "UDF17" => $item['Items'][0]['UDF17'] ?? "",
-                "UDF18" => $item['Items'][0]['UDF18'] ?? "",
-                "UDF19" => $item['Items'][0]['UDF19'] ?? "",
-                "UDF20" => $item['Items'][0]['UDF20'] ?? "",
-                "PhotoName" => $item['Items'][0]['PhotoName'] ?? "",
-                "Discontinued" => $item['Items'][0]['Discontinued'] ?? "",
-                "Source" => $item['Items'][0]['Source'] ?? "",
-                "IsDeleted" => $item['Items'][0]['IsDeleted'] ?? "",
-                "Weight" => $item['Items'][0]['Weight'] ?? "",
-                "QualityID" => $item['Items'][0]['QualityID'] ?? "",
-                "DesignID" => $item['Items'][0]['DesignID'] ?? "",
-                "ColorID" => $item['Items'][0]['ColorID'] ?? "",
-                "SizeID" => $item['Items'][0]['SizeID'] ?? "",
-                "ShapeID" => $item['Items'][0]['ShapeID'] ?? "",
-                "DesignDescription" => $item['Items'][0]['DesignDescription'] ?? "",
-                "ExternalID" => $item['Items'][0]['ExternalID'] ?? "",
-                "ProductType" => $item['Items'][0]['ProductType'] ?? "",
-                "DimentionalWeight" => $item['Items'][0]['DimentionalWeight'] ?? "",
-                "ImageName" => $item['Items'][0]['ImageName'] ?? "",
-                "Country" => $item['Items'][0]['Country'] ?? "",
-                "ProductDescription" => $item['Items'][0]['ProductDescription'] ?? "",
-                "CareInstructions" => $item['Items'][0]['CareInstructions'] ?? "",
-                "UDFFields" => $item['Items'][0]['UDFFields'] ?? [],
-                "NewArrivalExpiry" => $item['Items'][0]['NewArrivalExpiry'] ?? "",
-                "Clearence" => $item['Items'][0]['Clearence'] ?? "",
-                "TopSeller" => $item['Items'][0]['TopSeller'] ?? "",
-                "SpecialBuy" => $item['Items'][0]['SpecialBuy'] ?? "",
-                "Thickness" => $item['Items'][0]['Thickness'] ?? "",
-                "PileHeight" => $item['Items'][0]['PileHeight'] ?? "",
-                "HotBuy" => $item['Items'][0]['HotBuy'] ?? "",
-                "RugPad" => $item['Items'][0]['RugPad'] ?? "",
-                "MarketSpecial" => $item['Items'][0]['MarketSpecial'] ?? "",
-                "PrePad" => $item['Items'][0]['PrePad'] ?? "",
-                "ULTPad" => $item['Items'][0]['ULTPad'] ?? "",
-                "GroupPricing" => $item['Items'][0]['GroupPricing'] ?? "",
-                "VideoURL" => $item['Items'][0]['VideoURL'] ?? "",
-                "Length" => $item['Items'][0]['Length'] ?? "",
-                "Width" => $item['Items'][0]['Width'] ?? "",
-                "RegularDeliveryTime" => $item['Items'][0]['RegularDeliveryTime'] ?? "",
-                "ExpressDeliveryTime" => $item['Items'][0]['ExpressDeliveryTime'] ?? "",
-                "ImageNameArray" => ['https://media.momeni.com/Full_Img/'],
-                "ItemColor" => $item['Colors'][0]['Description'] ?? "",
-                "ItemColorImage" => "https://media.momeni.com/Full_Img/" ?? "",
-                "CutPieces" => $cut_piece_data ?? [],
-                "SQFTPrice" => (string)$totalSqftArea ?? "",
-                "SQFTArea" => "",
-                "CutPieceID" => "",
-                "RollID" => $rowDetail['RollID'] ?? "",
-                "SergingCharges" => "",
-                "SergingType" => "",
-                "location_id" => "",
-                "cut_type" => "",
-                "Serging" => ""
-            ];
-
-            $quote_cart = [
-                'id' => $rowDetail['Line_NO'],
-                'item_id' => $rowDetail['ItemID'],
-                'item_customer_id' => $data['OutPut']['CustomerID'],
-                'item_name' => $item['Items'][0]['ItemName'],
-                'item_quantity' => 1,
-                'item_price' => $item_price, //(float) number_format((float)$item_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
-                'item_total' =>  $item_price, //(float) number_format((float)$item_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
-                'item_color' => $item['Colors'][0]['Description'],
-                'item_size' => $max_len_size,
-                'item_currency' => '$',
-                'item_image' => 'https://media.momeni.com/Full_Img/',
-                'item_eta' => null,
-                'item_data' => serialize(json_encode($item_json)),
-                'item_atsq' => 1,
-                'item_only_max_quantity' => false,
-                'oak_item' => 0,
-                'broadloom_item' => 1,
-                'oak_sku' => null,
-                'bd_roll_id' => $rowDetail['RollID'],
-                'user_remarks' => null,
-                'cfa' => 0,
-                'remnant_shipable' => 0,
-                'unit_price' => (float) number_format((float)$unit_price, ConstantsController::ALLOWED_DECIMALS, '.', ''),
-                'sqft_area' => (float) number_format((float)$totalSqftArea, ConstantsController::ALLOWED_DECIMALS, '.', ''),
-                'rand_str' => '',
-                'is_bd_child' => $bd_child,
-                'rugpad_price' =>  0.00,
-                'order_length' => $rowDetail['OrderLength'],
-                'quotation_no' => $QuotationNo,
-            ];
-            $quote_cart_data[] = $quote_cart;
-
-            foreach($quote_cart_data as $index => $quote){
-                if($quote['id'] == $rowDetail['Line_NO'] && $index > 0){
-                    $quote_cart_data[$index - 1]['rugpad_price'] = (float)$rugpad_price;
-                }
-            }
+        } catch(\Exception $e) {
+            return redirect()->back()->with('message', 'Somthing went wrong. Please try again...');
+        } catch(\Error $e) {
+            return redirect()->back()->with('message', 'Somthing went wrong. Please try again...');
         }
-//dd(isset($customer_details['CustomerDetail']['PaymentTerm']) ? $customer_details['CustomerDetail']['PaymentTerm'] : '');
-        return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-shopping-cart', [
-            'quote_cart_data'     => json_decode(json_encode($quote_cart_data)),
-            'countries'           => $countries,
-            'cust_country'        => $data['OutPut']['Country'] ? $data['OutPut']['Country'] : $customer_details['CustomerDetail']['Country'],
-            'cust_state'          => $data['OutPut']['State'] ? $data['OutPut']['State'] : $customer_details['CustomerDetail']['State'],
-            'shipping_options'    => $shipping_options,
-            'shippings'           => $shippings,
-            'default_ship_via_id' => $default_ship_via_id,
-            'shipping_addresses' => isset($shipping_addresses) ? $shipping_addresses : [],
-            'payment_terms_list' => $payment_terms_list,
-            'customer_comment' => '',
-            'payment_term' =>  isset($customer_details['CustomerDetail']['PaymentTerm']) ? $customer_details['CustomerDetail']['PaymentTerm'] : '',
-            'payment_options' => []
-        ]);
+
     }
+
     public function calculateMaxLenSize($cutpieces) {
         $maxLength = 0;
         $maxWidth = 0;

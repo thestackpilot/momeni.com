@@ -65,9 +65,9 @@ class CollectionsController extends FrontendController
 
                 if ( $with_title )
                 {
-                    if($id == "BroadLoom" && $type == "Collections"){
-                        $cols[$counter]['LinkUrl'] =   url('/collections/BroadLoom/Colors') . '/' . base64_encode(json_encode($link_filter));
-                    }else{
+                    if($id == "BroadLoom" && $type == "Collections") {
+                        $cols[$counter]['LinkUrl'] =   url('/designs/BroadLoom/') . '/' . base64_encode(json_encode($link_filter)) . '/Colors/1';
+                    } else {
                         $cols[$counter]['LinkUrl'] = route( 'frontend.designs_with_title', [$id, base64_encode( json_encode( $link_filter ) ), $type, 1] );
                     }
                 }
@@ -130,7 +130,6 @@ class CollectionsController extends FrontendController
 
         $this->append_breadcrumbs( $main_collection['Description'], route( 'frontend.favourite', $id ) );
         $this->append_breadcrumbs( $type, route( 'frontend.collections', [$id, $type] ) );
-
 
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.collection', [
             'collections'     => $collections,

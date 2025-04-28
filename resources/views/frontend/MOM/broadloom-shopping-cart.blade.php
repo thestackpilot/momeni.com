@@ -63,12 +63,27 @@
                                             <input type="hidden" name="customer" id="customer_id" value="{{ $cust }}">
                                             <thead>
                                             <tr>
-                                                <th>Product</th>
-                                                @foreach ($cart->items as $item)
-                                                    @if(!$item->broadloom_item)
-                                                        <th>Quantity</th>
-                                                    @endif
-                                                @endforeach
+                                                <th>Product X</th>
+                                                @php
+                                                $show_quantity = false;
+                                                if (!empty($quoteCartData)) {
+                                                    foreach ($quoteCartData as $item) {
+                                                        if(!$item->broadloom_item) {
+                                                            $show_quantity = true;
+                                                        }
+                                                    }
+                                                } else {
+                                                    foreach ($cart->items as $item) {
+                                                        if(!$item->broadloom_item) {
+                                                            $show_quantity = true;
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                @endphp
+                                                @if($show_quantity)
+                                                <th>Quantity {{ $show_quantity }}</th>
+                                                @endif
                                                 <th>Cut Cost</th>
                                                 <th>Serging Cost</th>
                                                 <th>Rug Pad</th>
@@ -184,23 +199,20 @@
                                                             <td class="align-content-center">
                                                                 @php
                                                                     $sergingTotal += $sum_surging_charges;
-                                                                    number_format($sergingTotal, 2);
                                                                     $cuttingTotal += $item->unit_price;
-                                                                    number_format($cuttingTotal, 2);
                                                                 @endphp
                                                                 {{ $item->item_currency }}{{ number_format($sum_surging_charges + $item->unit_price, 2) }}
                                                             </td>
                                                             <td class="align-content-center">
                                                                 @php
                                                                     $rugPadTotal += $item->rugpad_price;
-                                                                    number_format($rugPadTotal, 2);
                                                                 @endphp
                                                                 {{ $item->item_currency }}{{ number_format($item->rugpad_price, 2) }}
                                                             </td>
                                                             <td class="align-content-center">{{ $item->item_currency }}<span
                                                                     id="item_total_price">{{ number_format($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total, 2)  }}
                                                                 @php
-                                                                    $subPriceTotal += $sum_surging_charges + $item->unit_price + $item->item_total
+                                                                    $subPriceTotal += $item->item_price + $item->rugpad_price; // $sum_surging_charges + $item->unit_price + $item->item_total
                                                                 @endphp
                                                             </span>
                                                             </td>
@@ -313,23 +325,20 @@
                                                             <td class="align-content-center">
                                                                 @php
                                                                     $sergingTotal += $sum_surging_charges;
-                                                                    number_format($sergingTotal, 2);
                                                                     $cuttingTotal += (float)$item->unit_price;
-                                                                    number_format($cuttingTotal, 2);
                                                                 @endphp
                                                                 {{ $item->item_currency }}{{ number_format((float)$sum_surging_charges + (float)$item->unit_price, 2) }}
                                                             </td>
                                                             <td class="align-content-center">
                                                                 @php
                                                                     $rugPadTotal += $item->rugpad_price;
-                                                                    number_format($rugPadTotal, 2);
                                                                 @endphp
                                                                 {{ $item->item_currency }}{{ number_format($item->rugpad_price, 2) }}
                                                             </td>
                                                             <td class="align-content-center">{{ $item->item_currency }}<span
                                                                     id="item_total_price">{{ number_format($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total, 2)  }}
                                                                 @php
-                                                                    $subPriceTotal += $sum_surging_charges + $item->unit_price + $item->item_total
+                                                                    $subPriceTotal += $item->item_price + $item->rugpad_price; // $sum_surging_charges + $item->unit_price + $item->item_total
                                                                 @endphp
                                                             </span>
                                                             </td>
@@ -338,7 +347,7 @@
                                                     @endforeach
                                                 @endif
                                                 <input type="hidden" id="sergingTotal" value="{{ number_format($sergingTotal, 2) }}">
-                                                <input type="hidden" id="sergingTotal" value="{{ number_format($sergingTotal, 2) }}">
+                                                <input type="hidden" id="cuttingTotal" value="{{ number_format($cuttingTotal, 2) }}">
                                                 <input type="hidden" name="inside-hidden-subtotal" id="inside-hidden-subtotal" value="{{ number_format( $subPriceTotal, 2)}}">
                                                 <input type="hidden" name="quote-cart-data" id="quote-cart-data" value="{{ json_encode($quoteCartData) }}">
                                                 <input type="hidden" name="quote-no" id="quote-no" value="{{ !empty($quoteCartData) ? $quoteCartData[0]->quotation_no : "" }}">
