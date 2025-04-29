@@ -1400,7 +1400,9 @@ var selectedValue = $('.ship-method-select').val();
 if (
     selectedValue === 'OTHER' || 
     selectedText.includes('3rd party') || 
-    selectedText.includes('third party')
+    selectedText.includes('third party')||
+    selectedText.includes('3rd pty')
+
 ) {
     if ($('#ship_instructions').val().trim() === '') {
         console.log(selectedValue);
