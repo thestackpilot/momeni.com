@@ -401,7 +401,7 @@
                                         <hr style="border-top-color: whitesmoke;">
                                         <div class="row">
                                             <div class="col-md-3">Shipping Charges:</div>
-                                            <div class="col-md-9 text-right shipping_charges">will be calculated at time of Shipping
+                                            <div class="col-md-9 text-right shipping_charges">Will be calculated at the time of shipping
                                             </div>
                                             {{-- <div class="col-md-5 text-right shipping_charges">$0.00</div> --}}
                                         </div>
@@ -868,7 +868,7 @@
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                             <div class="row px-5">
                                                 <div class="col-md-4">Shipping Charges</div>
-                                                <div class="col-md-8 text-right section_2_shipping_charges">will be calculated at time of Shipping</div>
+                                                <div class="col-md-8 text-right section_2_shipping_charges">Will be calculated at the time of shipping</div>
                                                 {{-- <div class="col-md-3 text-right section_2_shipping_charges">$0.00</div> --}}
                                             </div>
                                             <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
@@ -1386,14 +1386,28 @@
                 // if ($('.ship-method-select').val() == 'BEST' || $('.ship-method-select').val() === 'FD58' || $('.ship-method-select').val() === 'FD51'
                 // || $('.ship-method-select').val() === 'FD50' || $('.ship-method-select').val() === 'OTHER' || $('.ship-method-select').val() === 'UT01'
                 // || $('.ship-method-select').val() === 'UT03') {
-                if ( 
-                 $('.ship-method-select').val() === 'OTHER' || $('.ship-method-select').val() === 'Third Party') {
-                    if($('#ship_instructions').val().trim() == ''){
-                        console.log($('.ship-method-select').val());
-                        alert(`Order Notes are required`);
-                        return true;
-                    }
-                }
+                // if ( 
+                //  $('.ship-method-select').val() === 'OTHER' || $('.ship-method-select').val() === 'Third Party') {
+                //     if($('#ship_instructions').val().trim() == ''){
+                //         console.log($('.ship-method-select').val());
+                //         alert(`Order Notes are required`);
+                //         return true;
+                //     }
+                // }
+                var selectedText = $('.ship-method-select option:selected').text().toLowerCase();
+var selectedValue = $('.ship-method-select').val();
+
+if (
+    selectedValue === 'OTHER' || 
+    selectedText.includes('3rd party') || 
+    selectedText.includes('third party')
+) {
+    if ($('#ship_instructions').val().trim() === '') {
+        console.log(selectedValue);
+        alert('Order Notes are required');
+        return true;
+    }
+}
 
                 // form.checkValidity()
                 if (firstName.checkValidity() && streetaddress.checkValidity()  && country.checkValidity()  && city.checkValidity()  && zipCode.checkValidity() && refNo.checkValidity() && shipDate.checkValidity()) {

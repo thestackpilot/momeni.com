@@ -500,8 +500,8 @@ body{
                                                                 </div>
                                                                 <div class="col-lg-8 col-md-12 col-sm-12 ps-5 mobile-mode-bd-cart" style="font-size: 12px">
                                                                     <div class="mt-1 row" style="display:flex; align-items: center;">
-                                                                        <div class="col-md-2 col-lg-2 p-0 font-weight--bold"> Design:</div>
-                                                                        <div class="col-md-10 col-lg-10 p-0 font-weight--normal" style="align-items: center;">
+                                                                        <div class="col-md-5 col-lg-5 p-0 font-weight--bold"> Design:</div>
+                                                                        <div class="col-md-7 col-lg-7 p-0 font-weight--normal" style="align-items: center;">
                                                                             {{ Str::after($item_data->ItemName, 'DESIGN: ') }} {{substr($item_data->ColorID, 0, 3)}}
                                                                         </div>
                                                                         <div class="col-md-10 col-lg-10 p-0" style="align-items: center;">
@@ -510,14 +510,14 @@ body{
                                                                         </div>
                                                                     </div>
                                                                     <div class="mt-1 row" style="display:flex; align-items: center;">
-                                                                        <div class="col-md-2 col-lg-2 p-0 font-weight--bold"> Roll Id: </div>
-                                                                        <div class="col-md-10 col-lg-10 p-0 font-weight--normal" style="align-items: center;">
+                                                                        <div class="col-md-5 col-lg-5 p-0 font-weight--bold"> Roll Id: </div>
+                                                                        <div class="col-md-7 col-lg-7 p-0 font-weight--normal" style="align-items: center;">
                                                                             {{ $item_data->RollID }}
                                                                         </div>
                                                                     </div>
                                                                     <div class="mt-1 row" style="display:flex; align-items: center;">
-                                                                            <div class="col-md-2 col-lg-2 p-0 font-weight--bold"> Sizes:</div>
-                                                                            <div class="col-md-10 col-lg-10 p-0" style="align-items: center;">
+                                                                            <div class="col-md-5 col-lg-5 p-0 font-weight--bold"> Sizes:</div>
+                                                                            <div class="col-md-7 col-lg-7 p-0" style="align-items: center;">
                                                                                 @php
                                                                                 $sizes = json_decode( unserialize($item->item_data ), true );
                                                                                 $sum_surging_charges = 0;
@@ -646,8 +646,8 @@ body{
                                     </div>
                                     <hr style="border-top-color: whitesmoke;">
                                     <div class="row">
-                                        <div class="col-md-7">Shipping Charges:</div>
-                                        <div class="col-md-5 text-right shipping_charges" id="shippingCharges">$0.00</div>
+                                        <div class="col-md-5">Shipping Charges:</div>
+                                        <div class="col-md-7 text-right shipping_charges" id="shippingCharges">Will be calculated at the time of shipping</div>
                                     </div>
                                     <hr style="border-top-color: whitesmoke;">
                                     <div class="row mt-3">
@@ -2341,9 +2341,9 @@ $('select[name="ship_via_id"]').on('change', function() {
             // }
 
             if(selectedValue == 'BEST' || selectedValue === 'AMZX'){
-                $('#shippingCharges').text('TBD');
+                $('#shippingCharges').text('Will be calculated at the time of shipping');
             }else{
-                $('#shippingCharges').text('$0.00');
+                $('#shippingCharges').text('Will be calculated at the time of shipping');
             }
         });
         $(document).ready(function () {

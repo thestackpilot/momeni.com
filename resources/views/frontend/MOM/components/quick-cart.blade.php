@@ -100,7 +100,7 @@ use App\Http\Controllers\CommonController;
                 <input type="hidden" value="940">
                 <p class="specs m-0 d-flex justify-content-between mb-2">
                     <strong class="font-crimson"> Shipping </strong>
-                    <span class="font-ropa shipping_price_value"> (will be calculated at time of Shipping) </span>
+                    <span class="font-ropa shipping_price_value ml-2"> (Will be calculated at the time of shipping) </span>
                 </p>
                 <hr>
                 <p class="specs m-0 d-flex justify-content-between total-amount">
