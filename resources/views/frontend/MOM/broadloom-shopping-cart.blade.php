@@ -660,8 +660,8 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-10 mb-2">
-                                                    <label for="" class="mb-0" style="font-size: 14px">Order Notes
-                                                        (optional)</label>
+                                                    <label for="" class="mb-0" style="font-size: 14px">Order Notes <span id="OrderNotesOption">(optional)</span>
+                                                    </label>
                                                     <textarea class="form-control" id="ship_instructions" name="shipping_instructions"
                                                               style="height: 7rem;" placeholder="" class="ship_instructions"></textarea>
                                                     
@@ -1676,5 +1676,25 @@ if (
             //     $('.section_2_shipping_charges').text('will be calculated at time of Shipping');
             // }
         });
+
+    $('.ship-method-select').on('change', function() {
+        var selectedText = $('.ship-method-select option:selected').text().toLowerCase();
+var selectedValue = $('.ship-method-select').val();
+
+if (
+    selectedValue === 'OTHER' || 
+    selectedValue === 'OTHERS' || 
+    selectedText.includes('3rd party') || 
+    selectedText.includes('third party')||
+    selectedText.includes('3rd pty')
+) {
+    $('#OrderNotesOption').html("<span style='color:red'>*</span>");
+}
+else{
+    $('#OrderNotesOption').text("(optional)");
+}
+    });
+
+
     </script>
 @endsection
