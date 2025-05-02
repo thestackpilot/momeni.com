@@ -6,6 +6,11 @@ use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
 
 @endphp
+<style>
+    .link-disabled {
+        pointer-events: none;
+    }
+</style>
 <footer class="footer-stick-bottom">
     <div class="footer-area-wrapper">
         <div class="footer-area section-space--ptb_60">
@@ -15,7 +20,7 @@ use App\Http\Controllers\CommonController;
                         <h6 class="footer-widget__title mb-20">{{$menus -> third_footer -> name}}</h6>
                         <ul class="footer-widget__list">
                             @foreach($menus -> third_footer -> metas as $meta)
-                            <li><a href="{{ $meta -> meta_url }}" class="hover-style-link">{{ $meta -> meta_title }}</a></li>
+                            <li><a href="{{ $meta -> meta_url }}" class="hover-style-link {{ !$meta -> meta_url ? 'link-disabled' : '' }}">{{ $meta -> meta_title }}</a></li>
                             @endforeach
                         </ul>
                     </div>
@@ -23,7 +28,7 @@ use App\Http\Controllers\CommonController;
                         <h6 class="footer-widget__title mb-20">{{$menus -> first_footer -> name}}</h6>
                         <ul class="footer-widget__list">
                             @foreach($menus -> first_footer -> metas as $meta)
-                            <li><a href={{ $meta -> meta_url }} class="hover-style-link">{{ $meta -> meta_title }}</a></li>
+                            <li><a href={{ $meta -> meta_url }} class="hover-style-link {{ !$meta -> meta_url ? 'link-disabled' : '' }}">{{ $meta -> meta_title }}</a></li>
                             @endforeach
 
                         </ul>
@@ -32,7 +37,7 @@ use App\Http\Controllers\CommonController;
                         <h6 class="footer-widget__title mb-20">{{$menus -> second_footer -> name}}</h6>
                         <ul class="footer-widget__list">
                             @foreach($menus -> second_footer -> metas as $meta)
-                            <li><a href="{{ $meta -> meta_url }}" class="hover-style-link">{{ $meta -> meta_title }}</a></li>
+                            <li><a href="{{ $meta -> meta_url }}" class="hover-style-link {{ !$meta -> meta_url ? 'link-disabled' : '' }}">{{ $meta -> meta_title }}</a></li>
                             @endforeach
 
                         </ul>
@@ -41,7 +46,7 @@ use App\Http\Controllers\CommonController;
                         <h6 class="footer-widget__title mb-20">{{$menus -> fourth_footer -> name}}</h6>
                         <ul class="footer-widget__list">
                             @foreach($menus -> fourth_footer -> metas as $meta)
-                            <li><a href="{{ $meta -> meta_url }}" class="hover-style-link">{{ $meta -> meta_title }}</a></li>
+                            <li><a href="{{ $meta -> meta_url }}" class="hover-style-link {{ !$meta -> meta_url ? 'link-disabled' : '' }}">{{ $meta -> meta_title }}</a></li>
                             @endforeach
 
                         </ul>

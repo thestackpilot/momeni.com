@@ -43,9 +43,13 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Create_DealerAccount', 'Create Dealer Account', $post_array, ['Success', 'Message'], 0 );
     }
 
-    public function Get_ATS( $itemId, $customerId = '' )
+    public function Get_ATS( $itemId, $customerId = '', $orderLength = '' )
     {
         $post_array    = array( 'ItemID' => $itemId, 'CustomerID' => $customerId );
+        if ( $orderLength ) {
+            $post_array['OrderLength'] = $orderLength;
+        }
+        
         $responseArray = $this->Post_API_Signature( 'Get_ATS', 'Get ATS', $post_array );
 
         return array( "ATSInfo" => $responseArray['OutPut'] );

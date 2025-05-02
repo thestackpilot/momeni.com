@@ -195,6 +195,7 @@ class QuotesController extends DashboardController
             $quote_cart_data = [];
             $max_len_size  = "";
             $totalSqftArea = "";
+            $totalSqftPrice= "";
             $item_price = 0;
             $unit_price =  "";
             $bd_child = 0;
@@ -204,18 +205,20 @@ class QuotesController extends DashboardController
             foreach($data['OutPut']['QuotationDetailList'] as $rowDetail) {
                 $item_price = 0;
                 $item = $this->ApiObj->Get_Items('', '', $rowDetail['ItemID'], '', '', '', '', '', '', '', '', '', '', '' );
-                $price = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
+                $price = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'], $rowDetail['OrderLength'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
                 foreach($data['OutPut']['QuotationDetailCutList'] as $rowCutList){
                     if($rowCutList['ItemID'] == $rowDetail['ItemID'] && $rowCutList['RollID'] == $rowDetail['RollID']){
                         $bd_child = $rowCutList['RugPad'] == "1" ? 0 : 1;
 
                         if($rowCutList['Line_No'] == $rowDetail['ParentLine_NO']){
-                            $rugpad_price_get = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
+                            $rugpad_price_get = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'], $rowDetail['OrderLength'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
                         }
 
                         $max_len_size  = $this->calculateMaxLenSize($rowCutList);
                         $totalSqftArea = $this->calculateTotalSqftArea($rowCutList);
+                        $totalSqftPrice = $price['Price'];
                         try {
+                            // echo "<p>{$item_price} :: {$price['Price']} x {$totalSqftArea} = " . ($price['Price'] * $totalSqftArea) . "</p>";
                             $item_price += $price['Price'] * $totalSqftArea;
                         } catch (\Exception $e) {
                             throw new Exception('Error in price calculation');
@@ -318,8 +321,8 @@ class QuotesController extends DashboardController
                     "ItemColor" => $item['Colors'][0]['Description'] ?? "",
                     "ItemColorImage" => "https://media.momeni.com/Full_Img/" ?? "",
                     "CutPieces" => $cut_piece_data ?? [],
-                    "SQFTPrice" => (string)$totalSqftArea ?? "",
-                    "SQFTArea" => "",
+                    "SQFTPrice" => (string)$totalSqftPrice ?? "",
+                    "SQFTArea" => (string)$totalSqftArea ?? "",
                     "CutPieceID" => "",
                     "RollID" => $rowDetail['RollID'] ?? "",
                     "SergingCharges" => "",

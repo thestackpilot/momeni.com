@@ -497,7 +497,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
             $('.filter-content .sidebar-filters-input').each(function(){
                 $(this).removeAttr('checked');
             });
-            filterManager(null,null, 0, 1);
+            filterManager(null,null, 0, 0);
         });
 
         $(document)

@@ -69,6 +69,10 @@ use App\Http\Controllers\CommonController;
                                 <input type="hidden" id="cart_item_oak" name="cart_item_oak" value="{{isset($active_theme_json->general->oak_items->enabled) && $active_theme_json->general->oak_items->title == strtoupper($collection_id) ? '{"oak": 1}' : '{"oak": 0}'}}">
                                 <h3 class="price item_color_change" id="item_color_change"><b></b></h3>
                                 <h3 class="price" id="product-heading-new" style="text-wrap: wrap;"><b>{{$items['Items'][0]['QualityDescription']}} {{$items['Items'][0]['DesignID']}}</b></h3>
+                                @if(isset($items['Items'][0]['ProductDescription']) && trim($items['Items'][0]['ProductDescription']))
+                                <h3 class="detiel-heading"> Description</h3>
+                                <p id="product-description">{!! trim($items['Items'][0]['ProductDescription']) == '' || strtolower(trim($items['Items'][0]['ProductDescription'])) == 'not available' ? '' : $items['Items'][0]['ProductDescription'] !!}</p>
+                                @endif
                                 <div class="col-12 row">
                                 @foreach ($items['Items'][0]['UDFFields'] as  $des_val)
                                     <div class="col-6 d-flex align-items-baseline">

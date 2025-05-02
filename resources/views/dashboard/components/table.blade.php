@@ -298,12 +298,13 @@ function get_table( $table, $tab = '' ) {
                                             <span class="row-details" style="display: none !important;">${JSON.stringify(json.data[i]['details'])}</span>
                                         `;
 
-                                    if (typeof json.data[i]['other_actions'] !== 'undefined' && json.data[i]['other_actions'][0]['type'] == 'modal')
+                                    if (typeof json.data[i]['other_actions'] !== 'undefined' && json.data[i]['other_actions'][0]['type'] == 'modal') {
                                         var reportbuttonClass = (json.data[i]['other_actions'][0]['module'] == 'Bl Order') ? 'bl-report' : 'other-details';
                                         json.data[i]['other_actions'] = `
                                             <button class="btn btn-sm btn-primary ${reportbuttonClass}" type="button">${json.data[i]['other_actions'][0]['label']}</button>
                                             <span class="other-row-details" style="display: none !important;">${JSON.stringify(json.data[i]['other_actions_details'])}</span>
                                         `;
+                                    }
 
                                     data.push(json.data[i]);
                                 }
@@ -361,7 +362,7 @@ function get_table( $table, $tab = '' ) {
                             }
                             else if( index == 'TrackingLink' && row[index] !== '')
                             {
-                                modal_body += `<td><a href="${( typeof row['href'] !== 'undefined' ? row['href'] : '#' )}" target='_blank'> ${row[index]} </a></td>`;
+                                modal_body += `<td><a href="${( typeof row['href'] !== 'undefined' ? row['href'] : '#' )}" target='_blank'> ${row[index]?.length ? row[index] : 'N/A'} </a></td>`;
                             }
                             else
                             {
