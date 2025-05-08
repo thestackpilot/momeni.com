@@ -59,7 +59,10 @@ use App\Http\Controllers\CommonController;
                                 {{$pages -> all_pages -> sections -> main_top_menu -> menu_1_caption}}
                             </a>
                             <ul class="sub-menu">
-                                <li> <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_url}}">VIEW ALL</a></li>
+                                {{-- <li> <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_url}}">VIEW ALL</a></li>
+                                <li>
+                                    <a href="">Collection</a>
+                                </li> --}}
                                 @if(isset($menus -> rug_header))
                                 @foreach($menus -> rug_header -> metas as $meta)
                                     <li>
@@ -79,11 +82,11 @@ use App\Http\Controllers\CommonController;
 
                         </li>
 
-                        @if(Auth::user() && (Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1))
+                        {{-- @if(Auth::user() && (Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1))
                         <li class="has-children"> <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_url}}">{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_caption}}</a>
 
                         </li>
-                        @endif
+                        @endif --}}
 
                         <li class="has-children"> <a class="nav-link" href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_url}}">{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_caption}}</a>
 

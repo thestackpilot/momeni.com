@@ -6,115 +6,164 @@
     use App\Http\Controllers\CommonController;
 
 @endphp
+<style>
+    .nav-link:hover{
+        text-decoration: underline 2px #660000;
+        color: #660000 !important;
+    }
+     /* Reduce space around nav items */
+     .navbar .nav-item,
+    .navbar .navbar-item {
+        margin: 0;
+        padding: 0;
+    }
 
-<div class=" header-menu text-left">
-    <ul class="menu">
-        <li class="parant">
-            @if(isset($menus -> rug_header))
-                <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_url}}"
-                   class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_caption}} <i
-                        class="icon-chevron-down"></i></a>
-                <div class="drop-down-item">
-                    <div class="container">
-                        <div class="sub-menu-item">
+    .navbar .nav-link {
+        padding: 0.25rem 0.75rem; /* Reduce padding: top/bottom left/right */
+        font-size: 0.9rem; /* Optional: smaller text */
+    }
 
-                            @foreach($menus -> rug_header -> metas as $meta)
-                                <a href="{{ $meta -> meta_url }}">{{ $meta -> meta_title }}</a>
-                            @endforeach
+    .dropdown-menu {
+        margin-top: 0; /* Prevent gap between toggle and menu */
+    }
 
-                        </div>
-                    </div>
-                </div>
-            @else
-                <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_url}}"
-                   class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_caption}}</a>
-            @endif
+    /* Adjust image and badge positioning inside nav */
+    .nav-link img {
+        max-height: 20px;
+    }
+
+    .cartCount {
+        top: -5px;
+        right: -10px;
+    }
+  
+    .text-light:hover{
+        color: black;
+    }
+    a:hover{
+color: black !important;
+
+    }
+    .abc a{
+    color: white;
+    }
+    .abc,.abc>a:hover{
+        color: black;
+    }
+
+</style>
+<div class=" header-menu  text-left">
+<!-- Start Bootstrap 5 Navbar -->
+<ul class="navbar">
+
+    <li class="nav-item dropdown">
+        @if(isset($menus -> rug_header))
+       
+        <a href="{{ $pages->all_pages->sections->main_top_menu->menu_1_url }}" 
+           class="nav-link dropdown-toggle" 
+           id="dropdownMenu1" 
+           role="button" 
+           data-bs-toggle="dropdown" 
+           aria-expanded="false">
+            {{ $pages->all_pages->sections->main_top_menu->menu_1_caption }}
+        </a>
+        <ul class="dropdown-menu " aria-labelledby="dropdownMenu1" style="background-color:#660000;">
+            {{-- <li class="dropdown-item "><a href="#" class="abc" style="color:white">new collection</a></li>
+            <li class="dropdown-item "><a href="#" class="abc" style="color:white">abc </a></li>
+            <li class="dropdown-item "><a href="#" class="abc" style="color:white">ab</a></li> --}}
+            @foreach($menus->rug_header->metas as $meta)
+             <li class="dropdown-item "><a href="{{ $meta->meta_url }}" class="abc" style="color:white">{{ $meta->meta_title }}</a></li>
+
+                {{-- <li><a href="{{ $meta->meta_url }}" class="dropdown-item">{{ $meta->meta_title }}</a></li> --}}
+            @endforeach
+        </ul>
+         @else 
+          <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_url}}"
+               class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_1_caption}}</a>
+        @endif 
+    </li>
+    
+    @if($pages->all_pages->sections->main_top_menu->menu_2_caption)
+        <li class="navbar-item">
+            <a href="{{ $pages->all_pages->sections->main_top_menu->menu_2_url }}" class="nav-link">
+                {{ $pages->all_pages->sections->main_top_menu->menu_2_caption }}
+            </a>
         </li>
-        @if($pages -> all_pages -> sections -> main_top_menu -> menu_2_caption !== null)
-            {{-- <li class="parant" style="display: {{ !(Auth::check() && (Auth::user()->broadloom_user || Auth::user()->is_sale_rep)) ? 'inline-block' : 'none' }}" id="broadloomLi">
-                <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_2_url}}" class="main-item">
-                    {{$pages -> all_pages -> sections -> main_top_menu -> menu_2_caption}}
-                </a>
-            </li> --}}
-            <li class="parant" id="broadloomLi">
-                <a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_2_url}}" class="main-item">
-                    {{$pages -> all_pages -> sections -> main_top_menu -> menu_2_caption}}
-                </a>
-            </li
-        @endif
+    @endif
 
-        @if($pages -> all_pages -> sections -> main_top_menu -> menu_3_caption !== null)
-            <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_url}}"
-                                  class="main-item">@if($pages -> all_pages -> sections -> main_top_menu -> menu_3_caption==="OAK")
-
-                                      ONE OF A KIND
-@else
-{{$pages -> all_pages -> sections -> main_top_menu -> menu_3_caption==="OAK"}}
-                                  @endif
-                                  
-                                      </a>
-
-            </li>
-        @endif
-
-        @if($pages -> all_pages -> sections -> main_top_menu -> menu_6_caption !== null && Auth::user() && (Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1))
-        <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_url}}"
-                              class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_6_caption}}</a>
-
+    @if($pages->all_pages->sections->main_top_menu->menu_3_caption)
+        <li class="navbar-item">
+            <a href="{{ $pages->all_pages->sections->main_top_menu->menu_3_url }}" class="nav-link">
+                @if($pages->all_pages->sections->main_top_menu->menu_3_caption === "OAK")
+                    ONE OF A KIND
+                @else
+                    {{ $pages->all_pages->sections->main_top_menu->menu_3_caption }}
+                @endif
+            </a>
         </li>
-        @endif
+    @endif
 
-        @if($pages -> all_pages -> sections -> main_top_menu -> menu_4_caption !== null)
-            <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_url}}"
-                                  class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_4_caption}}</a>
+    @if($pages->all_pages->sections->main_top_menu->menu_4_caption)
+        <li class="navbar-item">
+            <a href="{{ $pages->all_pages->sections->main_top_menu->menu_4_url }}" class="nav-link">
+                {{ $pages->all_pages->sections->main_top_menu->menu_4_caption }}
+            </a>
+        </li>
+    @endif
 
-            </li>
-        @endif
-        @if($pages -> all_pages -> sections -> main_top_menu -> menu_5_caption !== null)
-            <li class="parant"><a href="{{$pages -> all_pages -> sections -> main_top_menu -> menu_5_url}}"
-                                  class="main-item">{{$pages -> all_pages -> sections -> main_top_menu -> menu_5_caption}}</a>
+    @if($pages->all_pages->sections->main_top_menu->menu_5_caption)
+        <li class="navbar-item">
+            <a href="{{ $pages->all_pages->sections->main_top_menu->menu_5_url }}" class="nav-link">
+                {{ $pages->all_pages->sections->main_top_menu->menu_5_caption }}
+            </a>
+        </li>
+    @endif
+    {{-- @if($pages->all_pages->sections->main_top_menu->menu_6_caption)
+        <li class="navbar-item">
+            <a href="{{ $pages->all_pages->sections->main_top_menu->menu_6_url }}" class="nav-link">
+                {{ $pages->all_pages->sections->main_top_menu->menu_5_caption }}
+            </a>
+        </li>
+    @endif --}}
 
-            </li>
-        @endif
-        <li class="parant d-none">
-            @if(!Auth::user())
-                <span> <a href="{{route('auth.register')}}" class="main-item"> Become a Partner</a></span>
-            @endif
+    @if(!Auth::user())
+        <li class="navbar-item d-none">
+            <a href="{{ route('auth.register') }}" class="nav-link">Become a Partner</a>
         </li>
-        <li class="parant" id="loginLi" style="display: {{ !Auth::user() ? 'inline-block' : 'none' }}">
-            <span> <a href="{{route('auth.login')}}" class="main-item"> Login</a></span>
-            {{-- @else
-                <span> <a href="javascript:void(0)" class="main-item quickProfile-opener"> <img src="/MOM/images/myaccount-icon-mom.svg"></a></span> --}}
-        </li>
-        <li class="parant">
-            <div class="" id="search_text_container">
-                <input type="text" name="searchText" id="search_field" style="display: none;"
-                       class="border-0 main-item search-field search-input" placeholder="Search Here"/>
-                <span>
-                    <a href="javascript:void(0)" class="search-button exclude-link submit-btn search-icon"
-                       id="click-search">
-                        <img src="/MOM/images/search-icon-mom.svg" id="serach-popup-btn-box">
-                    </a>
-                </span>
-            </div>
-        </li>
-        <li class="parant">
-            <span id="cart-parent">
+    @endif
 
-                <a href="javascript:void(0)" class="main-item quickCart-opener position-relative">
-                    @auth()
-                        <span class="badge badge-pill badge-primary position-absolute cartCount"
-                              style="top: auto">{{$cart -> cart_count}}</span>
-                    @endauth
-                    <img src="/MOM/images/cart-icon-mom.svg">
-                </a>
-            </span>
+    <li class="navbar-item" id="loginLi" style="display: {{ !Auth::user() ? 'inline-block' : 'none' }}">
+        <a href="{{ route('auth.login') }}" class="nav-link">Login</a>
+    </li>
+    <li class="navbar-item">
+        <div id="search_text_container" class="d-flex align-items-center">
+            <input type="text" name="searchText" id="search_field" class="form-control me-2 d-none" placeholder="Search Here"/>
+            <a href="javascript:void(0)" class="nav-link p-0" id="click-search">
+                <img src="/MOM/images/search-icon-mom.svg" alt="Search">
+            </a>
+        </div>
+    </li>
+    
+ 
+    <li class="navbar-item">
+        <a href="javascript:void(0)" class="nav-link position-relative quickCart-opener">
+            @auth
+                <span class="badge badge-pill badge-primary position-absolute cartCount">{{ $cart->cart_count }}</span>
+            @endauth
+            <img src="/MOM/images/cart-icon-mom.svg" alt="Cart">
+        </a>
+    </li>
+
+    @if(Auth::user())
+        <li class="navbar-item" id="profileLi">
+            <a href="javascript:void(0)" class="nav-link quickProfile-opener">
+                <img src="/MOM/images/myaccount-icon-mom.svg" alt="My Account">
+            </a>
         </li>
-        <li class="parant" style="display: {{ !Auth::user() ? 'inline-block' : 'none' }}" id="profileLi">
-            <span> <a href="javascript:void(0)" class="main-item quickProfile-opener"> <img
-                        src="/MOM/images/myaccount-icon-mom.svg"></a></span>
-        </li>
-    </ul>
+    @endif
+</ul>
+
+  
 </div>
 @auth()
     <div class="quick-profile col-sm-12 position-fixed checkout-balance col-12 container-checker d-none">
@@ -397,4 +446,23 @@
             });
         });
     });
+</script>
+<script>
+    var dropdowns = document.querySelectorAll('.nav-item.dropdown');
+    dropdowns.forEach(function(dropdown) {
+        var menu = dropdown.querySelector('.dropdown-menu');
+        dropdown.addEventListener('mouseenter', function() {
+            menu.classList.add('show'); 
+        });
+        dropdown.addEventListener('mouseleave', function() {
+            menu.classList.remove('show');
+        });
+    });
+
+    document.getElementById('click-search').addEventListener('click', function () {
+        var searchField = document.getElementById('search_field');
+        searchField.classList.toggle('d-none');
+        searchField.focus(); // Optional: focus on the input after showing
+    });
+    
 </script>

@@ -1596,7 +1596,7 @@
                         let mxlenf = 0;
                         let mxlen = 0;
                         let unitpriceCal = 0;
-
+console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['TotalUsedLength']);
                         $.each(data['cut_piece']['OutPut']['AddCutPieces'], function (index, item) {
                             let lengthFeet = Math.floor(item.ATSLength / 12);
                             let lengthInches = item.ATSLength % 12;
@@ -1610,9 +1610,13 @@
                                 unitpriceCal += parseFloat($('#unit-price').val());
                             }
                             console.log('unitpriceCal', unitpriceCal);
+                            console.log('location one values');
+                            console.log(`mxlenf is ${mxlenf} lengthFeet is ${lengthFeet} mxlen is ${mxlen} and lengthInches are ${lengthInches}`)
 
                             mxlenf = mxlenf + lengthFeet;
                             mxlen = mxlen + lengthInches;
+                            // mxlenf =  lengthFeet;
+                            // mxlen =  lengthInches;
 
                             lenInchCal = (lengthInches * 0.0833333);
                             widInchCal = (widthInches * 0.0833333);
@@ -1694,7 +1698,9 @@
                         }
 
                         $("#ats-qty").val(totalSqftPrice.toFixed(2));
-                        $('#max-width').text(`${mxlenf}'-${mxlen % 12}''`);
+                      var inches=data['cut_piece']['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
+                        $('#max-width').text(`${Math.floor(inches/12)}'-${inches % 12}''`);
+                        // $('#max-width').text(`${mxlenf}'-${mxlen % 12}''`);
                         updatePrices();
 
                         divContent += `</div>`;
