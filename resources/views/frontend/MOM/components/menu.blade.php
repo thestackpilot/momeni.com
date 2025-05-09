@@ -102,7 +102,13 @@ color: black !important;
             </a>
         </li>
     @endif
-
+   @if($pages -> all_pages -> sections -> main_top_menu -> menu_6_caption !== null && Auth::user() && (Auth::user()->is_sale_rep == 1 || Auth::user()->broadloom_user == 1))
+    <li class="navbar-item">
+        <a href="{{ $pages->all_pages->sections->main_top_menu->menu_6_url }}" class="nav-link">
+            {{ $pages->all_pages->sections->main_top_menu->menu_6_caption }}
+        </a>
+    </li>
+    @endif
     @if($pages->all_pages->sections->main_top_menu->menu_4_caption)
         <li class="navbar-item">
             <a href="{{ $pages->all_pages->sections->main_top_menu->menu_4_url }}" class="nav-link">
@@ -118,13 +124,6 @@ color: black !important;
             </a>
         </li>
     @endif
-    {{-- @if($pages->all_pages->sections->main_top_menu->menu_6_caption)
-        <li class="navbar-item">
-            <a href="{{ $pages->all_pages->sections->main_top_menu->menu_6_url }}" class="nav-link">
-                {{ $pages->all_pages->sections->main_top_menu->menu_5_caption }}
-            </a>
-        </li>
-    @endif --}}
 
     @if(!Auth::user())
         <li class="navbar-item d-none">
@@ -148,7 +147,7 @@ color: black !important;
     <li class="navbar-item">
         <a href="javascript:void(0)" class="nav-link position-relative quickCart-opener">
             @auth
-                <span class="badge badge-pill badge-primary position-absolute cartCount">{{ $cart->cart_count }}</span>
+                <span class="badge badge-pill badge-primary position-absolute cartCount" style="top:0; right:0">{{ $cart->cart_count }}</span>
             @endauth
             <img src="/MOM/images/cart-icon-mom.svg" alt="Cart">
         </a>
