@@ -100,10 +100,29 @@ class CollectionsController extends FrontendController
         $collections = $this->addCollectionUrls( $this->ApiObj->Get_Collections_With_Filters( $id, $type, CommonController::escape_string( base64_decode( $filter ), 1 ) ), $id, $type, true, $collectionID );
 
         $updated_content = $this->content_model->get_content( $this->active_theme->id, $hash );
-
+        $pageData=[];
         if ( $updated_content && $updated_content->content )
         {
             $content = json_decode( unserialize( $updated_content->content ), 1 );
+            
+if(isset($content['title'])){
+    $pageData['title']=$content['title'];
+}
+else{
+    $pageData['title']="";
+}
+if(isset($content['description'])){
+    $pageData["description"]=$content['description'];
+}
+else{
+    $pageData['description']="";
+}
+if(isset($content['image'])){
+    $pageData["image"]=$content['image'];
+}
+else{
+    $pageData['image']="";
+}
 
             foreach ( $collections[$type] as &$collection )
             {
@@ -132,6 +151,7 @@ class CollectionsController extends FrontendController
         $this->append_breadcrumbs( $type, route( 'frontend.collections', [$id, $type] ) );
 
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.collection', [
+            'pageData' =>$pageData,
             'collections'     => $collections,
             'favourites'      => $favourites,
             'main_collection' => $main_collection,
@@ -166,8 +186,8 @@ class CollectionsController extends FrontendController
 
         if ( $updated_content && $updated_content->content )
         {
+           // dd($updated_content->content);
             $content = json_decode( unserialize( $updated_content->content ), 1 );
-
             foreach ( $collections[$type] as &$collection )
             {
 
