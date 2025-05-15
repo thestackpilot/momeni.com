@@ -66,11 +66,13 @@ class AdminController extends RootController
             $sliders       = $this->slider_model->get_all_sliders( $this->active_theme->id );
             $showrooms     = $this->showroom_model->get_all_showrooms( $this->active_theme->id );
             $menus         = $this->menu_model->get_main_menus( $this->active_theme->id );
+            $menusWithmeta         = $this->menu_model->get_menus_with_meta( $this->active_theme->id );
             $forms         = $this->form_model->get_main_forms( $this->active_theme->id );
             $basicSettings = $this->model_basic_settings->get_settings( $this->active_theme->id );
 
             View::share( 'basicSettings', $basicSettings );
             View::share( 'menus', $menus );
+            View::share( 'menusWithmeta', $menusWithmeta );
             View::share( 'forms', $forms );
             View::share( 'pages', $pages );
             View::share( 'sliders', $sliders );
@@ -78,6 +80,7 @@ class AdminController extends RootController
         }
 
         $this->main_collections = ( new MainCollectionController() )->get_main_collections();
+      //  dd($this->main_collections);
         View::share( 'maincollections', $this->main_collections );
     }
 

@@ -7,7 +7,15 @@ use App\Http\Controllers\CommonController;
 
 
 @endphp
+<style>
+    #fixedimg {
+    min-width:25px !important;
+    height: 200px !important;
+    max-width: none !important;
+    
+}
 
+</style>
 @extends('frontend.'.$active_theme -> theme_abrv.'.layouts.app')
 @section('title',$main_collection['Description'] .' '. array_key_first($collections) .' Collections')
 @section('content')
@@ -17,13 +25,41 @@ use App\Http\Controllers\CommonController;
         <div class="breadcrumb-area">
             <div class="container">
                 <div class="row breadcrumb_box  align-items-center">
+                    <div class="col-lg-12 col-md-12 col-sm-12 text-center text-sm-left">
+                       
+                        @if(isset($pageData['image']) && $pageData['image']!=="" )
+                        
+                            <img id="fixedimg" class="d-block mx-auto mb-2"  src="{{ asset('images/'. $pageData['image']) }}" alt="Page Logo" >
+
+                        @endif
+                     
+                    </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 text-center text-sm-left" id="collection_heading">
                         <!-- <h2 class="breadcrumb-title text-center ">{{$main_collection['Description'] .' - '. array_key_first($collections)}}</h2> -->
                         @if (request()->segment(2) == "BroadLoom")
                             <h2 class="breadcrumb-title text-center section-title--center ">Broadloom</h2>
                         @else
+                        @if(isset($pageData['title']) && $pageData['title']!=="" )
+                        
+                            <h2 class="breadcrumb-title text-center section-title--center ">{{$pageData['title']}}</h2>
+                        
+                        @else
+
                             <h2 class="breadcrumb-title text-center section-title--center ">{{isset($sub_category) ? $sub_category : ((strcmp('RUGS & CARPETS', strtoupper($main_collection['Description'])) === 0) ? 'RUGS' : $main_collection['Description'])}}</h2>
+                        
+                         @endif
+                            @endif
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 text-center text-sm-left">
+                       
+                        @if(isset($pageData['description']) && $pageData['description']!=="" )
+                        
+                            <p class="text-center " style="font-size:20px">{{$pageData['description']}}</p>
+                        
+                       
                         @endif
+                     
                     </div>
                 </div>
             </div>
@@ -48,6 +84,7 @@ use App\Http\Controllers\CommonController;
                                                 id="flexCheckChecked-discontinued" >
 
                                             <label class="form-check-label" for="flexCheckChecked-discontinued"> Show Discontinued {{ $main_collection['Description'] }}</label>
+                                           
                                            </li>
                                         @endif
 

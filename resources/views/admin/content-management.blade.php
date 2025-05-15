@@ -77,6 +77,48 @@ use App\Http\Controllers\CommonController;
                         @elseif($template_type == 'update-collections')
                         <form action="{{route('admin.modify-api-content')}}" enctype="multipart/form-data" method="post">
                             @csrf
+
+                            {{-- @isset($filter) --}}
+
+                            <!-- Page Content -->
+                            <div class="card shadow mb-4">
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                    <h1 class="h3 m-4 text-gray-800">Header Management</h1>
+                                </div>
+                                <div class="card-body shadow-sm mt-2 p-3 bg-white rounded">
+                                    
+                                    
+                                    <div class="form-group">
+                                        <label for="">Title</label>
+                                        <input type="text" name="pageTitle" class="form-control" value="{{ isset($content['title']) && $content['title'] !== '' ? $content['title'] : '' }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Description</label>
+                                        
+                                        <textarea name="pageDescription" class="form-control" >{{ isset($content['description']) && $content['description'] !== '' ? $content['description'] : '' }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Image</label>
+                                        <div class="mt-1 mb-3 fav-image">
+                                            <input type="hidden" id="pageimg" name="pageImageold" value="{{ isset($content['image']) && $content['image'] !== '' ? $content['image'] : '' }}" />
+                                            
+                                           <img id="pageimgview" class="w_200" src="{{isset($content['image']) && $content['image'] !== '' ? asset('images/'. $content['image']) : '' }}"  alt="Page Logo"  /> 
+                                         
+                                            <a style="font-size: 12px;" class=" font-weight-bolder text-danger text-sm-left remove-page-image">
+                                                Remove Custom Image
+                                            </a>
+                                        </div>
+                                        <input  type="file" accept="image/*" name="pageImage" class="" />
+                                        <p class="font-italic font-weight-bold font-weight-lighter mt-2 text-danger" style="font-size: 12px;">Image should be 800px X 800px Or 600px X 800px Or 600px X 400px Or 800px X 600px Or 900px X 900px Or 900px X 1200px</p>
+                                    </div>
+                                    <br>
+                                    <hr>
+                                    
+                                    <button type="submit" class="btn btn-success">Update</button>
+                                </div>
+                            </div>
+                                {{-- @endisset --}}
+
                             @foreach($api as $name => $value)
                             <input type="hidden" name="api_{{$name}}" value="{{$value}}" />
                             @endforeach
@@ -206,6 +248,21 @@ use App\Http\Controllers\CommonController;
 @section('scripts')
 <script>
     $(document).ready(function() {
+        var imgSrc = $('#pageimgview').attr('src');
+    
+    if (!imgSrc || imgSrc.trim() === '') {
+        $('#pageimgview').addClass('d-none');
+        $('.remove-page-image').addClass('d-none');
+    }
+        $(document).on('click', '.remove-page-image', function(e) {
+    e.preventDefault();
+    let value=$('#pageimg').val();
+    $('#pageimg').val(value+",delete");
+
+    $('#pageimgview').attr('src', '')
+    $('.remove-page-image').addClass('d-none')
+});
+
         $('.fav-image').each(function(){
             if (
                 $('img', $(this)).attr('src') !== $('img', $(this)).attr('alt-src') &&

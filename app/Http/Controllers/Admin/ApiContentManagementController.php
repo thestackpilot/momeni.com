@@ -17,10 +17,19 @@ class ApiContentManagementController extends AdminController
     {
         parent::__construct();
         $this->content_model = new ApiContentManagement();
+        $this->pageData = [
+            'title' => '',
+            'description' => '',
+            'image' => ''
+        ];
     }
 
     public function get_collections_content( $id, $page = '', $filters = '' )
     {
+        if(isset($filters)){
+            $isfilter=true;
+        }
+
         if ( $page || $filters )
         {
             $hash            = md5( json_encode( ['id' => join( '~', [$id, $page, $filters] ), 'method' => 'Get_'.$page, 'theme' => $this->active_theme->id] ) );
@@ -29,9 +38,9 @@ class ApiContentManagementController extends AdminController
 
 // die( '<pre>'.print_r( $collections, 1 ) );
 
-            if ( ! $updated_content )
-            {
-
+if ( ! $updated_content )
+            
+        {
                 foreach ( $collections[$page] as $collection )
                 {
                     $content[$collection['Description']] = [
@@ -56,6 +65,7 @@ class ApiContentManagementController extends AdminController
             ] );
 
             return view( 'admin.content-management', [
+                "filter"=>$isfilter,
                 'favourite_id'  => $id,
                 'collections'   => $collections[$page],
                 'content'       => $content,
@@ -145,37 +155,79 @@ class ApiContentManagementController extends AdminController
 try {
             $data = [];
             $hash = md5( json_encode( ['id' => $request->api_key, 'method' => $request->api_method, 'theme' => $this->active_theme->id] ) );
+
+        if(isset($request->pageImage)){
+            $image = $request->file('pageImage');
+            $filename = $request->pageTitle . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'),$filename );
+            $img=$filename;
+        }
+        else if($request->pageImageold){
+            
+
+            // Split the string into an array
+            $parts = explode(',', $request->pageImageold);
+            
+            // Access the two parts
+            $first = $parts[0];
+            $second = isset($parts[1]) ? $parts[1] : null;
+
+            if(isset($second)&& $second==="delete"){
+ 
+                $imagePath = public_path('images\\' . $first);
+     
+                            if (file_exists($imagePath)) {
+
+                    unlink($imagePath); 
+            }
+
+        }}
+
+        $this->pageData['image'] = $img;
+        $this->pageData['title'] = $request->pageTitle;
+        $this->pageData['description'] = $request->pageDescription;
+
+
             $keys = array_keys( $request->title );
 
             foreach ( $keys as $key )
             {
+
                 $data[$key] = [
                     'title' => $request->title[$key],
                     'raw'   => json_decode( $request->raw[$key], 1 )
                 ];
-
-                if ( $request->has( 'description' ) )
+                if ( isset($request->description[$key]) )
                 {
                     $data[$key]['description'] = $request->description[$key];
                 }
-
+                else{
+                    
+                    $data[$key]['description'] = "";
+                }
+                
                 if ( $request->hasFile( 'file.'.$key ) && $request->file( 'file.'.$key )->isValid() )
                 {
                     // $data[$key]['image'] = asset( $request->{'file.'.$key}->store( 'storage' ) );
                     $data[$key]['image'] = CommonController::upload_file_ftp($request->{'file.'.$key});
                     $data[$key]['ImageName'] = CommonController::upload_file_ftp($request->{'file.'.$key});
                 }
-                else
+                else if(isset($request->image[$key]))
                 {
                     $data[$key]['raw']['ImageName'] = $request->image[$key];
                     $data[$key]['image'] = $request->image[$key];
                     $data[$key]['ImageName'] = $request->image[$key];
                 }
+                else{
+                    $data[$key]['raw']['ImageName'] = "";
+                    $data[$key]['image'] = "";
+                    $data[$key]['ImageName'] = "";
+                }
 
             }
 
             $this->content_model->create_update_content( $this->active_theme->id, $hash, [
-                'content' => serialize( json_encode( $data ) )
+                'content' => serialize( json_encode(array_merge( $data,$this->pageData ) ))
             ] );
 
             return redirect()->back()->with( 'message', ['type' => 'success', 'body' => 'Content updated successfully.'] );

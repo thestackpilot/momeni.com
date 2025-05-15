@@ -84,7 +84,31 @@ use App\Http\Controllers\CommonController;
         </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseCollections" aria-expanded="false" aria-controls="collapseCollections">
+        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseRugmenu" aria-expanded="false" aria-controls="collapseRugmenu">
+            <i class="fas fa-list"></i>
+            <span>Rugs Menu</span>
+        </a>
+        <div id="collapseRugmenu" class="collapse" aria-labelledby="headingRugmenu" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+              
+               @if(isset($menusWithmeta["rug_header"]))
+
+                @foreach($menusWithmeta["rug_header"]["metas"] as $meta)
+                    @php
+                        $segments = explode('/', trim($meta['meta_url'], '/'));
+                        $lastPart = end($segments);
+                        
+                    @endphp
+                        <a class="collapse-item" href="{{ route('admin.collections',["Rugs" ,"Collections",strlen($lastPart)>50 ? $lastPart:"" ])}}"> {{$meta["meta_title"]}} </a>
+                   
+                @endforeach
+            
+            @endif
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseCollections" aria-expaded="false" aria-controls="collapseCollections">
             <i class="fas fa-list"></i>
             <span>Collection Pages</span>
         </a>
