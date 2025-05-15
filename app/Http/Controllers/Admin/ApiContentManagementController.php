@@ -183,6 +183,9 @@ try {
             }
 
         }}
+        else {
+            $img="";
+        }
 
         $this->pageData['image'] = $img;
         $this->pageData['title'] = $request->pageTitle;
