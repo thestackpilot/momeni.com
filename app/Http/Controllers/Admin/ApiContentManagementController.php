@@ -38,7 +38,7 @@ class ApiContentManagementController extends AdminController
 
 // die( '<pre>'.print_r( $collections, 1 ) );
 
-if (  $updated_content )
+if (  !$updated_content )
             
         {
                 foreach ( $collections[$page] as $collection )
