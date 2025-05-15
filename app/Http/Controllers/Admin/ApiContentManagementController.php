@@ -226,7 +226,7 @@ try {
                 }
 
             }
-
+dd("add dd for test");
             $this->content_model->create_update_content( $this->active_theme->id, $hash, [
                 'content' => serialize( json_encode(array_merge( $data,$this->pageData ) ))
             ] );
