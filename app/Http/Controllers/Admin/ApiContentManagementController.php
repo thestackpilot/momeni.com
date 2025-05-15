@@ -178,7 +178,8 @@ try {
      
                             if (file_exists($imagePath)) {
 
-                    unlink($imagePath); 
+                    unlink($imagePath);
+                    $img=""; 
             }
 
         }}

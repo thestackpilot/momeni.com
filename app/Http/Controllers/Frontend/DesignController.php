@@ -84,7 +84,7 @@ class DesignController extends FrontendController
 
                     foreach ( $contents as $content )
                     {
-
+dd( $collection_id);
                         if ( strcmp( $collection_id, $content['raw']['CollectionID'] ) === 0 )
                         {
                             $return = [
@@ -177,7 +177,8 @@ class DesignController extends FrontendController
             'return_type_id'          => $type,
             'sub_category'            => isset( $subCategory['title'] ) ? $subCategory['title'] : '',
             'with_title'              => $with_title,
-            'custom_title_descripton' => $with_title ? $this->check_title_description( $filter ) : []
+            'custom_title_descripton' =>  []
+            // 'custom_title_descripton' => $with_title ? $this->check_title_description( $filter ) : []
         ] );
     }
 
