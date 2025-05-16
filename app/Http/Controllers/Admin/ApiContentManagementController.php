@@ -162,7 +162,7 @@ try {
             $image->move(public_path('images'),$filename );
             $img=$filename;
         }
-        else if($request->pageImageold){
+        else if(isset($request->pageImageold)){
             
 
             // Split the string into an array
@@ -175,14 +175,16 @@ try {
             if(isset($second)&& $second==="delete"){
  
                 $imagePath = public_path('images\\' . $first);
-     
-                            if (file_exists($imagePath)) {
+                    if (file_exists($imagePath)) {
+                        unlink($imagePath);
+                        $img=""; }
 
-                    unlink($imagePath);
-                    $img=""; 
+                }
+                else{
+                    $img=isset($request->pageImageold)? $request->pageImageold:"";
+                    
+                }
             }
-
-        }}
         else {
             $img="";
         }
@@ -236,6 +238,7 @@ try {
 
             return redirect()->back()->with( 'message', ['type' => 'success', 'body' => 'Content updated successfully.'] );
 } catch (\Exception $e) {
+    dd($data[$key]);
 	// die(print_r([$e->getMessage()],1));
 }
         }
