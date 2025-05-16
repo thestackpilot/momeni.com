@@ -174,7 +174,7 @@ try {
 
             if(isset($second)&& $second==="delete"){
  
-                $imagePath = public_path('images\\' . $first);
+                $imagePath = public_path('images/' . $first);
                     if (file_exists($imagePath)) {
                         unlink($imagePath);
                         $img=""; }
@@ -238,7 +238,7 @@ try {
 
             return redirect()->back()->with( 'message', ['type' => 'success', 'body' => 'Content updated successfully.'] );
 } catch (\Exception $e) {
-    dd($data[$key]);
+ 
 	// die(print_r([$e->getMessage()],1));
 }
         }

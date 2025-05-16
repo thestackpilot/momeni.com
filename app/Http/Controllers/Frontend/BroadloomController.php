@@ -43,7 +43,8 @@ class BroadloomController extends FrontendController
         $roll_pieces =  $this->ApiObj->Get_ItemsRollAndCutPieceList($item_id);
         $surging_types = $this->ApiObj->Get_SurgingTypes();
         // dd($roll_pieces);
-        // dd( 'frontend.' . $this->active_theme->theme_abrv . '.broadloom');
+
+     // dd( 'frontend.' . $this->active_theme->theme_abrv . '.broadloom');
         return view('frontend.' . $this->active_theme->theme_abrv . '.broadloom', [
             'surging_types' => $surging_types,
             'roll_pieces' => $roll_pieces,

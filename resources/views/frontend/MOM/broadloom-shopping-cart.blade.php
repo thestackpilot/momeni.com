@@ -660,7 +660,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-md-10 mb-2">
-                                                    <label for="" class="mb-0" style="font-size: 14px">Order Notes <span id="OrderNotesOption">(optional)</span>
+                                                    <label for="" class="mb-0" style="font-size: 14px">Order / Shipping Instruction <span id="OrderNotesOption">(optional)</span>
                                                     </label>
                                                     <textarea class="form-control" id="ship_instructions" name="shipping_instructions"
                                                               style="height: 7rem;" placeholder="" class="ship_instructions"></textarea>
