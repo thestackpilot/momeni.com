@@ -84,7 +84,7 @@ class DesignController extends FrontendController
 
                     foreach ( $contents as $content )
                     {
-dd( $collection_id);
+
                         if ( strcmp( $collection_id, $content['raw']['CollectionID'] ) === 0 )
                         {
                             $return = [

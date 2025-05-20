@@ -19,7 +19,7 @@ class QuotesController extends DashboardController
         $sergingtypes = $this->ApiObj->Get_QuotationSergingTypes();
         $quotationsLists = $this->ApiObj->Get_QuotationList();
         $items = $this->ApiObj->Get_AllBLItems();
-
+//
         $blList = isset($items['OutPut']['BLItemsList']) ? $items['OutPut']['BLItemsList'] : [];
         $sergList = isset($sergingtypes['SurgingTypesList']) ? $sergingtypes['SurgingTypesList'] : [];
         $quoteList = isset($quotationsLists['QuotationList']) ? $quotationsLists['QuotationList'] : [];

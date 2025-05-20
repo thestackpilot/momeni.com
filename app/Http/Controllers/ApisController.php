@@ -319,6 +319,7 @@ class ApisController extends RootController
     {
         $post_array = array( 'MainCollectionID' => $MainCollectionId, 'DesignID' => $DesignID, 'ItemID' => $ItemID, 'ExternalID' => $ExternalID, 'SubCategory' => $SubCategory, 'CollectionID' => $CollectionID, 'ColorID' => $ColorID, 'SizeID' => $SizeID, 'UpdatedDateFrom' => $UpdatedDateFrom, 'UpdatedDateTo' => $UpdatedDateTo, 'ProductType' => $ProductType, 'IsDeleted' => $IsDeleted, 'HasExternalID' => $HasExternalID, 'SKU' => $SKU );
 
+       // dd( $this->Post_API_Signature( 'Get_Items', 'Get Items', $post_array, ['Items', 'Colors', 'Sizes', 'ItemImages', 'PillowCovers', 'ItemsETA'] ));
         return $this->Post_API_Signature( 'Get_Items', 'Get Items', $post_array, ['Items', 'Colors', 'Sizes', 'ItemImages', 'PillowCovers', 'ItemsETA'] );
     }
 
@@ -476,6 +477,8 @@ class ApisController extends RootController
         return $this->Post_API_Signature( 'Place_BLOrder', 'Place BL Order', $post_array, ['Success', 'Message', 'ErrorDetail', 'ObjectID'], 0 );
     }
 
+   
+    
     public function Post_API_Signature( $api_slug, $api_text, $post_array, $specific_keys = array(), $only_on_success = 1, $json_reponse = 1, $get_type = 0 )
     {
         $all_params = [
@@ -807,7 +810,9 @@ class ApisController extends RootController
         ];
         return $this->Post_API_Signature( 'Get_QuotationList', 'Get Quotation List', $post_array, ['QuotationList']);
     }
-
+public function Get_BLShipViaList(){
+    return $this->Post_API_Signature('Get_BLShipViaList', "Get Bl Ship Via list", [], [], 1, 1, 1);
+}
     public function Get_AllBLItems()
     {
         $post_array = [];

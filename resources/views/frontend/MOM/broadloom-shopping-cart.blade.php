@@ -649,10 +649,10 @@
                                                     <label for="" class="form-label mb-1" style="font-size: 14px">Shipping
                                                         Method</label>
                                                     <select name="shipping_method" class="form-control ship-method-select">
-                                                        @if($shipping_options)
-                                                            @foreach($shipping_options as $shipping_option)
+                                                        @if($shiplist)
+                                                            @foreach($shiplist['OutPut']['ShipVias'] as $shipping_option)
                                                                 <option
-                                                                    {{ $default_ship_via_id == $shipping_option['ShipViaID'] ? 'selected' : '' }} value="{{$shipping_option['ShipViaID']}}">{{$shipping_option['Description']}}</option>
+                                                                    {{ $default_ship_via_id == $shipping_option['ShipViaID' ] ? 'selected' : '' }} value="{{$shipping_option['ShipViaID']}}">{{$shipping_option['Description']}}</option>
                                                             @endforeach
                                                         @else
                                                             <option value="3RDP">Standard ShipVia</option>
@@ -1139,12 +1139,41 @@
                             </div>
                             <div class="col-md-4 align-content-center text-right font-weight--bold mb-5 cart_total_final"
                                  style="font-size: 20px"></div>
-                            <div class="col-sm-8 my-5 row justify-content-center">
+                            {{-- <div class="col-sm-8 my-5 row justify-content-center">
+                                
                                 <a href="/dashboard/home" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5"
                                    id="add_cart">
                                     Go to dashboard &nbsp; &nbsp; &nbsp;<i class="fa fa-long-arrow-right pl-5"></i>
                                 </a>
+                            </div> --}}
+                            <div class="col-sm-8 my-5 row">
+                                <div class="col-sm-6">
+                                <a href="/dashboard/home" class="add-to-cart-button btn btn-dark align-content-center text-left mt-5"
+                                   id="add_cart">
+                                    Go to dashboard<i class="fa fa-long-arrow-right pl-5"></i>
+                                </a>
                             </div>
+                                <div class="col-sm-6">
+                                    <a id="reportGen" class="add-to-cart-button btn btn-dark align-content-center text-right mt-5 ml-5 bl-report text-white" >View Report</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade other-detail-modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header other-detail-modal-header text-center">
+                            <h4 style='float: left;'>Report Details</h4>
+                            <button type="button" class="close other-detail-modal-close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" style="font-size: 40px;">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body other-detail-modal-body p-5" id="section-details" style="background: #fff;">
+                        </div>
+                        <div class="modal-footer">
+                            {{-- <button type="button" class="btn btn-secondary close-modal other-detail-modal-close" data-dismiss="modal">Close</button> --}}
                         </div>
                     </div>
                 </div>
@@ -1695,6 +1724,56 @@ else{
 }
     });
 
+
+    $(document).on('click', '.bl-report', function(){
+           // $('#loader-container').css('display', 'block');
+            const url = "{{ route('dashboard.orderreport') }}";
+           // var data = JSON.parse($('span.other-row-details', $(this).parent()).html());
+            let SalesRepId = '';
+            let CustomerId = '';
+            let MenuTag = 'ViewBLOrder';
+            let DocumentNo =  $("#orderno").text();
+            console.log(DocumentNo);
+            const fullUrl = `${url}?SalesRepId=${SalesRepId}&CustomerId=${CustomerId}&MenuTag=${MenuTag}&DocumentNo=${DocumentNo}`;
+
+            $.ajax({
+                url: fullUrl,
+                type: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                success: function(response) {
+                    //$('#loader-container').css('display', 'none');
+                    console.log('Response', response);
+                    $(".other-detail-modal").modal("show");
+                    var modalBody = $(".modal-body");
+                    $(".other-detail-modal-body").empty();
+                    var obj = document.createElement('object');
+                    obj.style.width = '100%';
+                    obj.style.height = '842pt';
+                    obj.type = 'application/pdf';
+                    console.log(response);
+                    obj.data = 'data:application/pdf;base64,' + response;
+                    document.body.appendChild(obj);
+                    //   console.log(obj);
+                    $(".other-detail-modal-body").append(obj);
+
+                    var link = document.createElement('a');
+                    link.innerHTML = 'Download Report';
+                    link.className = 'btn btn-primary my-3 py-3';
+                    link.download = 'Report.pdf';
+                    link.href = 'data:application/octet-stream;base64,' + response;
+                    document.body.appendChild(link);
+                    $(".other-detail-modal-body").append(link);
+                },
+                error: function( error) {
+                    $('#loader-container').css('display', 'none');
+                    //  console.error("Error fetching", error);
+                }
+            });
+        });
 
     </script>
 @endsection

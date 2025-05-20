@@ -148,6 +148,8 @@ class BroadloomController extends FrontendController
     //      isset($customer_payment_options['customers']) && count($customer_payment_options['customers']) > 0 ? $customer_payment_options['customers'][0] : []
         
     // );
+    $shiplist = $this->ApiObj->Get_BLShipViaList();
+   // dd($shiplist['OutPut']['ShipVias'][0]['ShipViaID']);
         return view('frontend.' . $this->active_theme->theme_abrv . '.broadloom-shopping-cart', [
             'countries' => $countries,
             'cust_country' => isset($customer_details['CustomerDetail']['Country']) ? $customer_details['CustomerDetail']['Country'] : null,
@@ -155,6 +157,7 @@ class BroadloomController extends FrontendController
             'states' => $states,
             'shipping_options' => $shipping_options,
             'shippings' => $shippings,
+            'shiplist'=>$shiplist,
             'default_ship_via_id' => $default_ship_via_id,
             'shipping_addresses' => isset($shipping_addresses) ? $shipping_addresses : [],
             'payment_terms_list' => $payment_terms_list,

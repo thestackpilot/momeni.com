@@ -147,7 +147,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                 <div class="product-content {{ !$with_title ? 'mt-0' : '' }}">
                                     @if($with_title && isset($collection['ColorDescription']))
                                     <h6 class="prodect-title test">
-                                        <a href="{{$collection['LinkUrl']}}" title="{{$collection['ColorDescription']}}">{{$collection['ColorDescription']}} </a>
+                                        <a href="{{$collection['LinkUrl']}}" title="{{$collection['ColorDescription']}}"><b style="letter-spacing: 4px">{{$collection['ColorDescription']}}</b></a>
                                     </h6>
                                     @endif
 

@@ -246,7 +246,7 @@ use App\Http\Controllers\CommonController;
                               <button type="button" class="add-row btn btn-primary text-uppercase mt-2 me-2">Insert new row</button>
                            </div>
                            <div class="p-3 col-md-6 d-flex justify-content-end">
-                              <button type="submit" class="btn btn-primary text-uppercase mt-2">Place Order</button>
+                              <button type="submit" class="btn btn-primary text-uppercase mt-2">Place Ordersss</button>
                            </div>
                         </div>
                      </form>

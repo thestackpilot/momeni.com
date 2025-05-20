@@ -718,6 +718,7 @@ class ShopController extends DashboardController
         ];
 
         // dd([$filters, $request->all(), $default_ship_via_id]);
+        //dd( $itemIds['OutPut']['BLItemsList']);
         View::share( 'datepicker_dates', ['min' => 'today', 'max' => '+1m'] );
         View::share( 'filters', $filters );
         View::share( 'itemIds', $itemIds['OutPut']['BLItemsList']);
@@ -739,6 +740,7 @@ class ShopController extends DashboardController
     public function fetch_item_id_data(Request $request){
         $itemController = new ItemController();
         $items = $itemController->generate_color_name($itemController->generate_image_urls($this->ApiObj->Get_Items('', '', $request->item_id, '', '', '', '', '', '', '', '', '', '', '' )));
+      return($items);
         return response()->json([
             'item_json' => json_encode($items['Items'][0]),
             'rug_pad' => $items['Items'][0]['ULTPad']

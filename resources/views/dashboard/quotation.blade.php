@@ -59,7 +59,7 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
                                             
                                             <div class="col-md-6 col-12">
                                                     <div class="mb-3 sale_rep_box">
-                                                        <label class="form-label">Customer ID</label>
+                                                        <label class="form-label">Customer IDdddd</label>
                                                         <select class="form-control customer_id_sr" name="customer_id" id="customer_id">
                                                             <option disabled selected>Choose Customer</option>
                                                             @foreach ($customer as $single_customer)
@@ -121,7 +121,7 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
 
                                             <div class="col-md-3 col-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Cut Width</label>
+                                                    <label class="form-label">Cut Width <span class="Twidth-max-error d-none" style="font-size:0.6rem; font-weight:800; color:red;"></span></label>
                                                     <div class="mb-3 d-flex align-items-center justify-content-between">
                                                         <div class="input-group me-2">
                                                             <input type="number" class="form-control text-center small-input" name="widthF" id="widthF" placeholder="00" min="0" max="100">
@@ -136,7 +136,7 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
                                             </div>
                                             <div class="col-md-3 col-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Cut Length</label>
+                                                    <label class="form-label">Cut Length  <span class="Tlength-max-error " style="font-size:0.6rem; font-weight:800; color:red;"></span></label>
                                                     <div class="mb-3 d-flex align-items-center justify-content-between">
                                                         <div class="input-group me-2">
                                                             <input type="number" class="form-control text-center small-input" name="lengthF" id="lengthF" placeholder="00" min="0" max="100">
@@ -481,7 +481,9 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
 
 <script type="text/javascript">
+
     $(document).ready(function () {
+        
         // Hide show on the base customer or sales rep
         var is_sales_rep = '{{ Auth::user()->is_sale_rep }}';
         var is_customer = '{{ Auth::user()->is_customer }}';
@@ -548,7 +550,7 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
             var lengthI = $('#lengthI').val();
             var widthF = $('#widthF').val();
             var widthI = $('#widthI').val();
-
+            //console.log("file test");
             console.log(`Customer ID: ${customer_id} quotes_date: ${quotes_date} cancel_quote_date: ${cancel_quote_date} item_id: ${item_id}  serging: ${serging} lengthF: ${lengthF} lengthI: ${lengthI} widthF: ${widthF} widthI: ${widthI}`);
 
 
@@ -560,10 +562,36 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
         }
         $('#customer_id, #quotes_date, #cancel_quote_date, #item_id, #serging, #lengthF, #lengthI, #widthF, #widthI').on('change', function() {
             checkForm();
+            $(".quote-total-price").text("$0.00");
+checkwidthlimit();
+
         });
+        function checkwidthlimit(){
+            let widthF=$('#widthF').val();
+            let widthI=$('#widthI').val();
+            let total= (parseInt(widthF)*12)+parseInt(widthI);
+            let dataWidth = $("#item_id").find('option:selected').attr('data-width');
+            if(total>dataWidth){
+             $('.Twidth-max-error').removeClass('d-none');
+             let feets=Math.floor(dataWidth/12);
+             let inches=dataWidth-(feets*12);
+             $('.Twidth-max-error').text(`(Value cannot be greater than ${feets}' ${inches}" )`);
+             
+            }
+            else{
+                $('.Twidth-max-error').addClass('d-none'); 
+            }
+            
+
+        }
         checkForm();
 
-
+        $('#reserve-stock').change(function() {
+            $(".quote-total-price").text("$0.00"); 
+        });
+        $('#add-rugpad').change(function() {
+            $(".quote-total-price").text("$0.00"); 
+        });
         // Auto do inch is 1 if feet for width/lenght is 0
         $('#lengthF, #lengthI').on('change', function () {
             validateFeetinchInput('#lengthF', '#lengthI');
@@ -667,10 +695,10 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
             var reserveStock = $('#reserve-stock').is(':checked') ? "Y" : "N";
             var length = lengthF * 12 + lengthI;
             var width  = widthF * 12 + widthI;
+console.log("some chnage ");
 
-
-            console.log(`Customer ID: ${customer_id} quotes_date: ${quotes_date} cancel_quote_date: ${cancel_quote_date} item_id: ${item_id}  serging: ${serging} lengthF: ${lengthF} lengthI: ${lengthI} widthF: ${widthF} widthI: ${widthI}`);
-
+            console.log(`Customer ID: ${customer_id} quotes_date: ${quotes_date} cancel_quote_date: ${cancel_quote_date} item_id: ${item_id}  serging: ${serging} lengthF: ${lengthF} lengthI: ${lengthI} widthF: ${widthF} widthI: ${widthI} and `);
+            $('.quote-total-price').text("$0.00");
             $.ajax({
                 url: '/dashboard/save-quote',
                 type: 'POST',
@@ -988,5 +1016,14 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
         });
 
 });
+
+$('#lengthI').on('input', function() {
+    $(".quote-total-price").val("$0.00");
+});
+
+//     $('#lengthI').change(function() {
+//         $(".quote-total-price").val("$0.00");
+//     });
+// #select2-item_id-container','#widthF','#widthI','#lengthF',
 </script>
 @endsection

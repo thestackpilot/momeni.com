@@ -1433,8 +1433,9 @@ class GenericReportsController extends DashboardController
             $CustomerId = $request->has('CustomerId') ? $request->CustomerId : '';
             $MenuTag = $request->has('MenuTag') ? $request->MenuTag : 'View Order';
             $DocumentNo = $request->has('DocumentNo') ? $request->DocumentNo : 0000;
-
+           // dd($SalesRepId, $CustomerId, $MenuTag, $DocumentNo);
             $report = $this->ApiObj->Get_ViewDocumentsReport($SalesRepId, $CustomerId, $MenuTag, $DocumentNo);
+            dd($report['document']['ReportData']);
             if( $report['document']['Success'] )
             {
                 View::share( 'ReportData', $report['document']['ReportData'] );
