@@ -41,7 +41,7 @@ use App\Http\Controllers\CommonController;
                         @else
                         @if(isset($pageData['title']) && $pageData['title']!=="" )
                         
-                            <h2 class="breadcrumb-title text-center section-title--center ">{{$pageData['title']}}</h2>
+                            <h2 class="breadcrumb-title text-center">{{$pageData['title']}}</h2>
                         
                         @else
 
