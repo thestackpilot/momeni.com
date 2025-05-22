@@ -576,10 +576,12 @@ checkwidthlimit();
              let feets=Math.floor(dataWidth/12);
              let inches=dataWidth-(feets*12);
              $('.Twidth-max-error').text(`(Value cannot be greater than ${feets}' ${inches}" )`);
-             
+             $('.generate-quote-btn').addClass('submit-disabled-link');
             }
             else{
-                $('.Twidth-max-error').addClass('d-none'); 
+                $('.Twidth-max-error').addClass('d-none');
+                $('.generate-quote-btn').removeClass('submit-disabled-link');
+
             }
             
 
@@ -697,7 +699,7 @@ checkwidthlimit();
             var width  = widthF * 12 + widthI;
 console.log("some chnage ");
 
-            console.log(`Customer ID: ${customer_id} quotes_date: ${quotes_date} cancel_quote_date: ${cancel_quote_date} item_id: ${item_id}  serging: ${serging} lengthF: ${lengthF} lengthI: ${lengthI} widthF: ${widthF} widthI: ${widthI} and `);
+            console.log(`data we are going to save is Customer ID: ${customer_id} quotes_date: ${quotes_date} cancel_quote_date: ${cancel_quote_date} item_id: ${item_id}  serging: ${serging} lengthF: ${lengthF} lengthI: ${lengthI} widthF: ${widthF} widthI: ${widthI} and `);
             $('.quote-total-price').text("$0.00");
             $.ajax({
                 url: '/dashboard/save-quote',

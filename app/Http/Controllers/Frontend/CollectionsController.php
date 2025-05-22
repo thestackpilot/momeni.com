@@ -152,6 +152,7 @@ else{
 
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.collection', [
             'pageData' =>$pageData,
+            "setFilter"=>true,
             'collections'     => $collections,
             'favourites'      => $favourites,
             'main_collection' => $main_collection,

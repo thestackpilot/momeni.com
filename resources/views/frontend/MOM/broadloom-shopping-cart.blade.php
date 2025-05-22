@@ -649,7 +649,7 @@
                                                     <label for="" class="form-label mb-1" style="font-size: 14px">Shipping
                                                         Method</label>
                                                     <select name="shipping_method" class="form-control ship-method-select">
-                                                        @if($shiplist)
+                                                        @if(isset($shiplist))
                                                             @foreach($shiplist['OutPut']['ShipVias'] as $shipping_option)
                                                                 <option
                                                                     {{ $default_ship_via_id == $shipping_option['ShipViaID' ] ? 'selected' : '' }} value="{{$shipping_option['ShipViaID']}}">{{$shipping_option['Description']}}</option>
@@ -1154,7 +1154,7 @@
                                 </a>
                             </div>
                                 <div class="col-sm-6">
-                                    <a id="reportGen" class="add-to-cart-button btn btn-dark align-content-center text-right mt-5 ml-5 bl-report text-white" >View Report</a>
+                                    <a id="reportGen" class="add-to-cart-button btn btn-dark align-content-center mt-5 ml-5 bl-report text-white" >View Report</a>
                                 </div>
                             </div>
                         </div>

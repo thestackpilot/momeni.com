@@ -13,13 +13,14 @@ use App\Http\Controllers\ConstantsController;
 class QuotesController extends DashboardController
 {
     public function index(){
+      //  dd("1234");
         $is_salse_rep = Auth::user()->is_sale_rep;
         $is_customer = Auth::user()->is_customer;
         $customer = ($is_salse_rep && !$is_customer) ? $this->get_customers_dropdown_value(false) : [];
         $sergingtypes = $this->ApiObj->Get_QuotationSergingTypes();
         $quotationsLists = $this->ApiObj->Get_QuotationList();
         $items = $this->ApiObj->Get_AllBLItems();
-//
+
         $blList = isset($items['OutPut']['BLItemsList']) ? $items['OutPut']['BLItemsList'] : [];
         $sergList = isset($sergingtypes['SurgingTypesList']) ? $sergingtypes['SurgingTypesList'] : [];
         $quoteList = isset($quotationsLists['QuotationList']) ? $quotationsLists['QuotationList'] : [];
@@ -371,7 +372,7 @@ class QuotesController extends DashboardController
                     }
                 }
             }
-            
+            $shiplist = $this->ApiObj->Get_BLShipViaList();
             // dd([$data, $quote_cart_data]);
             return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-shopping-cart', [
                 'quote_cart_data'     => json_decode(json_encode($quote_cart_data)),
@@ -380,6 +381,7 @@ class QuotesController extends DashboardController
                 'cust_state'          => $data['OutPut']['State'] ? $data['OutPut']['State'] : $customer_details['CustomerDetail']['State'],
                 'shipping_options'    => $shipping_options,
                 'shippings'           => $shippings,
+                'shiplist' =>$shiplist,
                 'default_ship_via_id' => $default_ship_via_id,
                 'shipping_addresses' => isset($shipping_addresses) ? $shipping_addresses : [],
                 'payment_terms_list' => $payment_terms_list,

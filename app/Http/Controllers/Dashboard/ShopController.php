@@ -428,8 +428,9 @@ class ShopController extends DashboardController
 
         }
 
-        $shippings = $this->ApiObj->Get_ShipViaList();
-
+        //$shippings = $this->ApiObj->Get_ShipViaList();
+        $shiplist = $this->ApiObj->Get_BLShipViaList();
+        $shippings=$shiplist['OutPut'];
         if ( $shippings )
         {
             $temp = [];
@@ -633,7 +634,9 @@ class ShopController extends DashboardController
     }
 
     public function place_bl_order( Request $request ){
-        $shippings = $this->ApiObj->Get_ShipViaList();
+        //$shippings = $this->ApiObj->Get_ShipViaList();
+        $shiplist = $this->ApiObj->Get_BLShipViaList();
+        $shippings=$shiplist['OutPut'];
         if ( $shippings )
         {
             $temp = [];
@@ -740,7 +743,7 @@ class ShopController extends DashboardController
     public function fetch_item_id_data(Request $request){
         $itemController = new ItemController();
         $items = $itemController->generate_color_name($itemController->generate_image_urls($this->ApiObj->Get_Items('', '', $request->item_id, '', '', '', '', '', '', '', '', '', '', '' )));
-      return($items);
+
         return response()->json([
             'item_json' => json_encode($items['Items'][0]),
             'rug_pad' => $items['Items'][0]['ULTPad']

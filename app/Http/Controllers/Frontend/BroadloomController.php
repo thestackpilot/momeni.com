@@ -157,7 +157,7 @@ class BroadloomController extends FrontendController
             'states' => $states,
             'shipping_options' => $shipping_options,
             'shippings' => $shippings,
-            'shiplist'=>$shiplist,
+            'shiplist'=> $shiplist,
             'default_ship_via_id' => $default_ship_via_id,
             'shipping_addresses' => isset($shipping_addresses) ? $shipping_addresses : [],
             'payment_terms_list' => $payment_terms_list,

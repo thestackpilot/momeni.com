@@ -102,14 +102,13 @@ use App\Http\Controllers\CommonController;
                                         <div class="mt-1 mb-3 fav-image">
                                             <input type="hidden" id="pageimg" name="pageImageold" value="{{ isset($content['image']) && $content['image'] !== '' ? $content['image'] : '' }}" />
                                             
-                                           <img id="pageimgview" class="w_200" src="{{isset($content['image']) && $content['image'] !== '' ? asset('images/'. $content['image']) : '' }}"  alt="Page Logo"  /> 
+                                           <img id="pageimgview" class="w_200" src="{{isset($content['image']) && $content['image'] !== '' ? asset('images/'. $content['image']) : '' }}"    /> 
                                          
                                             <a style="font-size: 12px;" class=" font-weight-bolder text-danger text-sm-left remove-page-image">
                                                 Remove Custom Image
                                             </a>
                                         </div>
                                         <input  type="file" accept="image/*" name="pageImage" class="" />
-                                        <p class="font-italic font-weight-bold font-weight-lighter mt-2 text-danger" style="font-size: 12px;">Image should be 800px X 800px Or 600px X 800px Or 600px X 400px Or 800px X 600px Or 900px X 900px Or 900px X 1200px</p>
                                     </div>
                                     <br>
                                     <hr>
