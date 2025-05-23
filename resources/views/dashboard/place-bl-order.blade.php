@@ -330,11 +330,11 @@ body{
                                     </div>
                                     <div class="mb-3 d-flex align-items-center justify-content-between">
                                         <div class="input-group me-2">
-                                            <input type="number" class="form-control Twidth text-center small-input" name="Twidth" id="Twidth" placeholder="00" min="0"  style="text-align:right;">
+                                            <input type="number" class="form-control Twidth text-center small-input" name="Twidth" id="Twidth" disabled placeholder="00" min="0"  style="text-align:right;">
                                             <span class="input-group-text TwidthGroup">Ft</span>
                                         </div>
                                         <div class="input-group ms-2">
-                                            <input type="number" class="form-control TwidthInch text-center small-input" name="TwidthInch" id="TwidthInch"  placeholder="00" min="0" max="11" style="text-align:right;">
+                                            <input type="number" class="form-control TwidthInch text-center small-input" name="TwidthInch" id="TwidthInch" disabled placeholder="00" min="0" max="11" style="text-align:right;">
                                             <span class="input-group-text TwidthInchGroup">In</span>
                                         </div>
                                     </div>
@@ -383,15 +383,15 @@ body{
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="">
+                                    <label class=""> <input type="checkbox" id="surging_check">
                                     <strong> With Serging </strong></label>
-                                    <select name="" id="surging_options" class="form-control">
+                                    <select name="" id="surging_options" class="form-control" disabled>
                                         <option value="" charges="">No Serging</option>
                                         @foreach ($surging_types as $row)
                                             <option value="{{$row['SergingTypeNo']}}" charges="{{$row['Charges']}}" desc="{{$row['Description']}}" 
-                                            @if($row['Description']==='Machine serging (wool matching yarn)')
+                                            {{-- @if($row['Description']==='Machine serging (wool matching yarn)')
                                                 selected
-                                            @endif
+                                            @endif --}}
                                             >{{$row['Description']}}</option>
                                         @endforeach
                                     </select>
@@ -922,6 +922,38 @@ $(document).ready(function() {
         bind_radio_clicks();
     }).change();
 
+    $('#surging_check').change(function () {
+
+                if ($(this).is(':checked')) {
+                    
+                    $('#surging_options').prop('disabled', false);
+                    $('#surging_options').val("2");
+                    console.log($('#surging_options').val());
+
+                    $('#Twidth').val( $('#Twidth-ats-max').val() );
+                    $('#TwidthInch').val( $('#TwidthInch-ats-max').val() );
+                    $('#Twidth').prop('disabled',false);
+                    $('#TwidthInch').prop( 'disabled',false);
+
+
+                     var selectedOption = $('#surging_options').find('option:selected');
+        charges = selectedOption.attr('charges');
+        $('#surging_charges').val(charges);
+        $('#charges').val(charges);
+        $('#sergingtypeno').val(selectedOption.attr('value'));
+        $('#desc').val(selectedOption.attr('desc'));
+                } else {
+                     $('#Twidth').prop('disabled',true);
+                    $('#TwidthInch').prop( 'disabled',true);
+                    $('#surging_options').prop('disabled', true);
+                    $('#sergingtypeno').val('');
+                    $('#surging_options').val("");
+                    $('#surging_charges').val("");
+                    $('#Twidth').val( $('#Twidth-ats-max').val() );
+                    $('#TwidthInch').val( $('#TwidthInch-ats-max').val() );
+                }
+            });
+
     function bind_radio_clicks() {
         $('.addresses-section input[type="radio"]')
         .off('click')
@@ -1388,13 +1420,13 @@ $(document).ready(function() {
 });
 
 function add_cut_pieces() {
-    // if($('#surging_check').is(':checked') && $('#surging_options').val() == 0){
-    //     toastr.error('Kindly choose serging type', {
-    //         hideDuration: 10000,
-    //         closeButton: true,
-    //     });
-    //     return true;
-    // }
+    if($('#surging_check').is(':checked') && $('#surging_options').val() == 0){
+        toastr.error('Kindly choose serging type', {
+            hideDuration: 10000,
+            closeButton: true,
+        });
+        return true;
+    }
     if(!$(".Tlength-max-error").hasClass("d-none") || !$(".Twidth-max-error").hasClass("d-none")){
         toastr.error('Lenght/Width must not be greater than ATS ROLL', {
             hideDuration: 10000,
@@ -1495,6 +1527,7 @@ function add_cut_pieces() {
 
                     let surging = '';
                     if (item.SergingType != "0") {
+                    // if ($('surging_options').val()!=="") {
                         surging = ' Serging';
                         console.log('in serging add');
                         unitpriceCal += parseFloat($('#unit-price').val());
@@ -1549,11 +1582,11 @@ function add_cut_pieces() {
                     line_no = line_no + 1;
                 });
 
-                // $('#surging_check').prop('checked', false);
-                // $('#surging_options').prop('disabled', true);
-                $('#Twidth').prop('disabled', false);
-                $('#TwidthInch').prop('disabled', false);
-                // $('#surging_options').val("")
+                $('#surging_check').prop('checked', false);
+                $('#surging_options').prop('disabled', true);
+                $('#Twidth').prop('disabled', true);
+                $('#TwidthInch').prop('disabled', true);
+                $('#surging_options').val("");
                 $('#surging_charges').val('');
                 $("#sergingtypeno").val('');
                 $('#Twidth').val( $('#Twidth-ats-max').val() );
@@ -1878,9 +1911,12 @@ function getDimensionsInInches(sizeStr) {
 }
 
 function pushToCart() {
+    console.log("push to cart");
     item = JSON.parse($('#item_json').val());
     console.log('PUHS TO CART item', item);
     let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "0";
+    console.log("my value of srging type is eh ", surging_type);
+
     item.SQFTPrice = $('#sq-ft').val();
     item.SQFTArea = $('#totalsqft').val();
     item.CutPieceID = $('#cutpiece_id').val();
@@ -1889,7 +1925,8 @@ function pushToCart() {
     item.SergingType = surging_type;
     item.location_id = $('#locationid').val();
     item.cut_type = $('#cuttype').val();
-    item.Serging = ($('#surging_options').val()==="") ? 'Y' : 'N';
+    item.Serging = $('#surging_check').is(':checked') ? 'Y' : 'N'
+   // item.Serging = ($('#surging_options').val()==="") ? 'Y' : 'N';
     $('#item_json').val(JSON.stringify(item));
 
     let jsonString = $('#size_price').val();
@@ -1943,18 +1980,23 @@ function pushToCart() {
 }
 
 function add_to_cart(){
+    console.log("add to card is calling");
     $('#add_rugpad').prop('disabled', true);
     item = JSON.parse($('#item_json').val());
+
     let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "0";
+    console.log("my value of srging type is ", surging_type);
     item.SQFTPrice = $('#sq-ft').val();
     item.SQFTArea = $('#totalsqft').val();
     item.CutPieceID = $('#cutpiece_id').val();
     item.RollID = $("#rollDropdown").val();
     item.SergingCharges = $('#surging_charges').val();
+    item.SergingCharges = $('#surging_charges').val();
     item.SergingType = surging_type;
     item.location_id = $('#locationid').val();
     item.cut_type = $('#cuttype').val();
-    item.Serging = ($('#surging_options').val()=="") ? 'Y' : 'N'
+    item.Serging = $('#surging_check').is(':checked') ? 'Y' : 'N'
+   // item.Serging = ($('#surging_options').val()=="") ? 'Y' : 'N'
     console.log(`item before:  ${item}`);
 
     $('#item_json').val(JSON.stringify(item));
@@ -2049,9 +2091,10 @@ function add_to_cart(){
                                                     $('#sq-ft').val('');
                                                     $('#sq-yrd').val('');
                                                     $('#sq-ext').val('');
-                                                    // $('#surging_options').val("");
-                                                   // $('#surging_options').prop('disabled', true);
-                                                   // $('#surging_check').prop('checked', true);
+                                                    // console.log("i am hit");
+                                                    //  $('#surging_options').val("2");
+                                                    $('#surging_options').prop('disabled', true);
+                                                    $('#surging_check').prop('checked', true);
                                                     $('#surging_charges').val('');
                                                     $('#cust-inst').val('');
                                                     $("#cfa_check").prop("checked", false);
@@ -2158,13 +2201,14 @@ function add_to_cart(){
                                     $('#sq-ft').val('');
                                     $('#sq-yrd').val('');
                                     $('#sq-ext').val('');
-                                    // $('#surging_options').val("");
-                                   // $('#surging_check').prop('checked', false);
+                                    // console.log("i am hitting");
+                                    // $('#surging_options').val("2");
+                                   $('#surging_check').prop('checked', false);
                                     $('#surging_charges').val('');
                                     $('#cust-inst').val('');
                                     $("#cfa_check").prop("checked", false);
                                     $("#remnant_check").prop("checked", false);
-                                    $('#surging_options').prop('disabled', false);
+                                    $('#surging_options').prop('disabled', true);
                                     $('#show-cut-piece-btn').addClass('d-none');
                                     $('#hide-cut-piece-btn').addClass('d-none');
                                     $('#add_to_cart').addClass('d-none');

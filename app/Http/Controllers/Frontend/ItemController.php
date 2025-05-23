@@ -220,6 +220,7 @@ class ItemController extends FrontendController
                 ];
             }
             else{
+               // dd( $this->ApiObj->Get_ATS( $request->item_id, $request->customer_id )['ATSInfo']);
                 $return = [
                     'success' => 1,
                     'data'    => $this->update_ats_prices( $this->ApiObj->Get_ATS( $request->item_id, $request->customer_id )['ATSInfo'], $request->item_id, $request->customer_id )

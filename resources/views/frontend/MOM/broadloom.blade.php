@@ -110,7 +110,7 @@
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Twidth"
-                                                                           id="Twidth" placeholder=""
+                                                                           id="Twidth" placeholder="" disabled
                                                                            style="text-align:right;" min="0" >
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">
@@ -139,7 +139,7 @@
                                                                         <option value="11">11</option>
                                                                     </select> --}}
                                                                     <input type="number" class="form-control TwidthInch"
-                                                                           id="TwidthInch" placeholder=""
+                                                                           id="TwidthInch" placeholder="" disabled
                                                                            style="text-align:right;" min="0" max="11">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">
@@ -236,15 +236,13 @@
                                                 </div>
                                                 <div class="col-md-12 col-sm-12">
                                                     <div class="form-group">
-                                                        <label for="">
+                                                        <label for=""><input type="checkbox" id="surging_check">
                                                             <strong> With Serging </strong></label>
-                                                        <select name="" id="surging_options" class="form-control"
+                                                        <select name="" id="surging_options" class="form-control" disabled
                                                                 >
                                                             <option value="" charges="">No Surging</option>
                                                             @foreach ($surging_types['OutPut']['SurgingTypesList'] as $row)
-                                                                <option value="{{$row['SergingTypeNo']}}" @if ($row['Description']==="Machine serging (wool matching yarn)")
-                                                                selected
-                                                                @endif
+                                                                <option value="{{$row['SergingTypeNo']}}"
                                                                         charges="{{$row['Charges']}}"
                                                                         desc="{{$row['Description']}}">{{$row['Description']}}</option>
                                                             @endforeach
@@ -453,7 +451,7 @@
                         $('#cart_main').html(new_html.find('#cart_main').html());
                         $('#cart_main').find('#add_to_cart').removeClass('d-none');
                         $('#cart_main').find('#login_by_popup').remove();
-
+                            window.location.reload();
                         $('#add_to_cart').off('click');
                         $('#add_to_cart').on('click', function (e) {
                             if (
@@ -944,6 +942,7 @@
         }
 
         function pushToCart() {
+            console.log("start pushToCart")
             $('#add_to_cart').addClass('btn-muted');
             $('#cart_item_quantity').val($('#item_qty').val());
             item = JSON.parse($('#item_json').val());
@@ -957,8 +956,8 @@
             item.SergingType = surging_type;
             item.location_id = $('#locationid').val();
             item.cut_type = $('#cuttype').val();
-            //item.Serging = $('#surging_check').is(':checked') ? 'Y' : 'N'
-            item.Serging = ($('#surging_options').val()==="") ? 'Y' : 'N';
+            item.Serging = $('#surging_check').is(':checked') ? 'Y' : 'N'
+            //item.Serging = ($('#surging_options').val()==="") ? 'Y' : 'N';
             $('#item_json').val(JSON.stringify(item));
 
             let jsonString = $('#size_price').val();
@@ -1021,6 +1020,7 @@
         }
 
         function add_to_cart() {
+            console.log("this is going to cart");
             $('#add_rugpad').prop('disabled', true);
             item = JSON.parse($('#item_json').val());
             let surging_type = $('#surging_options').val() ? $('#surging_options').val() : "0";
@@ -1032,8 +1032,8 @@
             item.SergingType = surging_type;
             item.location_id = $('#locationid').val();
             item.cut_type = $('#cuttype').val();
-            //item.Serging = $('#surging_check').is(':checked') ? 'Y' : 'N'
-            item.Serging = ($('#surging_options').val()==="") ? 'Y' : 'N'
+            item.Serging = $('#surging_check').is(':checked') ? 'Y' : 'N'
+            //item.Serging = ($('#surging_options').val()==="") ? 'Y' : 'N'
             $('#item_json').val(JSON.stringify(item));
             let jsonString = $('#size_price').val();
             let sizesArray = JSON.parse(jsonString);
@@ -1062,6 +1062,8 @@
             var remnant_check = $("#remnant_check").is(":checked") ? 1 : 0;
             var randomString = Math.random().toString(36).substring(2, 12);
 
+//console.log(`here are the details ,${$('#item_json').val()},${$('#cart_item_oak').val()},${{{ Auth::user()->spars_logged_user_no }}},${ $("#unit-price-cal").val()},${$('#add_rugpad').is(':checked') ? $('#rug_pad_price_ext').val() : ''}`);
+                                        
             $.ajax({
                 url: "{{ route('check-cart-item') }}",
                 type: "GET",
@@ -1131,7 +1133,7 @@
                                                             $('#sq-ext').val('');
                                                             // $('#surging_options').val('');
                                                             $('#surging_options').prop('disabled', false);
-                                                            //$('#surging_check').prop('checked', true);
+                                                            $('#surging_check').prop('checked', true);
                                                             $('#surging_charges').val('');
                                                             $('#cust-inst').val('');
                                                             $("#cfa_check").prop("checked", false);
@@ -1255,7 +1257,7 @@
                                             $('#sq-yrd').val('');
                                             $('#sq-ext').val('');
                                             // $('#surging_options').val('');
-                                            //$('#surging_check').prop('checked', false);
+                                            $('#surging_check').prop('checked', false);
                                             $('#surging_charges').val('');
                                             $('#cust-inst').val('');
                                             $("#cfa_check").prop("checked", false);
@@ -1489,13 +1491,13 @@
         let added_cut_pieces = [];
 
         function add_cut_pieces() {
-            // if($('#surging_check').is(':checked') && $('#surging_options').val() == 0){
-            //     toastr.error('Kindly choose serging type', {
-            //         hideDuration: 10000,
-            //         closeButton: true,
-            //     });
-            //     return true;
-            // }
+            if($('#surging_check').is(':checked') && $('#surging_options').val() == 0){
+                toastr.error('Kindly choose serging type', {
+                    hideDuration: 10000,
+                    closeButton: true,
+                });
+                return true;
+            }
             console.log("add cut pice is calling ");
             if(!$("#Tlength-max-error").hasClass("d-none") || !$("#Tlengthinch-max-error").hasClass("d-none") || !$("#Twidth-max-error").hasClass("d-none") || !$("#Twidthinch-max-error").hasClass("d-none")){
                 toastr.error('Lenght/Width must not be greater than ATS ROLL', {
@@ -1678,11 +1680,11 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
 
                         })
 
-                        //$('#surging_check').prop('checked', false);
-                       // $('#surging_options').prop('disabled', true);
-                        // $('#Twidth').prop('disabled', true);
-                        // $('#TwidthInch').prop('disabled', true);
-                        //$('#surging_options').val('')
+                        $('#surging_check').prop('checked', false);
+                        $('#surging_options').prop('disabled', true);
+                        $('#Twidth').prop('disabled', true);
+                        $('#TwidthInch').prop('disabled', true);
+                        $('#surging_options').val('')
                         $('#surging_charges').val('');
                         $("#sergingtypeno").val('');
                         $('#Twidth').val( $('#Twidth-ats-max').val() );
@@ -1806,6 +1808,7 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
             let sqYrdPrice = perSquareFeetPrice * 9;
 
             let extPrice = $("#sq-ft").val() * $("#ats-qty").val();
+            console.log($("#sq-ft").val(),'and', $("#ats-qty").val());
             let extpriceRug = $("#rug_pad_price").val() * $("#ats-qty").val();
 
             // Update the SQ-YRD Price ($) and EXT Price ($) fields
@@ -1970,18 +1973,28 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
                     $('#TwidthInch').prop('disabled',false);
                 }
             });
-            // $('#surging_check').change(function () {
-            //     if ($(this).is(':checked')) {
-            //         $('#surging_options').prop('disabled', false);
-            //     } else {
-            //         $('#surging_options').prop('disabled', true);
-            //         $('#sergingtypeno').val('');
-            //         $('#surging_options').val(0);
-            //         $('#surging_charges').val("");
-            //         $('#Twidth').val( $('#Twidth-ats-max').val() );
-            //         $('#TwidthInch').val( $('#TwidthInch-ats-max').val() );
-            //     }
-            // });
+            $('#surging_check').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#surging_options').prop('disabled', false);
+                    $('#surging_options').val('2');
+
+
+
+                     var selectedOption = $('#surging_options').find('option:selected');
+        charges = selectedOption.attr('charges');
+        $('#surging_charges').val(charges);
+        $('#charges').val(charges);
+        $('#sergingtypeno').val(selectedOption.attr('value'));
+        $('#desc').val(selectedOption.attr('desc'));
+                } else {
+                    $('#surging_options').prop('disabled', true);
+                    $('#sergingtypeno').val('');
+                   // $('#surging_options').val(0);
+                    $('#surging_charges').val("");
+                    $('#Twidth').val( $('#Twidth-ats-max').val() );
+                    $('#TwidthInch').val( $('#TwidthInch-ats-max').val() );
+                }
+            });
 
             $('#cut_piece_btn').click(function () {
                 add_cut_pieces();
@@ -2019,6 +2032,7 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
                         'customer_id': $('#customer_id').val()
                     },
                     success: function (response) {
+                        console.log("price we get from " , response.data['Price']);
                         $("#sq-ft").val(response.data['Price']);
                         updatePrices();
                         $.ajax({
@@ -2200,15 +2214,15 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
             }
         });
 
-        // $('#surging_check').on('change', function() {
-        //     console.log("going to call");
-        //     const isChecked = $(this).is(':checked');
+        $('#surging_check').on('change', function() {
+            console.log("going to call");
+            const isChecked = $(this).is(':checked');
 
-        //     $('#Twidth').prop('disabled', !isChecked)
-        //                 .attr('title', isChecked ? '' : 'Select Serging to Cut by Width');
+            $('#Twidth').prop('disabled', !isChecked)
+                        .attr('title', isChecked ? '' : 'Select Serging to Cut by Width');
 
-        //     $('#TwidthInch').prop('disabled', !isChecked)
-        //                     .attr('title', isChecked ? '' : 'Select Serging to Cut by Width');
-        // });
+            $('#TwidthInch').prop('disabled', !isChecked)
+                            .attr('title', isChecked ? '' : 'Select Serging to Cut by Width');
+        });
     </script>
 @endsection

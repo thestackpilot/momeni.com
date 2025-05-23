@@ -1166,9 +1166,11 @@
                     <div class="modal-content">
                         <div class="modal-header other-detail-modal-header text-center">
                             <h4 style='float: left;'>Report Details</h4>
-                            <button type="button" class="close other-detail-modal-close" data-dismiss="modal" aria-label="Close">
+                            {{-- <button type="button" class="close other-detail-modal-close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" style="font-size: 40px;">&times;</span>
-                            </button>
+                            </button> --}}
+                            <button type="button" onclick="closemodle()" class="close other-detail-modal-close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" style="font-size: 40px;">&times;</span> </button>
                         </div>
                         <div class="modal-body other-detail-modal-body p-5" id="section-details" style="background: #fff;">
                         </div>
@@ -1436,7 +1438,7 @@ if (
 ) {
     if ($('#ship_instructions').val().trim() === '') {
         console.log(selectedValue);
-        alert('Order Notes are required');
+        alert('Order / Shipping Instructions are required');
         return true;
     }
 }
@@ -1774,6 +1776,8 @@ else{
                 }
             });
         });
-
+function closemodle(){
+$('.other-detail-modal').modal('hide');
+}
     </script>
 @endsection

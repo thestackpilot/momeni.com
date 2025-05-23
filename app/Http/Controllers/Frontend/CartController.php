@@ -18,6 +18,7 @@ class CartController extends FrontendController
 
     public function add( Request $request )
     {
+        // dd($request->all());
         try
         {
             if ( strcmp( ConstantsController::USER_ROLES['admin'], Auth::user()->role ) === 0 )
