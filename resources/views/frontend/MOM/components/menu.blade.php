@@ -50,6 +50,16 @@ color: black !important;
     .abc,.abc>a:hover{
         color: black;
     }
+    .dropdown-item {
+        padding-left: 0px;
+        padding-right: 8px;
+    }
+    .dropdown-item:active {
+        background-color: white !important;
+    }
+.dropdown-item:hover a {
+    color: black !important;
+}
 
 </style>
 <div class=" header-menu  text-left">
