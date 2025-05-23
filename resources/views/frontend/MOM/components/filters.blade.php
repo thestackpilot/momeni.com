@@ -245,7 +245,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
             var Filters = [];
             var filter_types = "{{ implode( ',', $filter_arr ) }}".split(','); //['Current In-Line', 'Color', 'Style', 'Material', 'Pattern', 'Weaving', 'Discount', 'Collection', 'Construction'];
             var default_filter_id = $('input[name="default_filter_id"]').val();
-
+console.log(filter_type);
             filter_types.forEach(function(filter)
             {
                 var response = fill_filter_array(filter);
@@ -324,6 +324,10 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
             console.log("in discountinued");
             console.log(jsonData);
         FiltersArray = btoa(JSON.stringify(jsonData));
+        }
+        //filter fixes no relation with others
+        if(FiltersArray==="eyJGaWx0ZXJzIjpbXX0="){
+            FiltersArray="eyJGaWx0ZXJzIjogW119";
         }
         filter_array   = FiltersArray;
         console.log(FiltersArray);
