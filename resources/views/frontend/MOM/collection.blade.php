@@ -22,10 +22,12 @@ use App\Http\Controllers\CommonController;
 <div class="wrapper with-banner">
     @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
     <main class="main-content">
-        <div class="breadcrumb-area">
+        {{-- Header div --}}
+        {{-- <div class="breadcrumb-area">
             <div class="container">
                 <div class="row breadcrumb_box  align-items-center">
-                    <div class="col-lg-12 col-md-12 col-sm-12 text-center text-sm-left">
+                    <div class="col-lg-3 col-md-0 col-sm-0"></div>
+                    <div class="col-lg-9 col-md-12 col-sm-12 text-center text-sm-left">
                        
                         @if(isset($pageData['image']) && $pageData['image']!=="" )
                         
@@ -34,7 +36,9 @@ use App\Http\Controllers\CommonController;
                         @endif
                      
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 text-center text-sm-left" id="collection_heading">
+                                        <div class="col-lg-3 col-md-0 col-sm-0"></div>
+
+                    <div class="col-lg-9 col-md-12 col-sm-12 text-center text-sm-left" id="collection_heading">
                         <!-- <h2 class="breadcrumb-title text-center ">{{$main_collection['Description'] .' - '. array_key_first($collections)}}</h2> -->
                         @if (request()->segment(2) == "BroadLoom")
                             <h2 class="breadcrumb-title text-center section-title--center ">Broadloom</h2>
@@ -50,8 +54,9 @@ use App\Http\Controllers\CommonController;
                          @endif
                             @endif
                     </div>
+                    <div class="col-lg-3 col-md-0 col-sm-0"></div>
 
-                    <div class="col-lg-12 col-md-12 col-sm-12 text-center text-sm-left">
+                    <div class="col-lg-9 col-md-12 col-sm-12 text-center text-sm-left">
                        
                         @if(isset($pageData['description']) && $pageData['description']!=="" )
                         
@@ -63,16 +68,51 @@ use App\Http\Controllers\CommonController;
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <section class="collection-section">
-            <div class="">
+                  
+            <div class="" style="margin-top: 0px;">
                 <div class="container">
                         <div class="d-flex justify-content-lg-between coll-pg product-wrapper collection-prdt-wrapper" id="sub_collections_wrapper">
-                            <div class="col-md-3 d-flex flex-column sidebar-main">
+                            <div class="col-md-3 d-flex flex-column sidebar-main" style="margin-top: 130px;">
                                 @include('frontend.'.$active_theme -> theme_abrv.'.components.filters')
                             </div>
 
                             <div class="col-md-9 h-100 col-sm-12 col-12 d-flex flex-row justify-content-left three-col product-listing d-flex flex-wrap my-5"  id="sub_collections_wrapper">
+<div class="container" style="display: inline-block;margin:auto;" >
+                    <div>
+                         @if(isset($pageData['image']) && $pageData['image']!=="" )
+                            
+                                <img id="fixedimg" class="d-block mx-auto mb-2"  src="{{ asset('images/'. $pageData['image']) }}" >
+
+                            @endif
+                    </div>
+                      
+                        <div>
+                            @if (request()->segment(2) == "BroadLoom")
+                            <h2 class="breadcrumb-title text-center section-title--center ">Broadloom</h2>
+                        @else
+                        @if(isset($pageData['title']) && $pageData['title']!=="" )
+                        
+                            <h2 class="breadcrumb-title text-center">{{$pageData['title']}}</h2>
+                        
+                        @else
+
+                            <h2 class="breadcrumb-title text-center section-title--center ">{{isset($sub_category) ? $sub_category : ((strcmp('RUGS & CARPETS', strtoupper($main_collection['Description'])) === 0) ? 'RUGS' : $main_collection['Description'])}}</h2>
+                        
+                         @endif
+                            @endif
+                        </div>
+                         <div>
+                        @if(isset($pageData['description']) && $pageData['description']!=="" )
+                        
+                            <p class="text-center " style="font-size:20px">{{$pageData['description']}}</p>
+                        
+                       
+                        @endif
+                        </div>
+                     
+</div>
                                 <div class="cu-top-filters col-12 d-flex justify-content-between align-items-center">
                                     <div>
                                         <ul>
@@ -168,7 +208,7 @@ use App\Http\Controllers\CommonController;
                         </div>
                 </div>
             </div>
-        </section>
+        </section> 
         <div class="pageLoader d-none" id="pageLoader">
             <div id="loading_msg" class="d-flex flex-column text-center">
                 <div class="spinner-border" role="status" style="margin: 0 auto;">
