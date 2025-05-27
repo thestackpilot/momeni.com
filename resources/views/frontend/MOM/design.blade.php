@@ -61,109 +61,107 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                     <div class="col-md-4 d-flex flex-column sidebar-main">
                         @include('frontend.'.$active_theme -> theme_abrv.'.components.filters')
                     </div>
-                    <div class="col-md-8 col-sm-12 col-12 d-flex flex-row justify-content-left three-col product-listing d-flex flex-wrap mb-5">
-                        <div class="cu-top-filters col-12 d-flex justify-content-between align-items-center">
-                            <div>
+                  <div class="container-fluid product-listing mb-5">
+    {{-- Top Filters Section --}}
+    <div class="row cu-top-filters d-flex justify-content-between align-items-center mb-4">
+        <div class="col-12 col-md-6">
+            @if($main_collection['MainCollectionID'] == 'Rugs')
+                <ul>
+                    <li>
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="discontinued"
+                               id="flexCheckChecked-discontinued"
+                               {{ isset($is_discontinued) && $is_discontinued ? 'checked' : '' }}>
+                        <label class="form-check-label" for="flexCheckChecked-discontinued">
+                            Show Discontinued {{ $main_collection['Description'] }}
+                        </label>
+                    </li>
+                </ul>
+            @endif
+        </div>
 
-                                <ul>
-                                    @if($main_collection['MainCollectionID'] == 'Rugs')
-                                   <li>
-                                            <input class="form-check-input"
-                                            type="checkbox"
-                                            name="discontinued"
-                                            id="flexCheckChecked-discontinued"
-                                            {{ isset($is_discontinued) && $is_discontinued ? 'checked' : '' }}
-                                            >
+        <div class="col-12 col-md-6 d-flex align-items-center justify-content-md-end justify-content-start">
+            @if(($filters['Filters_Count']) > 0)
+                @foreach($filters['Filters'] as $filter)
+                    @if(strtolower($filter['FilterID']) == 'sort')
+                        <div id="filter-id-{{ strtolower($filter['FilterID'])}}" class="me-3">
+                            <select class="sort-filter form-select" name="{{ strtolower($filter['FilterID']) }}">
+                                <option value="0">Sort by</option>
+                                @foreach($filter['Values'] as $value)
+                                    <option value="{{ $value['value'] }}" {{ $value['checked'] ? 'selected' : '' }}>
+                                        {{ $value['value'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+                @endforeach
+            @endif
+        </div>
+    </div>
 
-                                        <label class="form-check-label" for="flexCheckChecked-discontinued"> Show Discontinued {{ $main_collection['Description'] }}</label>
-                                       </li>
-                                    </ul>
-                                @endif
-
-                            </div>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div>
-                                    {{-- <div class="form-check d-flex align-items-center">
-                                        <input class="form-check-input" type="checkbox" name="ShowRugWithImage" value="Show Rugs With Images" id="ShowRugWithImage">
-                                        <label class="form-check-label" for="ShowRugWithImage">Show Rugs With Images</label>
-                                    </div> --}}
-                                </div>
-
-                                @if(($filters['Filters_Count']) > 0)
-                                    @foreach($filters['Filters'] as $filter)
-                                    @if(strtolower($filter['FilterID']) == 'sort')
-                                    <div id="filter-id-{{ strtolower($filter['FilterID'])}}">
-                                        <select class="sort-filter pull-left mb-3" name={{ strtolower($filter['FilterID'])}}>
-                                            <option value="0"> Sort by</option>
-                                            @foreach($filter['Values'] as $value)
-                                            <option value="{{$value['value']}}" {{$value['checked'] ? 'selected' : ''}} >{{$value['value']}}</option>
-                                            @endforeach
-                                        </select>
+    {{-- Product Grid Section --}}
+    <div class="row g-3">
+        @if(count($collections))
+            @foreach($collections[array_key_first($collections)] as $collection)
+                <div class="col-12 col-sm-6 col-md-4">
+                    <div class="product-card h-100">
+                        {{-- Image Section --}}
+                        <a href="{{ $collection['LinkUrl'] }}?colorId={{ $collection['ColorDescription'] }}">
+                            @if($with_title)
+                                <img src="{{ CommonController::getApiFullImage($collection['ImageName']) }}"
+                                     class="img-fluid single-img"
+                                     onerror="this.onerror=null; this.src='{{ url('/') . ConstantsController::IMAGE_PLACEHOLDER }}'" />
+                            @else
+                                <div class="position-relative overflow-hidden" style="height: 250px;">
+                                    <div class="w-100 h-100" style="
+                                        background-image: url('{{ CommonController::getApiFullImage($collection['ImageName']) }}'),
+                                                            url('{{ url('/') . ConstantsController::IMAGE_PLACEHOLDER }}');
+                                        background-size: cover;
+                                        background-position: center;">
                                     </div>
 
+                                    @php
+                                        $segments = Request::segments();
+                                        $designValue = $segments[array_search('designs', $segments) + 1] ?? null;
+                                    @endphp
+
+                                    @if($designValue === 'BroadLoom')
+                                        <div class="position-absolute bottom-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay">
+                                            <span class="text-white fs-4 fw-bold">{{ $collection['CollectionID'] }}</span>
+                                        </div>
                                     @endif
-                                    @endforeach
-                                @endif
-                                {{-- <div class="clear-all">
-                                    <button class="btn btn-sm">Reset Filters</button>
-                                </div> --}}
-                            </div>
-                        </div>
-                        @if(count($collections))
-                        @foreach($collections[array_key_first($collections)] as $collection)
-                        <div class="col-md-4 grid-item" {{$with_title ? 'style="padding-right: 10px; padding-left: 10px;"' : ''}}>
-                            @if(!$with_title)
-                            <div class="carousel slide">
-                                @endif
-                                <div class="slider-for justify-content-center {{ $with_title ? 'rug-callection' : '' }}">
-                                    <a href="{{$collection['LinkUrl']}}?colorId={{$collection['ColorDescription']}}">
-                                        @if($with_title)
-                                        <img class="single-img" src="{{CommonController::getApiFullImage($collection['ImageName'])}}" class="img-responsive" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
-                                        @else
-                                        {{-- <div style="background-image: url('{{CommonController::getApiFullImage($collection['ImageName'])}}'), url({{url('/').ConstantsController::IMAGE_PLACEHOLDER}});" class="single-img"> </div> --}}
-                                        <div class="position-relative overflow-hidden">
-                                            <!-- Image Section -->
-                                            <div
-                                              style="background-image: url('{{CommonController::getApiFullImage($collection['ImageName'])}}'), url({{url('/').ConstantsController::IMAGE_PLACEHOLDER}}); height: 250px; background-size: cover; background-position: center;"
-                                              class="w-100">
-                                            </div>
-                                            @php
-                                                $fullUrl = Request::url();
-                                                $segments = Request::segments(); // Get all URL segments
-                                                $designValue = $segments[array_search('designs', $segments) + 1]; // Get the value after 'designs'
-                                            @endphp
-                                            <!-- Overlay Section -->
-                                            @if ($designValue == "BroadLoom")
-                                            <div class="position-absolute bottom-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay">
-                                                <span class="text-white fs-4 fw-bold">{{$collection['CollectionID']}}</span>
-                                            </div>
-                                            @endif
-                                          </div>
-
-
-                                        @endif
-                                    </a>
                                 </div>
-                                <div class="product-content {{ !$with_title ? 'mt-0' : '' }}">
-                                    @if($with_title && isset($collection['ColorDescription']))
-                                    <h6 class="prodect-title test">
-                                        <a href="{{$collection['LinkUrl']}}" title="{{$collection['ColorDescription']}}"><strong style="letter-spacing: 4px">{{$collection['ColorDescription']}}</strongs></a>
-                                    </h6>
-                                    @endif
-
-                                    <h6 class="prodect-title">
-                                        <a href="{{$collection['LinkUrl']}}" title="{{$collection['Description']}}">{{$collection['Description']}} </br> {{$collection['SizeID']}} </a>
-                                    </h6>
-                                </div>
-                                @if(!$with_title)
-                            </div>
                             @endif
+                        </a>
+
+                        {{-- Description Section --}}
+                        <div class="product-content pt-2">
+                            @if($with_title && isset($collection['ColorDescription']))
+                                <h6 class="prodect-title">
+                                    <a href="{{ $collection['LinkUrl'] }}" title="{{ $collection['ColorDescription'] }}">
+                                        <strong style="letter-spacing: 4px">{{ $collection['ColorDescription'] }}</strong>
+                                    </a>
+                                </h6>
+                            @endif
+                            <h6 class="prodect-title">
+                                <a href="{{ $collection['LinkUrl'] }}" title="{{ $collection['Description'] }}">
+                                    {{ $collection['Description'] }}<br>{{ $collection['SizeID'] }}
+                                </a>
+                            </h6>
                         </div>
-                        @endforeach
-                        @else
-                        <h1 class="section-title text-left mb-md-5 font-ropa col-sm-6 col-12">There is no data to display</h1>
-                        @endif
                     </div>
+                </div>
+            @endforeach
+        @else
+            <div class="col-12">
+                <h1 class="section-title text-left mb-md-5 font-ropa">There is no data to display</h1>
+            </div>
+        @endif
+    </div>
+</div>
+
                 </div>
             </div>
         </section>

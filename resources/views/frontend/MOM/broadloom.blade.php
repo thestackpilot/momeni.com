@@ -240,7 +240,7 @@
                                                             <strong> With Serging </strong></label>
                                                         <select name="" id="surging_options" class="form-control" disabled
                                                                 >
-                                                            <option value="" charges="">No Surging</option>
+                                                            <option value="" charges="">No Serging</option>
                                                             @foreach ($surging_types['OutPut']['SurgingTypesList'] as $row)
                                                                 <option value="{{$row['SergingTypeNo']}}"
                                                                         charges="{{$row['Charges']}}"
@@ -2224,5 +2224,31 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
             $('#TwidthInch').prop('disabled', !isChecked)
                             .attr('title', isChecked ? '' : 'Select Serging to Cut by Width');
         });
+
+      
     </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('a[href]').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const targetUrl = this.href;
+                const currentUrl = window.location.href;
+
+                
+                if (targetUrl !== currentUrl && !targetUrl.startsWith("javascript:") && $('#size_price').val()!=="[]") {
+                    e.preventDefault();
+
+                    const shouldLeave = confirm("Are you sure you want to discard added cut pieces without add to cart");
+                    if (shouldLeave) {
+                        window.location.href = targetUrl;
+                    } else {
+                       
+                        console.log('User canceled navigation');
+                    }
+                }
+            });
+        });
+    });
+</script>
+
 @endsection

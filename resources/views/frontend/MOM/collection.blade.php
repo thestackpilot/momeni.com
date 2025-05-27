@@ -10,8 +10,8 @@ use App\Http\Controllers\CommonController;
 <style>
     #fixedimg {
     min-width:25px !important;
-    height: 200px !important;
-    max-width: none !important;
+    height: 150px !important;
+    max-width: 150px !important;
     
 }
 
