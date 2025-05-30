@@ -98,7 +98,16 @@ class CollectionsController extends FrontendController
         $hash        = md5( json_encode( ['id' => join( '~', [$id, $type, $filter] ), 'method' => 'Get_'.$type, 'theme' => $this->active_theme->id] ) );
         $collectionID = json_decode(CommonController::escape_string( base64_decode( $filter )), true)['Filters'][0]['Values'][0];
         $collections = $this->addCollectionUrls( $this->ApiObj->Get_Collections_With_Filters( $id, $type, CommonController::escape_string( base64_decode( $filter ), 1 ) ), $id, $type, true, $collectionID );
-
+        if(isset($filter)){
+            foreach($collections['Collections'] as &$col) {
+               $chLink=(json_decode(base64_decode(explode('/', $col['LinkUrl'])[5])))->Filters[0];  
+               $finalLink=(json_decode(base64_decode(explode('/', $col['LinkUrl'])[5])));
+               $finalLink->Filters[0]=json_decode(base64_decode($filter))->Filters[0];
+               $finalLink->Filters[1]=$chLink;
+               $enLink= base64_encode(json_encode($finalLink)); 
+               $col['LinkUrl']= str_replace(explode('/', $col['LinkUrl'])[5], $enLink, $col['LinkUrl']);
+           }
+        }
         $updated_content = $this->content_model->get_content( $this->active_theme->id, $hash );
         $pageData=[];
         if ( $updated_content && $updated_content->content )
