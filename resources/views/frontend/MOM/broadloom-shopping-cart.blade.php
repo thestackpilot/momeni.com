@@ -1718,10 +1718,19 @@ if (
     selectedText.includes('3rd party') || 
     selectedText.includes('third party')||
     selectedText.includes('3rd pty')
-) {
+) {$('#ship_instructions').prop('disabled',false);
     $('#OrderNotesOption').html("<span style='color:red'>*</span>");
 }
+else if (
+
+    selectedText.includes('shipping instructions on file')  
+
+){
+    $('#OrderNotesOption').text("");
+    $('#ship_instructions').prop('disabled',true);
+}
 else{
+    $('#ship_instructions').prop('disabled',false);
     $('#OrderNotesOption').text("(optional)");
 }
     });
