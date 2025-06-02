@@ -66,7 +66,8 @@ color: black !important;
 <!-- Start Bootstrap 5 Navbar -->
 <ul class="navbar">
 
-    <li class="nav-item dropdown">
+    {{-- <li class="nav-item dropdown"> --}}
+    <li class="navbar-item dropdown">
         @if(isset($menus -> rug_header))
        
         <a href="{{ $pages->all_pages->sections->main_top_menu->menu_1_url }}" 

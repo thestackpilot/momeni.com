@@ -567,10 +567,11 @@ checkwidthlimit();
 
         });
         function checkwidthlimit(){
-            let widthF=$('#widthF').val();
-            let widthI=$('#widthI').val();
+            let widthF=$('#widthF').text();
+            let widthI=$('#widthI').text();
             let total= (parseInt(widthF)*12)+parseInt(widthI);
             let dataWidth = $("#item_id").find('option:selected').attr('data-width');
+            console.log(`total is ${total} and data width is ${dataWidth}`);
             if(total>dataWidth){
              $('.Twidth-max-error').removeClass('d-none');
              let feets=Math.floor(dataWidth/12);
