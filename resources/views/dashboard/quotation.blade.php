@@ -615,7 +615,10 @@ checkwidthlimit();
         $('#serging').val(2).trigger('change');
         $('#serging').change(function() {
             sergingcharges = $('#serging option:selected').data('sergingcharges');
-
+if($('#serging option:selected').val()==0){
+    $('.Twidth-max-error').text("");
+    $('.generate-quote-btn').removeClass('submit-disabled-link');
+}
             if($(this).val() == 0){
                 $('#widthF').prop('disabled', true);
                 $('#widthI').prop('disabled', true);
