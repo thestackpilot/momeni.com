@@ -108,19 +108,15 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                 <div class="col-12 col-sm-6 col-md-4">
                     <div class="product-card h-100">
                         {{-- Image Section --}}
-                        <a href="{{ $collection['LinkUrl'] }}?colorId={{ $collection['ColorDescription'] }}">
+                        {{-- <a href="{{ $collection['LinkUrl'] }}?colorId={{ $collection['ColorDescription'] }}">
                             @if($with_title)
                                 <img src="{{ CommonController::getApiFullImage($collection['ImageName']) }}"
                                      class="img-fluid single-img"
                                      onerror="this.onerror=null; this.src='{{ url('/') . ConstantsController::IMAGE_PLACEHOLDER }}'" />
                             @else
                                 <div class="position-relative overflow-hidden" style="height: 250px;">
-                                    <div class="w-100 h-100" style="
-                                        background-image: url('{{ CommonController::getApiFullImage($collection['ImageName']) }}'),
-                                                            url('{{ url('/') . ConstantsController::IMAGE_PLACEHOLDER }}');
-                                        background-size: cover;
-                                        background-position: center;">
-                                    </div>
+                                    <div class="w-100 h-100" style="background-image: url({!! CommonController::getApiFullImage($collection['ImageName']) !!}), url({!! url('/') . ConstantsController::IMAGE_PLACEHOLDER !!});  background-size: cover; background-position: center;">
+                                </div>
 
                                     @php
                                         $segments = Request::segments();
@@ -134,7 +130,31 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                     @endif
                                 </div>
                             @endif
-                        </a>
+                        </a> --}}
+                        <a href="{{ $collection['LinkUrl'] }}?colorId={{ $collection['ColorDescription'] }}">
+    @if($with_title)
+        <img src="{{ CommonController::getApiFullImage($collection['ImageName']) }}"
+             class="img-fluid single-img"
+             onerror="this.onerror=null; this.src='{{ url('/') . ConstantsController::IMAGE_PLACEHOLDER }}'" />
+    @else
+        <div class="position-relative overflow-hidden" style="height: 250px;">
+            <div style="background-image: url('{!! CommonController::getApiFullImage($collection['ImageName']) !!}'), url('{!! url('/') . ConstantsController::IMAGE_PLACEHOLDER !!}'); background-size: cover; background-position: center; height:245px; width:200px;">
+            </div> 
+
+            @php
+                $segments = Request::segments();
+                $designValue = $segments[array_search('designs', $segments) + 1] ?? null;
+            @endphp
+
+            @if($designValue === 'BroadLoom')
+                <div class="position-absolute bottom-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay">
+                    <span class="text-white fs-4 fw-bold">{{ $collection['CollectionID'] }}</span>
+                </div>
+            @endif
+        </div>
+    @endif
+</a>
+
 
                         {{-- Description Section --}}
                         <div class="product-content pt-2">

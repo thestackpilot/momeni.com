@@ -1989,7 +1989,7 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
                 } else {
                     $('#surging_options').prop('disabled', true);
                     $('#sergingtypeno').val('');
-                   // $('#surging_options').val(0);
+                    $('#surging_options').val("");
                     $('#surging_charges').val("");
                     $('#Twidth').val( $('#Twidth-ats-max').val() );
                     $('#TwidthInch').val( $('#TwidthInch-ats-max').val() );
@@ -2233,9 +2233,9 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
             link.addEventListener('click', function (e) {
                 const targetUrl = this.href;
                 const currentUrl = window.location.href;
-
+console.log($('#size_price').val());
                 
-                if (targetUrl !== currentUrl && !targetUrl.startsWith("javascript:") && $('#size_price').val()!=="[]") {
+                if (targetUrl !== currentUrl && !targetUrl.startsWith("javascript:") && $('#size_price').val()!=="[]" && $('#size_price').val()!=undefined) {
                     e.preventDefault();
 
                     const shouldLeave = confirm("Are you sure you want to discard added cut pieces without add to cart");
