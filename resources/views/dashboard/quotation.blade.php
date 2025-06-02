@@ -567,8 +567,8 @@ checkwidthlimit();
 
         });
         function checkwidthlimit(){
-            let widthF=$('#widthF').text();
-            let widthI=$('#widthI').text();
+            let widthF=$('#widthF').val();
+            let widthI=$('#widthI').val();
             let total= (parseInt(widthF)*12)+parseInt(widthI);
             let dataWidth = $("#item_id").find('option:selected').attr('data-width');
             console.log(`total is ${total} and data width is ${dataWidth}`);
@@ -576,8 +576,10 @@ checkwidthlimit();
              $('.Twidth-max-error').removeClass('d-none');
              let feets=Math.floor(dataWidth/12);
              let inches=dataWidth-(feets*12);
+            if(($('#serging').val())!=0){
+                console.log('value is ', $('#serging').val());
              $('.Twidth-max-error').text(`(Value cannot be greater than ${feets}' ${inches}" )`);
-             $('.generate-quote-btn').addClass('submit-disabled-link');
+             $('.generate-quote-btn').addClass('submit-disabled-link');}
             }
             else{
                 $('.Twidth-max-error').addClass('d-none');
