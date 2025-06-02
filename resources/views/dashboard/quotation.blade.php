@@ -577,7 +577,6 @@ checkwidthlimit();
              let feets=Math.floor(dataWidth/12);
              let inches=dataWidth-(feets*12);
             if(($('#serging').val())!=0){
-                console.log('value is ', $('#serging').val());
              $('.Twidth-max-error').text(`(Value cannot be greater than ${feets}' ${inches}" )`);
              $('.generate-quote-btn').addClass('submit-disabled-link');}
             }
@@ -1005,7 +1004,8 @@ console.log("some chnage ");
         });
 
         $('#item_id').change(function() {
-           
+           $('.Twidth-max-error').text("");
+             $('.generate-quote-btn').removeClass('submit-disabled-link');
             document.getElementById('add-rugpad').checked = false;
             var rugCheck = $(this).find('option:selected').data('rugcheck');
             rugCheck == 'N' ? $('#add-rugpad').prop('disabled', true) : $('#add-rugpad').prop('disabled', false);
