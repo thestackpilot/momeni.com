@@ -726,6 +726,11 @@ $(document).ready(function() {
         $("[name='ship_via_id']").val(localStorage.getItem('ship_via_id'));
         $(`option[value='${localStorage.getItem('ship_via_id')}']`, $("[name='ship_via_id']")).attr('selected', 'selected').trigger('change');
     }
+    else {
+        console.log('ship_via_id :: ', localStorage.getItem('ship_via_id'))
+        $("[name='ship_via_id']").val("BEST");
+        $(`option[value='BEST']`, $("[name='ship_via_id']")).attr('selected', 'selected').trigger('change');
+    }
 
     if (localStorage.getItem('req_ship_date')) {
         console.log('req_ship_date :: ', localStorage.getItem('req_ship_date'))
