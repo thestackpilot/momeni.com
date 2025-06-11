@@ -15,18 +15,19 @@ use App\Http\Controllers\CommonController;
                     <li class="has-children mb-icons ">
                              <span class="container-checker" id="searchh">
                              <div class="searchh">
-                                <img src="/MOM/images/search-icon-mom.svg" id="click-search">
-                                <div id="show-on-search" style="display: none;">
-                                <div id="search-custom-overlay"></div>
-                                <div id="custom-cross-btn">X</div>
+                                <img src="/MOM/images/search-icon-mom.svg" id="cli">
+                                <div id="show_search" style="display: none; z-index:999">
+                                <div id="search-custom-overlay" style="z-index:999">
+                                <div id="closeBtn">X</div>
                                     <div class="full-screen-serach-box_inner_wrapper d-flex align-items-center">
                                         <form role="search" method="get" id="searchform" class="search-form" action="https://momeni.botguys.ai/">
                                             <div class="form-group">
                                                 <input type="text" class="search-input" id="popup-search" value="" name="s" placeholder="Search....." required="">
+                                                <button type="submit" id="serach-popup-btn-box" class="search-button search_text_button submit-btn"><img src="/MOM/images/white-search-icon-mom.svg"></button>
                                             </div>
-                                            <button type="submit" id="serach-popup-btn-box" class="search-button submit-btn"><img src="/MOM/images/white-search-icon-mom.svg"></button>
                                         </form>
                                     </div>
+                                </div>
                                 </div>
                             </div>
                             </span>
@@ -104,4 +105,19 @@ use App\Http\Controllers\CommonController;
             </div>
         </div>
     </div>
+
+
+<script>
+$("#cli").click(function(){
+     $("#show_search").attr("style", "display: block");
+    console.log("show something");
+    
+});
+$("#closeBtn").click(function () {
+    $("#show_search").attr("style", "display: none");
+    console.log("Search hidden");
+});
+
+</script>
+
 

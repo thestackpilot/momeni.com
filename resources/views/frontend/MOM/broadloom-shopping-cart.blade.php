@@ -906,7 +906,7 @@
             <div class="section" id="section3" style="display: none;">
                 <div class="container">
                     <div class="mt-5 mb-4 text-center" style="color: green; font-size:22px;">
-                        Your order is processed and you will get the confirmation soon. Your Order Detail is:
+                        Your order is being processed, and a confirmation will be sent to you shortly. Here are your order details:
                     </div>
                     <div class="container my-5">
                         <div class="row justify-content-center">
@@ -1154,7 +1154,7 @@
                                 </a>
                             </div>
                                 <div class="col-sm-6">
-                                    <a id="reportGen" class="add-to-cart-button btn btn-dark align-content-center mt-5 ml-5 bl-report text-white" >View Report</a>
+                                    <a id="reportGen" class="add-to-cart-button btn btn-dark align-content-center mt-5 ml-5 bl-report text-white" >Order PDF</a>
                                 </div>
                             </div>
                         </div>
@@ -1546,6 +1546,7 @@ if (
                     $('#select-address').prop("disabled", false);
                 } else {
                      $(".disable-toggle").removeClass("muted-bd-fields");
+                     $('#countries').val('US');
                     // $(".hidden-inp").val("");
                     // $('#hidden-address_id').val("");
                     // $(".disable-toggle").val("");
