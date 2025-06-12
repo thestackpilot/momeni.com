@@ -623,6 +623,12 @@ use App\Http\Controllers\CommonController;
                         $(this).attr('data-old-val', '');
                      }
                   });
+                  $('#countries').val("US");
+                  let selectedOption = $('#countries').find('option:selected');
+        let selectedCountry = selectedOption.attr('origincode');
+        if (selectedCountry) {
+            states(selectedCountry);
+        }
                } else {
                   $('.other-address').addClass('d-none');
                   const address_data = JSON.parse($('.shipping-address-data', $(this).parent()).html());

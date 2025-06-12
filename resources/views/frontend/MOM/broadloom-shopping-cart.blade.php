@@ -484,7 +484,7 @@
                                                         Name
                                                         <span class="text-danger"
                                                               style="font-size: 18px">*</span></label>
-                                                    <input class="form-control disable-toggle" type="text" id=""
+                                                    <input class="form-control disable-toggle" type="text" id="FirstName"
                                                            name="FirstName"
                                                            placeholder=""
                                                            value="{{$shipping_addresses['ShipToAddresses'][0]['FirstName']}}"
@@ -526,7 +526,7 @@
                                                         Address<span class="text-danger"
                                                                      style="font-size: 18px">*</span></label>
                                                     <input class="form-control disable-toggle new-address" type="text"
-                                                           id="" name="Address1"
+                                                           id="Address1" name="Address1"
                                                            placeholder=""
                                                            value="{{$shipping_addresses['ShipToAddresses'][0]['Address1']}}"
                                                            required>
@@ -599,7 +599,7 @@
                                                     <label for="" class="form-label mb-0" style="font-size: 14px">Town/
                                                         City<span class="text-danger"
                                                                   style="font-size: 18px">*</span></label>
-                                                    <input class="form-control disable-toggle" type="text" id=""
+                                                    <input class="form-control disable-toggle" type="text" id="City"
                                                            name="City"
                                                            placeholder=""
                                                            value="{{$shipping_addresses['ShipToAddresses'][0]['City']}}"
@@ -609,7 +609,7 @@
                                                     <label for="" class="form-label mb-0" style="font-size: 14px">Zip
                                                         Code<span class="text-danger"
                                                                   style="font-size: 18px">*</span></label>
-                                                    <input class="form-control disable-toggle" type="text" id=""
+                                                    <input class="form-control disable-toggle" type="text" id="Zip"
                                                            name="Zip"
                                                            placeholder=""
                                                            value="{{$shipping_addresses['ShipToAddresses'][0]['Zip']}}"
@@ -1547,12 +1547,17 @@ if (
                 } else {
                     $("#hidden-address_id").val("");
                      $(".disable-toggle").removeClass("muted-bd-fields");
-                     $('#countries').val('US');
+
                     // $(".hidden-inp").val("");
                     // $('#hidden-address_id').val("");
                     // $(".disable-toggle").val("");
                     // $("#countries").val(0);
-                    // $("#state_dropdown").val('');
+                    $('#countries').val('US');
+                     $("#state_dropdown").val('');
+                     $("#FirstName").val('');
+                     $("#Address1").val('');
+                     $("#City").val('');
+                     $("#Zip").val('');
                      $(".disable-toggle").attr("required", true);
                      $("#bd-address2").removeAttr("required")
                     // $('#select-address').prop("disabled", true);

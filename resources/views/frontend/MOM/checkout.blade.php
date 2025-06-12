@@ -387,7 +387,7 @@
                                                     <label class="p-0 m-0 mb-3">First Name <span
                                                             class="color-red">*</span> </label>
                                                     <input type="text" data-required="true"
-                                                        class="form-control bg-white " name="FirstName" maxlength="35"
+                                                        class="form-control bg-white " name="FirstName" maxlength="35" id="firstName"
                                                         aria-describedby="FirstName" placeholder="First Name*">
                                                 </div>
                                                 <div class="d-flex flex-column fullwidth">
@@ -401,7 +401,7 @@
                                             <div class="d-flex flex-column justify-content-between column-gap-20 mb-4">
                                                 <label class="p-0 m-0 mb-3">Email <span class="color-red">*</span></label>
                                                 <input type="email" data-required="true" class="form-control bg-white"
-                                                    name="Email" maxlength="60" aria-describedby="Email"
+                                                    name="Email" maxlength="60" aria-describedby="Email" id="Email"
                                                     placeholder="Email*">
                                             </div>
                                             <div class="d-flex flex-column mb-4">
@@ -410,7 +410,7 @@
                                                         class="color-red">*</span></label>
                                                 <input type="text" data-required="true"
                                                     class="form-control bg-white mb-4" name="Address1" maxlength="35"
-                                                    aria-describedby="Address" placeholder="Address*">
+                                                    aria-describedby="Address" placeholder="Address*" id="Address1">
                                                 <label class="p-0 m-0 mb-3">Apartment, suite, etc. (optional) </label>
                                                 <input type="text" class="form-control bg-white mb-4" name="Address2"
                                                     maxlength="35" aria-describedby="Apartment"
@@ -437,7 +437,7 @@
                                                         </label>
                                                         <input type="text" data-required="true"
                                                             class="form-control bg-white" name="City" maxlength="35"
-                                                            aria-describedby="City" placeholder="City*">
+                                                            aria-describedby="City" placeholder="City*" id="City">
                                                     </div>
                                                 </div>
                                             </div>
@@ -470,7 +470,7 @@
                                                     <label class="p-0 m-0 mb-3">Zip Code <span
                                                             class="color-red">*</span> </label>
                                                     <input type="text" data-required="true"
-                                                        class="form-control bg-white" name="Zip" maxlength="10"
+                                                        class="form-control bg-white" name="Zip" maxlength="10" id="Zip"
                                                         aria-describedby="PostalCode" placeholder="Postal Code*">
                                                 </div>
                                             </div>
@@ -1408,11 +1408,35 @@
             $('#countries').prop('disabled', true);
             $('input[name="shipping-address"]').on('change', function () {
                 if($(this).val() != "other"){
+                    console.log("value of country is ", localStorage.getItem("countries"));
+                    console.log("value of first name is ", localStorage.getItem("firstName"));
+                    $('#countries').val(`${localStorage.getItem("countries")}`);
+                    $('#state_dropdown').val(`${localStorage.getItem("state_dropdown")}`);
+                    $('#firstName').val(`${localStorage.getItem("firstName")}`);
+                    $('#Email').val(`${localStorage.getItem("Email")}`);
+                    $('#Address1').val(`${localStorage.getItem("Address1")}`);
+                    $('#City').val(`${localStorage.getItem("City")}`);
+                    $('#Zip').val(`${localStorage.getItem("Zip")}`);
                     $('#state_dropdown').prop('disabled', true);
                     $('#countries').prop('disabled', true);
                 }else {
+                    
                     $('#state_dropdown').prop('disabled', false);
                     $('#countries').prop('disabled', false);
+                    localStorage.setItem("countries", $('#countries').val());
+                    localStorage.setItem("state_dropdown", $('#state_dropdown').val());
+                    localStorage.setItem("firstName", $('#firstName').val());
+                    localStorage.setItem("Email", $('#Email').val());
+                    localStorage.setItem("Address1", $('#Address1').val());
+                    localStorage.setItem("City", $('#City').val());
+                    localStorage.setItem("Zip", $('#Zip').val());
+                    $('#countries').val("16");
+                    $('#state_dropdown').val("");
+                    $('#firstName').val("");
+                    $('#Email').val("");
+                    $('#Address1').val("");
+                    $('#City').val("");
+                    $('#Zip').val("");
                 }
             });
         });

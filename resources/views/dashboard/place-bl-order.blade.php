@@ -308,9 +308,9 @@ body{
                     <div class="row col-md-12">
                         <div class="row">
                             <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
-                                <label class="label-without-form">Item ID</label>
+                                <label class="label-without-form">Style</label>
                                 <select name="item_id" id="itemDropdown" class="form-control">
-                                    <option value="">Select Item Id</option>
+                                    <option value="">Choose Style</option>
                                     @foreach($itemIds as $item)
                                         <option value="{{$item['KeyID']}}">{{$item['Description']}}</option>
                                     @endforeach
@@ -750,6 +750,14 @@ $(document).ready(function() {
     $(document).on('change', '[name="shipping-address"]',function() {
         let selectedValue = $('input[name="shipping-address"]:checked').val();
         if(selectedValue == "other"){
+            console.log("checking");
+
+            $('#countries').val('US');
+        let selectedOption = $('#countries').find('option:selected');
+        let selectedCountry = selectedOption.attr('origincode');
+        if (selectedCountry) {
+            states(selectedCountry);
+        }
             $('.default-country').addClass('d-none');
             $('.default-state').addClass('d-none');
             $('.other-country').removeClass('d-none');
