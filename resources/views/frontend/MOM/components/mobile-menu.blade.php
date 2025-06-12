@@ -16,16 +16,16 @@ use App\Http\Controllers\CommonController;
                              <span class="container-checker" id="searchh">
                              <div class="searchh">
                                 <img src="/MOM/images/search-icon-mom.svg" id="cli">
-                                <div id="show_search" style="display: none; z-index:999">
-                                <div id="search-custom-overlay" style="z-index:999">
-                                <div id="closeBtn">X</div>
+                                <div id="show_search" style="display: none; z-index:999;">
+                                <div id="search-custom-overlay" style="z-index:999; width:268px">
+                                <div id="closeBtn" class="ml-1">X</div>
                                     <div class="full-screen-serach-box_inner_wrapper d-flex align-items-center">
-                                        <form role="search" method="get" id="searchform" class="search-form" action="https://momeni.botguys.ai/">
+                                        
                                             <div class="form-group">
-                                                <input type="text" class="search-input" id="popup-search" value="" name="s" placeholder="Search....." required="">
-                                                <button type="submit" id="serach-popup-btn-box" class="search-button search_text_button submit-btn"><img src="/MOM/images/white-search-icon-mom.svg"></button>
+                                                <input type="text" class="ml-2" id="inputText"  name="s" placeholder="Search....." >
+                                                <button type="button" id="searchBtn" class="search-button submit-btn"><img src="/MOM/images/white-search-icon-mom.svg"></button>
                                             </div>
-                                        </form>
+                                        
                                     </div>
                                 </div>
                                 </div>
@@ -117,6 +117,18 @@ $("#closeBtn").click(function () {
     $("#show_search").attr("style", "display: none");
     console.log("Search hidden");
 });
+
+    document.getElementById("searchBtn").addEventListener("click", function () {
+       const inputValue = document.getElementById("inputText").value;
+console.log(inputValue);
+        if (!inputValue) {
+            alert("Please enter a search term.");
+            return;
+        }
+        const encoded = btoa(inputValue); // base64 encode
+        const url = `/search/${encoded}`; // match your Laravel route
+        window.location.href = url; // redirect
+    });
 
 </script>
 
