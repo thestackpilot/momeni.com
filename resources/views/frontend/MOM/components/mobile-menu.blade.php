@@ -6,6 +6,17 @@ use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
 
 @endphp
+<style>
+#search-custom-overlay{
+
+    position: absolute;
+    top:0;
+    right:0;
+   
+    
+  
+}
+</style>
 <div class="mobile-menu-overlay" id="mobile-menu-overlay">
         <div class="mobile-menu-overlay__inner">
             <div class="mobile-menu-close-box text-right"> <span class="mobile-navigation-close-icon" id="mobile-menu-close-trigger"> <i class="icon-cross2"></i></span> </div>
@@ -17,12 +28,12 @@ use App\Http\Controllers\CommonController;
                              <div class="searchh">
                                 <img src="/MOM/images/search-icon-mom.svg" id="cli">
                                 <div id="show_search" style="display: none; z-index:999;">
-                                <div id="search-custom-overlay" style="z-index:999; width:268px">
+                                <div id="search-custom-overlay" style="z-index:999; width:100%">
                                 <div id="closeBtn" class="ml-1">X</div>
                                     <div class="full-screen-serach-box_inner_wrapper d-flex align-items-center">
                                         
                                             <div class="form-group">
-                                                <input type="text" class="ml-2" id="inputText"  name="s" placeholder="Search....." >
+                                                <input type="text" class="ml-2" id="inputText"  name="s" placeholder="Search....." style="width: 175px">
                                                 <button type="button" id="searchBtn" class="search-button submit-btn"><img src="/MOM/images/white-search-icon-mom.svg"></button>
                                             </div>
                                         
