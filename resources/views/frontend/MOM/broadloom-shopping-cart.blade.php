@@ -1545,6 +1545,7 @@ if (
                     $('.order-ship-date').val(shipValue);
                     $('#select-address').prop("disabled", false);
                 } else {
+                    $("#hidden-address_id").val("");
                      $(".disable-toggle").removeClass("muted-bd-fields");
                      $('#countries').val('US');
                     // $(".hidden-inp").val("");
