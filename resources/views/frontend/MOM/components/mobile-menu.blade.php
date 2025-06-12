@@ -33,7 +33,7 @@ use App\Http\Controllers\CommonController;
                                     <div class="full-screen-serach-box_inner_wrapper d-flex align-items-center">
                                         
                                             <div class="form-group">
-                                                <input type="text" class="ml-2" id="inputText"  name="s" placeholder="Search....." style="width: 175px">
+                                                <input type="text" class="ml-2" id="inputText"  name="s" placeholder="Search....." style="width: 170px">
                                                 <button type="button" id="searchBtn" class="search-button submit-btn"><img src="/MOM/images/white-search-icon-mom.svg"></button>
                                             </div>
                                         
