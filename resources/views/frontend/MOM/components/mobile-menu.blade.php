@@ -9,8 +9,8 @@ use App\Http\Controllers\CommonController;
 <style>
 #search-custom-overlay{
 
-    position: absolute;
-    top:0;
+    position: fixed;
+    top:100px;
     right:0;
    
     
@@ -28,12 +28,12 @@ use App\Http\Controllers\CommonController;
                              <div class="searchh">
                                 <img src="/MOM/images/search-icon-mom.svg" id="cli">
                                 <div id="show_search" style="display: none; z-index:999;">
-                                <div id="search-custom-overlay" style="z-index:999; width:100%">
-                                <div id="closeBtn" class="ml-1">X</div>
-                                    <div class="full-screen-serach-box_inner_wrapper d-flex align-items-center">
+                                <div id="search-custom-overlay" style="z-index:999; height:90px">
+                                <div id="closeBtn" style="margin-left:95%">X</div>
+                                    <div class="full-screen-serach-box_inner_wrapper d-flex align-items-center justify-content-center">
                                         
-                                            <div class="form-group">
-                                                <input type="text" class="ml-2" id="inputText"  name="s" placeholder="Search....." style="width: 155px">
+                                            <div class="form-group" style=";" >
+                                                <input type="text" id="inputText"  name="s" placeholder="Search.....">
                                                 <button type="button" id="searchBtn" class="search-button submit-btn"><img src="/MOM/images/white-search-icon-mom.svg"></button>
                                             </div>
                                         
@@ -140,7 +140,14 @@ console.log(inputValue);
         const url = `/search/${encoded}`; // match your Laravel route
         window.location.href = url; // redirect
     });
+const innerElement = document.querySelector('.mobile-menu-overlay__inner');
+const overlayElement = document.getElementById('search-custom-overlay');
 
+if (innerElement && overlayElement) {
+  const width = innerElement.offsetWidth;  // get width in px
+  overlayElement.style.width = width + 'px !importent';  // set width with unit
+ 
+}
 </script>
 
 
