@@ -192,6 +192,7 @@
                                                             @endif
                                                             <td class="align-content-center">
                                                                 @php
+                                                                     $neg=$item->item_price=$item->item_price-$sum_surging_charges-$item->unit_price;
                                                                     $priceTotal += $item->item_price;
                                                                     number_format($priceTotal, 2);
                                                                 @endphp
@@ -210,7 +211,8 @@
                                                                 {{ $item->item_currency }}{{ number_format($item->rugpad_price, 2) }}
                                                             </td>
                                                             <td class="align-content-center">{{ $item->item_currency }}<span
-                                                                    id="item_total_price">{{ number_format($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total, 2)  }}
+                                                                    {{-- id="item_total_price">{{ number_format($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total, 2)  }} --}}
+                                                                    id="item_total_price">{{ number_format(  $item->rugpad_price + $item->item_total, 2)  }}
                                                                 @php
                                                                     $subPriceTotal += $item->item_price + $item->rugpad_price; // $sum_surging_charges + $item->unit_price + $item->item_total
                                                                 @endphp

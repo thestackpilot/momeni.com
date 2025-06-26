@@ -23,6 +23,7 @@ class AccountController extends DashboardController
 
     public function account_information()
     {
+       
         $active_customer    = ( new Cart() )->get_active_cart_customer();
         $shipping_addresses = $parent = array();
 
@@ -259,7 +260,25 @@ class AccountController extends DashboardController
 
     public function my_account()
     {
-        return view( 'dashboard.my-account' );
+         $active_customer    = ( new Cart() )->get_active_cart_customer();
+        $shipping_addresses = $parent = array();
+
+        if ( Auth::user()->parent_id )
+        {
+            $parent = $this->user_model->get_user( 'parent_id', Auth::user()->parent_id );
+        }
+
+        if ( $active_customer )
+        {
+            $shipping_addresses = $this->ApiObj->Get_CustomerAddresses( $active_customer );
+        }
+
+        return view( 'dashboard.my-account', [
+            'client_address'  => $shipping_addresses,
+            'active_customer' => $active_customer,
+            'parent'          => $parent
+        ] );
+        
     }
 
     public function update_account_cost_settings( $request )

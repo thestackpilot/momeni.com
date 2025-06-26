@@ -24,7 +24,8 @@ use App\Http\Controllers\CommonController;
                         {{ $item['label'] }}
                     </a>
                 @elseif(!in_array($item['slug'], ["dashboard.quotation", "dashboard.viewblorder", "dashboard.place_bl_order" , "dashboard.bl_reports"]))
-                    <a href="{{ route($item['slug']) }}"
+                    @if($item['label']!=='Account Information')
+                <a href="{{ route($item['slug']) }}"
                     class="{{ str_contains(url()->current(), route($item['slug'])) ? 'active' : $item['slug'] }}">
                     {{$item['label']}}
                     {{-- @if ($item['label']==="Place Rug  Order")
@@ -33,6 +34,7 @@ use App\Http\Controllers\CommonController;
                     {{$item['label']}}
                     @endif --}}
                     </a>
+                @endif
                 @endif
             </li>
         @endif

@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Frontend\BroadloomController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApisController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\ThemeController;
@@ -19,6 +19,7 @@ use App\Http\Controllers\Dashboard\StaffController;
 use App\Http\Controllers\Frontend\DesignController;
 use App\Http\Controllers\Frontend\FilterController;
 use App\Http\Controllers\Frontend\SearchController;
+use App\Http\Controllers\Dashboard\QuotesController;
 use App\Http\Controllers\Admin\PageSettingController;
 use App\Http\Controllers\Dashboard\AccountController;
 use App\Http\Controllers\Dashboard\FinanceController;
@@ -26,11 +27,11 @@ use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Admin\BasicSettingController;
 use App\Http\Controllers\Dashboard\HangtagsController;
 use App\Http\Controllers\Dashboard\ShippingController;
+use App\Http\Controllers\Frontend\BroadloomController;
 use App\Http\Controllers\Frontend\FavouriteController;
 use App\Http\Controllers\Frontend\CollectionsController;
 use App\Http\Controllers\Frontend\MainCollectionController;
 use App\Http\Controllers\Dashboard\GenericReportsController;
-use App\Http\Controllers\Dashboard\QuotesController;
 use App\Http\Controllers\Admin\DealerRegistrationsController;
 use App\Http\Controllers\Admin\ApiContentManagementController;
 use App\Http\Controllers\Admin\FormController as AdminFormController;
@@ -92,6 +93,7 @@ Route::post( '/cart/refresh/{type}', [CartController::class, 'refresh'] )->name(
 Route::post( '/cart/update/', [CartController::class, 'update'] )->name( 'frontend.cart.update' );
 Route::post( '/cart/blupdate/', [CartController::class, 'bl_update'] )->name( 'frontend.cart.blupdate' );
 Route::post( '/cart/remove/', [CartController::class, 'remove'] )->name( 'frontend.cart.remove' );
+Route::post( '/cart/removerug/{id}', [CartController::class, 'Reset_Rugpad_Price'] )->name( 'frontend.cart.Reset_Rugpad_Price' );
 
 //TODO : Checkout Routes - THIS IS NOT WORKING
 Route::group( ['prefix' => 'checkout', 'middleware' => ['auth']], function ()
@@ -213,6 +215,7 @@ Route::group( ['prefix' => 'dashboard', 'middleware' => ['auth']], function ()
     Route::get( '/view-order', [GenericReportsController::class, 'view_order'] )->name( 'dashboard.vieworder' );
     Route::get( '/order_report', [GenericReportsController::class, 'order_report'] )->name( 'dashboard.orderreport' );
     Route::get( '/bl/view-order', [GenericReportsController::class, 'view_order_bl'] )->name( 'dashboard.viewblorder' );
+    Route::get('/ViewMultiDocumentsReport',[GenericReportsController::class,'ViewMultiDocumentsReport'])->name('dashboard.ViewMultiDocumentsReport');
     Route::get( '/initiate-return', [ShopController::class, 'init_return'] )->name( 'dashboard.initreturn' );
     Route::get( '/view-return', [GenericReportsController::class, 'view_return'] )->name( 'dashboard.viewreturn' );
     Route::get( '/hangtags', [HangtagsController::class, 'index'] )->name( 'dashboard.hangtags' );

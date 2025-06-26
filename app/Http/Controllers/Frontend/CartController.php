@@ -206,6 +206,12 @@ class CartController extends FrontendController
             return response()->json(['success' => false, 'error' => 'Record not found']);
         }
     }
+    public function Reset_Rugpad_Price($id)
+    {
+        $cart = new Cart();
+        $updated = $cart->clearRugpadPriceById($id);
+        return $updated;
+    }
 
 }
 

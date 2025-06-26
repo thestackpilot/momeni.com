@@ -354,11 +354,54 @@ use App\Http\Controllers\CommonController;
             }
         });
     }
+function updateRugpadePrice(id) {
+   
 
-    function removeItemFromCart(itemId,token,customerId, broadloom, rollId, randStr, hideQuantity,isMobile, isBroadloom = false)
+    const url = `/cart/removerug/${id}`; // dynamic route with id
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Delete successful: ' + data.message);
+        } else {
+            console.log('S Delete failed: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong.');
+    });
+}
+
+
+    function removeItemFromCart(element=null,id,itemId,token,customerId, broadloom, rollId, randStr, hideQuantity,isMobile, isBroadloom = false)
     {
         if (confirm("Are you sure to remove this Item?"))
         {
+            console.log('id is', id);
+        const allIds = JSON.parse(element.getAttribute('data-items') || '[]');
+       
+        
+        console.log("all ids are ", allIds);
+         if (Array.isArray(allIds) && allIds.length > 0) {
+            console.log('going to change previous value');
+          const currentIndex = allIds.findIndex(el => el == id);
+        console.log('index i get is ',currentIndex);
+        // Ensure there's a previous item
+        if (currentIndex) {
+
+            const parentId = allIds[currentIndex - 1];
+             console.log('id is here final ', parentId);
+           updateRugpadePrice(parentId);
+        }
+    }
             var itemNode = typeof isMobile !== "undefined" && isMobile ? "#mob_"+itemId+"__"+customerId : "#"+itemId+"__"+customerId;
             itemNode = itemNode.replace(/([ #;&,.+*~\':"!^$[\]()=>|/@])/g, '\\$1');
             $(itemNode).addClass('all-muted');

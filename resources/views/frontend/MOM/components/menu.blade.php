@@ -62,6 +62,10 @@ color: black !important;
 }
 
 </style>
+@php
+    $allIds=[];
+    $ids = [];
+@endphp
 <div class=" header-menu  text-left">
 <!-- Start Bootstrap 5 Navbar -->
 <ul class="navbar">
@@ -273,7 +277,7 @@ color: black !important;
                                     <div class="col-md-3 products-thumbnails position-relative align-self-baseline p-0">
                                         <a href="javascript:void(0)" class="d-block newStyle">
                                             <i class="position-absolute icon-cross removeProd"
-                                               onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '')"> </i>
+                                               onclick="removeItemFromCart(this,'{{$item -> id}}','{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '')"> </i>
                                             <img src="{{$item -> item_image}}"
                                                  onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'"
                                                  alt="{{$item -> item_name}}">
@@ -323,14 +327,26 @@ color: black !important;
                         @endforeach
 
                         @foreach ($cart->items as $item)
-                            @if($item->broadloom_item && $item->is_bd_child != 1)
+                        @php
+                            array_push($allIds,$item -> id);
+                        @endphp
+                            @if($item->broadloom_item)
+                           
+                                @if ($item->is_bd_child != 1)
+                                @php
+                                
+                                
+                                  $prevId=$item -> id;
+                                @endphp
+                            
                                 <div
-                                    class="d-flex flex-row justify-content-between align-items-center p-3 pt-3 border-bottom-thick"
+                               
+                                    class="d-flex flex-row justify-content-between align-items-center p-3 pt-3 border-bottom-thick "
                                     id="{{$item -> item_id}}__{{$item -> item_customer_id}}">
                                     <div class="col-md-3 products-thumbnails position-relative align-self-baseline p-0">
                                         <a href="javascript:void(0)" class="d-block newStyle">
                                             <i class="position-absolute icon-cross removeProd"
-                                               onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '{{$item->rand_str}}')"> </i>
+                                               onclick="removeItemFromCart(this,'{{$item -> id}}','{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '{{$item->rand_str}}')"> </i>
                                             <img src="{{$item -> item_image}}"
                                                  onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'"
                                                  alt="{{$item -> item_name}}">
@@ -373,8 +389,67 @@ color: black !important;
                                         <p class="price justify-content-end m-0 menu-price">Price:
                                             <span>{{$item -> item_currency}}{{ number_format($item->item_total, 2) }}</span></p>
                                         <hr>
+                                        <div id="id-{{$item -> id}}" style="width: 320px; margin:0; padding:0;"></div>
                                     </div>
                                 </div>
+                            
+                             @elseif($item->is_bd_child == 1)
+                              @php
+                                
+                                    array_push($ids, $prevId);
+                                @endphp
+
+<div
+                                    class="d-flex flex-row justify-content-between align-items-center p-3 pt-3 border-bottom-thick id-{{$prevId}}"
+                                    id="{{$item -> item_id}}__{{$item -> item_customer_id}}">
+                                    <div class="col-md-1 products-thumbnails position-relative align-self-baseline p-0">
+                                        <a href="javascript:void(0)" class="d-block newStyle">
+                                            <i class="position-absolute icon-cross removeProd " data-items='@json($allIds)'
+                                            
+                                               onclick="removeItemFromCart(this,'{{$item -> id}}','{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '{{$item->rand_str}}')"> </i>
+                                            
+                                        </a>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <h6 class="font-ropa m-0">RUG PAD</h6>
+                                       
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <strong>Sizes: </strong>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="specs">
+                                                    @php
+                                                        $sizes = json_decode( unserialize($item->item_data ), true );
+                                                        //$sizes = json_decode($item->item_data, true);
+                                                    @endphp
+                                                    @if(isset($sizes['CutPieces']))
+                                                        @foreach($sizes['CutPieces'] as $item_sizes)
+                                                            @php
+                                                                $lenght_feet =  (int)floor($item_sizes['ATSLength'] / 12);
+                                                                $width_feet =  (int)floor($item_sizes['ATSWidth'] / 12);
+                                                                $lenght_inch =  $item_sizes['ATSLength'] % 12;
+                                                                $width_inch =   $item_sizes['ATSWidth'] % 12;
+                                                            @endphp
+                                                            <div
+                                                                class="badge badge-default broadloom-badge side-bar-broadloom-badge"
+                                                                style="background: @if($item_sizes['LengthStatus'] == 'F') blue @else #660000 @endif">
+                                                        <span>
+                                                            {{ $width_feet . "'" . $width_inch . "\"" . " x " . $lenght_feet  . "'" . $lenght_inch . "\"" }}
+                                                        </span>
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="price justify-content-end m-0 menu-price">Price:
+                                            <span>{{$item -> item_currency}}{{ number_format($item->item_total, 2) }}</span></p>
+                                        <hr>
+                                        
+                                    </div>
+                                </div>
+                            @endif
                             @endif
                         @endforeach
                         <!-- <h2 class="text-muted text-center mt-5 mb-3 emptyCart"> Cart is empty! </h2> -->
@@ -474,5 +549,32 @@ color: black !important;
         searchField.classList.toggle('d-none');
         searchField.focus(); // Optional: focus on the input after showing
     });
+   
     
+   
+        // Example array of strings
+        let myArray = {!! json_encode($ids) !!};
+        
+        myArray.forEach(function (key) {
+
+            
+            let sourceElement = document.querySelector('.id-' + key);
+            let targetElement =  document.querySelector('#id-' + key);
+
+            if (sourceElement && targetElement) {
+                // Get the content
+                let content = sourceElement.innerHTML;
+
+                // Clear the source content
+                sourceElement.innerHTML = '';
+                sourceElement.classList.add('d-none');
+
+                // Add the content to the matching ID
+                targetElement.innerHTML = content;
+            }
+        });
+
+
+
+
 </script>

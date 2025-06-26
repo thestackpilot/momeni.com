@@ -44,7 +44,7 @@ use App\Http\Controllers\CommonController;
     @endif
     @endforeach
     <div class="col-md-12 d-flex justify-content-end">
-        <button type="submit" name="submit" value="data" class="btn btn-primary text-uppercase mt-2">Search</button>
+        <button type="submit" name="submit" value="data" class="btn btn-primary text-uppercase mt-2" id="search">Search</button>
     </div>
 </form>
 @endif
@@ -71,5 +71,16 @@ use App\Http\Controllers\CommonController;
          return all_ok;
       });
    });
+    window.addEventListener('DOMContentLoaded', function () {
+        const noTableResponsive = !document.querySelector('.table-responsive');
+        const isOrderPage = window.location.href.includes('dashboard/view-order') || 
+                    window.location.href.includes('dashboard/bl/view-order');
+
+    if (noTableResponsive && isOrderPage) {
+            console.log(window.location.href);
+            document.getElementById('search').click(); 
+    }   
+    });
+
 </script>
 @endsection

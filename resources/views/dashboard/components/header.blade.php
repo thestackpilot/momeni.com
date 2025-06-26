@@ -12,7 +12,7 @@ use App\Http\Controllers\CommonController;
 <header class="d-flex flex-row flex-wrap dashboardHead">
     <div class="container d-flex header mt-3 align-items-center only-for-desktop">
         <div class="col-6 col-xs-4 col-sm-3 col-md-5">
-            <address>{{$basicSettings -> address}}</address>
+            {{-- <address>{{$basicSettings -> address}}</address> --}}
         </div>
         <div class="col-6 col-xs-2 col-sm-2 col-md-2 text-center">
             <a href="{{route('frontend.home')}}" class="logo">

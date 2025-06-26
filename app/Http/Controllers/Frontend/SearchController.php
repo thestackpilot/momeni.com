@@ -61,8 +61,11 @@ class SearchController extends FrontendController
      */
     public function index( $search, $type = '' )
     {
+        
         $search         = base64_decode( $search );
+       
         $search_results = $this->addSearchUrls( $this->ApiObj->Get_Search_Text( $search, $type ) );
+       // dd($search_results);
         $this->append_breadcrumbs( "Search", route( 'frontend.search', [$search] ) );
 
         // die("<pre>".print_r($search_results, 1)."</pre>");

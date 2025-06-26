@@ -856,6 +856,14 @@ public function Get_BLShipViaList(){
             return $this->Post_API_Signature('Get_AllBLSalesRepReports', 'Get All BL Sales Rep Reports', $post_array, [], 1, 1, 1);
         }
     }
+    public function ViewMultiDocumentsReport($MenuTag,$DocumentNo)
+    {
+        
+            $post_array = array('MenuTag' => $MenuTag, 'DocumentNo' => $DocumentNo);
+           return ( $this->Post_API_Signature('ViewMultiDocumentsReport', 'View All Multi Documents Report', $post_array));
+        
+    }
+
 
     public function Get_BLSalesReport($SalesRep, $CustomerID = '', $groupBy = '', $FromDate = '', $ToDate = '', $Quality = '', $ItemID = '', $Collection = '', $Design = '')
     {

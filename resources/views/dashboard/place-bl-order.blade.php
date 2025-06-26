@@ -205,6 +205,10 @@ body{
                         });
                     </script>
                 @endif
+                <div class="d-none">
+                    <input type="text" id="surgingHide" name="surgingHide" value="">
+                    <input type="text" id="iduse" name="iduse" value="">
+                </div>
 
                   <div class="account-content p-5">
                     <h1 class="section-title text-center mb-3 mt-3 font-ropa">Place Broadloom Order</h1>
@@ -579,6 +583,7 @@ body{
                                                         @endif
                                                         <td class="align-content-center">
                                                             @php
+                                                                $item->item_price=$item->item_price-$sum_surging_charges-$item->unit_price;
                                                                 $priceTotal += $item->item_price;
                                                                 number_format($priceTotal, 2);
                                                             @endphp
@@ -600,9 +605,9 @@ body{
                                                             <span class="font-prox">$</span>{{ number_format($item->rugpad_price, 2) }}
                                                         </td>
                                                         <td class="align-content-center"><span class="font-prox">$</span><span
-                                                                id="item_total_price">{{ number_format($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total, 2)  }}
+                                                              id="item_total_price">{{ number_format(  $item->rugpad_price + $item->item_total, 2)  }}
                                                             @php
-                                                                $dashboardTotal += ($sum_surging_charges + $item->rugpad_price + $item->unit_price + $item->item_total);
+                                                                $dashboardTotal += ( $item->rugpad_price + $item->item_total);
                                                                 $subPriceTotal += $sum_surging_charges + $item->unit_price + $item->item_total
                                                             @endphp
                                                         </span>
@@ -1432,6 +1437,36 @@ $(document).ready(function() {
 
 });
 
+function savedata(newObj) {
+    
+  let inputId = "surgingHide";
+  const input = document.getElementById(inputId);
+
+  let val = input.value.trim();
+  let arr;
+
+  if (!val) {
+    // Empty input, create new array with newObj
+    arr = [newObj];
+    console.log('my array is ', arr);
+  } else {
+    try {
+      // Parse existing JSON string
+      arr = JSON.parse(val);
+      // Make sure arr is an array before pushing
+      if (!Array.isArray(arr)) {
+        arr = [arr];
+      }
+    } catch (e) {
+      // If parsing fails, reset to new array
+      arr = [];
+    }
+    arr.push(newObj);
+  }
+
+  // Save updated array back as JSON string
+  input.value = JSON.stringify(arr);
+}
 function add_cut_pieces() {
     if($('#surging_check').is(':checked') && $('#surging_options').val() == 0){
         toastr.error('Kindly choose serging type', {
@@ -1504,6 +1539,45 @@ function add_cut_pieces() {
         data: $data,
         success: function (data) {
             if (data.cut_piece.OutPut.Success) {
+ 
+                        const cutPieces = data?.cut_piece?.OutPut?.AddCutPieces || [];
+
+                        let maxCPTempLineNo = 0;
+
+                         if (cutPieces.length > 0) {
+                        maxCPTempLineNo = Math.max(
+                        ...cutPieces.map(piece => Number(piece.CPTempLine_No) || 0)
+                        );
+                        }
+                        $("#iduse").val(maxCPTempLineNo);
+
+                        console.log('data i am use:' ,maxCPTempLineNo);
+                        console.log('value get sved',$("#iduse").val());
+                        let val = $("#iduse").val();
+                        $("#iduse").val("");
+
+
+                          console.log(`after doing all the thing vale is acl ${actual_length} and inL ${length_inch} widthininches ${width_inch} and width acual ${actual_width}  and flag is ${val}` );
+                             var selectedOption = $('#surging_options').find('option:selected');
+                            let charge = selectedOption.attr('charges');
+                            if(charge)
+                            {
+                            let widthINinch=(actual_width*12)+width_inch;
+                            let lengthINinch=(actual_length*12)+length_inch;
+                            console.log(`data i am going to load is ${widthINinch} and ${lengthINinch}`);
+                               let obj={
+                                id:val,
+                                cuttingCharges:parseFloat($('#unit-price').val()),
+                                length:lengthINinch,
+                                width:widthINinch,
+                                charges:charge,
+                               }
+                               console.log(`our length i save is ${obj.length} widht is ${obj.width}`);
+                                savedata(obj);
+                            
+                            }
+
+
                 $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
                 var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
                 var sizes = [];
@@ -1620,13 +1694,13 @@ function add_cut_pieces() {
 
                 $("#ats-qty").val(totalSqftPrice.toFixed(2));
                 $('#max-width').text(`${mxlenf}'-${mxlen % 12}''`);
-                updatePrices();
+                
 
                 divContent += `</div>`;
 
                 $('#cut_piece_parent').html(divContent);
                 $('#size_price').val(JSON.stringify(sizes));
-
+                updatePrices();
                 item_object.CutPieces = data['cut_piece']['OutPut']['AddCutPieces'];
                 $('#cut_pieces_json').val(JSON.stringify(data['cut_piece']['OutPut']['AddCutPieces']));
                 $('#item_json').val(JSON.stringify(item_object));
@@ -1656,6 +1730,7 @@ function add_cut_pieces() {
 
 function removeCutPiece(id, cut_piece_id, roll_id, line_no, lenghtStatus, lengthfeet, widthfeet) {
     input_lenght_ats -= lengthfeet;
+    removeSurgObject(line_no);
     if (lenghtStatus != 'F') {
         toastr.error('Remnant cannot be removed', {
             hideDuration: 10000,
@@ -1789,12 +1864,13 @@ function removeCutPiece(id, cut_piece_id, roll_id, line_no, lenghtStatus, length
 
                     $("#ats-qty").val(totalSqftPrice.toFixed(2));
                     $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
-                    updatePrices();
+                    
 
                     divContent += `</div>`;
 
                     $('#cut_piece_parent').html(divContent);
                     $('#size_price').val(JSON.stringify(sizes));
+                    updatePrices();
                     item_object.CutPieces = response['OutPut']['AddCutPieces'];
                     $('#cut_pieces_json').val(JSON.stringify(response['OutPut']['AddCutPieces']));
                     $('#item_json').val(JSON.stringify(item_object));
@@ -1845,7 +1921,9 @@ function updatePrices() {
     let extpriceRug = $("#rug_pad_price").val() * $("#ats-qty").val();
 
     console.log('extPrice',extPrice);
-
+    console.log(`finaly price is ${extPrice}`);
+    let otherCharges=calculateTotalCharges();
+    extPrice=extPrice+otherCharges;
     var formatExt =  extPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     $("#sq-ext").val(formatExt);
     $('#without-format-sq-ext').val(parseFloat(extPrice).toFixed(2));
@@ -2428,6 +2506,33 @@ $('select[name="ship_via_id"]').on('change', function() {
     $('#state_dropdown').trigger('change');
 });
 
+
+window.onload = function () {
+    document.getElementById('surgingHide').value = '';
+};
+
+function removeSurgObject(idToRemove) {
+    let size= $('#surgingHide').val();
+    const array = JSON.parse(size);
+  const newarray=array.filter(obj => obj.id !== idToRemove);
+  $('#surgingHide').val(JSON.stringify(newarray));
+}
+function calculateTotalCharges(){
+    let jsonArray=$('#surgingHide').val();
+    if(!jsonArray){
+        return 0;
+    }
+    newArr=[];
+    const myarray=JSON.parse(jsonArray);
+    myarray.forEach(obj => {
+        console.log(`width is ${obj.width} and length is ${obj.length} and charges are ${obj.charges} and cutting chrge are ${obj.cuttingCharges}`)
+      newArr.push((((( obj.width+obj.length)*2)/12)*obj.charges)+obj.cuttingCharges);
+    });
+    console.log("my array is :" , newArr);
+    const sum = newArr.reduce((total, current) => total + current, 0);
+    console.log(`price i got is ${sum}`);
+    return sum;
+}
 </script>
 @endsection
 

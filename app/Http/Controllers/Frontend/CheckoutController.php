@@ -564,33 +564,33 @@ class CheckoutController extends FrontendController
 
                 $cart_data['shipping']['SO_Number'] = $result['ObjectID'];
 
-                try {
+                // try {
 
-                    if (!empty($cart_data['shipping']['Email'])) {
-                           $cart_data_email = $cart_data['shipping']['Email'];
-                           SendMail::dispatch( [
-                               'data'     => $cart_data,
-                               'slug'     => "Order Confirmed",
-                               'email'    => [$cart_data_email, 'techbugs06@gmail.com'],
-                               'template' => 'email.order-confirmation',
-                                //'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
-                           ] );
-                           prr($cart_data['shipping']['Email']);
-                           prr(" :: Shipping Email Sent :: ");
-                    }
+                //     if (!empty($cart_data['shipping']['Email'])) {
+                //            $cart_data_email = $cart_data['shipping']['Email'];
+                //            SendMail::dispatch( [
+                //                'data'     => $cart_data,
+                //                'slug'     => "Order Confirmed",
+                //                'email'    => [$cart_data_email, 'techbugs06@gmail.com'],
+                //                'template' => 'email.order-confirmation',
+                //                 //'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+                //            ] );
+                //            prr($cart_data['shipping']['Email']);
+                //            prr(" :: Shipping Email Sent :: ");
+                //     }
 
-                       SendMail::dispatch( [
-                           'data'     => $cart_data,
-                           'slug'     => "Order Confirmed Official",
-                           'email'    => ConstantsController::ORDER_NOTIFICATION,
-                           'template' => 'email.order-confirmation',
-                           'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
-                       ] );
+                //        SendMail::dispatch( [
+                //            'data'     => $cart_data,
+                //            'slug'     => "Order Confirmed Official",
+                //            'email'    => ConstantsController::ORDER_NOTIFICATION,
+                //            'template' => 'email.order-confirmation',
+                //            'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+                //        ] );
 
-                    prr(" :: Order Acknowledgment Email Sent :: ");
-                } catch (\Exception $e) {
-                    prr("Order Acknowledgment Email Exception :: " . $e->getMessage());
-                }
+                //     prr(" :: Order Acknowledgment Email Sent :: ");
+                // } catch (\Exception $e) {
+                //     prr("Order Acknowledgment Email Exception :: " . $e->getMessage());
+                // }
                 // }
             } else {
                 $order_payment = $this->order_payment_model->updateOrCreate(
@@ -606,29 +606,29 @@ class CheckoutController extends FrontendController
                     // $response['success'] = 1;
                     // $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash;
 
-                    try {
-                        $order_data = [
-                            'hash' => $order_payment_hash,
-                            'order-detail' => serialize([$headers, $itemDetail])
-                        ];
+                    // try {
+                    //     $order_data = [
+                    //         'hash' => $order_payment_hash,
+                    //         'order-detail' => serialize([$headers, $itemDetail])
+                    //     ];
 
-                       SendMail::dispatch( [
-                           'data'     => $order_data,
-                           'slug'     => 'Web Hook Order',
-                           'email'    => ConstantsController::WEB_HOOK_EMAIL,
-                           'template' => 'email.web_hook_email'
-                       ] );
-                        prr(" :: WEB_HOOK Email Sent :: ");
-                        if(empty($quoteCartData)){
-                            $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', '', true);
-                        }
-                        $response['success'] = 1;
-                        $response['webhook'] = 1;
-                        $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash . '</br>';
+                    //    SendMail::dispatch( [
+                    //        'data'     => $order_data,
+                    //        'slug'     => 'Web Hook Order',
+                    //        'email'    => ConstantsController::WEB_HOOK_EMAIL,
+                    //        'template' => 'email.web_hook_email'
+                    //    ] );
+                    //     prr(" :: WEB_HOOK Email Sent :: ");
+                    //     if(empty($quoteCartData)){
+                    //         $this->cart_model->remove_cart_item(Auth::user()->id, (new Cart())->get_active_cart_customer(), 0, 0, '', '', true);
+                    //     }
+                    //     $response['success'] = 1;
+                    //     $response['webhook'] = 1;
+                    //     $response['msg'] = 'You order is processed and you will get the confirmation soon. <br> Your order reference is: ' . $order_payment_hash . '</br>';
 
-                    } catch (\Exception $e) {
-                        prr("Mail Exception: " . $e->getMessage());
-                    }
+                    // } catch (\Exception $e) {
+                    //     prr("Mail Exception: " . $e->getMessage());
+                    // }
                 } else {
                     //dd($order_payment_hash);
                     $this->finalize_payment($order_payment, $order_payment_hash, $requestDataArray, 'void');

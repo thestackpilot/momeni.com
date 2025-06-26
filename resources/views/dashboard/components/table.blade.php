@@ -8,7 +8,7 @@ use App\Http\Controllers\CommonController;
 $tabs = [];
 if ( isset($tabular) && $tabular == 'yes' ) {
     // $tabs = ['Pending Orders', 'Open Orders', 'Back Orders', 'Complete Orders'];
-    $tabs = ['All', 'Open', 'Shipped', 'Cancel', 'Shipping In Process'];
+    $tabs = ['All', 'Open','Shipping In Process', 'Shipped', 'Cancel' ];
     /*
     foreach($table['tbody'] as $row ) {
         if ( isset($row['tab']) && !in_array($row['tab'], $tabs) ) {
@@ -59,6 +59,20 @@ function get_table( $table, $tab = '' ) {
                             $table_body .= '
                             <button class="btn btn-sm btn-primary '.$reportbuttonClass.'" type="button">'.$other_actions['label'].'</button>
                             <span class="other-row-details" style="display: none !important;">'.json_encode($row['other_actions_details']).'</span>
+                            ';
+                        }
+                    }
+                    $table_body .= '</td>';
+                }
+                else if ($key == 'bol' && isset($row['bol'])) { 
+                           
+                    $table_body .= '<td>';
+                    foreach($row['bol'] as $BOL) {
+                        if( $BOL['type'] == 'modal') {
+                            
+                            $table_body .= '
+                            <button class="btn btn-sm btn-primary other-details abc" type="button">'.$BOL['label'].'</button>
+                            
                             ';
                         }
                     }
@@ -266,7 +280,7 @@ function get_table( $table, $tab = '' ) {
                     @endforeach
                     $('.table.data-table:visible').DataTable().destroy();
                     $('.table.data-table:visible').dataTable({
-                        'pageLength': 25,
+                        'pageLength': 10,
                         // 'dom': 'Bfrtip',
                         // 'buttons': [
                         //     'copy', 'csv', 'excel', 'pdf', 'print'
@@ -282,7 +296,7 @@ function get_table( $table, $tab = '' ) {
                             "dataSrc": function(json) {
                                 var data = [];
                                 console.log('json',json);
-
+                                
                                 for (var i = 0; i < json.data.length; i++) {
                                     if (
                                         '{{$tabular ?? ""}}' == 'yes' &&
@@ -303,6 +317,13 @@ function get_table( $table, $tab = '' ) {
                                         json.data[i]['other_actions'] = `
                                             <button class="btn btn-sm btn-primary ${reportbuttonClass}" type="button">${json.data[i]['other_actions'][0]['label']}</button>
                                             <span class="other-row-details" style="display: none !important;">${JSON.stringify(json.data[i]['other_actions_details'])}</span>
+                                        `;
+                                    }
+                                    if (json.data[i]['bol'] && json.data[i].bol.length > 0 && json.data[i]['bol'][0]['type']) {
+                                        var cls=json.data[i]['status']==='Closed'? "":"d-none";
+                                        json.data[i]['bol'] = `
+                                            <button class="btn btn-sm btn-primary ${cls}" onclick="ViewMultiDocumentsReport(${i})" type="button">${json.data[i]['bol'][0]['label']}</button>
+                                            
                                         `;
                                     }
 
@@ -478,5 +499,56 @@ function get_table( $table, $tab = '' ) {
         });
 
     });
+
+    function ViewMultiDocumentsReport(index) {
+    let Orders=@json($view_orders['Orders']);
+    console.log('list of orders are',Orders);
+    let BOLNo=Orders[index]['Header']['BOLNOs'];
+    let MenuTags = 'ViewBOL';
+            $('#loader-container').css('display', 'block');
+        //    const url = `/ViewMultiDocumentsReport/${MenuTags}/${BOLNo}`;
+        const urls = "{{ route('dashboard.ViewMultiDocumentsReport') }}";
+        const url = `${urls}?MenuTags=${MenuTags}&BOLNo=${BOLNo}`;
+            $.ajax({
+                url: url,
+                type: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                success: function(response) {
+                    $('#loader-container').css('display', 'none');
+                    console.log('Response', response);
+                    $(".other-detail-modal").modal("show");
+                    var modalBody = $(".modal-body");
+                    $(".other-detail-modal-body").empty();
+                    var obj = document.createElement('object');
+                    obj.style.width = '100%';
+                    obj.style.height = '842pt';
+                    obj.type = 'application/pdf';
+                    obj.data = 'data:application/pdf;base64,' + response;
+                    document.body.appendChild(obj);
+                    //   console.log(obj);
+                    $(".other-detail-modal-body").append(obj);
+
+                    var link = document.createElement('a');
+                    link.innerHTML = 'Download Report';
+                    link.className = 'btn btn-primary my-3 py-3';
+                    link.download = 'Report.pdf';
+                    link.href = 'data:application/octet-stream;base64,' + response;
+                    document.body.appendChild(link);
+                    //$(".other-detail-modal-body").append(link);
+                },
+                error: function( error) {
+                    console.log('something went wrong');
+                    $('#loader-container').css('display', 'none');
+                    //  console.error("Error fetching", error);
+                }
+            });
+        }
+   
+
+
 </script>
 @endsection

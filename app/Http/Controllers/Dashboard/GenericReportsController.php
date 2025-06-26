@@ -53,7 +53,7 @@ class GenericReportsController extends DashboardController
         View::share( 'active_customer', $active_customer );
         View::share( 'customers', $customers );
         View::share( 'company_credit', $company_credit );
-
+ //dd($company_credit);
         $report_type = isset( $request->report_type ) && $request->report_type ? $request->report_type : 'credit-memos';
         // die($report_type);
         switch ( $report_type )
@@ -496,6 +496,7 @@ class GenericReportsController extends DashboardController
             }
             // echo "<pre>" . print_r($request->all(), 1). "</pre>";
             $memos = $this->ApiObj->Get_DebitMemos( $request->customer, $request->from_date, $request->to_date, $request->invoice_number, $request->vendor, $page, $page_size );
+                    // dd($memos);
             $table = array( 'thead' => [
                 'memo_number'    => 'Memo Number',
                 // 'customer_id'    => 'Customer ID',
@@ -794,10 +795,11 @@ class GenericReportsController extends DashboardController
             else
             {
                 $page      = 1;
-                $page_size = 25;
+                $page_size = 10;
             }
 
             $view_orders = $this->ApiObj->View_BL_Order( $request->customer, $request->external_number, $request->from_date, $request->to_date, $request->sales_rep, $page, $page_size, $request->customer_po, $request->order_number );
+//  dd($view_orders['Orders']);
             $table       = array( 'thead' => [
                 'order_no'     => 'Order Number',
                 'customer_id'  => 'Customer ID',
@@ -807,7 +809,8 @@ class GenericReportsController extends DashboardController
                 'status'       => 'Status',
                 'order_date'   => 'Order Date',
                 'actions'      => 'Actions',
-                'other_actions' => 'Reports'
+                'other_actions' => 'Reports',
+                'bol'=>'BOL',
             ], 'tbody' => [] );
 
             if ( isset( $view_orders['Orders'] ) )
@@ -885,6 +888,7 @@ class GenericReportsController extends DashboardController
                             ]
                         ],
                         'other_actions' => [['type' => 'modal', 'label' => 'View Report', 'module' => 'Bl Order']],
+                        'bol' => (isset( $view_order['Header']['BOLNOs'] ) &&  ($view_order['Header']['BOLNOs']>0))?[['type' => 'modal', 'label' => 'View BOL']]:[],
                         'other_actions_details' => [
                             'OrderNo'   => $view_order['Header']['OrderNo'],
                         ],
@@ -921,7 +925,7 @@ class GenericReportsController extends DashboardController
                 'type'        => 'date',
                 'attribues'   => ' data-required="true" ',
                 'placeholder' => '',
-                'value'       => $request->from_date ? $request->from_date : CommonController::get_date_format( '-1 month' )
+                'value'       => $request->from_date ? $request->from_date : CommonController::get_date_format( '-60 month' )
             ],
             [
                 'title'       => 'To Date',
@@ -981,7 +985,7 @@ class GenericReportsController extends DashboardController
             else
             {
                 $page      = 1;
-                $page_size = 25;
+                $page_size = 10;
             }
 
             $view_orders = $this->ApiObj->View_Order( $request->customer, $request->external_number, $request->from_date, $request->to_date, $request->sales_rep, $page, $page_size, $request->customer_po, $request->order_number );
@@ -993,8 +997,9 @@ class GenericReportsController extends DashboardController
                 'total_qty'    => 'Total Quantity',
                 'status'       => 'Status',
                 'order_date'   => 'Order Date',
-                'actions'      => 'Actions',
-                'other_actions' => 'Reports',
+                'actions'      => 'Order Details',
+                'other_actions' => 'Order PDF',
+                'bol'=>'BOL'
             ], 'tbody' => [] );
 
             if ( isset( $view_orders['Orders'] ) )
@@ -1013,6 +1018,8 @@ class GenericReportsController extends DashboardController
                         'order_date'   => isset( $view_order['Header']['OrderDate'] ) ? CommonController::get_date_format( $view_order['Header']['OrderDate'] ) : 'N/A',
                         'actions'      => [['type' => 'modal', 'label' => 'View Details']],
                         'other_actions' => [['type' => 'modal', 'label' => 'View Report', 'module' => 'Other']],
+                        'bol'           => (isset( $view_order['Header']['BOLNOs'] ) &&  ($view_order['Header']['BOLNOs']>0))?[['type' => 'modal', 'label' => 'View BOL']]:[],
+
                         'other_actions_details' => [
                             'OrderNo'   => $view_order['Header']['OrderNo'],
                         ],
@@ -1108,7 +1115,7 @@ class GenericReportsController extends DashboardController
                 'type'        => 'date',
                 'attribues'   => ' data-required="true" ',
                 'placeholder' => '',
-                'value'       => $request->from_date ? $request->from_date : CommonController::get_date_format( '-1 month' )
+                'value'       => $request->from_date ? $request->from_date : CommonController::get_date_format( '-60 month' )
             ],
             [
                 'title'       => 'To Date',
@@ -1576,5 +1583,25 @@ class GenericReportsController extends DashboardController
         View::share( 'reports_title', $reports_title );
 
         return view( 'dashboard.bl-sales-history' );
+    }
+   public function ViewMultiDocumentsReport(Request $request)
+{  
+    
+     $MenuTag = $request->has('MenuTags') ? $request->MenuTags : 'ViewBOL';
+     $DocumentNo = $request->has('BOLNo') ? $request->BOLNo : 0000;
+    try{
+         $report = $this->ApiObj->ViewMultiDocumentsReport($MenuTag, $DocumentNo);
+    //  dd($report['OutPut']['ReportData']);
+    if( $report['OutPut']['ReportData'] )
+            {
+                View::share( 'ReportData', $report['OutPut']['ReportData'] );
+                return $report['OutPut']['ReportData'];
+            }
+        }
+        
+         catch (\Exception $e) {
+            Log::error($e);
+            return response()->json(['error' => 'An error occurred. Please try again later.']);
+        }
     }
 }

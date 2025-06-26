@@ -110,7 +110,7 @@
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Twidth"
-                                                                           id="Twidth" placeholder="" disabled
+                                                                           id="Twidth" placeholder="" disabled name="Twidth" value=""
                                                                            style="text-align:right;" min="0" >
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">
@@ -139,7 +139,7 @@
                                                                         <option value="11">11</option>
                                                                     </select> --}}
                                                                     <input type="number" class="form-control TwidthInch"
-                                                                           id="TwidthInch" placeholder="" disabled
+                                                                           id="TwidthInch" placeholder="" disabled name="TwidthInch" value=""
                                                                            style="text-align:right;" min="0" max="11">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text">
@@ -160,7 +160,7 @@
                                                             <div class="col-6">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control Tlength"
-                                                                           id="Tlength" placeholder=""
+                                                                           id="Tlength" placeholder="" name="Tlength" value=""
                                                                            style="text-align:right;" min="0">
                                                                     <div class="input-group-prepend">
                                                                         <div class="input-group-text"><strong>
@@ -334,6 +334,8 @@
                                         <input type="text" name="rug_pad_id" id="rug_pad_id" value="{{ $item['ULTPad'] }}">
                                         <input type="text" name="rug_pad_price" id="rug_pad_price" value="">
                                         <input type="text" name="rug_pad_price_ext" id="rug_pad_price_ext" value="">
+                                        <input type="text" id="surgingHide" name="surgingHide" value="">
+                                        <input type="text" id="iduse" name="iduse" value="">
                                     </div>
                                 </div>
                             </div>
@@ -1311,6 +1313,7 @@
             console.log(cut_piece_id);
             console.log(roll_id);
             console.log(line_no);
+            removeSurgObject(line_no);
             console.log(lenghtStatus);
             console.log(lengthfeet);
             console.log(widthfeet);
@@ -1450,12 +1453,14 @@
 
                             $("#ats-qty").val(totalSqftPrice.toFixed(2));
                             $('#max-width').text(`${mxlenf}'-${mxlen % 12}'`);
-                            updatePrices();
+                            
 
                             divContent += `</div>`;
 
                             $('#cut_piece_parent').html(divContent);
                             $('#size_price').val(JSON.stringify(sizes));
+                           updatePrices();
+
                             item_object.CutPieces = response['OutPut']['AddCutPieces'];
                             $('#cut_pieces_json').val(JSON.stringify(response['OutPut']['AddCutPieces']));
                             $('#item_json').val(JSON.stringify(item_object));
@@ -1489,8 +1494,38 @@
 
         let input_lenght_ats = 0;
         let added_cut_pieces = [];
+function savedata(newObj) {
+    
+  let inputId = "surgingHide";
+  const input = document.getElementById(inputId);
 
+  let val = input.value.trim();
+  let arr;
+
+  if (!val) {
+    // Empty input, create new array with newObj
+    arr = [newObj];
+    console.log('my array is ', arr);
+  } else {
+    try {
+      // Parse existing JSON string
+      arr = JSON.parse(val);
+      // Make sure arr is an array before pushing
+      if (!Array.isArray(arr)) {
+        arr = [arr];
+      }
+    } catch (e) {
+      // If parsing fails, reset to new array
+      arr = [];
+    }
+    arr.push(newObj);
+  }
+
+  // Save updated array back as JSON string
+  input.value = JSON.stringify(arr);
+}
         function add_cut_pieces() {
+            console.log('i am callign add_cut_piccc');
             if($('#surging_check').is(':checked') && $('#surging_options').val() == 0){
                 toastr.error('Kindly choose serging type', {
                     hideDuration: 10000,
@@ -1577,8 +1612,45 @@
                 success: function (data) {
                     if (data.cut_piece.OutPut.Success) {
                         console.log('response cut pieces');
+                        
+                        const cutPieces = data?.cut_piece?.OutPut?.AddCutPieces || [];
 
-                        console.log(data['cut_piece']['OutPut']['AddCutPieces']);
+                        let maxCPTempLineNo = 0;
+
+                         if (cutPieces.length > 0) {
+                        maxCPTempLineNo = Math.max(
+                        ...cutPieces.map(piece => Number(piece.CPTempLine_No) || 0)
+                        );
+                        }
+                        $("#iduse").val(maxCPTempLineNo);
+
+                        console.log('data i am use:' ,maxCPTempLineNo);
+                        console.log('value get sved',$("#iduse").val());
+                        let val = $("#iduse").val();
+                        $("#iduse").val("");
+
+
+                          console.log(`after doing all the thing vale is acl ${actual_length} and inL ${length_inch} widthininches ${width_inch} and width acual ${actual_width}  and flag is ${val}` );
+                             var selectedOption = $('#surging_options').find('option:selected');
+                            let charge = selectedOption.attr('charges');
+                            if(charge)
+                            {
+                            let widthINinch=(actual_width*12)+width_inch;
+                            let lengthINinch=(actual_length*12)+length_inch;
+                            console.log(`data i am going to load is ${widthINinch} and ${lengthINinch}`);
+                               let obj={
+                                id:val,
+                                cuttingCharges:parseFloat($('#unit-price').val()),
+                                length:lengthINinch,
+                                width:widthINinch,
+                                charges:charge,
+                               }
+                               console.log(`our length i save is ${obj.length} widht is ${obj.width}`);
+                                savedata(obj);
+                            
+                            }
+
+                        console.log(data['cut_piece']['OutPut']['AddCutPieces'])
                         $("#TempSalesOrderNo").val(data['cut_piece']['OutPut']['AddCutPieces'][0]['TempSalesOrderNo'])
                         var divContent = '<input type="hidden" id="size_price" name="size_price[]" value=""></input<div>';
                         var sizes = [];
@@ -1708,13 +1780,13 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
                       var inches=data['cut_piece']['OutPut']['AddCutPieces'][0]['TotalUsedLength'];
                         $('#max-width').text(`${Math.floor(inches/12)}'-${inches % 12}''`);
                         // $('#max-width').text(`${mxlenf}'-${mxlen % 12}''`);
-                        updatePrices();
+                        
 
                         divContent += `</div>`;
 
                         $('#cut_piece_parent').html(divContent);
                         $('#size_price').val(JSON.stringify(sizes));
-
+                        updatePrices();
                         item_object.CutPieces = data['cut_piece']['OutPut']['AddCutPieces'];
                         $('#cut_pieces_json').val(JSON.stringify(data['cut_piece']['OutPut']['AddCutPieces']));
                         $('#item_json').val(JSON.stringify(item_object));
@@ -1814,8 +1886,9 @@ console.log("testing data is ",data['cut_piece']['OutPut']['AddCutPieces'][0]['T
             // Update the SQ-YRD Price ($) and EXT Price ($) fields
             // $("#sq-yrd").val(sqYrdPrice.toFixed(2));
             // $("#sq-ext").val(extPrice.toFixed(2));
-            console.log('extPrice',extPrice);
-
+            console.log(`finaly price is ${extPrice}`);
+            let otherCharges=calculateTotalCharges();
+            extPrice=extPrice+otherCharges;
             var formatExt =  extPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             $("#sq-ext").val(formatExt);
             $('#without-format-sq-ext').val(parseFloat(extPrice).toFixed(2));
@@ -2249,6 +2322,33 @@ console.log($('#size_price').val());
             });
         });
     });
+
+window.onload = function () {
+    document.getElementById('surgingHide').value = '';
+};
+
+function removeSurgObject(idToRemove) {
+    let size= $('#surgingHide').val();
+    const array = JSON.parse(size);
+  const newarray=array.filter(obj => obj.id !== idToRemove);
+  $('#surgingHide').val(JSON.stringify(newarray));
+}
+function calculateTotalCharges(){
+    let jsonArray=$('#surgingHide').val();
+    if(!jsonArray){
+        return 0;
+    }
+    newArr=[];
+    const myarray=JSON.parse(jsonArray);
+    myarray.forEach(obj => {
+        console.log(`width is ${obj.width} and length is ${obj.length} and charges are ${obj.charges} and cutting chrge are ${obj.cuttingCharges}`)
+      newArr.push((((( obj.width+obj.length)*2)/12)*obj.charges)+obj.cuttingCharges);
+    });
+    console.log("my array is :" , newArr);
+    const sum = newArr.reduce((total, current) => total + current, 0);
+    console.log(`price i got is ${sum}`);
+    return sum;
+}
 </script>
 
 @endsection

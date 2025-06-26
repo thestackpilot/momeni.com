@@ -24,7 +24,7 @@ class BroadloomController extends FrontendController
 
     public function index($id, $cust_id, $color_id, $item_name = '', $item_id = '')
     {
-        
+
         $itemController = new ItemController();
 
         $items = $itemController->generate_color_name($itemController->generate_image_urls($this->ApiObj->Get_Items("", $id, "", "", "", "", $color_id)));
@@ -211,6 +211,7 @@ class BroadloomController extends FrontendController
 
 
         $res = $this->ApiObj->Get_AddCutPiece($tempsalesorderno, $cutpieceId, $rollId, $itemId, $atslength, $totalWidth, $totalSqft, $cutType, $description, $charges, $sergingTypeNo, $locationId, $waste, $remnant, $available, $isremship, $serging, $line, $userremarks, $logged_user_no);
+        // dd($res);
         return [
             'cut_piece' => $res,
         ];

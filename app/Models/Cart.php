@@ -406,5 +406,9 @@ class Cart extends Model
             ['user_id' => $user_id, 'customer_id' => $customer_id, 'item_id' => $item_id, 'item_quantity' => $quantity]
         );
     }
+    public function clearRugpadPriceById($id)
+    {
+    return self::where('id', $id)->update(['rugpad_price' => null]);
+    }
 
 }
