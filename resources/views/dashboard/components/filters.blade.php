@@ -83,6 +83,8 @@ use App\Http\Controllers\CommonController;
             document.getElementById('search').click(); 
     }   
     });
-
+    setTimeout(() => {
+    localStorage.removeItem('searchOne')
+    },5000 );
 </script>
 @endsection

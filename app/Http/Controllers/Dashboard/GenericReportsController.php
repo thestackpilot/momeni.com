@@ -808,8 +808,8 @@ class GenericReportsController extends DashboardController
                 'total_qty'    => 'Total Quantity',
                 'status'       => 'Status',
                 'order_date'   => 'Order Date',
-                'actions'      => 'Actions',
-                'other_actions' => 'Reports',
+                'actions'      => 'Order Details',
+                'other_actions' => 'Order PDF',
                 'bol'=>'BOL',
             ], 'tbody' => [] );
 
