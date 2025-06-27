@@ -67,10 +67,24 @@ class AccountController extends DashboardController
     {
         $validated_data = $request->validate( [
             'existing-password' => 'required',
-            'new-password'      => 'required|min:8|max:12',
-            'confirm-password'  => 'required|min:8|max:12'
-        ] );
+            'new-password'      => 'required|min:15|max:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
+            'confirm-password'  => 'required|min:15|max:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
+        ],[
+            'password.regex'    => 'Password must be 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one symbol like .',
+        ]);
 
+        
+            if ($validated_data['existing-password']==$validated_data['new-password'])
+            {
+                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Password must not be the same as your previous.'] );
+            }
+        
+        
+            if (Auth::user()->email==$validated_data['new-password'])
+            {
+                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Password must not be the same as your Username.'] );
+            }
+        
         if ( isset(Auth::user()->email) && Auth::user()->email )
         {
             if ( ! Auth::attempt( ['email' => Auth::user()->email, 'password' => $validated_data['existing-password']] ) )
