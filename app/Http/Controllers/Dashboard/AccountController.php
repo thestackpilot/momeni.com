@@ -67,10 +67,11 @@ class AccountController extends DashboardController
     {
         $validated_data = $request->validate( [
             'existing-password' => 'required',
-            'new-password'      => 'required|min:15|max:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
-            'confirm-password'  => 'required|min:15|max:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
+            'new-password'      => 'required|min:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
+            'confirm-password'  => 'required|min:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
         ],[
-            'password.regex'    => 'Password must be 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one symbol like .',
+            'confirm-password.regex'    => 'Password must be 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one Special character.',
+            'new-password.regex'    => 'Password must be 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one Special character.',
         ]);
 
         
