@@ -70,14 +70,14 @@ class AccountController extends DashboardController
             'new-password'      => 'required|min:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
             'confirm-password'  => 'required|min:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
         ],[
-            'confirm-password.regex'    => 'Password must be 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one Special character.',
-            'new-password.regex'    => 'Password must be 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one Special character.',
+            'confirm-password.regex'    => 'Password must be at least 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one Special character.',
+            'new-password.regex'    => 'Password must be at least 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one Special character.',
         ]);
 
         
             if ($validated_data['existing-password']==$validated_data['new-password'])
             {
-                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Password must not be the same as your previous.'] );
+                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Password must not be the same as your previous Password.'] );
             }
         
         
@@ -86,20 +86,6 @@ class AccountController extends DashboardController
                 return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Password must not be the same as your Username.'] );
             }
         
-        if ( isset(Auth::user()->email) && Auth::user()->email )
-        {
-            if ( ! Auth::attempt( ['email' => Auth::user()->email, 'password' => $validated_data['existing-password']] ) )
-            {
-                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Wrong details for existing password.'] );
-            }
-        }
-        else
-        {
-            if ( ! Auth::attempt( ['customer_id' => Auth::user()->customer_id, 'password' => $validated_data['existing-password']] ) )
-            {
-                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Wrong details for existing password.'] );
-            }
-        }
 
         if ( $validated_data['new-password'] != $validated_data['confirm-password'] )
         {
@@ -123,6 +109,11 @@ class AccountController extends DashboardController
             }
 
         }
+        if ( !$updated_in_spars )
+        {
+            return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => $api_response["Message"]] );
+        }
+
 
         if ( $updated_in_spars )
         {
