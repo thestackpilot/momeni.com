@@ -76,7 +76,9 @@ use App\Http\Controllers\CommonController;
         const isOrderPage = window.location.href.includes('dashboard/view-order') || 
                     window.location.href.includes('dashboard/bl/view-order');
 
-    if (noTableResponsive && isOrderPage) {
+    if (noTableResponsive && isOrderPage && !localStorage.getItem('searchOne')) {
+            // Store a key-value pair
+            localStorage.setItem('searchOne', true);
             console.log(window.location.href);
             document.getElementById('search').click(); 
     }   
