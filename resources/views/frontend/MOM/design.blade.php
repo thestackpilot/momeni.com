@@ -219,21 +219,26 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
 @endif
 <script>
     $(document).ready(function() {
+        console.log("desinge page");
         var page = 2;
         var currentscrollHeight = 0;
         var currentURL = window.location.href;
         $(window).scroll(function() {
+            console.log("try scrolling ")
             if (currentURL != window.location.href) {
                 currentURL = window.location.href;
                 page = 2;
+                console.log('going an other page');
             }
 
-            if (page < 0 || typeof $('#sub_collections_wrapper .product-listing .grid-item').length === 'undefined' || $('#sub_collections_wrapper .product-listing .grid-item').length < 1) return;
+            if (page < 0 || typeof $('#sub_collections_wrapper .product-listing .grid-item').length === 'undefined' || $('#sub_collections_wrapper .product-listing .grid-item').length < 0) {console.log($('#sub_collections_wrapper .product-listing .grid-item').length); return }
             try {
+                console.log("what is this ");
                 const scrollHeight = $(document).height();
                 const scrollPos = Math.floor($(window).height() + $(window).scrollTop());
                 const isBottom = (scrollHeight - $('.footer-area-wrapper').height()) < scrollPos;
-                if (isBottom && currentscrollHeight < scrollHeight && $('.product-listing .grid-item').length > 29) {
+                console.log(`is Bottom ${isBottom} scrollHeight is ${scrollHeight} and current is ${currentscrollHeight} and this is last ${$('.grid-item').length}`);
+            if (isBottom && currentscrollHeight < scrollHeight && $('.product-listing').length ) {
                     $('.pageLoader').removeClass('d-none');
                     var pagingURL = window.location.href;
                     if (`{{$with_title}}` == 1)
@@ -246,8 +251,14 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                     }, function(response) {
                         console.log('response: ', response);
                         if (response.success && response.data.Designs.length) {
-                            response.data.Designs.forEach((design) => {
-                                $(`
+                                                        let row;
+                            response.data.Designs.forEach((design, index) => {
+                                // Create a new row every 3 items
+                                if (index % 3 === 0) {
+                                    row = $('<div class="row"></div>');
+                                }
+
+                                const col = $(`
                                     <div class="col-md-4 grid-item">
                                         @if(!$with_title)
                                         <div class="carousel slide">
@@ -270,8 +281,16 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                                         </div>
                                         @endif
                                     </div>
-                                `).appendTo($('.product-listing'));
+                                `);
+
+                                row.append(col);
+
+                                // Append the row to the product-listing after 3 items or at the end
+                                if (index % 3 === 2 || index === response.data.Designs.length - 1) {
+                                    $('.product-listing').append(row);
+                                }
                             });
+
                             page++;
                         } else {
                             page = -1;
