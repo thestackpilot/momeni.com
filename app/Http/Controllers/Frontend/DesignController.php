@@ -147,6 +147,7 @@ class DesignController extends FrontendController
                 // die("<pre>".print_r(base64_decode( $filter ), 1)."</pre>");
                 // print_r($filter, 1);die();
         // die("<pre>".print_r( CommonController::escape_string( base64_decode( $filter ) ), 1)."</pre>");
+        //dd($this->ApiObj->Get_Designs( $id, CommonController::escape_string( base64_decode( $filter ), 1 ) ), $id );
         $collections     = $this->addDesignUrls( $this->ApiObj->Get_Designs( $id, CommonController::escape_string( base64_decode( $filter ), 1 ) ), $id ); //
         $main_collection = ( new MainCollectionController() )->get_main_collection( $id );
         $subCategory     = $this->active_theme_json->general->category_based_filters ? $this->checkSubcategoryForFilters( $filter ) : '';
@@ -155,6 +156,7 @@ class DesignController extends FrontendController
             isset( $subCategory['id'] ) ? $subCategory['id'] : '',
             $this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) )
         );
+        //dd($collections);
 //         print_r("<pre>");
 //         print_r($filters);
 // die();
