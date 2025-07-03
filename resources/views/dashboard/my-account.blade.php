@@ -108,13 +108,31 @@ use App\Http\Controllers\CommonController;
                               <div class="col-lg-12 col-sm-12 col-12 py-0">
                         <!-- TODO - ADD THEME CONDITION HERE -->
                         @if($active_theme_json->general->allow_sales_rep_details)
-                        @if ($active_customer)
+                        @if (1 || $active_customer)
                         <div class="p-3 account-content mb-4 py-5 lr-accountInfo">
                             <h1 class="section-title text-center mb-3 mt-0 font-ropa">
                                 Customer Information
                                 <i class="bi bi-info-circle" style="font-size: 20px;" data-toggle="tooltip" data-placement="top" title="This information is of the customer which is currently selected in the cart."></i>
                             </h1>
-                            <p style="font-size:24px;color: #EA7410;" class="px-2">{{$active_customer}}</p>
+
+                             @if ( $customers )
+                            <form class="d-flex" method="get">
+                                <div class="col-md-8 d-inline">
+                                    <select class="form-control" name="customer">
+                                        @foreach($customers as $customer)
+                                            <option value="{{$customer['value']}}" {{ $active_customer && $active_customer == $customer['value'] ? 'selected' : '' }}>{{$customer['label']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-primary w-100" id="getSelected" >Select</button>
+                                </div>
+                            </form>
+                            @else
+                            <p style="font-size:24px;color: #EA7410;" class="px-2">{{$active_customer ? $active_customer : 'You have a customer account.'}}</p>
+                            @endif
+                            {{-- <p style="font-size:24px;color: #EA7410;" class="px-2">{{$active_customer}}</p> --}}
+                            @if ($active_customer)
                             @if ($client_address && isset($client_address['CustomerAddress']))
                             <div class="d-flex flex-column mt-4 kinda-table">
                                 <div class="align-items-center d-flex justify-content-between">
@@ -155,6 +173,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
                             </div>
                             @endforeach
+                            @endif
                             @endif
                         </div>
                         @endif
@@ -479,6 +498,18 @@ use App\Http\Controllers\CommonController;
             $('.address-details-modal').modal('show');
         });
     });
-    
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('getSelected').addEventListener('click', function() {
+      const select = document.querySelector('select[name="customer"]');
+      const selectedCustomer = select.value;
+
+      if (selectedCustomer) {
+        const routeUrl = "{{ route('dashboard.accountinfo') }}";
+        window.location.href = `${routeUrl}?customer=${encodeURIComponent(selectedCustomer)}`;
+      } else {
+        alert('Please select a customer.');
+      }
+    });
+  });
 </script>
 @endsection
