@@ -21,29 +21,49 @@ class AccountController extends DashboardController
         $this->user_model = new User();
     }
 
-    public function account_information()
-    {
+    // public function account_information()
+    // {
        
-        $active_customer    = ( new Cart() )->get_active_cart_customer();
+    //     $active_customer    = ( new Cart() )->get_active_cart_customer();
+    //     $shipping_addresses = $parent = array();
+
+    //     if ( Auth::user()->parent_id )
+    //     {
+    //         $parent = $this->user_model->get_user( 'parent_id', Auth::user()->parent_id );
+    //     }
+
+    //     if ( $active_customer )
+    //     {
+    //         $shipping_addresses = $this->ApiObj->Get_CustomerAddresses( $active_customer );
+    //     }
+
+    //     return view( 'dashboard.account-information', [
+    //         'customers' => $this->get_customers_dropdown_options(0),
+    //         'client_address'  => $shipping_addresses,
+    //         'active_customer' => $active_customer,
+    //         'parent'          => $parent
+    //     ] );
+    // }
+  public function account_information(Request $request)
+    { 
+        $active_customer = $request->has('customer') ? $request->customer : (new Cart())->get_active_cart_customer();
         $shipping_addresses = $parent = array();
 
-        if ( Auth::user()->parent_id )
-        {
-            $parent = $this->user_model->get_user( 'parent_id', Auth::user()->parent_id );
+        if (Auth::user()->parent_id) {
+            $parent = $this->user_model->get_user('parent_id', Auth::user()->parent_id);
         }
 
-        if ( $active_customer )
-        {
-            $shipping_addresses = $this->ApiObj->Get_CustomerAddresses( $active_customer );
+        if ($active_customer) {
+            $shipping_addresses = $this->ApiObj->Get_CustomerAddresses($active_customer);
         }
-
-        return view( 'dashboard.account-information', [
-            'client_address'  => $shipping_addresses,
+        
+        return view('dashboard.account-information', [
+            'customers' => $this->get_customers_dropdown_options(0),
+            'client_address' => $shipping_addresses,
             'active_customer' => $active_customer,
-            'parent'          => $parent
-        ] );
+            'parent' => $parent
+        ]);
     }
-
     public function account_update( Request $request )
     {
 
@@ -85,7 +105,24 @@ class AccountController extends DashboardController
             {
                 return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Password must not be the same as your Username.'] );
             }
-        
+            
+        if(isset(Auth::user()->parent_id)){
+            if ( isset(Auth::user()->email) && Auth::user()->email )
+        {
+            if ( ! Auth::attempt( ['email' => Auth::user()->email, 'password' => $validated_data['existing-password']] ) )
+            {
+                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Wrong details for existing password.'] );
+            }
+        }
+        else
+        {
+            if ( ! Auth::attempt( ['customer_id' => Auth::user()->customer_id, 'password' => $validated_data['existing-password']] ) )
+            {
+                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Wrong details for existing password.'] );
+            }
+        }
+    }
+
 
         if ( $validated_data['new-password'] != $validated_data['confirm-password'] )
         {
@@ -280,11 +317,42 @@ class AccountController extends DashboardController
         }
 
         return view( 'dashboard.my-account', [
+            'customers' => $this->get_customers_dropdown_options(0),
             'client_address'  => $shipping_addresses,
             'active_customer' => $active_customer,
             'parent'          => $parent
         ] );
         
+    }
+
+     public function get_customers_dropdown_options( $include_all = 1 )
+    {
+        $options = [];
+
+// For Now
+        if ( $include_all )
+        {
+            $options[] = [
+                'value' => '',
+                'label' => 'All'
+            ];
+        }
+
+        if ( Auth::user() && Auth::user()->sales_rep_customers )
+        {
+            $sales_rep_customers = json_decode( Auth::user()->sales_rep_customers, true );
+
+            foreach ( $sales_rep_customers['Customers'] as $customer )
+            {
+                $options[] = [
+                    'value' => $customer['CustomerID'],
+                    'label' => "{$customer['CompanyName']} ({$customer['CustomerID']})"
+                ];
+            }
+
+        }
+
+        return $options;
     }
 
     public function update_account_cost_settings( $request )
