@@ -28,7 +28,24 @@ use App\Http\Controllers\CommonController;
                                 Customer Information
                                 <i class="bi bi-info-circle" style="font-size: 20px;" data-toggle="tooltip" data-placement="top" title="This information is of the customer which is currently selected in the cart."></i>
                             </h1>
-                            <p style="font-size:24px;color: #EA7410;" class="px-2">{{$active_customer}}</p>
+                                  @if ( $customers )
+                            <form class="d-flex" method="get">
+                                <div class="col-md-8 d-inline">
+                                    <select class="form-control" name="customer">
+                                        @foreach($customers as $customer)
+                                            <option value="{{$customer['value']}}" {{ $active_customer && $active_customer == $customer['value'] ? 'selected' : '' }}>{{$customer['label']}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary w-100" id="getSelected" >Select</button>
+                                </div>
+                            </form>
+                            @else
+                            <p style="font-size:24px;color: #EA7410;" class="px-2">{{$active_customer ? $active_customer : 'You have a customer account.'}}</p>
+                            @endif
+                            {{-- <p style="font-size:24px;color: #EA7410;" class="px-2">{{$active_customer}}</p> --}}
+                            @if ($active_customer)
                             @if ($client_address && isset($client_address['CustomerAddress']))
                             <div class="d-flex flex-column mt-4 kinda-table">
                                 <div class="align-items-center d-flex justify-content-between">
@@ -69,6 +86,7 @@ use App\Http\Controllers\CommonController;
                                 </div>
                             </div>
                             @endforeach
+                            @endif
                             @endif
                         </div>
                         @endif
