@@ -46,7 +46,8 @@ class AccountController extends DashboardController
     // }
   public function account_information(Request $request)
     { 
-        $active_customer = $request->has('customer') ? $request->customer : (new Cart())->get_active_cart_customer();
+        $active_customer = $request->has('customer') ? $request->customer : Auth::user()->customer_id;
+        // $active_customer = $request->has('customer') ? $request->customer : (new Cart())->get_active_cart_customer();
         $shipping_addresses = $parent = array();
 
         if (Auth::user()->parent_id) {
@@ -301,9 +302,10 @@ class AccountController extends DashboardController
         return view( 'dashboard.document', ['documents' => $documents, 'directory' => CommonController::readDirectory( public_path('documents')) ]); //  __DIR__ . '/../../../../public/documents')] );
     }
 
-    public function my_account()
+    public function my_account(Request $request)
     {
-         $active_customer    = ( new Cart() )->get_active_cart_customer();
+       //  $active_customer    = ( new Cart() )->get_active_cart_customer();
+       $active_customer = $request->has('customer') ? $request->customer : Auth::user()->customer_id;
         $shipping_addresses = $parent = array();
 
         if ( Auth::user()->parent_id )
@@ -452,10 +454,10 @@ class AccountController extends DashboardController
             $data[$key] = $value;
         }
 
-        $data['CustomerID'] = ( new Cart() )->get_active_cart_customer();
+        $data['CustomerID'] = Auth::user()->customer_id;
         $this->ApiObj->Get_CustomerAddressCreateOrUpdate( $data );
 
-        return redirect()->route( 'dashboard.accountinfo' )->with( 'message', ['type' => 'success', 'body' => 'Record updated...'] );
+        return redirect()->route( 'dashboard.myaccount' )->with( 'message', ['type' => 'success', 'body' => 'Record updated...'] );
     }
 
     public function update_password()
