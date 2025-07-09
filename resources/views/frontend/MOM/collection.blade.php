@@ -11,13 +11,13 @@ use App\Http\Controllers\CommonController;
     #fixedimg {
     min-width:25px !important;
     height: 150px !important;
-    max-width: 150px !important;
+
     
 }
 
 </style>
 @extends('frontend.'.$active_theme -> theme_abrv.'.layouts.app')
-@section('title',$main_collection['Description'] .' '. array_key_first($collections) .' Collections')
+@section('title',$main_collection['Description'] .' '. array_key_first($collections) .' '. (isset($pageData['title'])? $pageData['title']:""))
 @section('content')
 <div class="wrapper with-banner">
     @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
@@ -98,7 +98,7 @@ use App\Http\Controllers\CommonController;
                         
                         @else
 
-                            <h2 class="breadcrumb-title text-center section-title--center ">{{isset($sub_category) ? $sub_category : ((strcmp('RUGS & CARPETS', strtoupper($main_collection['Description'])) === 0) ? 'RUGS' : $main_collection['Description'])}}</h2>
+                            <h2 class="breadcrumb-title text-center section-title--center my-3">{{isset($sub_category) ? $sub_category : ((strcmp('RUGS & CARPETS', strtoupper($main_collection['Description'])) === 0) ? 'RUGS' : $main_collection['Description'])}}</h2>
                         
                          @endif
                             @endif
