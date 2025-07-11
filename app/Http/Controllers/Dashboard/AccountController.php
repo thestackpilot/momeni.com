@@ -91,8 +91,8 @@ class AccountController extends DashboardController
             'new-password'      => 'required|min:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
             'confirm-password'  => 'required|min:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
         ],[
-            'confirm-password.regex'    => 'Password must be at least 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one Special character.',
-            'new-password.regex'    => 'Password must be at least 15 characters and include at least one uppercase letter, one lowercase letter, one number, and one Special character.',
+            'confirm-password.regex'    => 'Confirm Password must contain at least one uppercase letter, one lowercase letter, one number, and one Special character.',
+            'new-password.regex'    => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one Special character.',
         ]);
 
         
