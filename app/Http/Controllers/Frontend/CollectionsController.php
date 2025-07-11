@@ -94,7 +94,14 @@ class CollectionsController extends FrontendController
 
     public function collection_with_filters( $id, $type, $filter )
     {
-        // die(print_r($this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) ));
+        $rehashFlag=0;
+        $rehashFlag=sizeof(( json_decode( base64_decode( $filter)))->Filters)-1;
+        $newFilter=$filter;
+        $object = new \stdClass();
+        $object->Filters[0]=((( json_decode( base64_decode( $newFilter)))->Filters[sizeof(( json_decode( base64_decode( $newFilter)))->Filters)-1]));
+        $json=((json_encode($object, JSON_UNESCAPED_SLASHES)));
+        $json = str_replace('"Filters":[', '"Filters": [', $json);
+        $finalFilter=base64_encode($json);
         $hash        = md5( json_encode( ['id' => join( '~', [$id, $type, $filter] ), 'method' => 'Get_'.$type, 'theme' => $this->active_theme->id] ) );
         $collectionID = json_decode(CommonController::escape_string( base64_decode( $filter )), true)['Filters'][0]['Values'][0];
         $collections = $this->addCollectionUrls( $this->ApiObj->Get_Collections_With_Filters( $id, $type, CommonController::escape_string( base64_decode( $filter ), 1 ) ), $id, $type, true, $collectionID );
@@ -109,7 +116,7 @@ class CollectionsController extends FrontendController
            }
         }
         $updated_content = $this->content_model->get_content( $this->active_theme->id, $hash );
-        $pageData=[];
+        $pageData=[]; 
         if ( $updated_content && $updated_content->content )
         {
             $content = json_decode( unserialize( $updated_content->content ), 1 );
@@ -158,7 +165,31 @@ else{
 
         $this->append_breadcrumbs( $main_collection['Description'], route( 'frontend.favourite', $id ) );
         $this->append_breadcrumbs( $type, route( 'frontend.collections', [$id, $type] ) );
-
+        if($rehashFlag){
+             $hash= md5( json_encode( ['id' => join( '~', [$id, $type, $finalFilter] ), 'method' => 'Get_'.$type, 'theme' => $this->active_theme->id] ) );
+        $updated_content = $this->content_model->get_content( $this->active_theme->id, $hash );
+        if ( $updated_content && $updated_content->content )
+        {
+            $content = json_decode( unserialize( $updated_content->content ), 1 );
+        if(isset($content['title'])){
+            $pageData['title']=$content['title'];
+        }
+        else{
+            $pageData['title']="";
+        }
+        if(isset($content['description'])){
+            $pageData["description"]=$content['description'];
+        }
+        else{
+            $pageData['description']="";
+        }
+        if(isset($content['image'])){
+            $pageData["image"]=$content['image'];
+        }
+        else{
+            $pageData['image']="";
+        }
+        }}
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.collection', [
             'pageData' =>$pageData,
             "setFilter"=>true,
@@ -190,7 +221,7 @@ else{
         $hash            = md5( json_encode( ['id' => join( '~', [$id, $type, ''] ), 'method' => 'Get_'.$type, 'theme' => $this->active_theme->id] ) );
         $collections     = $this->addCollectionUrls( $this->ApiObj->Get_Collections( $id, $type ), $id, $type, true, "" );
         $updated_content = $this->content_model->get_content( $this->active_theme->id, $hash );
-
+        
         // prr( $id );
         // prr( $collections );
 
