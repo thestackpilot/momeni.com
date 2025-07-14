@@ -38,7 +38,7 @@ $login_page = isset(Session::get('message')['referrer']) ? false : $login_page;
                 </div>
                 @endif
                 <div class="mb-3">
-                  <label for="email" class="form-label">Username</label>
+                  <label for="email" class="form-label">User Name</label>
                   <input type="text" name="email" required value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" id="email" aria-describedby="emailHelp" placeholder="Please enter your User ID">
                 </div>
                 <div class="mb-3">

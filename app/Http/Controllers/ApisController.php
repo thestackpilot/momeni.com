@@ -107,6 +107,8 @@ class ApisController extends RootController
     public function Get_Collections_With_Filters( $mainCollectionId = 1, $collectionType = "Collections", $Filters = '' )
     {
         list( $Filters, $OrderBy ) = ( new FilterController() )->get_sort_filter( $Filters );
+        if($Filters=="null"){
+            $Filters="";}
         $post_array              = array( 'MainCollectionID' => $mainCollectionId, 'Filters' => $Filters, 'OrderBy' => $OrderBy );
         prr( $post_array );
 
@@ -895,9 +897,15 @@ public function Get_BLShipViaList(){
 
     public function Get_AllBLItemsForOrderPlace()
     {
-        return $this->Post_API_Signature( 'Get_AllBLItemsForOrderPlace', 'Get All BL Items For Order Place', [], [], 1, 1, 1);
+        return $this->Post_API_Signature( 'Get_AllBLItemsForOrderPlace', 'Get All BL Items For Order Place', [], [], 0, 0, 0);
     }
-
+    // public function GetLoggedUserInformation()
+    // {
+    //     $post_array = [  
+    //         'UserID'=> Auth::user()->customer_id
+    //     ];
+    //     return $this->Post_API_Signature( 'GetLoggedUserInformation', 'Get Logged User Information', $post_array , [], 1, 1, 0);
+    // } 
     public function CheckBLQuotePrice($CustomerID, $ItemID, $SergingType, $CutLengthFeet, $CutLengthInches, $CutWidthFeet, $CutWidthInches, $RugPad)
     {
         $post_array = [

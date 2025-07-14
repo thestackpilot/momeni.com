@@ -59,7 +59,7 @@ style="background-color: rgba(0, 0, 0, 0.2); z-index: 9999;">
                                             
                                             <div class="col-md-6 col-12">
                                                     <div class="mb-3 sale_rep_box">
-                                                        <label class="form-label">Customer IDdddd</label>
+                                                        <label class="form-label">Customer ID</label>
                                                         <select class="form-control customer_id_sr" name="customer_id" id="customer_id">
                                                             <option disabled selected>Choose Customer</option>
                                                             @foreach ($customer as $single_customer)
