@@ -320,7 +320,7 @@ function get_table( $table, $tab = '' ) {
                                         `;
                                     }
                                     if (json.data[i]['bol'] && json.data[i].bol.length > 0 && json.data[i]['bol'][0]['type']) {
-                                        var cls=json.data[i]['status']==='Closed'? "":"d-none";
+                                        var cls=json.data[i]['status']==='Closed'? "":"";
                                         json.data[i]['bol'] = `
                                             <button class="btn btn-sm btn-primary ${cls}" onclick="ViewMultiDocumentsReport(${i})" type="button">${json.data[i]['bol'][0]['label']}</button>
                                             
