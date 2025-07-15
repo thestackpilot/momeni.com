@@ -94,7 +94,7 @@ class AccountController extends DashboardController
         ]);
 
         
-            if ($request->input("confirm-password")!=null && $request->input("confirm-password")==$validated_data['new-password'])
+            if ($request->input("confirm-password")!=null && $request->input("confirm-password")!==$validated_data['new-password'])
             {
                 return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Password and Confirm Password should be same.'] );
             }
