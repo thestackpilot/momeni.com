@@ -395,8 +395,13 @@ color: black !important;
                             
                              @elseif($item->is_bd_child == 1)
                               @php
-                                
-                                    array_push($ids, $prevId);
+                                // $cart -> cart_total+=number_format($cart -> cart_total, 2)+number_format($item->item_total, 2);
+                               // Assuming both are strings like "100.50" and "50.25"
+                               $cart_total = (float)str_replace(',', '', $cart->cart_total);
+                               $item_price = (float)str_replace(',', '', $item->item_total);
+                               $mini_total=$cart_total+$item_price;
+                                $cart->cart_total = $mini_total;
+                                array_push($ids, $prevId);
                                 @endphp
 
 <div
