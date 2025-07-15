@@ -89,13 +89,15 @@ class AccountController extends DashboardController
         $validated_data = $request->validate( [
             'existing-password' => 'required',
             'new-password'      => 'required|min:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
-            'confirm-password'  => 'required|min:15|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',
         ],[
-            'confirm-password.regex'    => 'Confirm Password must contain at least one uppercase letter, one lowercase letter, one number, and one Special character.',
             'new-password.regex'    => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one Special character.',
         ]);
 
         
+            if ($request->input("confirm-password")!=null && $request->input("confirm-password")==$validated_data['new-password'])
+            {
+                return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Password and Confirm Password should be same.'] );
+            }
             if ($validated_data['existing-password']==$validated_data['new-password'])
             {
                 return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'Password must not be the same as your previous Password.'] );
