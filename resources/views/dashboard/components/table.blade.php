@@ -152,7 +152,11 @@ function get_table( $table, $tab = '' ) {
     <div class="loader" style="border: 50px solid #f3f3f3; border-top: 50px solid #660000; border-radius: 50%; width: 100px; height: 100px; animation: spin 1s linear infinite;">
     </div>
 </div>
-
+{{-- <div><pre>
+@php
+    print_r(($view_orders));
+@endphp    
+</pre></div> --}}
 
 @section('styles')
 @parent
@@ -501,7 +505,7 @@ function get_table( $table, $tab = '' ) {
     });
 
     function ViewMultiDocumentsReport(index) {
-    let Orders=@json($view_orders['Orders']);
+    const orders = @json($view_orders['Orders'] ?? []);
     console.log('list of orders are',Orders);
     let BOLNo=Orders[index]['Header']['BOLNOs'];
     let MenuTags = 'ViewBOL';

@@ -258,7 +258,7 @@ color: black !important;
                 @endphp
                 <div class="col-sm-12 m-md-2 checkout-balance col-12 position-absolute">
                     <i class="close-icon icon-cross position-absolute quickcart-closer"> </i>
-                    <div class="checkout_items_wrap mt-4">
+                    <div class="checkout_items_wrap mt-4" style="overflow-x: hidden">
                         @foreach($cart -> items as $item)
                             @php
                                 if(isset($item -> item_data) && $item -> item_data) {
