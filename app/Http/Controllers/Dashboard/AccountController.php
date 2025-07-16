@@ -435,9 +435,14 @@ class AccountController extends DashboardController
             'data'           => serialize( json_encode( $request->all() ) ),
             'updated_at'     => date( 'Y-m-d H:i:s' )
         ];
-
+       $response= $this->ApiObj->UpdateLoggedUserInformation($request->all());
+       if($response['OutPut']['Success'])
+        {
         $this->user_model->update_user( $data, Auth::user()->id );
-
+        }
+        else{
+                return redirect()->route( 'dashboard.myaccount' )->with( 'message', ['type' => 'error', 'body' => 'Record updated failed'] );
+        }
         return redirect()->route( 'dashboard.myaccount' )->with( 'message', ['type' => 'success', 'body' => 'Record updated...'] );
     }
 

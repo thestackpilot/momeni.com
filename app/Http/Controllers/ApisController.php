@@ -895,9 +895,26 @@ public function Get_BLShipViaList(){
         return $this->Post_API_Signature( 'GetQuotationOrderDetailForOrderPlace', 'Get Quotation Order Detail For Order Place', $post_array, [], 1, 1, 0) ;
     }
 
+    public function UpdateLoggedUserInformation($data)
+    {
+
+        $post_array = [
+            "UserID" => (isset(Auth::user()->customer_id)? Auth::user()->customer_id :null),
+            "FirstName"=> (isset($data["firstname"])? $data["firstname"]:null),
+            "LastName"=> (isset($data["lastname"])? $data["lastname"]:null),
+            "Email"=> (isset($data["email"])? $data["email"]:null),
+            "Company"=> (isset($data["company"])? $data["company"]:null),
+            "OfficePhone"=> (isset($data["phone"])? $data["phone"]:null),
+            "Address"=> (isset($data["street_address"])? $data["street_address"]:null),
+            "PostalCode"=> (isset($data["postal_code"])? $data["postal_code"]:null),
+            "Description"=> (isset($data["description"])? $data["description"]:null),
+        ];
+       
+        return $this->Post_API_Signature( 'UpdateLoggedUserInformation', 'Update Logged User Information', $post_array, [], 1, 1, 0);
+    }
     public function Get_AllBLItemsForOrderPlace()
     {
-        return $this->Post_API_Signature( 'Get_AllBLItemsForOrderPlace', 'Get All BL Items For Order Place', [], [], 0, 0, 0);
+        return $this->Post_API_Signature( 'Get_AllBLItemsForOrderPlace', 'Get All BL Items For Order Place', [], [], 1, 1, 1);
     }
     // public function GetLoggedUserInformation()
     // {

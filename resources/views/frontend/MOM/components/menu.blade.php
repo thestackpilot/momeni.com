@@ -464,7 +464,7 @@ color: black !important;
                         <p class="specs m-0 d-flex justify-content-between mb-2">
                             <strong class="font-crimson"> Sub Total </strong>
                             <span
-                                class="font-ropa cart_sub_total"> {{$cart -> cart_currency}}{{$cart -> cart_total}} </span>
+                                class="font-ropa cart_sub_total"> {{$cart -> cart_currency}}{{number_format($cart -> cart_total,2)}} </span>
                         </p>
                         <input type="hidden" value="940">
                         <p class="specs m-0 d-flex justify-content-between mb-2">
@@ -475,7 +475,7 @@ color: black !important;
                         <p class="specs m-0 d-flex justify-content-between total-amount">
                             <strong class="font-crimson"> Total </strong>
                             <span
-                                class="font-ropa cart_total_price"> {{$cart->cart_currency}}{{$cart->cart_total}} </span>
+                                class="font-ropa cart_total_price"> {{$cart->cart_currency}}{{number_format($cart -> cart_total, 2)}} </span>
                         </p>
 
                         <a href="{{ $broadloom_item ? route('broadloom.shopping_cart') : route('frontend.checkout')}}"
