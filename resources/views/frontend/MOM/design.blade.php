@@ -230,6 +230,11 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                 page = 2;
                 console.log('going an other page');
             }
+            const productCards = document.querySelectorAll('.product-card');
+            if(productCards.length<30){
+                return;
+            }
+            console.log(`Total .product-card elements found: ${productCards.length}`);
 
             if (page < 0 || typeof $('#sub_collections_wrapper .product-listing .grid-item').length === 'undefined' || $('#sub_collections_wrapper .product-listing .grid-item').length < 0) {console.log($('#sub_collections_wrapper .product-listing .grid-item').length); return }
             try {
@@ -245,7 +250,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
                         pagingURL = `${(window.location.href).slice(0, window.location.href.lastIndexOf('/'))}`;
                     else
                         pagingURL = window.location.href;
-
+console.log(`${pagingURL}/${page}`);
                     $.post(`${pagingURL}/${page}`, {
                         _token: '{{csrf_token()}}'
                     }, function(response) {
