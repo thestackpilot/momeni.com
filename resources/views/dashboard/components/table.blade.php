@@ -505,7 +505,7 @@ function get_table( $table, $tab = '' ) {
     });
 
     function ViewMultiDocumentsReport(index) {
-    const orders = @json($view_orders['Orders'] ?? []);
+    const Orders = @json($view_orders['Orders'] ?? []);
     console.log('list of orders are',Orders);
     let BOLNo=Orders[index]['Header']['BOLNOs'];
     let MenuTags = 'ViewBOL';
