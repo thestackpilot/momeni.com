@@ -157,7 +157,7 @@ function get_table( $table, $tab = '' ) {
     print_r(($view_orders));
 @endphp    
 </pre></div> --}}
-
+<input type="hidden" name="json" id="json" value="">
 @section('styles')
 @parent
 <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" />
@@ -300,7 +300,7 @@ function get_table( $table, $tab = '' ) {
                             "dataSrc": function(json) {
                                 var data = [];
                                 console.log('json',json);
-                                
+                                document.getElementById("json").value = JSON.stringify(json);
                                 for (var i = 0; i < json.data.length; i++) {
                                     if (
                                         '{{$tabular ?? ""}}' == 'yes' &&
@@ -505,9 +505,10 @@ function get_table( $table, $tab = '' ) {
     });
 
     function ViewMultiDocumentsReport(index) {
-    const Orders = @json($view_orders['Orders'] ?? []);
-    console.log('list of orders are',Orders);
-    let BOLNo=Orders[index]['Header']['BOLNOs'];
+
+    // const Orders = @json($view_orders['Orders'] ?? []);
+    const values=JSON.parse($('#json').val())
+    let BOLNo=values['data'][index]['bol'];
     let MenuTags = 'ViewBOL';
             $('#loader-container').css('display', 'block');
         //    const url = `/ViewMultiDocumentsReport/${MenuTags}/${BOLNo}`;

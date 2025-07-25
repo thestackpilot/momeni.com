@@ -888,7 +888,7 @@ class GenericReportsController extends DashboardController
                             ]
                         ],
                         'other_actions' => [['type' => 'modal', 'label' => 'View Report', 'module' => 'Bl Order']],
-                        'bol' => (isset( $view_order['Header']['BOLNOs'] ) &&  ($view_order['Header']['BOLNOs']>0))?[['type' => 'modal', 'label' => 'View BOL']]:[],
+                        'bol' => (isset( $view_order['Header']['BOLNOs'] ) &&  ($view_order['Header']['BOLNOs']>0))?[['type' => 'modal', 'label' => 'View BOL', 'bolNo'=>$view_order['Header']['BOLNOs']]]:[],
                         'other_actions_details' => [
                             'OrderNo'   => $view_order['Header']['OrderNo'],
                         ],
@@ -1018,7 +1018,7 @@ class GenericReportsController extends DashboardController
                         'order_date'   => isset( $view_order['Header']['OrderDate'] ) ? CommonController::get_date_format( $view_order['Header']['OrderDate'] ) : 'N/A',
                         'actions'      => [['type' => 'modal', 'label' => 'View Details']],
                         'other_actions' => [['type' => 'modal', 'label' => 'View Report', 'module' => 'Other']],
-                        'bol'           => (isset( $view_order['Header']['BOLNOs'] ) &&  ($view_order['Header']['BOLNOs']>0))?[['type' => 'modal', 'label' => 'View BOL']]:[],
+                        'bol'           => (isset( $view_order['Header']['BOLNOs'] ) &&  ($view_order['Header']['BOLNOs']>0))?[['type' => 'modal', 'label' => 'View BOL','bolNo'=>$view_order['Header']['BOLNOs']]]:[],
 
                         'other_actions_details' => [
                             'OrderNo'   => $view_order['Header']['OrderNo'],
