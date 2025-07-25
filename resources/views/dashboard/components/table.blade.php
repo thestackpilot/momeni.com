@@ -508,12 +508,14 @@ function get_table( $table, $tab = '' ) {
 
     // const Orders = @json($view_orders['Orders'] ?? []);
     const values=JSON.parse($('#json').val())
-    let BOLNo=values['data'][index]['bol'];
+    let BOLNo=values['data'][index]['bol'][0]['bolNo'];
+    console.log(BOLNo);
     let MenuTags = 'ViewBOL';
             $('#loader-container').css('display', 'block');
         //    const url = `/ViewMultiDocumentsReport/${MenuTags}/${BOLNo}`;
         const urls = "{{ route('dashboard.ViewMultiDocumentsReport') }}";
         const url = `${urls}?MenuTags=${MenuTags}&BOLNo=${BOLNo}`;
+        console.log(url);
             $.ajax({
                 url: url,
                 type: "GET",
