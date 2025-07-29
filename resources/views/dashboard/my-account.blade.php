@@ -281,10 +281,10 @@ use App\Http\Controllers\CommonController;
                                     <label for="Inquiry" class="form-label">Account</label>
                                     <input type="number" min="0" class="form-control" placeholder="Cust">
                                 </div> -->
-                                <div class="mb-3 col-md-12 col-sm-12">
+                                {{-- <div class="mb-3 col-md-12 col-sm-12">
                                     <label for="description" class="form-label">Description</label>
                                     <textarea style="min-height: 100px;" class="form-control" rows="10" id="description" name="description" aria-describedby="Inquiry " placeholder="Details" maxlength="2000">{{(old('description')) ? old('description') : Auth::user()->getDataAttribute('description','')}}</textarea>
-                                </div>
+                                </div> --}}
                                 <div class="mb-3 justify-content-end pe-1 pe-lg-3 col-md-12 d-flex">
                                     <button type="submit" class="btn btn-primary text-uppercase mt-2" style="width: auto;background: #660000;color:#fff;">Save</button>
                                 </div>
