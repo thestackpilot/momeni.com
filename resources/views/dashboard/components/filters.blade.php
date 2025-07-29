@@ -71,18 +71,19 @@ use App\Http\Controllers\CommonController;
          return all_ok;
       });
    });
-    window.addEventListener('DOMContentLoaded', function () {
+   
+        console.log('halo paistan');
         const noTableResponsive = !document.querySelector('.table-responsive');
         const isOrderPage = window.location.href.includes('dashboard/view-order') || 
                     window.location.href.includes('dashboard/bl/view-order');
-
+console.log(noTableResponsive, isOrderPage ,!localStorage.getItem('searchOne'));
     if (noTableResponsive && isOrderPage && !localStorage.getItem('searchOne')) {
             // Store a key-value pair
             localStorage.setItem('searchOne', true);
             console.log(window.location.href);
             document.getElementById('search').click(); 
     }   
-    });
+    
     setTimeout(() => {
     localStorage.removeItem('searchOne')
     },5000 );

@@ -63,7 +63,7 @@
                                             <input type="hidden" name="customer" id="customer_id" value="{{ $cust }}">
                                             <thead>
                                             <tr>
-                                                <th>Product X</th>
+                                                <th>Product</th>
                                                 @php
                                                 $show_quantity = false;
                                                 if (!empty($quoteCartData)) {
