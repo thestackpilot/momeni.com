@@ -503,14 +503,14 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-md-5 mb-2">
+                                                <div class="col-md-5 mb-2" id='hidemail'>
                                                     <label for="" class="form-label mb-0"
                                                            style="font-size: 14px">Email</label>
                                                     <input class="form-control disable-toggle" type="email" id=""
                                                            name="Email"
                                                            placeholder=""
                                                            value="{{$shipping_addresses['ShipToAddresses'][0]['Email']}}"
-                                                           required>
+                                                           >
                                                 </div>
                                                 <div class="col-md-5 mb-2">
                                                     <label for="" class="form-label mb-0"
@@ -1546,9 +1546,11 @@ if (
                     $('input[name="reference_number"]').val(referenceNumberValue);
                     $('.order-ship-date').val(shipValue);
                     $('#select-address').prop("disabled", false);
+                    $("#hidemail").removeClass('d-none');
                 } else {
                     $("#hidden-address_id").val("");
                      $(".disable-toggle").removeClass("muted-bd-fields");
+                     $("#hidemail").addClass('d-none');
 
                     // $(".hidden-inp").val("");
                     // $('#hidden-address_id').val("");
