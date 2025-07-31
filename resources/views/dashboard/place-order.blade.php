@@ -73,9 +73,9 @@ use App\Http\Controllers\CommonController;
                               <input type="text" data-required="true" class="form-control bg-white " name="first_name" value="{{old('first_name')}}" aria-describedby="FirstName" maxlength="35" placeholder="First Name*">
                               <input type="text" class="form-control bg-white" name="last_name" value="{{old('last_name')}}" aria-describedby="LastName" maxlength="35" placeholder="Last Name">
                            </div>
-                           {{-- <div class="d-flex flex-row justify-content-between column-gap-20 mb-3">
+                           <div class="d-flex flex-row justify-content-between column-gap-20 mb-3 d-none">
                               <input type="email" data-required="true" class="form-control bg-white" name="email" value="{{old('email')}}" aria-describedby="Email" maxlength="60" placeholder="Email*">
-                           </div> --}}
+                           </div>
                            <div class="d-flex flex-column">
                               <!--                                            <input type="text" class="form-control bg-white mb-3" name="Company" aria-describedby="Company" placeholder="Company (optional)">-->
                               <input type="text" data-required="true" class="form-control bg-white mb-3" value="{{old('address1')}}" name="address1" aria-describedby="Address" maxlength="35" placeholder="Address*">
