@@ -20,7 +20,7 @@
 
     .navbar .nav-link {
         padding: 0.25rem 0.75rem; /* Reduce padding: top/bottom left/right */
-        font-size: 0.9rem; /* Optional: smaller text */
+        /* font-size: 0.9rem; Optional: smaller text */
     }
 
     .dropdown-menu {
