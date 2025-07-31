@@ -400,7 +400,7 @@
                                             </div>
                                             <div class="d-flex flex-column justify-content-between column-gap-20 mb-4" id="hideEmail">
                                                 <label class="p-0 m-0 mb-3 hideemail">Email <span class="color-red">*</span></label>
-                                                <input type="email" data-required="true" class="form-control bg-white hideemail"
+                                                <input type="email"  class="form-control bg-white hideemail"
                                                     name="Email" maxlength="60" aria-describedby="Email" id="Email"
                                                     placeholder="Email*">
                                             </div>
