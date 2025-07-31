@@ -564,34 +564,41 @@ class CheckoutController extends FrontendController
 
                 $cart_data['shipping']['SO_Number'] = $result['ObjectID'];
 
-                // try {
+                try {
 
-                //     if (!empty($cart_data['shipping']['Email'])) {
-                //            $cart_data_email = $cart_data['shipping']['Email'];
-                //            SendMail::dispatch( [
-                //                'data'     => $cart_data,
-                //                'slug'     => "Order Confirmed",
-                //                'email'    => [$cart_data_email, 'techbugs06@gmail.com'],
-                //                'template' => 'email.order-confirmation',
-                //                 //'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
-                //            ] );
-                //            prr($cart_data['shipping']['Email']);
-                //            prr(" :: Shipping Email Sent :: ");
-                //     }
+                    if (!empty($cart_data['shipping']['Email'])) {
+                           $cart_data_email = $cart_data['shipping']['Email'];
+                           dd(
+                               $cart_data,
+                                "Order Confirmed",
+                               [$cart_data_email, 'techbugs06@gmail.com'],
+                               'email.order-confirmation',
+                                //'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+                           );
+                           SendMail::dispatch( [
+                               'data'     => $cart_data,
+                               'slug'     => "Order Confirmed",
+                               'email'    => [$cart_data_email, 'techbugs06@gmail.com'],
+                               'template' => 'email.order-confirmation',
+                                //'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+                           ] );
+                           prr($cart_data['shipping']['Email']);
+                           prr(" :: Shipping Email Sent :: ");
+                    }
 
-                //        SendMail::dispatch( [
-                //            'data'     => $cart_data,
-                //            'slug'     => "Order Confirmed Official",
-                //            'email'    => ConstantsController::ORDER_NOTIFICATION,
-                //            'template' => 'email.order-confirmation',
-                //            'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
-                //        ] );
+                       SendMail::dispatch( [
+                           'data'     => $cart_data,
+                           'slug'     => "Order Confirmed Official",
+                           'email'    => ConstantsController::ORDER_NOTIFICATION,
+                           'template' => 'email.order-confirmation',
+                           'cc_email' => Auth::user()->is_sale_rep ? (isset(Auth::user()->email) ? Auth::user()->email : '') : ''
+                       ] );
 
-                //     prr(" :: Order Acknowledgment Email Sent :: ");
-                // } catch (\Exception $e) {
-                //     prr("Order Acknowledgment Email Exception :: " . $e->getMessage());
-                // }
-                // }
+                    prr(" :: Order Acknowledgment Email Sent :: ");
+                } catch (\Exception $e) {
+                    prr("Order Acknowledgment Email Exception :: " . $e->getMessage());
+                }
+                
             } else {
                 $order_payment = $this->order_payment_model->updateOrCreate(
                     ['user_id' => Auth::user()->id, 'hash' => $order_payment_hash],

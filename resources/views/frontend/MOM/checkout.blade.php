@@ -398,12 +398,12 @@
                                                         placeholder="Last Name"> 
                                                 </div>
                                             </div>
-                                            {{-- <div class="d-flex flex-column justify-content-between column-gap-20 mb-4">
+                                            <div class="d-flex flex-column justify-content-between column-gap-20 mb-4" id="hideEmail">
                                                 <label class="p-0 m-0 mb-3">Email <span class="color-red">*</span></label>
                                                 <input type="email" data-required="true" class="form-control bg-white"
                                                     name="Email" maxlength="60" aria-describedby="Email" id="Email"
                                                     placeholder="Email*">
-                                            </div> --}}
+                                            </div>
                                             <div class="d-flex flex-column mb-4">
                                                 <!--                                            <input type="text" class="form-control bg-white mb-3" name="Company" aria-describedby="Company" placeholder="Company (optional)">-->
                                                 <label class="p-0 m-0 mb-3">Address <span
@@ -1419,8 +1419,10 @@
                     $('#Zip').val(`${localStorage.getItem("Zip")}`);
                     $('#state_dropdown').prop('disabled', true);
                     $('#countries').prop('disabled', true);
+                    $('#hideEmail').addClass('d-none');
+
                 }else {
-                    
+                    $('#hideEmail').removeClass('d-none');
                     $('#state_dropdown').prop('disabled', false);
                     $('#countries').prop('disabled', false);
                     localStorage.setItem("countries", $('#countries').val());
