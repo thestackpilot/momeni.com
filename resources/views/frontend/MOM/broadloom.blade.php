@@ -2329,9 +2329,14 @@ window.onload = function () {
 
 function removeSurgObject(idToRemove) {
     let size= $('#surgingHide').val();
+    if(size && idToRemove){
     const array = JSON.parse(size);
   const newarray=array.filter(obj => obj.id !== idToRemove);
   $('#surgingHide').val(JSON.stringify(newarray));
+    }
+    else{
+        console.log('not remove surging');
+        return;}
 }
 function calculateTotalCharges(){
     let jsonArray=$('#surgingHide').val();
