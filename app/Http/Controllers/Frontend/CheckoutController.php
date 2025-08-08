@@ -351,7 +351,7 @@ class CheckoutController extends FrontendController
                         $itemDetail[] = [
                             'ItemID' => $quoteCart['item_id'],
                             'OrderQty' => $quoteCart['item_quantity'],
-                            'UnitPrice' => $quoteCart['item_price'],
+                            'UnitPrice' => ($item_data->SQFTPrice*$quoteCart['sqft_area']),
                             'SQFTPrice' => $item_data->SQFTPrice,
                             'SQFTArea'   => $quoteCart['sqft_area'],
                             'CutPieceID' => "",
@@ -428,7 +428,7 @@ class CheckoutController extends FrontendController
                         $itemDetail[] = [
                             'ItemID' => $item['item_id'],
                             'OrderQty' => $item['item_quantity'],
-                            'UnitPrice' => $item['item_price'],
+                            'UnitPrice' =>($item_data->SQFTPrice*$item['sqft_area']),
                             'SQFTPrice' => $item_data->SQFTPrice,
                             'SQFTArea'   => $item['sqft_area'],
                             'CutPieceID' => $item_data->CutPieceID,
