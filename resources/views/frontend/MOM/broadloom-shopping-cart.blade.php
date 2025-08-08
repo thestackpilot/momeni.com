@@ -109,7 +109,7 @@
                                                                     <div
                                                                         class="col-1 justify-content-center align-content-center delete-row"
                                                                         style="color: red;cursor: pointer;"
-                                                                        onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '{{$item->rand_str}}')">
+                                                                        onclick="removeItemFromCart(null,'{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '{{$item->rand_str}}')">
                                                                         x
                                                                     </div>
                                                                     <div class="col-3"><img
@@ -237,7 +237,7 @@
                                                                     <div
                                                                         class="col-1 justify-content-center align-content-center delete-row"
                                                                         style="color: red;cursor: pointer; visibility: hidden;"
-                                                                        onclick="removeItemFromCart('{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '{{$item->rand_str}}')">
+                                                                        onclick="removeItemFromCart(null,'{{$item -> item_id}}','{{csrf_token()}}','{{$item -> item_customer_id}}', '{{$item->broadloom_item}}', '{{$item->bd_roll_id}}', '{{$item->rand_str}}')">
                                                                         x
                                                                     </div>
                                                                     <div class="col-3"><img
@@ -763,8 +763,11 @@
                                                                 </div>
                                                             </div>
                                                             <div
-                                                                class="col-md-2 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->unit_price + $sum_surging_charges + $item->rugpad_price,  2)}}</div>
+                                                                class="col-md-2 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total + $item->rugpad_price,  2)}}</div>
                                                         </div>
+                                                            {{-- <div
+                                                                class="col-md-2 text-right align-content-center">{{$item->item_currency}}{{number_format($item->item_total +$item->unit_price + $sum_surging_charges+ $item->rugpad_price,  2)}}</div>
+                                                        </div> --}}
                                                         <hr class="mx-4" style="border-top-color: rgb(161, 161, 161);">
                                                     @endif
                                                 @endforeach
@@ -1447,6 +1450,7 @@ if (
 
                 // form.checkValidity()
                 if (firstName.checkValidity() && streetaddress.checkValidity()  && country.checkValidity()  && city.checkValidity()  && zipCode.checkValidity() && refNo.checkValidity() && shipDate.checkValidity()) {
+                   
                     $('#customer_info').find(':disabled').prop('disabled', false);
                     var formData = $('#customer_info').serialize();
                     $('#customer_info').find(':disabled').prop('disabled', true);
