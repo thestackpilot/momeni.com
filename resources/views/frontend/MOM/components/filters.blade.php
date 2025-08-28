@@ -208,10 +208,10 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
         }else{
             $.each($("select[name='" + type.toLowerCase() + "'] option:selected"), function()
             {
-                temp.push('"' + ($(this).val()).trim() + '"');
                 filter_type = 'Sort';
                 if($(this).val() != '0')
                 {
+                    temp.push('"' + ($(this).val()).trim() + '"');
                     filter_value = $(this).val();
                 }
                 //console.log($(this).val())
@@ -501,6 +501,7 @@ console.log(filter_type);
             $('.filter-content .sidebar-filters-input').each(function(){
                 $(this).removeAttr('checked');
             });
+            $('.sort-filter').val("0").trigger("change");
             filterManager(null,null, 0, 0);
         });
 
