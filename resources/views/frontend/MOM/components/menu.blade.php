@@ -47,6 +47,11 @@ color: black !important;
     .abc a{
     color: white;
     }
+    .abc{
+        text-transform: capitalize !important;
+        font-weight: normal;
+    }
+   
     .abc,.abc>a:hover{
         color: black;
     }
@@ -87,7 +92,7 @@ color: black !important;
             <li class="dropdown-item "><a href="#" class="abc" style="color:white">abc </a></li>
             <li class="dropdown-item "><a href="#" class="abc" style="color:white">ab</a></li> --}}
             @foreach($menus->rug_header->metas as $meta)
-             <li class="dropdown-item "><a href="{{ $meta->meta_url }}" class="abc" style="color:white">{{ $meta->meta_title }}</a></li>
+             <li class="dropdown-item "><a href="{{ $meta->meta_url }}" class="abc def" style="color:white">{{ $meta->meta_title }}</a></li>
 
                 {{-- <li><a href="{{ $meta->meta_url }}" class="dropdown-item">{{ $meta->meta_title }}</a></li> --}}
             @endforeach
