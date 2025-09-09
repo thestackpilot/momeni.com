@@ -49,7 +49,7 @@ color: black !important;
     }
     .abc{
         text-transform: capitalize !important;
-        font-weight: normal;
+        font-weight: normal !important;
     }
    
     .abc,.abc>a:hover{
