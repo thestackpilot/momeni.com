@@ -155,6 +155,10 @@ else{
         }
 
         $subCategory     = $this->active_theme_json->general->category_based_filters ? $this->checkSubcategoryForFilters( $filter ) : '';
+        // dd($this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) );
+        // dd($subCategory);
+
+        // dd(( $subCategory['id'] : '', $this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) ));
         $filters         = $this->ApiObj->Get_Filters( $id, isset( $subCategory['id'] ) ? $subCategory['id'] : '', $this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) );
 
         // $filters         = $this->addSelectedFilters( ConstantsController::NO_FILTER_FLAG, $filters );
@@ -244,7 +248,7 @@ else{
             }
 
         }
-
+        // dd($id);
         $filters = $this->ApiObj->Get_Filters( $id );
         $filters = $this->addSelectedFilters( ConstantsController::NO_FILTER_FLAG, $filters );
 
