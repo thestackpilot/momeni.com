@@ -213,7 +213,9 @@ class FrontendController extends RootController
 
             foreach ( $filters['Filters'] as $filter )
             {
-                $selected_filters[$filter['FilterID']] = join( ',', $filter['Values'] );
+               // dd($filter);
+                // $selected_filters[$filter['FilterID']] = join( ',', $filter['Values'] );
+                $selected_filters['FilterID'] = join(',', $filter['Values']);
 
             }
 

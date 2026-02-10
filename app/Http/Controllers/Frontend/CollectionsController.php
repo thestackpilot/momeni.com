@@ -95,6 +95,9 @@ class CollectionsController extends FrontendController
     public function collection_with_filters( $id, $type, $filter )
     {
         $rehashFlag=0;
+        \Log::info("=====================================");
+        //\Log::info(json_decode( base64_decode( $filter)));
+        \Log::info("=====================================");
         $rehashFlag=sizeof(( json_decode( base64_decode( $filter)))->Filters)-1;
         $newFilter=$filter;
         $object = new \stdClass();
@@ -121,24 +124,24 @@ class CollectionsController extends FrontendController
         {
             $content = json_decode( unserialize( $updated_content->content ), 1 );
             
-if(isset($content['title'])){
-    $pageData['title']=$content['title'];
-}
-else{
-    $pageData['title']="";
-}
-if(isset($content['description'])){
-    $pageData["description"]=$content['description'];
-}
-else{
-    $pageData['description']="";
-}
-if(isset($content['image'])){
-    $pageData["image"]=$content['image'];
-}
-else{
-    $pageData['image']="";
-}
+            if(isset($content['title'])){
+                $pageData['title']=$content['title'];
+            }
+            else{
+                $pageData['title']="";
+            }
+            if(isset($content['description'])){
+                $pageData["description"]=$content['description'];
+            }
+            else{
+                $pageData['description']="";
+            }
+            if(isset($content['image'])){
+                $pageData["image"]=$content['image'];
+            }
+            else{
+                $pageData['image']="";
+            }
 
             foreach ( $collections[$type] as &$collection )
             {
@@ -155,7 +158,7 @@ else{
         }
 
         $subCategory     = $this->active_theme_json->general->category_based_filters ? $this->checkSubcategoryForFilters( $filter ) : '';
-        $filters         = $this->ApiObj->Get_Filters( $id, isset( $subCategory['id'] ) ? $subCategory['id'] : '', $this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) );
+        $filters         = $this->ApiObj->Get_Filters( $id, isset( $subCategory['id'] ) ? $subCategory['id'] : '', $this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ), CommonController::escape_string( base64_decode( $filter ) ) );
 
         // $filters         = $this->addSelectedFilters( ConstantsController::NO_FILTER_FLAG, $filters );
         $filters    = $this->addSelectedFilters( json_decode( base64_decode( $filter ), true ), $filters );
@@ -203,6 +206,203 @@ else{
         ] );
     }
 
+    
+    // public function collection_with_filters($id, $type, $filter)
+    // {
+    //     /* -------------------------------------------------
+    //     | Decode & validate filter ONCE
+    //     -------------------------------------------------*/
+    //     $decodedFilter = json_decode(base64_decode($filter), true);
+
+    //     if (
+    //         empty($decodedFilter) ||
+    //         !isset($decodedFilter['Filters']) ||
+    //         !is_array($decodedFilter['Filters'])
+    //     ) {
+    //         \Log::error('Invalid filter payload', [
+    //             'raw'     => $filter,
+    //             'decoded' => $decodedFilter
+    //         ]);
+    //         abort(400, 'Invalid filter data');
+    //     }
+
+    //     \Log::info('================ FILTER ================');
+    //     \Log::info($decodedFilter);
+    //     \Log::info('========================================');
+
+    //     /* -------------------------------------------------
+    //     | Rehash flag & final filter
+    //     -------------------------------------------------*/
+    //     $rehashFlag  = count($decodedFilter['Filters']) > 1;
+    //     $finalFilter = $filter;
+
+    //     if ($rehashFlag) {
+    //         $finalFilterArray = [
+    //             'Filters' => [
+    //                 end($decodedFilter['Filters'])
+    //             ]
+    //         ];
+
+    //         $finalFilter = base64_encode(
+    //             json_encode($finalFilterArray, JSON_UNESCAPED_SLASHES)
+    //         );
+    //     }
+
+    //     /* -------------------------------------------------
+    //     | Hash & collection ID
+    //     -------------------------------------------------*/
+    //     $hash = md5(json_encode([
+    //         'id'     => implode('~', [$id, $type, $filter]),
+    //         'method' => 'Get_' . $type,
+    //         'theme'  => $this->active_theme->id
+    //     ]));
+
+    //     $collectionID = $decodedFilter['Filters'][0]['Values'][0] ?? null;
+
+    //     /* -------------------------------------------------
+    //     | API collections
+    //     -------------------------------------------------*/
+    //     $collections = $this->addCollectionUrls(
+    //         $this->ApiObj->Get_Collections_With_Filters(
+    //             $id,
+    //             $type,
+    //             CommonController::escape_string(base64_decode($filter), 1)
+    //         ),
+    //         $id,
+    //         $type
+    //     );
+
+    //     /* -------------------------------------------------
+    //     | Fix collection URLs (merge filters)
+    //     -------------------------------------------------*/
+    //     if (!empty($filter) && isset($collections['Collections'])) {
+    //         foreach ($collections['Collections'] as &$col) {
+
+    //             $parts = explode('/', $col['LinkUrl']);
+    //             if (!isset($parts[5])) {
+    //                 continue;
+    //             }
+
+    //             $linkDecoded = json_decode(base64_decode($parts[5]), true);
+    //             if (!isset($linkDecoded['Filters'][0])) {
+    //                 continue;
+    //             }
+
+    //             $originalFilter = $linkDecoded['Filters'][0];
+
+    //             $linkDecoded['Filters'][0] = $decodedFilter['Filters'][0];
+    //             $linkDecoded['Filters'][1] = $originalFilter;
+
+    //             $parts[5] = base64_encode(json_encode($linkDecoded));
+    //             $col['LinkUrl'] = implode('/', $parts);
+    //         }
+    //     }
+
+    //     /* -------------------------------------------------
+    //     | Page content
+    //     -------------------------------------------------*/
+    //     $pageData = [
+    //         'title'       => '',
+    //         'description' => '',
+    //         'image'       => ''
+    //     ];
+
+    //     $updated_content = $this->content_model->get_content(
+    //         $this->active_theme->id,
+    //         $hash
+    //     );
+
+    //     if ($updated_content && $updated_content->content) {
+    //         $content = json_decode(unserialize($updated_content->content), true);
+
+    //         $pageData['title']       = $content['title'] ?? '';
+    //         $pageData['description'] = $content['description'] ?? '';
+    //         $pageData['image']       = $content['image'] ?? '';
+
+    //         foreach ($collections[$type] ?? [] as &$collection) {
+    //             if (isset($content[$collection['Description']])) {
+    //                 $key = $collection['Description'];
+    //                 $collection['ImageName']   = $content[$key]['image'];
+    //                 $collection['Description'] = $content[$key]['title'];
+    //             }
+    //         }
+    //     }
+
+    //     /* -------------------------------------------------
+    //     | Subcategory & filters
+    //     -------------------------------------------------*/
+    //     $subCategory = $this->active_theme_json->general->category_based_filters
+    //         ? $this->checkSubcategoryForFilters($filter)
+    //         : '';
+
+    //     $filters = $this->ApiObj->Get_Filters(
+    //         $id,
+    //         $subCategory['id'] ?? '',
+    //         $this->getSelectedFilters($decodedFilter),
+    //         CommonController::escape_string( base64_decode( $filter ) )
+    //     );
+
+    //     $filters = $this->addSelectedFilters($decodedFilter, $filters);
+
+    //     /* -------------------------------------------------
+    //     | Rehash content if needed
+    //     -------------------------------------------------*/
+    //     if ($rehashFlag) {
+    //         $hash = md5(json_encode([
+    //             'id'     => implode('~', [$id, $type, $finalFilter]),
+    //             'method' => 'Get_' . $type,
+    //             'theme'  => $this->active_theme->id
+    //         ]));
+
+    //         $updated_content = $this->content_model->get_content(
+    //             $this->active_theme->id,
+    //             $hash
+    //         );
+
+    //         if ($updated_content && $updated_content->content) {
+    //             $content = json_decode(unserialize($updated_content->content), true);
+
+    //             $pageData['title']       = $content['title'] ?? '';
+    //             $pageData['description'] = $content['description'] ?? '';
+    //             $pageData['image']       = $content['image'] ?? '';
+    //         }
+    //     }
+
+    //     /* -------------------------------------------------
+    //     | Extra data
+    //     -------------------------------------------------*/
+    //     $main_collection = (new MainCollectionController())->get_main_collection($id);
+    //     $favourites      = (new FavouriteController())->getFavs($id);
+
+    //     $this->append_breadcrumbs(
+    //         $main_collection['Description'],
+    //         route('frontend.favourite', $id)
+    //     );
+    //     $this->append_breadcrumbs(
+    //         $type,
+    //         route('frontend.collections', [$id, $type])
+    //     );
+
+    //     /* -------------------------------------------------
+    //     | View
+    //     -------------------------------------------------*/
+    //     return view(
+    //         'frontend.' . $this->active_theme->theme_abrv . '.collection',
+    //         [
+    //             'pageData'        => $pageData,
+    //             'setFilter'       => true,
+    //             'collections'     => $collections,
+    //             'favourites'      => $favourites,
+    //             'main_collection' => $main_collection,
+    //             'filters'         => $filters,
+    //             'default_filter'  => base64_decode($filter),
+    //             'sub_category'    => $subCategory['title'] ?? '',
+    //             'return_type_id'  => $type
+    //         ]
+    //     );
+    // }
+
+    
     //do not get fucking blind - this function is written by you and you need it in the item controller
     public function generate_single_filter( $key, $value )
     {
@@ -234,11 +434,15 @@ else{
 
                 if ( array_key_exists( $collection['Description'], $content ) )
                 {
+
                     $key = $collection['Description'];
+                    $collection['ImageNameRaw']= $collection['ImageName'];
                     $collection['ImageName']   = $content[$key]['image'];
                     $collection['ImageUrl']    = $content[$key]['image'];
                     // $collection['Description'] = $content[$key]['title'] . '<br/>' . $content[$key]['description'];
                     $collection['Description'] = $content[$key]['title'];
+                }else{
+                    $collection['ImageNameRaw']= $collection['ImageName'];
                 }
 
             }

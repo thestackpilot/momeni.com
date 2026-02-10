@@ -127,7 +127,7 @@ class AccountController extends DashboardController
     }
 
 
-        if ( $validated_data['new-password'] != $validated_data['confirm-password'] )
+        if ( $validated_data['new-password'] != $request->input("confirm-password") )
         {
             return redirect()->back()->withInput()->with( 'message', ['type' => 'danger', 'referer' => 'changepass', 'body' => 'New password and confirm password doesn\'t match.'] );
         }
@@ -319,7 +319,9 @@ class AccountController extends DashboardController
         {
             $shipping_addresses = $this->ApiObj->Get_CustomerAddresses( $active_customer );
         }
-
+	\Log::info($shipping_addresses);
+	\Log::info($active_customer);
+	\Log::info($parent);
         return view( 'dashboard.my-account', [
             'customers' => $this->get_customers_dropdown_options(0),
             'client_address'  => $shipping_addresses,

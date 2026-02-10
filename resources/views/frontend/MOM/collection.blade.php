@@ -117,7 +117,7 @@ use App\Http\Controllers\CommonController;
                                     <div>
                                         <ul>
                                         @if($main_collection['MainCollectionID'] == 'Rugs')
-                                        <li>
+                                        <li class="d-none">
                                                 <input class="form-check-input"
                                                 type="checkbox"
                                                 name="discontinued"
@@ -164,6 +164,7 @@ use App\Http\Controllers\CommonController;
                                                     $img_check = strpos($collection['ImageName'] , 'storage') === 0 ? true : false;
                                                     if($img_check){
                                                         $url = url('/') . "/" . $collection['ImageName'];
+
                                                     }else{
                                                         $url = CommonController::getApiFullImage($collection['ImageName']);
                                                     }

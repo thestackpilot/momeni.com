@@ -247,17 +247,24 @@ class ApisController extends RootController
         return $this->Post_API_Signature( "Get_{$filterType}List", "Get {$filterType} List", $post_array );
     }
 
-    public function Get_Filters( $mainCollectionId, $subCategory = '', $selectedFilters = [] )
+    public function Get_Filters( $mainCollectionId, $subCategory = '', $selectedFilters = [], $filters=''  )
     {
+	 \Log::info($filters);
+        \Log::info($selectedFilters);
+
         $post_array = array( 'MainCollectionID' => $mainCollectionId );
 
         if ( $subCategory )
         {
             $post_array['SubCategoryID'] = $subCategory;
         }
+	if ( $filters )
+        {
+            $post_array['Filters'] = $filters;
+        }
 
         $post_array = $post_array + $selectedFilters;
-        // die("<pre>".print_r($post_array, 1)."</pre>");
+        \Log::info($post_array);
 
         return $this->Post_API_Signature( 'Get_Filters', 'Get Filters', $post_array, ['Filters'] );
     }

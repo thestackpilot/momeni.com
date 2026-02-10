@@ -137,12 +137,16 @@ use App\Http\Controllers\CommonController;
                                                 <label for="header" class="form-label">Change Header</label>
                                                 <input type="text" class="form-control" value="" name="header" id="header" maxlength="50" />
                                             </div>
-                                            <div class="col-md-6 col-sm-12">
+                                            <div class="col-md-6 col-sm-12 mt-auto ps-lg-5 pt-4">
+                                                <input type="checkbox" name="include-barcode" id="include-barcode" checked/>
+                                                <label for="include-barcode" class="form-label ml-2">Include Barcode</label>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12 d-none">
                                                 <label for="footer" class="form-label">Change Footer</label>
                                                 <input type="text" class="form-control" value="" name="footer" id="footer" maxlength="50" />
                                             </div>
                                         </div>
-                                        <div class="row p-2">
+                                        <div class="row p-2 d-none">
                                             <div class="col-md-6 col-sm-12">
                                                 <label for="price-multiplier" class="form-label">Pricing Multiplier (Dealer Price)</label>
                                                 <input type="number" min="1" data-double="true" max="99.99" maxlength="4" class="form-control" value="" name="price-multiplier" id="price-multiplier" step="0.1" />
@@ -153,7 +157,7 @@ use App\Http\Controllers\CommonController;
                                                 <span>Optimal image size 300 x 300</span>
                                             </div>
                                         </div>
-                                        <div class="row p-2">
+                                        <div class="row p-2 d-none">
                                             <div class="col-md-4 col-sm-12 mb-3 pe-1 pe-lg-3">
                                                 <input type="checkbox" name="without-price" id="without-price" />
                                                 <label for="without-price" class="form-label ml-2">Hang Tag without price</label>
@@ -162,12 +166,12 @@ use App\Http\Controllers\CommonController;
                                                 <input type="checkbox" name="include-barcode" id="include-barcode" checked/>
                                                 <label for="include-barcode" class="form-label ml-2">Include Barcode</label>
                                             </div>
-                                            <div class="col-md-4 col-sm-12 mb-3 pe-1 pe-lg-3">
+                                            <div class="col-md-4 col-sm-12 mb-3 pe-1 pe-lg-3 d-none">
                                                 <input type="checkbox" name="with-map" id="with-map" />
                                                 <label for="with-map" class="form-label ml-2">Hang Tag with MAP</label>
                                             </div>
                                         </div>
-                                        <div class="row p-2">
+                                        <div class="row p-2 d-none">
                                             <div class="col-md-4 col-sm-12 mb-3 pe-1 pe-lg-3">
                                                 <input type="radio" name="round-price" value=".00" id="to-0" />
                                                 <label for="to-0" class="form-label ml-2">Round to the nearest .00</label>

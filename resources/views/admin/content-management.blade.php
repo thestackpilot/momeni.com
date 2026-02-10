@@ -139,7 +139,8 @@ use App\Http\Controllers\CommonController;
                                 if($img_check){
                                     $url = url('/') . "/" . $content[$collection['Description']]['image'];
                                 }else{
-                                    $url = CommonController::getApiFullImage( $content[$collection['Description']]['image'] );
+                                   // $url = CommonController::getApiFullImage( $content[$collection['Description']]['image'] );
+                                    $url=null;
                                 }
                                 // dump( $url );
                                 @endphp
@@ -156,7 +157,10 @@ use App\Http\Controllers\CommonController;
                                     <label for="">Image</label>
                                     <div class="mt-1 mb-3 fav-image">
                                         <input type="hidden" name="image[{{$collection['Description']}}]" value="{{ $content[$collection['Description']]['image'] }}" />
-                                        <img class="w_200" alt-src="{{CommonController::getApiFullImage($collection['ImageName'])}}" alt="{{ $content[$collection['Description']]['title'] }}" src="{{$url}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
+                                       @php
+                                            $final_url=isset($url)?$url:CommonController::getApiFullImage($collection['ImageName']);
+                                        @endphp
+                                        <img class="w_200" src="{{$final_url}}" alt="{{ $content[$collection['Description']]['title'] }}" alt-src="{{$url}}" onerror="this.onerror=null; this.src='{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}'" />
                                         <a style="font-size: 12px;" class="d-none font-weight-bolder text-danger text-sm-left remove-image">
                                             Remove Custom Image
                                         </a>

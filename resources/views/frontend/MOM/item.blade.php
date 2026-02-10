@@ -656,6 +656,19 @@
                     $('#product-detailed').append(row);
                 });
             }
+
+            if (item_object.Items[0].UserCustomerInfo.IsSaleRep != 1) {
+                console.log("not in sales rep");
+                $.post('{{ route('frontend.item.design_ats') }}', {
+                    _token: '{{ csrf_token() }}',
+                    design_id: item_object.Items[0]['DesignID'],
+                    customer_id: item_object.Items[0].UserCustomerInfo.Customers[0]
+                        .CustomerID
+                }, function(response) {
+                    startBuyingBulk(item_object.Items[0].ItemID, item_object.Items[0]
+                        .UserCustomerInfo.Customers[0].CustomerID, response.data);
+                });
+            }
         }
     }
 
@@ -1140,8 +1153,14 @@ console.log('customer_id1: ', customer_id);
         //     show_components(['#cart_main', '#grid_add_to_cart', '#grid_cart_main']);
         // }
 
+        console.log(ATSInfo);
         ATSInfo.forEach(function(item, index) {
+            console.log($('.cart_item_id').first().val());
+
             $('.cart_item_id').each(function() {
+                console.log($(this).val());
+                console.log(item.ItemID);
+
                 if ($(this).val() == item.ItemID) {
 
                     price = item.Price.toLocaleString('en-US', {
@@ -1151,10 +1170,12 @@ console.log('customer_id1: ', customer_id);
 
                     if (!price.includes('$'))
                         price = '$' + price;
-
+                    console.log('started by me');
                     $(this).siblings('.PAChart-Price').text(price);
                     $(this).siblings('.cart_item_price').val(item.Price);
                     $(this).siblings('.PAChart-InStock').text(item.ATSQty < 0 ? 0 : item.ATSQty);
+                  
+                    console.log($(this).siblings('.PAChart-InStock').text());
                     $(this).siblings('.PAChart-Quantity').children('.item_qty').attr('max', item
                         .OnlyMaxQuantity ? item.ATSQty : 9999);
                 }
@@ -1413,6 +1434,9 @@ console.log('customer_id1: ', customer_id);
         init();
         bindClicks();
         init_sliders();
+        refreshItemJson(_ => {
+            console.log('refreshItemJson');
+        });
 
         // $('.owl-carousel').owlCarousel(
         // {
