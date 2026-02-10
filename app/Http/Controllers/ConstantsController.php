@@ -67,7 +67,7 @@ class ConstantsController extends RootController
         'port'     => '9898'
     ];
 
-    const IMAGE_PLACEHOLDER = '/images/placeholder.jpg?v=3';
+    const IMAGE_PLACEHOLDER = '/images/placeholder.jpg?v=4';
 
     const IMAGE_PLACEHOLDER_FULL = '/images/placeholder-full.jpg?v=1';
 

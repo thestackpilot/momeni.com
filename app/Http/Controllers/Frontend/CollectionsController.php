@@ -95,6 +95,9 @@ class CollectionsController extends FrontendController
     public function collection_with_filters( $id, $type, $filter )
     {
         $rehashFlag=0;
+        \Log::info("=====================================");
+        //\Log::info(json_decode( base64_decode( $filter)));
+        \Log::info("=====================================");
         $rehashFlag=sizeof(( json_decode( base64_decode( $filter)))->Filters)-1;
         $newFilter=$filter;
         $object = new \stdClass();
@@ -121,24 +124,24 @@ class CollectionsController extends FrontendController
         {
             $content = json_decode( unserialize( $updated_content->content ), 1 );
             
-if(isset($content['title'])){
-    $pageData['title']=$content['title'];
-}
-else{
-    $pageData['title']="";
-}
-if(isset($content['description'])){
-    $pageData["description"]=$content['description'];
-}
-else{
-    $pageData['description']="";
-}
-if(isset($content['image'])){
-    $pageData["image"]=$content['image'];
-}
-else{
-    $pageData['image']="";
-}
+            if(isset($content['title'])){
+                $pageData['title']=$content['title'];
+            }
+            else{
+                $pageData['title']="";
+            }
+            if(isset($content['description'])){
+                $pageData["description"]=$content['description'];
+            }
+            else{
+                $pageData['description']="";
+            }
+            if(isset($content['image'])){
+                $pageData["image"]=$content['image'];
+            }
+            else{
+                $pageData['image']="";
+            }
 
             foreach ( $collections[$type] as &$collection )
             {
@@ -155,11 +158,7 @@ else{
         }
 
         $subCategory     = $this->active_theme_json->general->category_based_filters ? $this->checkSubcategoryForFilters( $filter ) : '';
-        // dd($this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) );
-        // dd($subCategory);
-
-        // dd(( $subCategory['id'] : '', $this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) ));
-        $filters         = $this->ApiObj->Get_Filters( $id, isset( $subCategory['id'] ) ? $subCategory['id'] : '', $this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ) );
+        $filters         = $this->ApiObj->Get_Filters( $id, isset( $subCategory['id'] ) ? $subCategory['id'] : '', $this->getSelectedFilters( json_decode( base64_decode( $filter ), true ) ), CommonController::escape_string( base64_decode( $filter ) ) );
 
         // $filters         = $this->addSelectedFilters( ConstantsController::NO_FILTER_FLAG, $filters );
         $filters    = $this->addSelectedFilters( json_decode( base64_decode( $filter ), true ), $filters );
@@ -207,6 +206,8 @@ else{
         ] );
     }
 
+    
+
     //do not get fucking blind - this function is written by you and you need it in the item controller
     public function generate_single_filter( $key, $value )
     {
@@ -248,7 +249,7 @@ else{
             }
 
         }
-        // dd($id);
+
         $filters = $this->ApiObj->Get_Filters( $id );
         $filters = $this->addSelectedFilters( ConstantsController::NO_FILTER_FLAG, $filters );
 

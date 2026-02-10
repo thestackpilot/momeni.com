@@ -79,40 +79,40 @@ use App\Http\Controllers\CommonController;
                             </div>
 
                             <div class="col-md-9 h-100 col-sm-12 col-12 d-flex flex-row justify-content-left three-col product-listing d-flex flex-wrap my-5"  id="sub_collections_wrapper">
-<div class="container" style="display: inline-block;margin:auto;" >
-                    <div>
-                         @if(isset($pageData['image']) && $pageData['image']!=="" )
-                            
-                                <img id="fixedimg" class="d-block mx-auto mb-2"  src="{{ asset('images/'. $pageData['image']) }}" >
+                                <div class="container" style="display: inline-block;margin:auto;" >
+                                    <div>
+                                        @if(isset($pageData['image']) && $pageData['image']!=="" )
+                                            
+                                                <img id="fixedimg" class="d-block mx-auto mb-2"  src="{{ asset('images/'. $pageData['image']) }}" >
 
-                            @endif
-                    </div>
-                      
-                        <div>
-                            @if (request()->segment(2) == "BroadLoom")
-                            <h2 class="breadcrumb-title text-center section-title--center ">Broadloom</h2>
-                        @else
-                        @if(isset($pageData['title']) && $pageData['title']!=="" )
-                        
-                            <h2 class="breadcrumb-title text-center">{{$pageData['title']}}</h2>
-                        
-                        @else
+                                            @endif
+                                    </div>
+                                    
+                                    <div>
+                                        @if (request()->segment(2) == "BroadLoom")
+                                        <h2 class="breadcrumb-title text-center section-title--center ">Broadloom</h2>
+                                    @else
+                                    @if(isset($pageData['title']) && $pageData['title']!=="" )
+                                    
+                                        <h2 class="breadcrumb-title text-center">{{$pageData['title']}}</h2>
+                                    
+                                    @else
 
-                            <h2 class="breadcrumb-title text-center section-title--center my-3">{{isset($sub_category) ? $sub_category : ((strcmp('RUGS & CARPETS', strtoupper($main_collection['Description'])) === 0) ? 'RUGS' : $main_collection['Description'])}}</h2>
-                        
-                         @endif
-                            @endif
-                        </div>
-                         <div>
-                        @if(isset($pageData['description']) && $pageData['description']!=="" )
-                        
-                            <p class="text-center " style="font-size:20px">{{$pageData['description']}}</p>
-                        
-                       
-                        @endif
-                        </div>
-                     
-</div>
+                                        <h2 class="breadcrumb-title text-center section-title--center my-3">{{isset($sub_category) ? $sub_category : ((strcmp('RUGS & CARPETS', strtoupper($main_collection['Description'])) === 0) ? 'RUGS' : $main_collection['Description'])}}</h2>
+                                    
+                                    @endif
+                                        @endif
+                                    </div>
+                                    <div>
+                                    @if(isset($pageData['description']) && $pageData['description']!=="" )
+                                    
+                                        <p class="text-center " style="font-size:20px">{{$pageData['description']}}</p>
+                                    
+                                
+                                    @endif
+                                    </div>
+                                                    
+                                </div>
                                 <div class="cu-top-filters col-12 d-flex justify-content-between align-items-center">
                                     <div>
                                         <ul>
@@ -161,12 +161,15 @@ use App\Http\Controllers\CommonController;
                                             <div class="active item slide--1" data-slide="-1">
                                                 <a href="{{$collection['LinkUrl']}}">
                                                     @php
+                                                    
                                                     $img_check = strpos($collection['ImageName'] , 'storage') === 0 ? true : false;
+                                                    
                                                     if($img_check){
                                                         $url = url('/') . "/" . $collection['ImageName'];
                                                     }else{
                                                         $url = CommonController::getApiFullImage($collection['ImageName']);
                                                     }
+
                                                     @endphp
                                                     <div class="single-img" style="background-image: url('{{$url}}'), url('{{url('/').ConstantsController::IMAGE_PLACEHOLDER}}')" class="img-responsive"></div>
                                                 </a>

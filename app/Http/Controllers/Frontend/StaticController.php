@@ -19,7 +19,6 @@ class StaticController extends FrontendController
     public function index( $type )
     {
         $this->append_breadcrumbs( ucfirst( $type ), route( 'static.show', [$type] ) );
-
         return view( 'frontend.'.$this->active_theme->theme_abrv.'.'.strtolower( $type ) );
     }
 }

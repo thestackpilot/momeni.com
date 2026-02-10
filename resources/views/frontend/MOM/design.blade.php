@@ -67,7 +67,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
         <div class="col-12 col-md-6">
             @if($main_collection['MainCollectionID'] == 'Rugs')
                 <ul>
-                    <li>
+                    <li class="d-none">
                         <input class="form-check-input"
                                type="checkbox"
                                name="discontinued"
