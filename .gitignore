@@ -5,3 +5,8 @@ composer.lock
 .env
 *.log
 public/logs/*
+public/index_bk.php
+public/info.php
+public/old-storage
+public/vcs.log.bkp
+public_bk/
