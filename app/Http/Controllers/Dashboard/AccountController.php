@@ -452,12 +452,11 @@ class AccountController extends DashboardController
        $response= $this->ApiObj->UpdateLoggedUserInformation($request->all());
        if($response['OutPut']['Success'])
         {
-        $this->user_model->update_user( $data, Auth::user()->id );
+            return redirect()->route( 'dashboard.myaccount' )->with( 'message', ['type' => 'success', 'body' => 'Record updated...'] );
         }
         else{
                 return redirect()->route( 'dashboard.myaccount' )->with( 'message', ['type' => 'error', 'body' => 'Record updated failed'] );
         }
-        return redirect()->route( 'dashboard.myaccount' )->with( 'message', ['type' => 'success', 'body' => 'Record updated...'] );
     }
 
     public function update_customer_address( Request $request )
