@@ -922,13 +922,13 @@ public function Get_BLShipViaList(){
     {
         return $this->Post_API_Signature( 'Get_AllBLItemsForOrderPlace', 'Get All BL Items For Order Place', [], [], 1, 1, 1);
     }
-    // public function GetLoggedUserInformation()
-    // {
-    //     $post_array = [  
-    //         'UserID'=> Auth::user()->customer_id
-    //     ];
-    //     return $this->Post_API_Signature( 'GetLoggedUserInformation', 'Get Logged User Information', $post_array , [], 1, 1, 0);
-    // } 
+    public function GetLoggedUserInformation()
+    {
+        $post_array = [
+            'UserID'=> Auth::user()->customer_id
+        ];
+        return $this->Post_API_Signature( 'GetLoggedUserInformation', 'Get Logged User Information', $post_array , [], 1, 1, 0);
+    } 
     public function CheckBLQuotePrice($CustomerID, $ItemID, $SergingType, $CutLengthFeet, $CutLengthInches, $CutWidthFeet, $CutWidthInches, $RugPad)
     {
         $post_array = [
