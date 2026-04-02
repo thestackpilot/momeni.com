@@ -4,14 +4,18 @@
 
 use App\Http\Controllers\ConstantsController;
 use App\Http\Controllers\CommonController;
-
 @endphp
 @extends('frontend.'.$active_theme -> theme_abrv.'.layouts.app')
 @section('title','About Us')
 @section('content')
+@php try { @endphp
 <div class="wrapper">
     @include('frontend.'.$active_theme -> theme_abrv.'.components.header')
-
+@php } catch(\Exception $e) {
+die('Exception :: ' . $e->getMessage());
+} catch(\Error $e) {
+die('Error :: ' . $e->getMessage());
+} @endphp
 <section class="inner-banner our-story">
     <div class="container">
         <div class="row">

@@ -2,7 +2,7 @@
 //logging function
 function prr( $var )
 {
-
+//dd('doning');
     if ( is_array( $var ) || is_object( $var ) )
     {
         $var = print_r( $var, true );

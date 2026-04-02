@@ -34,6 +34,7 @@ class QuotesController extends DashboardController
     }
 
     public function save_quote(Request $request){
+        // dd($request->all());
         $customer_id = $request->customer_id;
         $quotes_date = $request->quotes_date;
         $cancel_quote_date = $request->cancel_quote_date;
@@ -159,6 +160,7 @@ class QuotesController extends DashboardController
             $data = $this->ApiObj->GetQuotationOrderDetailForOrderPlace($QuotationNo, $UserNo);
 
             $customer_details = $this->ApiObj->Get_CustomerDetail($data['OutPut']['CustomerID']);
+            // dd($customer_details);
             if ($customer_details && $customer_details['Success'] == true) {
                 $shipping_addresses = $customer_details['CustomerDetail']['CustomerAddressDetail'];
                 $default_ship_via_id = isset($customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]) ? $customer_details['CustomerDetail']['CustomerAddressDetail']['CustomerShipVias'][0]['ShipViaID'] : '';
@@ -207,6 +209,7 @@ class QuotesController extends DashboardController
                 $item_price = 0;
                 $item = $this->ApiObj->Get_Items('', '', $rowDetail['ItemID'], '', '', '', '', '', '', '', '', '', '', '' );
                 $price = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'], $rowDetail['OrderLength'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
+                $totalSqftArea=0;
                 foreach($data['OutPut']['QuotationDetailCutList'] as $rowCutList){
                     if($rowCutList['ItemID'] == $rowDetail['ItemID'] && $rowCutList['RollID'] == $rowDetail['RollID']){
                         $bd_child = $rowCutList['RugPad'] == "1" ? 0 : 1;
@@ -214,13 +217,17 @@ class QuotesController extends DashboardController
                         if($rowCutList['Line_No'] == $rowDetail['ParentLine_NO']){
                             $rugpad_price_get = $this->update_ats_prices( $this->ApiObj->Get_ATS($rowDetail['ItemID'], $data['OutPut']['CustomerID'], $rowDetail['OrderLength'] )['ATSInfo'], $rowDetail['ItemID'], $data['OutPut']['CustomerID'] );
                         }
-
+                        // dd($rowCutList);
                         $max_len_size  = $this->calculateMaxLenSize($rowCutList);
-                        $totalSqftArea = $this->calculateTotalSqftArea($rowCutList);
+                        // dd($max_len_size);
+                        $totalSqftArea += $this->calculateTotalSqftArea($rowCutList);
+
                         $totalSqftPrice = $price['Price'];
                         try {
+                           
                             // echo "<p>{$item_price} :: {$price['Price']} x {$totalSqftArea} = " . ($price['Price'] * $totalSqftArea) . "</p>";
-                            $item_price += $price['Price'] * $totalSqftArea;
+                            $item_price = $price['Price'] * $totalSqftArea;
+                            //  dd('inside try');
                         } catch (\Exception $e) {
                             throw new Exception('Error in price calculation');
                         } catch (\Error $e) {
@@ -332,7 +339,7 @@ class QuotesController extends DashboardController
                     "cut_type" => "",
                     "Serging" => ""
                 ];
-
+            
                 $quote_cart = [
                     'id' => $rowDetail['Line_NO'],
                     'item_id' => $rowDetail['ItemID'],
@@ -373,7 +380,8 @@ class QuotesController extends DashboardController
                 }
             }
             $shiplist = $this->ApiObj->Get_BLShipViaList();
-            // dd([$data, $quote_cart_data]);
+            //  dd([$data, $quote_cart_data]);
+                // dd($quote_cart);
             return view( 'frontend.'.$this->active_theme->theme_abrv.'.broadloom-shopping-cart', [
                 'quote_cart_data'     => json_decode(json_encode($quote_cart_data)),
                 'countries'           => $countries,
@@ -431,7 +439,8 @@ class QuotesController extends DashboardController
         $maxLengthInches = $maxLength % 12;
         $maxWidthFeet = floor($maxWidth / 12);
         $maxWidthInches = $maxWidth % 12;
-        return $max_len_size = "{$maxWidthFeet}'{$maxWidthInches}\" x {$maxLengthFeet}'{$maxLengthInches}\"";
+        // return `15'0" x 8'0" `;
+         return $max_len_size = "{$maxWidthFeet}'{$maxWidthInches}\" x {$maxLengthFeet}'{$maxLengthInches}\"";
     }
 
     public function calculateTotalSqftArea($cutpieces)
@@ -609,6 +618,7 @@ class QuotesController extends DashboardController
 
     public function quote_price(Request $request){
         $price = $this->ApiObj->CheckBLQuotePrice($request->CustomerID, $request->ItemID, $request->SergingType, $request->CutLengthFeet, $request->CutLengthInches, $request->CutWidthFeet, $request->CutWidthInches, $request->RugPad);
+        // dd($price);
         if($price['OutPut']['Success']){
             return response()->json([
                 'success' => $price['OutPut']['Success'],

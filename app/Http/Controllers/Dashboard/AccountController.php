@@ -320,13 +320,27 @@ class AccountController extends DashboardController
             $shipping_addresses = $this->ApiObj->Get_CustomerAddresses( $active_customer );
         }
 
+        // Fetch user info from SPARS API, fallback to null if API is down
+        $apiUserInfo = null;
+        try {
+            if ( Auth::user()->customer_id ) {
+                $apiResponse = $this->ApiObj->GetLoggedUserInformation();
+                if ( isset( $apiResponse['OutPut']['Success'] ) && $apiResponse['OutPut']['Success'] ) {
+                    $apiUserInfo = $apiResponse['OutPut'];
+                }
+            }
+        } catch ( \Exception $e ) {
+            prr( ['GetLoggedUserInformation error' => $e->getMessage()] );
+        }
+
         return view( 'dashboard.my-account', [
             'customers' => $this->get_customers_dropdown_options(0),
             'client_address'  => $shipping_addresses,
             'active_customer' => $active_customer,
-            'parent'          => $parent
+            'parent'          => $parent,
+            'apiUserInfo'     => $apiUserInfo
         ] );
-        
+
     }
 
      public function get_customers_dropdown_options( $include_all = 1 )
@@ -438,12 +452,11 @@ class AccountController extends DashboardController
        $response= $this->ApiObj->UpdateLoggedUserInformation($request->all());
        if($response['OutPut']['Success'])
         {
-        $this->user_model->update_user( $data, Auth::user()->id );
+            return redirect()->route( 'dashboard.myaccount' )->with( 'message', ['type' => 'success', 'body' => 'Record updated...'] );
         }
         else{
                 return redirect()->route( 'dashboard.myaccount' )->with( 'message', ['type' => 'error', 'body' => 'Record updated failed'] );
         }
-        return redirect()->route( 'dashboard.myaccount' )->with( 'message', ['type' => 'success', 'body' => 'Record updated...'] );
     }
 
     public function update_customer_address( Request $request )

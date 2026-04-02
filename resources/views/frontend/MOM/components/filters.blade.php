@@ -237,7 +237,7 @@ foreach(json_decode($default_filter, 1)['Filters'] as $filter) {
         {
             xhr.abort();
         }
-
+        console.log("Request Filterarr: ", Filterarr);
         var FiltersArray = btoa(`{!!ConstantsController::NO_FILTER_FLAG!!}`);
 
         if (Filterarr == null)

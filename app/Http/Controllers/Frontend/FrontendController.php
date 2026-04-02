@@ -201,24 +201,28 @@ class FrontendController extends RootController
 
     public function getSelectedFilters( $filters )
     {
-        $selected_filters = [];
+        $selected_filters = [];//initail filters are nothing
 
-        if ( ! is_array( $filters ) )
+        if ( ! is_array( $filters ) ) //only if we have no filters array then do this one
         {
             $filters = array( 'Filters' => array() );
         }
+        // cross in our case
+        // dd($filters['Filters']);
 
-        if ( isset( $filters['Filters'] ) )
+        if ( isset( $filters['Filters'] ) )//ture inside the condition
         {
 
             foreach ( $filters['Filters'] as $filter )
             {
-                $selected_filters[$filter['FilterID']] = join( ',', $filter['Values'] );
+                // dd($filter);
+                // $selected_filters[$filter['FilterID']] = join( ',', $filter['Values'] );
+                $selected_filters['FilterID'] = join(',', $filter['Values']);
 
             }
-
+// dd($selected_filters);
         }
-
+        // dd($selected_filters);
         return $selected_filters;
 
     }

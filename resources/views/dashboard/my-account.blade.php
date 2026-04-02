@@ -133,7 +133,7 @@ use App\Http\Controllers\CommonController;
                             @endif
                             {{-- <p style="font-size:24px;color: #EA7410;" class="px-2">{{$active_customer}}</p> --}}
                             @if ($active_customer)
-                            @if ($client_address && isset($client_address['CustomerAddress']))
+                            @if ($client_address && isset($client_address['CustomerAddress']) && isset($client_address['CustomerAddress']['ShipToAddresses']))
                             <div class="d-flex flex-column mt-4 kinda-table">
                                 <div class="align-items-center d-flex justify-content-between">
                                     <h6 class="col-md-2">
@@ -247,7 +247,7 @@ use App\Http\Controllers\CommonController;
                                 </div> -->
                                 <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                                     <label for="firstname" class="form-label">First Name*</label>
-                                    <input type="text" name="firstname" data-required="true" id="firstname" value="{{(old('firstname')) ? old('firstname') : Auth::user()->firstname}}" maxlength="35" class="form-control" placeholder="Oriental">
+                                    <input type="text" name="firstname" data-required="true" id="firstname" value="{{old('firstname') ?? ($apiUserInfo['FirstName'] ?? '')}}" maxlength="35" class="form-control" placeholder="Oriental">
                                 </div>
                                 <!-- <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                                     <label for="PhoneNumber*" class="form-label">Middle Name</label>
@@ -255,27 +255,27 @@ use App\Http\Controllers\CommonController;
                                 </div> -->
                                 <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                                     <label for="lastname" class="form-label">Last Name*</label>
-                                    <input type="text" data-required="true" name="lastname" id="lastname" class="form-control" placeholder="L.P" value="{{(old('lastname')) ? old('lastname') : Auth::user()->lastname}}" maxlength="35">
+                                    <input type="text" data-required="true" name="lastname" id="lastname" class="form-control" placeholder="L.P" value="{{old('lastname') ?? ($apiUserInfo['LastName'] ?? '')}}" maxlength="35">
                                 </div>
                                 <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                                     <label for="email" class="form-label">Email*</label>
-                                    <input type="email" data-required="true" id="email" name="email" class="form-control" placeholder="oriental@example.com" value="{{(old('email')) ? old('email') : Auth::user()->email}}" maxlength="60">
+                                    <input type="email" data-required="true" id="email" name="email" class="form-control" placeholder="oriental@example.com" value="{{old('email') ?? ($apiUserInfo['Email'] ?? '')}}" maxlength="60">
                                 </div>
                                 <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                                     <label for="company" class="form-label">Company*</label>
-                                    <input type="text" data-required="true" id="company" class="form-control" name="company" placeholder="XYZ & Co." value="{{(old('company')) ? old('company') : Auth::user()->company}}" maxlength="35">
+                                    <input type="text" data-required="true" id="company" class="form-control" name="company" placeholder="XYZ & Co." value="{{old('company') ?? ($apiUserInfo['Company'] ?? '')}}" maxlength="35">
                                 </div>
                                 <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                                     <label for="phone" class="form-label">Office Phone</label>
-                                    <input type="text" id="phone" class="form-control" name="phone" placeholder="210-342-4362" maxlength="12" minlength="12" data-inputmask="'mask': '999-999-9999'" value="{{(old('phone')) ? old('phone') : Auth::user()->phone}}">
+                                    <input type="text" id="phone" class="form-control" name="phone" placeholder="210-342-4362" maxlength="12" minlength="12" data-inputmask="'mask': '999-999-9999'" value="{{old('phone') ?? ($apiUserInfo['OfficePhone'] ?? '')}}">
                                 </div>
                                 <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                                     <label for="street_address" class="form-label">Address</label>
-                                    <input type="text" id="street_address" class="form-control" name="street_address" placeholder="Street # 123" value="{{(old('street_address')) ? old('street_address') : Auth::user()->street_address}}" maxlength="35">
+                                    <input type="text" id="street_address" class="form-control" name="street_address" placeholder="Street # 123" value="{{old('street_address') ?? ($apiUserInfo['Address'] ?? '')}}" maxlength="35">
                                 </div>
                                 <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                                     <label for="postal_code" class="form-label">Postal Code</label>
-                                    <input type="text" id="postal_code" class="form-control" name="postal_code" placeholder="12345" value="{{(old('postal_code')) ? old('postal_code') : Auth::user()->postal_code}}" maxlength="10">
+                                    <input type="text" id="postal_code" class="form-control" name="postal_code" placeholder="12345" value="{{old('postal_code') ?? ($apiUserInfo['PostalCode'] ?? '')}}" maxlength="10">
                                 </div>
                                 <!-- <div class="mb-3 col-md-3 col-sm-12 pe-1 pe-lg-3">
                                     <label for="Inquiry" class="form-label">Account</label>

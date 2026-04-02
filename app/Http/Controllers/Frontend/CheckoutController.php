@@ -228,6 +228,7 @@ class CheckoutController extends FrontendController
 
     public function place_order(Request $request)
     {
+        
         try {
             $response = [
                 'data' => [],
@@ -242,7 +243,7 @@ class CheckoutController extends FrontendController
             $requestDataArray = $request->all();
 
             $quoteCartData =  json_decode($requestDataArray['quoteCartData'], true );
-
+            // dd($quoteCartData);
             $headers = [
                 'CustomerID' => !empty($quoteCartData) ? $quoteCartData[0]['item_customer_id'] : (new Cart())->get_active_cart_customer(),
                 'FirstName' => $requestDataArray['FirstName'],
@@ -308,6 +309,7 @@ class CheckoutController extends FrontendController
             $TempSalesOrderNo = "";
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom']) {
                 $count = 0;
+                
                 if(!empty($quoteCartData)){
                     foreach ($quoteCartData as $key => $quoteCart) {
                         $count++;
@@ -387,7 +389,8 @@ class CheckoutController extends FrontendController
 
                         $total_amount += $quoteCart['item_price'];
                     }
-                }else{
+                }
+                else{
                     foreach ($this->cart_model->get_cart_for_front($this->ApiObj)['items'] as $item) {
                         $count++;
                         $item_data = json_decode(unserialize($item['item_data']));
@@ -503,7 +506,7 @@ class CheckoutController extends FrontendController
 // Log::debug('Data:', $itemDetail);
             prr(" :: Place Order API CALL DATA :: ");
             prr($headers, $itemDetail);
-            //dd($headers, $itemDetail);
+            // dd($headers, $itemDetail);
             if (isset($requestDataArray['item_broadloom']) && $requestDataArray['item_broadloom'] == 1) {
                 $result = $this->ApiObj->Place_BLOrder(
                     $headers,

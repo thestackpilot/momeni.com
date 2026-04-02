@@ -247,17 +247,23 @@ class ApisController extends RootController
         return $this->Post_API_Signature( "Get_{$filterType}List", "Get {$filterType} List", $post_array );
     }
 
-    public function Get_Filters( $mainCollectionId, $subCategory = '', $selectedFilters = [] )
+    public function Get_Filters( $mainCollectionId, $subCategory = '', $selectedFilters = [], $filters=''  )
     {
+	 \Log::info($filters);
+        \Log::info($selectedFilters);
         $post_array = array( 'MainCollectionID' => $mainCollectionId );
 
         if ( $subCategory )
         {
             $post_array['SubCategoryID'] = $subCategory;
         }
+	if ( $filters )
+        {
+            $post_array['Filters'] = $filters;
+        }
 
         $post_array = $post_array + $selectedFilters;
-        // die("<pre>".print_r($post_array, 1)."</pre>");
+        \Log::info($post_array);
 
         return $this->Post_API_Signature( 'Get_Filters', 'Get Filters', $post_array, ['Filters'] );
     }
@@ -916,13 +922,13 @@ public function Get_BLShipViaList(){
     {
         return $this->Post_API_Signature( 'Get_AllBLItemsForOrderPlace', 'Get All BL Items For Order Place', [], [], 1, 1, 1);
     }
-    // public function GetLoggedUserInformation()
-    // {
-    //     $post_array = [  
-    //         'UserID'=> Auth::user()->customer_id
-    //     ];
-    //     return $this->Post_API_Signature( 'GetLoggedUserInformation', 'Get Logged User Information', $post_array , [], 1, 1, 0);
-    // } 
+    public function GetLoggedUserInformation()
+    {
+        $post_array = [
+            'UserID'=> Auth::user()->customer_id
+        ];
+        return $this->Post_API_Signature( 'GetLoggedUserInformation', 'Get Logged User Information', $post_array , [], 1, 1, 0);
+    } 
     public function CheckBLQuotePrice($CustomerID, $ItemID, $SergingType, $CutLengthFeet, $CutLengthInches, $CutWidthFeet, $CutWidthInches, $RugPad)
     {
         $post_array = [
